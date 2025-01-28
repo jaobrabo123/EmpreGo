@@ -1,0 +1,25 @@
+* {
+    user-select: none;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/*
+.main {
+    margin-top: 125px;
+    background-color: rgb(200, 221, 239);
+    height: 95vh; 
+    width: 95vw;
+    border-radius: 100px;
+
+}*/

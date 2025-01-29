@@ -6,7 +6,54 @@
     box-sizing: border-box;
 }
 
-/*        Comentei o seu css
+body{
+    background-color: rgb(228, 228, 228);
+}
+
+a{
+    color: rgb(0, 0, 0);
+    text-decoration: none !important; /*Tag !important serve para priorizar essa tag*/
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+header{
+    font-size: 30px;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between; /* Separa as divs */
+    padding: 20px; 
+}
+
+#logoimg{
+    width: 80px;
+    height: auto;
+}
+
+#links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min-content; /* Width mínimo */
+}
+
+#logo{
+    width: min-content; /* Width mínimo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+#nomedosite{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
+/*        Comentei o seu css Souza
 body {
     background-color: white;
     display: flex;

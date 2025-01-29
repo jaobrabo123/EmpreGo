@@ -6,6 +6,7 @@
     box-sizing: border-box;
 }
 
+/*        Comentei o seu css
 body {
     background-color: white;
     display: flex;
@@ -14,7 +15,7 @@ body {
     overflow: hidden;
 }
 
-/*
+
 .main {
     margin-top: 125px;
     background-color: rgb(200, 221, 239);
@@ -23,3 +24,4 @@ body {
     border-radius: 100px;
 
 }*/
+

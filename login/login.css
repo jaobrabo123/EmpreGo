@@ -1,0 +1,120 @@
+/* Define o estilo do corpo da página */
+body {
+    margin: 0; /* Remove margens padrão */
+    padding: 0; /* Remove preenchimento padrão */
+    display: flex; /* Usa flexbox para centralizar conteúdo */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    min-height: 100vh; /* Garante que o conteúdo ocupe a tela toda */
+    font-family: 'Jost', sans-serif; /* Define a fonte do texto */
+    background: linear-gradient(to bottom, #18122B, #64039c, #540474, #0c0c0c); /* Fundo com efeito gradiente */
+}
+
+/* Estiliza o contêiner principal */
+.main {
+    width: 350px; /* Largura do contêiner */
+    height: 500px; /* Altura do contêiner */
+    background: red; /* Cor de fundo temporária */
+    overflow: hidden; /* Impede que elementos internos ultrapassem os limites */
+    background: url("https://i.pinimg.com/236x/ca/34/34/ca3434b86776afa0175f7394f9f54667.jpg") no-repeat center / cover; /* Define uma imagem de fundo */
+    border-radius: 10px; /* Borda arredondada */
+    box-shadow: 5px 20px 50px #000; /* Sombra para dar efeito de elevação */
+}
+
+/* Esconde o checkbox usado para alternar entre login e signup */
+#chk {
+    display: none;
+}
+
+/* Define o estilo do formulário de login */
+.login {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Estiliza os rótulos dos formulários */
+label {
+    color: #fff; /* Cor do texto */
+    font-size: 2.3em; /* Tamanho da fonte */
+    justify-content: center; /* Centraliza horizontalmente */
+    display: flex; /* Usa flexbox */
+    margin: 60px; /* Espaçamento externo */
+    font-weight: bold; /* Define a fonte em negrito */
+    cursor: pointer; /* Transforma o cursor em "mãozinha" ao passar sobre o elemento */
+    transition: .5s ease-in-out; /* Suaviza a transição de efeitos */
+}
+
+/* Estiliza os campos de entrada de texto */
+input {
+    width: 60%; /* Define a largura */
+    height: 10px; /* Altura fixa */
+    background: #e0dede; /* Cor de fundo */
+    justify-content: center;
+    display: flex;
+    margin: 20px auto; /* Centraliza e define espaçamento externo */
+    padding: 10px; /* Espaçamento interno */
+    border: none; /* Remove a borda */
+    outline: none; /* Remove contorno ao clicar */
+    border-radius: 5px; /* Arredonda as bordas */
+}
+
+/* Estiliza os botões */
+button {
+    width: 60%; /* Define a largura */
+    height: 40px; /* Define a altura */
+    margin: 10px auto; /* Centraliza o botão */
+    justify-content: center;
+    display: block;
+    color: #fff; /* Cor do texto */
+    background: #573b8a; /* Cor de fundo do botão */
+    font-size: 1em; /* Define o tamanho da fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    margin-top: 20px;
+    outline: none; /* Remove contorno */
+    border: none; /* Remove a borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    transition: .2s ease-in; /* Adiciona efeito suave ao passar o mouse */
+    cursor: pointer; /* Transforma o cursor em "mãozinha" */
+}
+
+/* Altera a cor do botão ao passar o mouse */
+button:hover {
+    background: #6d44b8;
+}
+
+/* Estiliza o formulário de cadastro */
+.signup {
+    height: 460px; /* Altura do formulário */
+    background: #eee; /* Cor de fundo */
+    border-radius: 60% / 10%; /* Borda arredondada */
+    transition: .8s ease-in-out; /* Suaviza a animação de transição */
+    transform: translateY(-180px); /* Move o formulário um pouco para cima */
+}
+
+/* Estiliza o rótulo do cadastro */
+.signup label {
+    color: #573b8a; /* Define a cor do texto */
+    transform: scale(.6); /* Diminui o tamanho do texto */
+}
+
+/* Quando o checkbox estiver marcado, o formulário de cadastro sobe */
+#chk:checked ~ .signup {
+    transform: translateY(-500px);
+}
+
+/* Quando o checkbox estiver marcado, o rótulo do cadastro cresce */
+#chk:checked ~ .signup label {
+    transform: scale(1);
+}
+
+/* Quando o checkbox estiver marcado, o rótulo do login diminui */
+#chk:checked ~ .login label {
+    transform: scale(.6);
+}
+
+.p{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}

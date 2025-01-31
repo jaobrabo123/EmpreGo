@@ -118,3 +118,22 @@ button:hover {
     margin-top: 5px;
     display: none; /* Inicialmente oculto */
 }
+
+#sem {
+    position: relative;
+    width: 60%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+}
+
+#sem input {
+    width: 100%;
+    padding-right: 40px; /* Espaço para o ícone */
+}
+
+#olho {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}

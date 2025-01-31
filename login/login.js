@@ -14,17 +14,17 @@
 function botao(){
     window.location.href = "index.html"
 }
-
+*/
 function mostrarsenha(){
-    var senhaInput = document.getElementById("senha");
+    var senhaInput = document.getElementById("pswd");
     if (senhaInput.type === "password") {
       senhaInput.type = "text" // Torna o campo visível
-      document.getElementById("olho").src =  "imagens/olhoaberto.png"
+      document.getElementById("olho").className =  "fas fa-eye"
     } else {
       senhaInput.type = "password"; // Torna o campo invisível
-      document.getElementById("olho").src =  "imagens/olhofechado.png"
+      document.getElementById("olho").className =  "fas fa-eye-slash"
     }
-}*/
+}
 
 function validarSenha() {
   const senha = document.getElementById("senha").value;

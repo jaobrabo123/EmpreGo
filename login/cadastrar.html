@@ -6,6 +6,7 @@
     <link rel="shortcut icon" href="../imagens/ajunet.ico" type="image/x-icon">
     <script src="../script.js" defer></script>
     <script src="login.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="cadastrar.css">
     <link rel="stylesheet" href="../styles.css">
 
@@ -46,8 +47,11 @@
             <div class="login">
                 <form>
                     <label for="chk" aria-hidden="true">Entrar</label>
-                    <input type="email" name="email" placeholder="Email" required>       
-                    <input type="password" name="pswd" placeholder="Password" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <div id="sem">
+                        <input type="password" id="pswd" name="pswd" placeholder="Password" required>
+                        <i class="fas fa-eye-slash" onclick="mostrarsenha()" id="olho"></i>
+                    </div>    
                     
                     <button type="submit">Entrar</button>
                 </form>

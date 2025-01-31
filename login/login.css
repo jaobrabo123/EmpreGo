@@ -2,16 +2,13 @@
 body {
     margin: 0; /* Remove margens padrão */
     padding: 0; /* Remove preenchimento padrão */
-    display: flex; /* Usa flexbox para centralizar conteúdo */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
     min-height: 100vh; /* Garante que o conteúdo ocupe a tela toda */
     font-family: 'Jost', sans-serif; /* Define a fonte do texto */
-    background: linear-gradient(to bottom, #18122B, #64039c, #540474, #0c0c0c); /* Fundo com efeito gradiente */
+    background: linear-gradient(to bottom, #18122B, #64039c, #540474, #7c7c7c); /* Fundo com efeito gradiente */
 }
 
 /* Estiliza o contêiner principal */
-.main {
+#conteudo {
     width: 350px; /* Largura do contêiner */
     height: 500px; /* Altura do contêiner */
     background: red; /* Cor de fundo temporária */

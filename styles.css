@@ -59,6 +59,12 @@ footer{
     font-style: italic;
 }
 
+#main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /*        Comentei o seu css Souza
 body {
     background-color: white;

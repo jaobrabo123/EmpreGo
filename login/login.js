@@ -19,10 +19,10 @@ function mostrarsenha(){
     var senhaInput = document.getElementById("pswd");
     if (senhaInput.type === "password") {
       senhaInput.type = "text" // Torna o campo visível
-      document.getElementById("olho").className =  "fas fa-eye"
+      document.getElementById("olho").src =  "../imagens/olhoaberto2.png"
     } else {
       senhaInput.type = "password"; // Torna o campo invisível
-      document.getElementById("olho").className =  "fas fa-eye-slash"
+      document.getElementById("olho").src =  "../imagens/olhofechado2.png"
     }
 }
 

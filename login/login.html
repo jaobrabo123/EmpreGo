@@ -35,7 +35,10 @@
             <form>
                 <label for="chk" aria-hidden="true">Entrar</label>
                 <input type="email" name="email" placeholder="Email" required>       
-                <input type="password" name="pswd" placeholder="Password" required>
+                <div id="sem">
+                    <input type="password" id="pswd" name="pswd" placeholder="Password" required>
+                    <img src="../imagens/olhofechado2.png" alt="Olho" onclick="mostrarsenha()" id="olho">
+                </div>
                 <button type="submit">Entrar</button>
             </form>
         </div>

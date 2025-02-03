@@ -136,4 +136,5 @@ button:hover {
     position: absolute;
     right: 10px;
     cursor: pointer;
+    width: 10%;
 }

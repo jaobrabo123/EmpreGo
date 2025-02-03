@@ -115,3 +115,23 @@ button:hover {
     width: 100%;
     height: 100%;
 }
+
+#sem {
+    position: relative;
+    width: 60%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+}
+
+#sem input {
+    width: 100%;
+    padding-right: 40px; /* Espaço para o ícone */
+}
+
+#olho {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    width: 10%;
+}

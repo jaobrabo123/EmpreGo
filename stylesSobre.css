@@ -1,6 +1,9 @@
-body{
-    
-    margin-bottom: 25px;
+:root {
+    --text: #ffffff;
+    --background: #18122B;
+    --primary: #393053;
+    --secondary: #443C68;
+    --accent: #635985;
 }
 
 .person-img{
@@ -14,7 +17,7 @@ body{
 p{
     font-size: 18px;
     font-weight: 600;
-    color: #45474a;
+    color: var(--text);
     text-decoration: none !important; /*Tag !important serve para priorizar essa tag*/
     margin-left: 20px;
     margin-right: 20px;
@@ -26,11 +29,17 @@ p{
 h1{
 margin-bottom: 30px;
 font-size: 36px;
-color: #45474a;
+color: var(--text);
 }
 
 footer{
-color: #45474a;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--secondary);
+    color: var(--text);
+    text-align: center;
+    padding: 15px;
+    font-style: italic;
 }
 
 #main{

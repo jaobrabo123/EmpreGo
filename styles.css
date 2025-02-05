@@ -1,86 +1,106 @@
+/*
+# = ID
+. = Class
+*/
+
+
+/* Definição de cores */
+:root {
+    --text: #ffffff;
+    --background: #18122B;
+    --primary: #393053;
+    --secondary: #443C68;
+    --accent: #635985;
+}
+
+/* Reset e configurações globais */
 * {
-    user-select: none;
-    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     user-select: none;
+    font-family: 'Arial', sans-serif;
 }
 
-body{
-    background-color: rgb(228, 228, 228);
-}
-
-a{
-    color: rgb(0, 0, 0);
-    text-decoration: none !important; /*Tag !important serve para priorizar essa tag*/
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-header{
-    font-size: 30px;
-    flex-direction: row;
+body {
+    background-color: var(--background);
+    color: var(--text);
     display: flex;
-    justify-content: space-between; /* Separa as divs */
-    padding: 20px; 
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-#logoimg{
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary);
+    padding: 15px 30px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/*Classe Links do Header*/
+.headerlink {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 2s ease;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+/*Efeito-hover links do Header*/
+.headerlink:hover {
+    background-color: var(--accent);
+}
+/*Id Div Organização Links Header*/
+#links {
+    display: flex;
+    gap: 15px;
+}
+
+#nomedosite{
+    color: var(--text);
+    text-decoration: none;
+    transition: color 2s ease;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+
+#logoimg {
     width: 80px;
     height: auto;
 }
 
-#links{
+#logo {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: min-content; /* Width mínimo */
-}
-
-#logo{
-    width: min-content; /* Width mínimo */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    margin-left: 0px;
-    margin-right: 0px;
-}
-
-#nomedosite{
-    margin-left: 0px;
-    margin-right: 0px;
+    gap: 10px;
 }
 
 footer{
-    margin-top: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--secondary);
+    color: var(--text);
     text-align: center;
+    padding: 15px;
     font-style: italic;
 }
 
-#main{
+#main {
     display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
-/*        Comentei o seu css Souza
-body {
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+.container {
+    max-width: 1200px;
+    width: 100%;
+    background-color: var(--primary);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-
-
-.main {
-    margin-top: 125px;
-    background-color: rgb(200, 221, 239);
-    height: 95vh; 
-    width: 95vw;
-    border-radius: 100px;
-
-}*/
-

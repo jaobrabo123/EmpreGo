@@ -1,0 +1,275 @@
+/* Regras globais para todos os elementos da página */
+* {
+    margin: 0; /* Remove a margem padrão de todos os elementos */
+    padding: 0; /* Remove o preenchimento (padding) padrão de todos os elementos */
+    box-sizing: border-box; /* Define que o tamanho dos elementos deve incluir bordas e padding */
+    text-decoration: none; /* Remove qualquer decoração de texto (como sublinhados) */
+    border: none; /* Remove as bordas de todos os elementos */
+    outline: none; /* Remove o contorno de foco */
+    scroll-behavior: smooth; /* Aplica rolagem suave ao clicar em âncoras */
+    font-family: "Poppins", sans-serif; /* Define a fonte padrão da página */
+}
+
+/* Definindo variáveis de cores no :root, que são reutilizáveis */
+:root {
+    --text-color: #ffffff;/* Cor do texto */
+    --bg-color: #18122B; /* Cor de fundo principal */    
+    --second-bg-color: #443C68; /* Segunda cor de fundo, quase preta */
+    --main-color:  #635985;  /* Cor principal */
+}
+
+/* Regras para o HTML */
+html {
+    font-size: 60%; /* Reduz o tamanho da fonte base para 60% do padrão */
+    overflow-x: hidden; /* Impede o overflow horizontal, não permitindo rolagem para os lados */
+}
+
+/* Regras para o corpo da página */
+body {
+    background: var(--bg-color); /* Define o fundo do body como a cor definida em --bg-color */
+    color: var(--text-color); /* Define a cor do texto como a cor definida em --text-color */
+}
+
+/* Estilo do cabeçalho (header) */
+.header {
+    position: fixed; /* Torna o cabeçalho fixo na parte superior da página */
+    top: 0; /* Posiciona o cabeçalho no topo da tela */
+    left: 0; /* Posiciona o cabeçalho à esquerda */
+    width: 100%; /* O cabeçalho ocupa toda a largura da tela */
+    padding: 4rem 12%; /* Define o padding interno, com 4rem de altura e 12% de largura */
+    background: rgba(0, 0, 0, 0.3); /* Define o fundo com transparência */
+    backdrop-filter: blur(10px); /* Aplica um desfoque ao fundo do cabeçalho */
+    display: flex; /* Utiliza flexbox para alinhar os itens dentro do cabeçalho */
+    justify-content: space-between; /* Distribui o conteúdo com espaçamento entre eles */
+    align-items: center; /* Alinha os itens ao centro verticalmente */
+    z-index: 1000; /* Garante que o cabeçalho apareça acima de outros elementos */
+}
+
+
+
+/* Estilo dos links da navbar */
+.navbar a {
+    font-size: 1.8rem; /* Tamanho do texto dos links */
+    color: var(--text-color); /* Cor do texto dos links */
+    margin-left: 4rem; /* Espaço à esquerda de cada link */
+    font-weight: 500; /* Peso da fonte */
+    transition: 0.3s ease; /* Transição suave ao passar o mouse sobre os links */
+    border-bottom: 3px solid transparent; /* Borda inferior invisível inicialmente */
+}
+
+/* Efeito de hover nos links da navbar */
+.navbar a:hover,
+.navbar a.active {
+    color: var(--main-color); /* Muda a cor do link para a cor principal */
+    border-bottom: 3px solid var(--main-color); /* Aplica a borda inferior com a cor principal */
+}
+
+/* Estilo do ícone de menu*/
+#menu-icon {
+    font-size: 3.6rem; /* Tamanho do ícone */
+    color: var(--main-color); /* Cor do ícone */
+    display: none; /* Inicialmente escondido, provavelmente usado em dispositivos móveis */
+    cursor: pointer; /* Altera o cursor para uma mãozinha */
+}
+
+/* Estilos para as seções do site */
+section {
+    min-height: 100vh; /* Garante que cada seção tenha pelo menos a altura da tela */
+    padding: 10rem 12%; /* Define o padding das seções */
+}
+
+/* Estilo da seção inicial (home) */
+.home {
+    display: flex; /* Usa flexbox para dispor os itens */
+    flex-direction: row; /* Organiza os itens horizontalmente */
+    align-items: center; /* Alinha os itens no centro verticalmente */
+    justify-content: space-between; /* Espaça igualmente os itens */
+    gap: 5rem; /* Define um espaço entre os itens */
+}
+
+/* Estilos para o conteúdo da seção home */
+.home-content {
+    display: flex; /* Usa flexbox para organizar o conteúdo */
+    flex-direction: column; /* Organiza os itens verticalmente */
+    align-items: baseline; /* Alinha os itens à linha de base */
+    text-align: left; /* Alinha o texto à esquerda */
+    justify-content: center; /* Alinha os itens no centro verticalmente */
+    margin-top: 3rem; /* Espaço superior */
+    width: 50%; /* Largura de 50% */
+}
+
+/* Estilos para a imagem na seção home */
+.home-slider {
+    width: 40%; /* Mantém a largura similar à antiga .home-img */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 4rem;
+    border-radius: 10%; /* Mantém a imagem redonda */
+    box-shadow: 0 0 25px var(--main-color); /* Mantém o efeito de sombra */
+    box-shadow: 0 0 25px var(--main-color),
+                0 0 50px var(--main-color),
+                0 0 100px var(--main-color);
+}
+
+/* Estilos para o texto "span" */
+span {
+    color: var(--main-color); /* Define a cor do span como a cor principal */
+}
+
+/* Estilo do título h3 na seção home */
+.home-content h3 {
+    margin-bottom: 2rem; /* Espaço inferior */
+    margin-top: 1rem; /* Espaço superior */
+    font-size: 1.9rem; /* Tamanho da fonte */
+}
+
+/* Estilo do título h1 na seção home */
+.home-content h1 {
+    font-size: 4rem; /* Tamanho da fonte */
+    font-weight: 1100; /* Peso da fonte */
+    margin-top: 1.5rem; /* Espaço superior */
+    line-height: 1.0; /* Ajuste do espaçamento entre as linhas */
+}
+
+/* Estilo para a imagem dentro do slider*/
+.swiper-slide img {
+    width: 30vw;
+    height: 30vw;
+    cursor: all-scroll; /*movimenta as imagens para o lado*/
+}
+
+
+/* Estilo do parágrafo na seção home */
+.home-content p {
+    font-size: 1.5rem; /* Tamanho da fonte */
+    font-weight: 500; /* Peso da fonte */
+    line-height: 1.8; /* Espaçamento entre as linhas */
+    max-width: 1000px; /* Largura máxima do parágrafo */
+}
+
+/* Estilos para os ícones sociais */
+.social-icons a {
+    display: inline-flex; /* Exibe os ícones em linha e com flexbox */
+    justify-content: center; /* Centraliza os ícones horizontalmente */
+    align-items: center; /* Centraliza os ícones verticalmente */
+    width: 4.5rem; /* Largura dos ícones */
+    height: 4.5rem; /* Altura dos ícones */
+    background: transparent; /* Fundo transparente */
+    border: 2px solid var(--main-color); /* Borda com a cor principal */
+    font-size: 2.5rem; /* Tamanho do ícone */
+    border-radius: 50%; /* Torna os ícones circulares */
+    color: var(--main-color); /* Cor do ícone */
+    margin: 3rem 1.5rem 3rem 0; /* Margens para espaçamento */
+    transition: 0.3s ease-in-out; /* Transição suave ao passar o mouse */
+}
+
+/* Efeito de hover nos ícones sociais */
+.social-icons a:hover {
+    color: var(--text-color); /* Muda a cor do ícone ao passar o mouse */
+    transform: scale(1.3) translateY(-5px); /* Aumenta o ícone e move para cima */
+    box-shadow: 0 0 25px var(--main-color); /* Aplica sombra ao ícone */
+    background-color: var(--main-color); /* Muda o fundo para a cor principal */
+}
+
+/* Estilo dos botões */
+.btn {
+    display: inline-block; /* Exibe o botão como um bloco em linha */
+    padding: 1rem 2.8rem; /* Padding do botão */
+    background: var(--main-color); /* Cor de fundo do botão */
+    box-shadow: 0 0 25px var(--main-color); /* Sombra ao redor do botão */
+    border-radius: 4rem; /* Bordas arredondadas */
+    font-size: 1.6rem; /* Tamanho da fonte do botão */
+    color: black; /* Cor do texto */
+    border: 2px solid transparent; /* Borda transparente */
+    letter-spacing: 0.1rem; /* Espaçamento entre letras */
+    font-weight: 600; /* Peso da fonte */
+    transition: 0.3s ease-in-out; /* Transição suave ao passar o mouse */
+    cursor: pointer; /* Torna o botão clicável */
+}
+
+/* Efeito de hover no botão */
+.btn:hover {
+    transform: scale(1.05); /* Aumenta o botão ao passar o mouse */
+    box-shadow: 0 0 50px var(--main-color); /* Aumenta a sombra ao passar o mouse */
+}
+
+/* Estilo do grupo de botões */
+.btn-group {
+    display: flex; /* Exibe os botões em linha */
+    align-items: center; /* Alinha os botões verticalmente */
+    gap: 1.5rem; /* Espaço entre os botões */
+}
+
+/* Estilo do segundo botão dentro do grupo */
+.btn-group a:nth-of-type(2) {
+    background-color: black; /* Fundo preto para o segundo botão */
+    color: var(--main-color); /* Cor do texto do botão */
+    border: 2px solid var(--main-color); /* Borda com a cor principal */
+    box-shadow: 0 0 25px transparent; /* Sombra transparente */
+}
+
+/* Efeito de hover no segundo botão do grupo */
+.btn-group a:nth-of-type(2):hover {
+    box-shadow: 0 0 25px var(--main-color); /* Aplica sombra ao botão */
+    background-color: var(--main-color); /* Muda o fundo para a cor principal */
+    color: black; /* Muda a cor do texto para preto */
+}
+
+/* Estilo do texto animado */
+.text-animation {
+    font-size: 34px; /* Tamanho do texto */
+    font-weight: 600; /* Peso da fonte */
+    max-width: 280px; /* Largura máxima */
+}
+
+/* Estilo para os spans dentro do texto animado */
+.text-animation span {
+    position: relative; /* Posicionamento relativo para os spans */
+}
+
+/* Animação do texto que muda entre diferentes funções */
+.text-animation span::before {
+    content: "web Developer"; /* Texto inicial */
+    color: var(--main-color); /* Cor do texto */
+    animation: words 20s infinite; /* Aplica animação de palavras */
+}
+
+/* Animação do cursor do texto animado */
+.text-animation span::after {
+    content: ""; /* Contém um elemento vazio para o cursor */
+    background-color: var(--bg-color); /* Cor de fundo do cursor */
+    position: absolute; /* Posicionamento absoluto */
+    width: calc(100% + 8px); /* Largura do cursor */
+    height: 100%; /* Altura do cursor */
+    border-left: 3px solid var(--bg-color); /* Borda esquerda para o cursor */
+    right: -8px; /* Ajuste da posição do cursor */
+    animation: cursor 0.6s infinite, typing 20s steps(14) infinite; /* Animações do cursor e digitação */
+}
+
+/* Animação do cursor piscando */
+@keyframes cursor {
+    to {
+        border-left: 2px solid var(--main-color); /* Muda a cor do cursor */
+    }
+}
+
+/* Animação das palavras que mudam ao longo do tempo */
+@keyframes words {
+    0%, 20% { content: "BIGS:"; }
+    21%, 40% { content: "Business Innovation"; }
+    41%, 60% { content: "Growth Strategy"; }
+    61%, 80% { content: " Estratégia de Inovação"; }
+    81%, 100% { content: "Crescimento Empresarial"; }
+}
+
+/* Animação do texto sendo "digitado" */
+@keyframes typing {
+    10%, 15%, 30%, 35%, 50%, 55%, 70%, 75%, 90%, 95% {
+        width: 0; /* Apaga a largura do texto */
+    }
+    5%, 20%, 25%, 40%, 45%, 60%, 65%, 80%, 85% {
+        width: calc(100% + 8px); /* Altera a largura do texto */
+    }
+}

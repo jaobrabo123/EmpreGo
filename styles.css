@@ -19,7 +19,16 @@
     padding: 0;
     box-sizing: border-box;
     user-select: none;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none; /* Remove qualquer decoração de texto (como sublinhados) */
+    border: none; /* Remove as bordas de todos os elementos */
+    outline: none; /* Remove o contorno de foco */
+    scroll-behavior: smooth; /* Aplica rolagem suave ao clicar */
+}
+
+html {
+    font-size: 60%; /* Reduz o tamanho da fonte base para 60% do padrão */
+    overflow-x: hidden; /* Impede o overflow horizontal, não permitindo rolagem para os lados */
 }
 
 body {
@@ -34,27 +43,41 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed; /* Torna o cabeçalho fixo na parte superior da página */
+    top: 0; /* Posiciona o cabeçalho no topo da tela */
+    left: 0; /* Posiciona o cabeçalho à esquerda */
+    width: 100%; /* O cabeçalho ocupa toda a largura da tela */
+    backdrop-filter: blur(10px); /* Aplica um desfoque ao fundo do cabeçalho */
+    padding: 4rem 12%; /* Define o padding interno, com 4rem de altura e 12% de largura */
+    z-index: 1000; /* Garante que o cabeçalho apareça acima de outros elementos */
     background-color: var(--primary);
     padding: 15px 30px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /*Classe Links do Header*/
-.headerlink {
+.links a{
     color: var(--text);
     text-decoration: none;
-    transition: color 2s ease;
+    transition: 0.3s ease; /* Transição suave ao passar o mouse sobre os links */
     padding: 5px 15px;
     border-radius: 5px;
+    border-bottom: 3px solid transparent; /* Borda inferior invisível inicialmente */
+    font-size: 1.8rem; /* Tamanho do texto dos links */
+    margin-left: 4rem; /* Espaço à esquerda de cada link */
+    font-weight: 500; /* Peso da fonte */ 
 }
+
+span {
+    color: var(--accent); /* Define a cor do span como a cor principal (BIGS) */
+}
+
+
 /*Efeito-hover links do Header*/
-.headerlink:hover {
-    background-color: var(--accent);
-}
-/*Id Div Organização Links Header*/
-#links {
-    display: flex;
-    gap: 15px;
+.links a:hover,
+.links a.active {
+    color: var(--accent); /* Muda a cor do link para a cor principal */
+    border-bottom: 3px solid var(--accent); /* Aplica a borda inferior com a cor principal */
 }
 
 #nomedosite{
@@ -63,6 +86,8 @@ header {
     transition: color 2s ease;
     padding: 5px 15px;
     border-radius: 5px;
+    font-size: 1.7em !important; 
+    text-shadow: 0 0 25px var(--accent); /* Aplica um efeito de sombra ao texto do logo */
 }
 
 #logoimg {
@@ -70,11 +95,22 @@ header {
     height: auto;
 }
 
+.logo:hover {
+    transform: scale(1.1); /* Aumenta o logo 10% ao passar o mouse sobre ele */
+}
+
 #logo {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 2rem; /* Tamanho do texto do logo */
+    color: var(--text-color); /* Cor do logo */
+    font-weight: 900; /* Deixa o texto do logo bem forte */
+    cursor: pointer; /* Altera o cursor para uma mãozinha quando passa sobre o logo */
+    transition: 0.3s ease; /* Adiciona uma transição suave ao logo */
+    
 }
+
 
 footer{
     bottom: 0;

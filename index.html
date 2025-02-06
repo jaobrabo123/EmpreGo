@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="imagens/ajunet.ico" type="image/x-icon">
-    <script src="script.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
     <link rel="stylesheet" href="styles.css">
-    <title>AjuNet</title>
+    <link rel="stylesheet" href="index/index.css">
+
+    <title>ModelBIGS</title>
 </head>
 <body onload="carregar()">
     <header>
@@ -14,21 +17,55 @@
             <a href="index.html" target="_self">
                 <img src="imagens\BIGSlogo.png" alt="Logo" id="logoimg">
             </a>
-            <a href="index.html" target="_self" id="nomedosite">AjuNet</a>        
+            <a href="index.html" target="_self" id="nomedosite">Model <span>BIGS</span></a>       
         </div>
-        <div id="links">
+        <nav class="links">
+            <a href="#home" >Inicio</a>
             <a class="headerlink" href="sobre.html" target="_self">Sobre</a>
             <a class="headerlink" href="suporte.html" target="_self">Suporte</a>
             <a class="headerlink" href="login/login.html" target="_self">Login / Cadastrar</a>
             <!--Temporariamente linkando a profile por aqui so pra testar-->
             <a class="headerlink"href="profile/profile.html" target="_self">Perfil</a> 
-        </div>
+        </nav>
     </header>
-    <div id="main">
-        <div id="slideShow">
-            <h1>Bem-Vindo a AjuNet!</h1>
+    
+    <section class="home" id="home">
+        <div class="home-content">
+            <h1>Seja Bem-Vindo ao <span>BIGS</span></h1>
+            <h3 class="text-animation">Model <span></span></h3>
+            <p>O interesse pelo texto como objeto de estudo gerou vários trabalhos importantes...</p>
+            <div class="social-icons">
+                <a href="#"><i class='bx bxl-facebook'></i></a>
+                <a href="#"><i class='bx bxl-github'></i></a>
+                <a href="#"><i class='bx bxl-instagram'></i></a>
+                <a href="#"><i class='bx bxl-linkedin'></i></a>
+            </div>
+            
+            <!-- Botoes de saiba mais e contato (obs: modificar se quiser) -->
+            <div class="btn-group">
+                <a href="#saiba-mais" class="btn">Saiba mais</a>
+                <a href="#contato" class="btn">Contato</a>
+            </div>
         </div>
-    </div>
-    <footer>&copy; AjuNet</footer>
+
+        <!-- Swiper Slider -->
+        <div class="home-slider swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="5.jpg" alt="Imagem 1"></div>
+                <div class="swiper-slide"><img src="6.jpg" alt="Imagem 2"></div>
+                <div class="swiper-slide"><img src="7.jpg" alt="Imagem 3"></div>
+            </div>
+            <!-- navegação automatica no js -->
+            <div class="swiper-next"></div>
+            <div class="swiper-prev"></div>
+            <!-- Paginação automatica no js -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+    
+    <footer>&copy; ModelBIGS</footer>
 </body>
 </html>

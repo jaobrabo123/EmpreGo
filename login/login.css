@@ -4,6 +4,8 @@ body {
     padding: 0; /* Remove preenchimento padrão */
     min-height: 100vh; /* Garante que o conteúdo ocupe a tela toda */
     font-family: 'Jost', sans-serif; /* Define a fonte do texto */
+    height: 800px; /* Altura do contêiner */
+
 }
 
 /* Estiliza o contêiner principal */
@@ -27,6 +29,7 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
+
 }
 
 /* Estiliza os rótulos dos formulários */

@@ -1,3 +1,5 @@
+/*---------------------------FALE COMIGO ANTES DE PENSAR EM MEXER---------------------------*/
+
 /* Regras globais para todos os elementos da página */
 * {
     margin: 0; /* Remove a margem padrão de todos os elementos */
@@ -8,7 +10,9 @@
     outline: none; /* Remove o contorno de foco */
     scroll-behavior: smooth; /* Aplica rolagem suave ao clicar em âncoras */
     font-family: "Poppins", sans-serif; /* Define a fonte padrão da página */
+    
 }
+
 
 /* Definindo variáveis de cores no :root, que são reutilizáveis */
 :root {
@@ -16,7 +20,10 @@
     --bg-color: #18122B; /* Cor de fundo principal */    
     --second-bg-color: #443C68; /* Segunda cor de fundo, quase preta */
     --main-color:  #635985;  /* Cor principal */
+    --primary: #393053;
+    --barra-lateral: black;
 }
+
 
 /* Regras para o HTML */
 html {
@@ -32,6 +39,8 @@ body {
 
 /* Estilo do cabeçalho (header) */
 .header {
+    width: 1200;
+    height: 1200;
     position: fixed; /* Torna o cabeçalho fixo na parte superior da página */
     top: 0; /* Posiciona o cabeçalho no topo da tela */
     left: 0; /* Posiciona o cabeçalho à esquerda */
@@ -46,31 +55,13 @@ body {
 }
 
 
-
-/* Estilo dos links da navbar */
-.navbar a {
-    font-size: 1.8rem; /* Tamanho do texto dos links */
-    color: var(--text-color); /* Cor do texto dos links */
-    margin-left: 4rem; /* Espaço à esquerda de cada link */
-    font-weight: 500; /* Peso da fonte */
-    transition: 0.3s ease; /* Transição suave ao passar o mouse sobre os links */
-    border-bottom: 3px solid transparent; /* Borda inferior invisível inicialmente */
-}
-
-/* Efeito de hover nos links da navbar */
-.navbar a:hover,
-.navbar a.active {
-    color: var(--main-color); /* Muda a cor do link para a cor principal */
-    border-bottom: 3px solid var(--main-color); /* Aplica a borda inferior com a cor principal */
-}
-
-/* Estilo do ícone de menu*/
+/* Estilo do ícone de menu */
 #menu-icon {
     font-size: 3.6rem; /* Tamanho do ícone */
     color: var(--main-color); /* Cor do ícone */
     display: none; /* Inicialmente escondido, provavelmente usado em dispositivos móveis */
     cursor: pointer; /* Altera o cursor para uma mãozinha */
-}
+} 
 
 /* Estilos para as seções do site */
 section {
@@ -98,22 +89,84 @@ section {
     width: 50%; /* Largura de 50% */
 }
 
-/* Estilos para a imagem na seção home */
+
+
+/*---------------------------SLIDER---------------------------*/
 .home-slider {
-    width: 40%; /* Mantém a largura similar à antiga .home-img */
+    width: 50%; /* Ajusta a largura do swiper */
+    height: 450px; /* Ajusta a altura do swiper */
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     top: 4rem;
-    border-radius: 10%; /* Mantém a imagem redonda */
-    box-shadow: 0 0 25px var(--main-color); /* Mantém o efeito de sombra */
+    border-radius: 15%; /* Arredonda as bordas mais agressivamente */
     box-shadow: 0 0 25px var(--main-color),
                 0 0 50px var(--main-color),
-                0 0 100px var(--main-color);
+                0 0 100px var(--main-color); /* Efeitos de sombra */
+    perspective: 1500px; /* Cria um efeito de perspectiva 3D */
+    overflow: hidden; /* Garante que os slides não saiam da área visível */
 }
 
-/* Estilos para o texto "span" */
+/* Animação para os slides */
+.home-slider {
+    width: 50%; /* Ajusta a largura do swiper */
+    height: 450px; /* Ajusta a altura do swiper */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 4rem;
+    border-radius: 15%; /* Arredonda as bordas mais agressivamente */
+    box-shadow: 0 0 25px var(--main-color),
+                0 0 50px var(--main-color),
+                0 0 100px var(--main-color); /* Efeitos de sombra */
+    perspective: 1500px; /* Cria um efeito de perspectiva 3D */
+    overflow: hidden; /* Garante que os slides não saiam da área visível */
+}
+
+/* Animação para os slides */
+.swiper-slide {
+    position: relative; /* Alterado de absolute para relative */
+    width: 100%; /* Garante que a largura do slide ocupe 100% do swiper */
+    height: 100%; /* Garante que a altura do slide ocupe 100% do swiper */
+    opacity: 0; /* Inicialmente invisível */
+    transform: scale(0.8) rotateY(90deg); /* Aumenta a escala e gira no eixo Y para dar o efeito 3D */
+    transition: opacity 1s ease, transform 1s ease, filter 1s ease; /* Transições suavizadas */
+    filter: blur(5px); /* Aplica um desfoque no slide */
+    will-change: opacity, transform, filter; /* Avisa ao navegador sobre as propriedades a serem alteradas */
+}
+
+/* Slide ativo: vai ficar visível, sem desfoque e com efeito 3D */
+.swiper-slide-active {
+    opacity: 1;
+    transform: scale(1) rotateY(0deg); /* Anima para o tamanho normal e remove a rotação */
+    filter: blur(0); /* Remove o desfoque */
+}
+
+/* Efeito de transição ainda mais alucinante */
+.swiper-slide-prev, .swiper-slide-next {
+    opacity: 0.6; /* Diminui a opacidade dos slides adjacentes */
+    transform: scale(0.9); /* Diminui um pouco o tamanho dos slides ao lado */
+    filter: blur(10px); /* Aplica um desfoque ainda mais forte nos slides adjacentes */
+}
+
+/* Estilo da imagem dentro do swiper */
+.swiper-slide img {
+    width: 100%; /* Faz a imagem ocupar 100% da largura do slide */
+    height: 100%; /* Ajusta a altura automaticamente para manter a proporção */
+    object-fit: cover; /* Faz a imagem preencher o espaço sem distorcer a proporção */
+    border-radius: 10%; /* Mantém as bordas arredondadas nas imagens */
+    transition: transform 0.5s ease; /* Transição suave ao aplicar zoom ou rotação */
+}
+
+/* Efeito de zoom e rotação da imagem no hover */
+.swiper-slide:hover img {
+    transform: scale(1.2) rotate(15deg); /* Aumenta o zoom e aplica uma rotação ao passar o mouse */
+}
+
+
+/*---------------------------TEXTO---------------------------*/
 span {
     color: var(--main-color); /* Define a cor do span como a cor principal */
 }
@@ -133,14 +186,6 @@ span {
     line-height: 1.0; /* Ajuste do espaçamento entre as linhas */
 }
 
-/* Estilo para a imagem dentro do slider*/
-.swiper-slide img {
-    width: 30vw;
-    height: 30vw;
-    cursor: all-scroll; /*movimenta as imagens para o lado*/
-}
-
-
 /* Estilo do parágrafo na seção home */
 .home-content p {
     font-size: 1.5rem; /* Tamanho da fonte */
@@ -149,7 +194,8 @@ span {
     max-width: 1000px; /* Largura máxima do parágrafo */
 }
 
-/* Estilos para os ícones sociais */
+
+/*---------------------------ÍCONES---------------------------*/
 .social-icons a {
     display: inline-flex; /* Exibe os ícones em linha e com flexbox */
     justify-content: center; /* Centraliza os ícones horizontalmente */
@@ -173,7 +219,8 @@ span {
     background-color: var(--main-color); /* Muda o fundo para a cor principal */
 }
 
-/* Estilo dos botões */
+
+/*---------------------------BOTOES---------------------------*/
 .btn {
     display: inline-block; /* Exibe o botão como um bloco em linha */
     padding: 1rem 2.8rem; /* Padding do botão */
@@ -217,7 +264,8 @@ span {
     color: black; /* Muda a cor do texto para preto */
 }
 
-/* Estilo do texto animado */
+
+/*---------------------------ANIMAÇÃO DO TEXTO---------------------------*/
 .text-animation {
     font-size: 34px; /* Tamanho do texto */
     font-weight: 600; /* Peso da fonte */
@@ -272,4 +320,340 @@ span {
     5%, 20%, 25%, 40%, 45%, 60%, 65%, 80%, 85% {
         width: calc(100% + 8px); /* Altera a largura do texto */
     }
+}
+
+.heading{
+    font-size: 8rem;
+    text-align: center;
+    margin: 5rem 0;
+}
+
+/*-------------------------SERVIÇOS--------------------------------*/
+
+.servicos {
+    padding: 100px 15px;
+    background: var(--primary);
+}
+
+.servicos h2 {
+    text-align: center;
+    color: white;
+    margin-bottom: 40px;
+}
+
+.linha-items {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.linha-items::before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 100%;
+    background-color: var(--main-color);
+    left: calc(50% - 2.5px);
+}
+
+.linha-item {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.linha-item:nth-child(odd) {
+    flex-direction: row-reverse;
+    text-align: right;
+    padding-right: calc(50% + 30px);
+}
+
+.linha-item:nth-child(even) {
+    padding-left: calc(50% + 30px);
+}
+
+.linha-dot {
+    height: 21px;
+    width: 21px;
+    background-color: var(--main-color);
+    box-shadow: 0 0 25px var(--main-color), 0 0 50px var(--main-color);
+    position: absolute;
+    left: calc(50% - 10px);
+    border-radius: 50%;
+    top: 10px;
+}
+
+.linha-content {
+    background-color: var(--bg-color);
+    border: 3px solid var(--main-color);
+    padding: 30px 50px;
+    border-radius: 4rem;
+    box-shadow: 0 0 10px var(--main-color);
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    max-width: 500px;
+}
+
+.linha-content:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px var(--main-color);
+}
+
+.linha-titulo {
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.linha-texto h3 {
+    font-size: 18px;
+    color: white;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.linha-texto p {
+    color: white;
+    font-weight: 300;
+    line-height: 22px;
+}
+
+/*---------------------------BARRA LATERAL---------------------------*/
+
+::-webkit-scrollbar{
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: var(--main-color);
+}
+
+::-webkit-scrollbar-track{
+    background-color: var(--bg-color);
+    width: 50px;
+}
+
+/*---------------------------PERFIS---------------------------*/
+
+.testperfis{
+    background: var(--second-bg-color);
+}
+
+.testperfis-box{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+}
+
+.testperfis .heading{
+    margin-bottom: 5rem;
+}
+
+.testperfis-box img{
+    width: 15rem;
+    border-radius: 50%;
+    border: 3px solid var(--main-color);
+    box-shadow: 0 0 25px var(--main-color);
+}
+
+.wrapper{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 3rem;
+}
+
+.testperfis-item{
+    min-height: 350px;
+    max-width: 450px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2rem;
+    margin: 0 2rem;
+    padding:  30px 60px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.5rem;
+    color: white;
+    transition: 0.4s ease-in-out;
+}
+
+.testperfis-item:hover{
+    border: 3px solid var(--main-color);
+    transform: translateY(-10px)scale(1.03);
+    box-shadow: 0 0 50px var(--main-color);
+}
+
+.testperfis-item h2{
+    font-size: 2.2rem;
+    justify-content: center;
+}
+
+.testperfis-item p{
+    font-size: 1.3;
+}
+
+/*APENAS TEST*/
+.testperfis-item:focus-within {
+    transform: scale(1.2);
+    box-shadow: 0 0 50px var(--main-color);
+}
+
+.testperfis-item.active {
+    transform: scale(1.2);
+    box-shadow: 0 0 50px var(--main-color);
+}
+
+/*---------------------------PARTE DE BAIXO DO SITE---------------------------*/
+.footer{
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    padding: 40px 0;
+    background-color: var(--primary);
+}
+
+.footer .social{
+    text-align: center;
+    padding-bottom: 25px;
+    color: var(--main-color);
+}
+
+.footer .social a{
+    font-size: 25px;
+    color: var(--text-color);
+    border: 2px solid var(--bg-color);
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 10px;
+    transition: 0.3s ease-in-out;
+}
+
+.footer .social a:hover{
+    transform: scale(1.2)translateY(-10px);
+    background-color: var(--second-bg-color);
+    color: black;
+    box-shadow: 0 0 25px var(--bg-color);
+}
+
+.footer ul{
+    margin-top: 0;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.footer ul li a{
+    color: white;
+    border-bottom: 3px solid transparent;
+    transition: 0.3s ease-in-out;
+}
+
+.footer ul li a:hover{
+    border-bottom: 3px solid;
+}
+
+.footer ul li{
+    display: inline-block;
+    padding: 0 15px;
+}
+
+.footer .name-log-footer{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+}
+
+/*---------------------------CELULAR---------------------------*/
+
+@media(max-width:1285px){
+    html{
+        font-size: 55%;
+    }
+}
+
+@media(max-width:991px){
+    .header{
+        padding: 2rem 3%;
+    }
+    .selection{
+        padding: 10rem 3% 2rem;
+    }
+    .linha-items::before{
+        left: 7px;
+    }
+    .linha-item:nth-child(odd){
+        padding-right: 0;
+        text-align: left;
+    }
+    .linha-item:nth-child(odd),
+    .linha-item:nth-child(even){
+        padding: 37px;
+    }
+    .linha-dot{
+        left: 0;
+    }
+    .testprfis .wrapper{
+        grid-template-columns: repeat(1,1fr);
+    }
+    .footer{
+        padding: 2rem 3%;
+    }
+}
+
+@media(max-width:895px){
+    #logoimg{
+        display: block;
+    }
+    .links{
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 50%;
+        padding: 1rem 3%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(20px);
+        border-bottom-left-radius: 2rem;
+        border-left: 2px solid var(--bg-color);
+        border-bottom: 2px solid var(--main-color);
+        display: none;
+    }
+    .links a{
+        display: block;
+        font-size: 2rem;
+        margin: 3rem 0;
+        color: white;
+    }
+    .home{
+        flex-direction: column-reverse;
+        margin: 5rem 4rem;
+    }
+    .home-content h3{
+        font-size: 2.6;
+    }
+    .home-content h1{
+        font-size: 8rem;
+        margin-top: 3rem;
+    }
+    .home-img img{
+        width: 56vw;
+    }
+
 }

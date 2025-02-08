@@ -48,12 +48,12 @@ header {
     left: 0; /* Posiciona o cabeçalho à esquerda */
     width: 100%; /* O cabeçalho ocupa toda a largura da tela */
     backdrop-filter: blur(10px); /* Aplica um desfoque ao fundo do cabeçalho */
-    padding: 4rem 12%; /* Define o padding interno, com 4rem de altura e 12% de largura */
+    padding: 1rem 2%; /* Define o padding interno, com 4rem de altura e 12% de largura */
     z-index: 1000; /* Garante que o cabeçalho apareça acima de outros elementos */
-    background-color: var(--primary);
-    padding: 15px 30px;
+    background-color: rgba(39, 30, 53, 0.5); /* 50% de transparência */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 
 /*Classe Links do Header*/
 .links a{

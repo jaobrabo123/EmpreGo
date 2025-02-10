@@ -14,10 +14,10 @@
     text-align: center;
     align-content: center;
     flex-direction: column;
-    background-image: url("imagens/SalsaFix.png");
+    background-image: url("/imagens/SalsaFix.png");
     background-repeat: no-repeat;
-    background-position-x: 1350px;
-    background-position-y: 350px;
+    background-position-x: 1250px;
+    background-position-y: 390px;
     position: relative;
 }
 
@@ -48,10 +48,23 @@ a{
 #informacoes{
     align-items: center;
     text-align: center;
+    display: flex;
     font-size: 20px;
+    align-content: center;
+    flex-direction: row;
+    margin-top: 70px;
 }
 #espacoTeste{
     padding-bottom: 25px;
+    margin-right: 100px;
+}
+
+#espacoFaq{
+    margin-right: 100px;
+}
+
+#espacoTel{
+    padding-right: 90px;
 }
 
 h2{

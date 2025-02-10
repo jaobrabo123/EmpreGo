@@ -515,7 +515,15 @@ span {
 }
 
 /*---------------------------PARTE DE BAIXO DO SITE---------------------------*/
+/*mexendo na imagem em baixo das biografias*/
 
+#salsaJoy{
+   height: 400px;
+   width: 380px;
+   margin-bottom: -100px;
+   margin-left: 460px;
+   margin-top: -80px;
+}
 
 /*---------------------------CELULAR---------------------------*/
 

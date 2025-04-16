@@ -7,59 +7,101 @@
     <script src="../script.js" defer></script>
     <script src="login.js" defer></script>
     <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="/login/login.css">
 
     <title>Login</title>
 </head>
-<body onload="carregar()">
-    <header>
-        <div id="logo">
-            <a href="../index.html" target="_self">
-                <img src="../imagens\BIGSlogo.png" alt="Logo" id="logoimg">
-            </a>
-            <a href="../index.html" target="_self" id="nomedosite">Model <span>BIGS</span></a>        
-        </div>
-        <nav class="links">
-            <a href="#home" >Inicio</a>
-            <a class="headerlink" href="../sobre.html" target="_self">Sobre</a>
-            <a class="headerlink" href="../suporte.html" target="_self">Suporte</a>
-            <a class="headerlink" href="../login/login.html" target="_self">Login / Cadastrar</a>
-            <!--Temporariamente linkando a profile por aqui so pra testar-->
-            <a class="headerlink"href="../profile/profile.html" target="_self">Perfil</a> 
-        </nav>
-    </header>
-    <div id="main">
-        <div id="conteudo">
-            <input type="checkbox" id="chk" aria-hidden="true">
+<body>
+    <div class="container">
+        <div class="forms-container">
+          <div class="login-cadastro">
+            <form id="loginForm" action="#" class="transicao-login">
+              <h2 class="title">Login</h2>
+              <div class="caixa-text">
+                <img src="/imagens/alvo.png" class="person">
+                <input type="text" id="username" placeholder="Username" required />
+              </div>
+              <div class="caixa-text">
+                <img src="/imagens/cadeado.png" class="all-icon">
+                <input type="password" id="password" placeholder="Password" required />
+                <button type="button" id="togglePassword">
+                  <img src="/imagens/escondido.png" id="eyeIcon" class="eye-icon">
+                </button>              
+              </div>
+              <input type="submit" value="Login" class="btn solid" id="loginBtn" disabled />
+              <a class="problema">Esqueceu sua senha?</a>
+            </form>
             
-
-        <div class="login">
-            <form>
-                <label for="chk" aria-hidden="true">Entrar</label>
-                <input type="email" name="email" placeholder="Email" required>       
-                <div id="sem">
-                    <input type="password" id="pswd" name="pswd" placeholder="Password" required>
-                    <img src="../imagens/olhofechado2.png" alt="Olho" onclick="mostrarsenha()" id="olho">
+            <form id="registerForm" action="#" class="transição-log-cadast">
+              <h2 class="title">Cadastrar-se</h2>
+              <div class="caixa-text">
+                <img src="/imagens/alvo.png" class="person" />
+                <input type="text" id="regUsername" placeholder="Username" required />
+              </div>
+              <div class="caixa-text">
+                <img src="/imagens/o-email.png" class="all-icon" />
+                <input type="email" id="email" placeholder="Email" required />
+              </div>
+              <div class="caixa-text">
+                <img src="/imagens/cadeado.png" class="all-icon" />
+                <input type="password" id="registerPassword" placeholder="Password" required />
+                <button type="button" id="toggleRegisterPassword">
+                  <img src="/imagens/escondido.png" id="eyeIconRegister" class="eye-icon" />
+                </button>
+              </div>
+              <div class="caixa-text">
+                <img src="/imagens/cadeado.png" class="all-icon" />
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+                <button type="button" id="toggleConfirmPassword">
+                  <img src="/imagens/escondido.png" id="eyeIconConfirm" class="eye-icon" />
+                </button>
+              </div>
+              <!-- Campo Data de Nascimento -->
+              <div class="caixa-text">
+                <img src="/imagens/calendario.png" class="all-icon" />
+                <input type="date" id="dob" placeholder="Data de Nascimento" required />
+              </div>
+             <!-- Campo Gênero -->
+             <div class="gender-container">
+                <div class="caixa-genero">
+                  <select id="genderSelect" class="dropdown" required>
+                      <option value="">-- Escolha seu gênero --</option>
+                      <option value="Masculino">Masculino</option>
+                      <option value="Feminino">Feminino</option>
+                      <option value="Outro">Outro</option>
+                  </select>
                 </div>
-                <button type="submit">Entrar</button>
-            </form>
+              </div>
+              <input type="submit" class="btn" value="Cadastrar-se" id="registerBtn" disabled />
+            </form>          
+          </div>
         </div>
-
-        <div class="signup">
-            <form onsubmit="return validarSenha()">
-                <label for="chk" aria-hidden="true">Cadastrar</label>
-                <input type="text" name="txt" placeholder="User name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" id="senha" name="pswd" placeholder="Password" required>
-                <input type="text" id="confirmaSenha" name="confirm_pswd" placeholder="Confirm Password" required>
-                <button type="submit">Cadastrar</button>  
-                <p id="mensagemErro" style="color: red; display: none;">As senhas não coincidem!</p>
-            </form>
+        <div class="circulo-container">
+          <div class="panel left-panel">
+            <div class="content">
+              <h3>Você é novo por aqui?</h3>
+              <p>
+                Se ainda não tiver uma conta, juntando-se a nós e faça seu cadastro logo abaixo.
+              </p>
+              <button class="btn transparente" id="login-up-btn">
+                Cadastrar-se
+              </button>
+            </div>
+          </div>
+          <div class="panel right-panel">
+            <div class="content">
+              <h3>Já tem uma conta?</h3>
+              <p>
+                Conecte-se novamente à nossa comunidade.
+              </p>
+              <button class="btn transparente" id="login-in-btn">
+                Login
+              </button>
+            </div>
+          </div>
         </div>
-        </div>
-        
-
-    </div>
+      </div>
+      <script src="app.js"></script>
     <footer>&copy; AjuNet</footer>
 </body>
 </html>

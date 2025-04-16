@@ -305,7 +305,7 @@ span {
 
 /* Animação das palavras que mudam ao longo do tempo */
 @keyframes words {
-    0%, 20% { content: "BIGS:"; }
+    0%, 20% { content: "EmpreGO"; }
     21%, 40% { content: "Business Innovation"; }
     41%, 60% { content: "Growth Strategy"; }
     61%, 80% { content: " Estratégia de Inovação"; }

@@ -43,7 +43,6 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed; /* Torna o cabeçalho fixo na parte superior da página */
     top: 0; /* Posiciona o cabeçalho no topo da tela */
     left: 0; /* Posiciona o cabeçalho à esquerda */
     width: 100%; /* O cabeçalho ocupa toda a largura da tela */

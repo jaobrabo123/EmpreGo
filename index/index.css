@@ -13,7 +13,6 @@
     
 }
 
-
 /* Definindo variáveis de cores no :root, que são reutilizáveis */
 :root {
     --text-color: #ffffff;/* Cor do texto */
@@ -41,7 +40,6 @@ body {
 .header {
     width: 1200;
     height: 1200;
-    position: fixed; /* Torna o cabeçalho fixo na parte superior da página */
     top: 0; /* Posiciona o cabeçalho no topo da tela */
     left: 0; /* Posiciona o cabeçalho à esquerda */
     width: 100%; /* O cabeçalho ocupa toda a largura da tela */
@@ -99,7 +97,6 @@ section {
     justify-content: center;
     align-items: center;
     position: relative;
-    top: 4rem;
     border-radius: 15%; /* Arredonda as bordas mais agressivamente */
     box-shadow: 0 0 25px var(--main-color),
                 0 0 50px var(--main-color),
@@ -108,22 +105,22 @@ section {
     overflow: hidden; /* Garante que os slides não saiam da área visível */
 }
 
-/* Animação para os slides */
+/*
 .home-slider {
-    width: 50%; /* Ajusta a largura do swiper */
-    height: 450px; /* Ajusta a altura do swiper */
+    width: 50%;
+    height: 450px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    top: 4rem;
-    border-radius: 15%; /* Arredonda as bordas mais agressivamente */
+    border-radius: 15%;
     box-shadow: 0 0 25px var(--main-color),
                 0 0 50px var(--main-color),
-                0 0 100px var(--main-color); /* Efeitos de sombra */
-    perspective: 1500px; /* Cria um efeito de perspectiva 3D */
-    overflow: hidden; /* Garante que os slides não saiam da área visível */
-}
+                0 0 100px var(--main-color); 
+    perspective: 1500px; 
+    overflow: hidden;
+}*/
+
 
 /* Animação para os slides */
 .swiper-slide {
@@ -515,70 +512,14 @@ span {
 }
 
 /*---------------------------PARTE DE BAIXO DO SITE---------------------------*/
-.footer{
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    padding: 40px 0;
-    background-color: var(--primary);
-}
+/*mexendo na imagem em baixo das biografias*/
 
-.footer .social{
-    text-align: center;
-    padding-bottom: 25px;
-    color: var(--main-color);
-}
-
-.footer .social a{
-    font-size: 25px;
-    color: var(--text-color);
-    border: 2px solid var(--bg-color);
-    width: 42px;
-    height: 42px;
-    line-height: 42px;
-    display: inline-block;
-    text-align: center;
-    border-radius: 50%;
-    margin: 0 10px;
-    transition: 0.3s ease-in-out;
-}
-
-.footer .social a:hover{
-    transform: scale(1.2)translateY(-10px);
-    background-color: var(--second-bg-color);
-    color: black;
-    box-shadow: 0 0 25px var(--bg-color);
-}
-
-.footer ul{
-    margin-top: 0;
-    padding: 0;
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 0;
-    text-align: center;
-}
-
-.footer ul li a{
-    color: white;
-    border-bottom: 3px solid transparent;
-    transition: 0.3s ease-in-out;
-}
-
-.footer ul li a:hover{
-    border-bottom: 3px solid;
-}
-
-.footer ul li{
-    display: inline-block;
-    padding: 0 15px;
-}
-
-.footer .name-log-footer{
-    margin-top: 50px;
-    text-align: center;
-    font-size: 16px;
-    color: white;
+#salsaJoy{
+   height: 400px;
+   width: 380px;
+   margin-bottom: -100px;
+   margin-left: 460px;
+   margin-top: -80px;
 }
 
 /*---------------------------CELULAR---------------------------*/

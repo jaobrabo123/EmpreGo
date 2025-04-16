@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="imagens/ajunet.ico" type="image/x-icon">
-    <script src="script.js" defer></script>
+    <script src="../script.js" defer></script>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="profileStyles.css">
     <title>Profile</title>
@@ -13,45 +13,64 @@
     <header>
         <div id="logo">
             <a href="../index.html" target="_self">
-                <img src="../imagens\BIGSlogo.png" alt="Logo" id="logoimg">
+                <img src="../imagens/BIGSlogo.png" alt="Logo" id="logoimg">
             </a>
-            <a href="../index.html" target="_self" id="nomedosite">Model <span>BIGS</span></a>         
+            <a href="../index.html" target="_self" id="nomedosite">Model <span>BIGS</span></a>  
+            <i class='bx bx-menu' id="menu-icon"></i>     
         </div>
-        <div id="links">
-            <a class="headerlink" href="../sobre.html" target="_self">Sobre</a>
-            <a class="headerlink" href="../suporte.html" target="_self">Suporte</a>
+        <nav class="links">
+            <a href="../index.html" >Inicio</a>
+            <a class="headerlink" href="../sobre/sobre.html" target="_self">Sobre</a>
+            <a class="headerlink" href="../suporte/suporte.html" target="_self">Suporte</a>
             <a class="headerlink" href="../login/login.html" target="_self">Login / Cadastrar</a>
-        </div>
+            <!--Temporariamente linkando a profile por aqui so pra testar-->
+            <a class="headerlink"href="../profile/profile.html" target="_self">Perfil</a> 
+        </nav>
     </header>
+
     <div id="main">
+            <div id="impInfo">
+                <img id="fotoUsuario" src="../imagens/genPfp.png" alt="genPfp" >
+                <h1 id="nomUsuario"> John Doe</h1>
+                <a id="emailUsuario"> EmailGenerico@gmail.com</a>
+            </div>
+
         <div id="bodyTop">
-            <img id="fotoUsuario" src="https://p.turbosquid.com/ts-thumb/3m/jy2HFA/lnnHNPqJ/4/png/1594739822/1920x1080/fit_q99/f2a310f8c37ebe8331954ae975521ebba8fb03aa/4.jpg" alt="Placeholder (eventual foto do user)" >
-            <input id="nomUsuario" type="text" placeholder="Insira aqui o seu nome de usuário">
-            <input id="emailUsuario" type="email" placeholder="Insira aqui o seu e-mail">
-            <input id="nascUsuario" type="date" placeholder="DD/MM/YYYY">
-            <input id="cpfUsuario" type="text" placeholder="123.456.678-90" maxlength="11">
-            <input id="tagUsuario" type="text" placeholder="Insira uma tag sua aqui">
-            <a>JS</a>
-            <!--Linha de tags aqui, não sei se faço input-->
+            <h1 id="nascUsuario">18/03/2017</h1>
+            <h1 id="cpfUsuario">123.456.789-10</h1>   
         </div>
-        <div id="bodyMid">
-            <input id="descUsuario" type="text" placeholder="Insira aqui uma descrição sobre você e sua jornada no mercado de trabalho" maxlength="2000">
-            <input id="gitUsuario" type="text" placeholder="Insira seu GitHub(opcional)">
-            <input id="ytUsuario" type="text" placeholder="Insira seu Youtube(opcional)">
-            <input id="twtUsuario" type="text" placeholder="Insira seu Twitter(opcional)">
+        <div id="bodyTags">
+            <input id="tagUsuario" placeholder="Insira uma tag sua aqui">
+            <a>JS</q>
         </div>
+
+        <div id="bodyTextArea">
+            <textarea id="descUsuario" placeholder="Insira aqui uma descrição sobre você e sua jornada no mercado de trabalho (Limite de 2000 caracteres)" maxlength="2000"></textarea>
+        </div>
+
+        <div id="bodyMid">    
+            <img src="../imagens/gitLogo.png" alt="gitLogo" class="logo">
+            <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc"> GitBrabo123</a>
+            <img src="../imagens/ytLogo.png" alt="ytLogo" class="logo">
+            <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc"> YtExemplo24</a>
+            <img src="../imagens/twitterLogo.png" alt="twitterLogo" class="logo">
+            <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc"> JohnDoeMarch18</a>
+        </div>
+
         <div id="bodyBottom">
-            <div id="boxExemplo">
-                <h1>Minha Empresa</h1>
-                <a>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae distinctio libero voluptas nisi natus saepe velit. Placeat facere ipsam, repellendus vitae quo unde tempore reprehenderit rem sint excepturi, tempora numquam!</a>
-                <!--Lembrar de apagar apos o usuario criar a sua primeira-->
+            <div id="containerExemplo">
+                    <h1 id="titExemplo">Empresa exemplo</h1>
+                <div id="boxExemplo">
+                    <img id="imgExemplo" src="https://i.pinimg.com/736x/d2/a2/82/d2a28224f80a7f6544cd4140d68c89f3.jpg" alt="imgExemplo">
+                    <a id="textExemplo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, consequuntur esse voluptates, accusantium asperiores nemo cum et labore obcaecati deserunt animi quam? Saepe ea nostrum voluptate, ullam eius corrupti vitae!</a>
+                </div>
             </div>
             
             <div id="boxCriar">
-                <img id="fotoCriar" src="https://p.turbosquid.com/ts-thumb/3m/jy2HFA/lnnHNPqJ/4/png/1594739822/1920x1080/fit_q99/f2a310f8c37ebe8331954ae975521ebba8fb03aa/4.jpg" alt="Placeholder (eventual foto deu um +)" >
-                <a>Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado seu!</a>
-                <button id="btnCriar"></button>
+                <input type="image" id="fotoCriarBtn" src="../imagens/plusBtn.png" alt="plusBtn" >
+                <a id="textCriar">Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado seu!</a>
                 <!--Fazer o btn ficar atras do texto, cirando uma caixa clicável (no css)-->
+                <!--Decidir entre fazer a imagem te levar para outro espaco para poder criar outra box, ou criar um botao separado para deixar a pessoa escrever aqui e por a imagem? Perguntar pra o resto do povo-->
             </div>
         </div>
     </div>

@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="imagens/ajunet.ico" type="image/x-icon">
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="../imagens/ajunet.ico" type="image/x-icon">
+    <script src="../script.js" defer></script>
+    <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="stylesSuporte.css">
     <title>Base</title>
 </head>
 <body onload="carregar()">
     <header>
         <div id="logo">
-            <a href="../index.html" target="_self">
+            <a href="../index/index.html" target="_self">
                 <img src="../imagens\BIGSlogo.png" alt="Logo" id="logoimg">
             </a>
-            <a href="../index.html" target="_self" id="nomedosite">Model <span>BIGS</span></a>        
+            <a href="../index/index.html" target="_self" id="nomedosite">Model <span>BIGS</span></a>        
         </div>
         <nav class="links">
-            <a href="#suporte" >Inicio</a>
-            <a class="headerlink" href="sobre.html" target="_self">Sobre</a>
+            <a href="../index.html" >Inicio</a>
+            <a class="headerlink" href="../sobre/sobre.html" target="_self">Sobre</a>
             <a class="headerlink" href="suporte.html" target="_self">Suporte</a>
-            <a class="headerlink" href="login/login.html" target="_self">Login / Cadastrar</a>
+            <a class="headerlink" href="../login/login.html" target="_self">Login / Cadastrar</a>
             <!--Temporariamente linkando a profile por aqui so pra testar-->
-            <a class="headerlink"href="profile/profile.html" target="_self">Perfil</a> 
+            <a class="headerlink"href="../profile/profile.html" target="_self">Perfil</a> 
         </nav>
     </header>
     </div>
     <div id="main">
-        <img src="imagens/bustedFuseBox.png" alt="" id="bustedFuseBox">
+        <img src="../imagens/bustedFuseBox.png" alt="" id="bustedFuseBox">
         <div class="suporteTexto">
             <p>Caso encontre qualquer problema ou tenha alguma dúvida</p>
             <p>Você pode ler as nossas Perguntas Frequentes (FAQ) Logo abaixo!</p>
@@ -37,17 +37,21 @@
         </div>
 
         <div id="informacoes">
-            <h2 id="faqTitulo">FAQ</h2>
-            <button id="faqBtn">Clique aqui!</button>
-
+            
             <div id="espacoTeste">
             <h2 id="emailTitulo">E-mail</h2>
             <a id="emailTexto">Emailde.Exemplo@gmail.com</a>
             </div>
- 
+            
+            <div id='espacoFaq'>
+            <h2 id="faqTitulo">FAQ</h2>
+            <button id="faqBtn">Clique aqui!</button>
+            </div>
+
+            <div id="espacoTel">
             <h2 id="telTitulo">Telefone</h2>
             <a id="telNum">+55 79123456789</a>
-
+            </div>
            
         </div>
     </div>

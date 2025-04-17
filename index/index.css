@@ -1,6 +1,3 @@
-/*---------------------------FALE COMIGO ANTES DE PENSAR EM MEXER---------------------------*/
-
-/* Regras globais para todos os elementos da página */
 * {
     margin: 0; /* Remove a margem padrão de todos os elementos */
     padding: 0; /* Remove o preenchimento (padding) padrão de todos os elementos */
@@ -10,7 +7,7 @@
     outline: none; /* Remove o contorno de foco */
     scroll-behavior: smooth; /* Aplica rolagem suave ao clicar em âncoras */
     font-family: "Poppins", sans-serif; /* Define a fonte padrão da página */
-    
+ 
 }
 
 /* Definindo variáveis de cores no :root, que são reutilizáveis */
@@ -52,22 +49,13 @@ body {
     z-index: 1000; /* Garante que o cabeçalho apareça acima de outros elementos */
 }
 
-
-/* Estilo do ícone de menu */
-#menu-icon {
-    font-size: 3.6rem; /* Tamanho do ícone */
-    color: var(--main-color); /* Cor do ícone */
-    display: none; /* Inicialmente escondido, provavelmente usado em dispositivos móveis */
-    cursor: pointer; /* Altera o cursor para uma mãozinha */
-} 
-
-/* Estilos para as seções do site */
+/*Tamanho-Seções*/
 section {
     min-height: 100vh; /* Garante que cada seção tenha pelo menos a altura da tela */
     padding: 10rem 12%; /* Define o padding das seções */
 }
 
-/* Estilo da seção inicial (home) */
+/*Início*/
 .home {
     display: flex; /* Usa flexbox para dispor os itens */
     flex-direction: row; /* Organiza os itens horizontalmente */
@@ -76,7 +64,7 @@ section {
     gap: 5rem; /* Define um espaço entre os itens */
 }
 
-/* Estilos para o conteúdo da seção home */
+/*Conteudo-Inicio*/
 .home-content {
     display: flex; /* Usa flexbox para organizar o conteúdo */
     flex-direction: column; /* Organiza os itens verticalmente */
@@ -86,82 +74,6 @@ section {
     margin-top: 3rem; /* Espaço superior */
     width: 50%; /* Largura de 50% */
 }
-
-
-
-/*---------------------------SLIDER---------------------------*/
-.home-slider {
-    width: 50%; /* Ajusta a largura do swiper */
-    height: 450px; /* Ajusta a altura do swiper */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    border-radius: 15%; /* Arredonda as bordas mais agressivamente */
-    box-shadow: 0 0 25px var(--main-color),
-                0 0 50px var(--main-color),
-                0 0 100px var(--main-color); /* Efeitos de sombra */
-    perspective: 1500px; /* Cria um efeito de perspectiva 3D */
-    overflow: hidden; /* Garante que os slides não saiam da área visível */
-}
-
-/*
-.home-slider {
-    width: 50%;
-    height: 450px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    border-radius: 15%;
-    box-shadow: 0 0 25px var(--main-color),
-                0 0 50px var(--main-color),
-                0 0 100px var(--main-color); 
-    perspective: 1500px; 
-    overflow: hidden;
-}*/
-
-
-/* Animação para os slides */
-.swiper-slide {
-    position: relative; /* Alterado de absolute para relative */
-    width: 100%; /* Garante que a largura do slide ocupe 100% do swiper */
-    height: 100%; /* Garante que a altura do slide ocupe 100% do swiper */
-    opacity: 0; /* Inicialmente invisível */
-    transform: scale(0.8) rotateY(90deg); /* Aumenta a escala e gira no eixo Y para dar o efeito 3D */
-    transition: opacity 1s ease, transform 1s ease, filter 1s ease; /* Transições suavizadas */
-    filter: blur(5px); /* Aplica um desfoque no slide */
-    will-change: opacity, transform, filter; /* Avisa ao navegador sobre as propriedades a serem alteradas */
-}
-
-/* Slide ativo: vai ficar visível, sem desfoque e com efeito 3D */
-.swiper-slide-active {
-    opacity: 1;
-    transform: scale(1) rotateY(0deg); /* Anima para o tamanho normal e remove a rotação */
-    filter: blur(0); /* Remove o desfoque */
-}
-
-/* Efeito de transição ainda mais alucinante */
-.swiper-slide-prev, .swiper-slide-next {
-    opacity: 0.6; /* Diminui a opacidade dos slides adjacentes */
-    transform: scale(0.9); /* Diminui um pouco o tamanho dos slides ao lado */
-    filter: blur(10px); /* Aplica um desfoque ainda mais forte nos slides adjacentes */
-}
-
-/* Estilo da imagem dentro do swiper */
-.swiper-slide img {
-    width: 100%; /* Faz a imagem ocupar 100% da largura do slide */
-    height: 100%; /* Ajusta a altura automaticamente para manter a proporção */
-    object-fit: cover; /* Faz a imagem preencher o espaço sem distorcer a proporção */
-    border-radius: 10%; /* Mantém as bordas arredondadas nas imagens */
-    transition: transform 0.5s ease; /* Transição suave ao aplicar zoom ou rotação */
-}
-
-/* Efeito de zoom e rotação da imagem no hover */
-.swiper-slide:hover img {
-    transform: scale(1.2) rotate(15deg); /* Aumenta o zoom e aplica uma rotação ao passar o mouse */
-}
-
 
 /*---------------------------TEXTO---------------------------*/
 span {
@@ -261,63 +173,6 @@ span {
     color: black; /* Muda a cor do texto para preto */
 }
 
-
-/*---------------------------ANIMAÇÃO DO TEXTO---------------------------*/
-.text-animation {
-    font-size: 34px; /* Tamanho do texto */
-    font-weight: 600; /* Peso da fonte */
-    max-width: 280px; /* Largura máxima */
-}
-
-/* Estilo para os spans dentro do texto animado */
-.text-animation span {
-    position: relative; /* Posicionamento relativo para os spans */
-}
-
-/* Animação do texto que muda entre diferentes funções */
-.text-animation span::before {
-    content: "web Developer"; /* Texto inicial */
-    color: var(--main-color); /* Cor do texto */
-    animation: words 20s infinite; /* Aplica animação de palavras */
-}
-
-/* Animação do cursor do texto animado */
-.text-animation span::after {
-    content: ""; /* Contém um elemento vazio para o cursor */
-    background-color: var(--bg-color); /* Cor de fundo do cursor */
-    position: absolute; /* Posicionamento absoluto */
-    width: calc(100% + 8px); /* Largura do cursor */
-    height: 100%; /* Altura do cursor */
-    border-left: 3px solid var(--bg-color); /* Borda esquerda para o cursor */
-    right: -8px; /* Ajuste da posição do cursor */
-    animation: cursor 0.6s infinite, typing 20s steps(14) infinite; /* Animações do cursor e digitação */
-}
-
-/* Animação do cursor piscando */
-@keyframes cursor {
-    to {
-        border-left: 2px solid var(--main-color); /* Muda a cor do cursor */
-    }
-}
-
-/* Animação das palavras que mudam ao longo do tempo */
-@keyframes words {
-    0%, 20% { content: "EmpreGO"; }
-    21%, 40% { content: "Business Innovation"; }
-    41%, 60% { content: "Growth Strategy"; }
-    61%, 80% { content: " Estratégia de Inovação"; }
-    81%, 100% { content: "Crescimento Empresarial"; }
-}
-
-/* Animação do texto sendo "digitado" */
-@keyframes typing {
-    10%, 15%, 30%, 35%, 50%, 55%, 70%, 75%, 90%, 95% {
-        width: 0; /* Apaga a largura do texto */
-    }
-    5%, 20%, 25%, 40%, 45%, 60%, 65%, 80%, 85% {
-        width: calc(100% + 8px); /* Altera a largura do texto */
-    }
-}
 
 .heading{
     font-size: 8rem;

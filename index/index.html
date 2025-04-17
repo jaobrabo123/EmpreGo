@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../imagens/ajunet.ico" type="image/x-icon">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <!-- Sytlesheets -->
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="index.css">
 
-    <title>ModelBIGS</title>
+    <!-- Icons API -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <title>EmpreGo</title>
 </head>
-<body onload="carregar()">
+<body>
     <header>
         <div id="logo">
-            <a href="index.html" target="_self">
+            <a href="index.html">
                 <img src="../imagens/BIGSlogo.png" alt="Logo" id="logoimg">
             </a>
-            <a href="index.html" target="_self" id="nomedosite">Model <span>BIGS</span></a>  
-            <i class='bx bx-menu' id="menu-icon"></i>     
+
+            <a href="index.html"id="nomedosite">Empre<span>Go</span></a>  
         </div>
+
+        <!-- Navbar -->
         <nav class="links">
             <a href="#home" >Inicio</a>
             <a  href="#servicos">Serviços</a>
@@ -27,42 +30,28 @@
             <a class="headerlink" href="../sobre/sobre.html" target="_self">Sobre</a>
             <a class="headerlink" href="../suporte/suporte.html" target="_self">Suporte</a>
             <a class="headerlink" href="../login/login.html" target="_self">Login / Cadastrar</a>
-            <!--Temporariamente linkando a profile por aqui so pra testar-->
             <a class="headerlink"href="../profile/profile.html" target="_self">Perfil</a> 
         </nav>
     </header>
     
     <section class="home" id="home">
         <div class="home-content">
-            <h1>Seja Bem-Vindo ao <span>BIGS</span></h1>
-            <h3 class="text-animation">Model <span></span></h3>
-            <p>O interesse pelo texto como objeto de estudo gerou vários trabalhos importantes...</p>
+            <h1>Empre<span>Go</span></h1>
+            <p>A mais nova plataforma para encontrar e divulgar trabalho no Brasil.</p>
             <div class="social-icons">
-                <a href="#"><i class='bx bxl-facebook'></i></a>
-                <a href="#"><i class='bx bxl-github'></i></a>
-                <a href="#"><i class='bx bxl-instagram'></i></a>
-                <a href="#"><i class='bx bxl-linkedin'></i></a>
+                <a href="https://x.com"><i class='bx bxl-twitter'></i></a>
+                <a href="https://www.tiktok.com"><i class='bx bxl-tiktok'></i></a>
+                <a href="https://www.instagram.com/"><i class='bx bxl-instagram'></i></a>
+                <a href="https://www.youtube.com/"><i class='bx bxl-youtube'></i></a>
             </div>
             
-           <!-- ________________BOTOES DE SAIBA MAIS E CONTATO_______________ -->
             <div class="btn-group">
-                <a href="#saiba-mais" class="btn">Saiba mais</a>
-                <a href="#contato" class="btn">Contato</a>
+                <a href="../sobre/sobre.html" class="btn">Saiba mais</a>
+                <a href="../suporte/suporte.html" class="btn">Contato</a>
             </div>
-        </div>
-
-         <!-- ________________SWEPER\SLIDER_______________ -->
-        <div class="home-slider swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="../imagens/52.jpg" alt="Imagem 1"></div>
-                <div class="swiper-slide"><img src="../imagens/62.jpg" alt="Imagem 2"></div>
-                <div class="swiper-slide"><img src="../imagens/72.jpg" alt="Imagem 3"></div>
-            </div>
-            <!-- Paginação automatica no js -->
-            <div class="swiper-pagination"></div>
         </div>
     </section>
-    <!-- ________________AREA DE SOBRE OU SERVIÇOS________________ -->
+
     <section class="servicos" id="servicos">
         <h2 class="heading">Serviços</h2>
     
@@ -172,10 +161,10 @@
     <footer class="footer">
         
         <div class="social">
-            <a href="#"><i class='bx bxl-facebook'></i></a>
-                <a href="#"><i class='bx bxl-github'></i></a>
-                <a href="#"><i class='bx bxl-instagram'></i></a>
-                <a href="#"><i class='bx bxl-linkedin'></i></a>
+            <a href="https://x.com"><i class='bx bxl-twitter'></i></a>
+            <a href="https://www.tiktok.com"><i class='bx bxl-tiktok'></i></a>
+            <a href="https://www.instagram.com/"><i class='bx bxl-instagram'></i></a>
+            <a href="https://www.youtube.com/"><i class='bx bxl-youtube'></i></a>
         </div>
 
         <ul class="lista-footer">
@@ -192,15 +181,16 @@
             </li>
 
             <li>
-                <a href="#">Suporte</a>
+                <a href="../suporte/suporte.html" target="_self">Suporte</a>
             </li>
 
             <li>
-                <a href="#">Sobre</a>
+                <a href="../sobre/sobre.html" target="_self">Sobre</a>
             </li>
         </ul>
+
         <p class="name-log-footer">
-            Model BIGS: Model Business Innovation & Growth Strategy
+            EmpreGo
         </p>
     </footer>
 

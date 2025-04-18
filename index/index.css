@@ -62,6 +62,10 @@ section {
     align-items: center; /* Alinha os itens no centro verticalmente */
     justify-content: space-between; /* Espaça igualmente os itens */
     gap: 5rem; /* Define um espaço entre os itens */
+    background-image: url("/imagens/SalsaHire.png");
+    background-position-x: 75%;
+    background-position-y: 50%;
+    background-repeat: no-repeat;
 }
 
 /*Conteudo-Inicio*/

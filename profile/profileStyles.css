@@ -53,6 +53,8 @@ a{
 .logo{
     width: 20px;
     height: 20px;
+    background-color: white;
+    border-radius: 10px;
 }
 
 #descUsuario{
@@ -172,13 +174,18 @@ a{
 #fotoUsuario{
 width: 400px;
 height: 400px;
-border-radius: 50px;
+border-radius: 200px;
 border-style: solid;
 border-color: white;
 border-width: 5px;
 }
 
-#fotoCriar{
+#fotoCriarBtn{
 width: 500px;
 height: 350px;
+}
+
+
+#fotoCriarBtn:hover{
+opacity: 80%;
 }

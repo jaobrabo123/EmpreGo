@@ -6,12 +6,10 @@
     --accent: #635985;
 }
 
-.person-img{
-    max-width: 500px;
-    max-height: 500px;
-    padding-right: 10px;
-    padding-left: 10px;
-    margin-bottom: 20px;
+.suporteText{
+    align-items: center;
+    display: grid;
+    text-align: center;
 }
 
 p{

@@ -16,15 +16,14 @@
     flex-direction: column;
     background-image: url("/imagens/SalsaFix.png");
     background-repeat: no-repeat;
-    background-position-x: 1250px;
-    background-position-y: 390px;
-    position: relative;
+    background-position: 95% 50%;
+    
 }
 
 #bustedFuseBox {
-    position:absolute;
-    top:110px;
-    left:0;
+    position:fixed;
+    top:25%;
+    left:2%;
 }
 
 .suporteTexto{

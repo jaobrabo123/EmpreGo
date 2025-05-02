@@ -137,7 +137,7 @@ a{
 
 #containerExemplo{
     width: 1000px;
-    height: fit-content;
+    height: 330px;
     background-color: #393053;
     margin-bottom: 25px;
     border-style: solid;
@@ -154,6 +154,7 @@ a{
     border-style: solid;
     border-color: #635985;
     border-width: 5px;
+    margin-bottom: 25px;
 }
 
 #fotoCriarBtn{

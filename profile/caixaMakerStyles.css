@@ -1,0 +1,91 @@
+#main{
+    display: flex;
+    flex-direction: column;
+}
+
+#caixaNova{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #393053;
+    width: 1000px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+}
+
+#caixaText{
+    min-width: 685px;
+    height: 300px;
+    resize: none;
+    background-color: #393053;
+    color: white;
+    border-radius: 20px;
+    text-align:justify;
+    font-size: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    margin-right: 5px;
+    margin-top: 70px;
+    margin-bottom: 5px;
+}
+
+#inputTitulo{
+    width:250px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+    font-size: 16px;
+    border-color: #635985;
+    background-color: #393053;
+    color: white;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 3px;
+    text-align: center;
+}
+
+#imgPlaceholder{
+    width: 300px;
+    height: 275px;
+    max-width: 300px;
+    max-height: 275px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+#btns{
+display: flex;
+flex-direction: row;
+}
+
+.btn{
+    margin-top: 20px;
+    min-width: 90px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    border-color: #635985;
+    background-color: #393053;
+    color: white;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 5px;
+}
+
+.btn:hover{
+    opacity: 85%;
+    cursor: pointer;
+}
+
+#btnSalvar{
+    margin-right: 5px;
+}
+
+#btnVoltar{
+    width: 110px;
+    margin-left: 5px;
+}
+

@@ -1,11 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../imagens/ajunet.ico" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="/profile/caixaMakerStyles.css">
+
     <title>Nova Caixa</title>
 </head>
-<body>
-    
+<body onload="carregar()">
+    <header>
+        <div id="logo">
+            <a href="../index/index.html" target="_self">
+                <img src="../imagens/BIGSlogo.png" alt="Logo" id="logoimg">
+            </a>
+            <a href="../index/index.html" target="_self" id="nomedosite">Empre<span>Go</span></a>  
+             
+        </div>
+        <nav class="links">
+            <a href="#home" >Inicio</a>
+            <a class="headerlink" href="../sobre/sobre.html" target="_self">Sobre</a>
+            <a class="headerlink" href="../suporte/suporte.html" target="_self">Suporte</a>
+            <a class="headerlink" href="../login/login.html" target="_self">Login / Cadastrar</a>
+            <a class="headerlink"href="../profile/profile.html" target="_self">Perfil</a> 
+        </nav>
+    </header>
+    <!-- A parte da caixa que você faz--> 
+    <div id="main">
+
+        <div id="caixaNova">
+            <div id="imgTitulo">
+                <input id="inputTitulo" type="text" maxlength="30" placeholder="Titulo (Max 30 caracteres)">
+                <img id="imgPlaceholder" src="https://upload.wikimedia.org/wikipedia/pt/7/73/Trollface.png" >
+                <!--Comentado temporariamente--> 
+                <!--<input id="caixaImg" type="file">-->
+            </div>
+            <textarea id="caixaText" placeholder="Insira aqui toda as informações relevantes" maxlength="1500"></textarea>
+        </div>
+
+        <div id="btns">
+        <button class="btn" id="btnSalvar">Salvar</button>
+            <a href="/profile/profile.html">
+                <button class="btn" id="btnVoltar">Retornar</button>
+            </a>
+        </div>
+    </div>
+
+
+<footer>&copy; Emprego</footer>
 </body>
 </html>

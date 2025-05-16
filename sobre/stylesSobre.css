@@ -6,17 +6,18 @@
     --accent: #635985;
 }
 
-.suporteText{
+.suporteText {
     align-items: center;
     display: grid;
     text-align: center;
 }
 
-p{
+p {
     font-size: 18px;
     font-weight: 600;
     color: var(--text);
-    text-decoration: none !important; /*Tag !important serve para priorizar essa tag*/
+    text-decoration: none !important;
+    /*Tag !important serve para priorizar essa tag*/
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 15px;
@@ -24,13 +25,13 @@ p{
     user-select: text;
 }
 
-h1{
+h1 {
     margin-bottom: 30px;
     font-size: 36px;
     color: var(--text);
 }
 
-footer{
+footer {
     bottom: 0;
     width: 100%;
     background-color: var(--secondary);
@@ -40,10 +41,9 @@ footer{
     font-style: italic;
 }
 
-#main{
+#main {
     align-items: center;
     display: flex;
     flex-direction: column;
     margin-bottom: 25px;
 }
-

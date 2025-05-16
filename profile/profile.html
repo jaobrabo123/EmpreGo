@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,34 +10,35 @@
     <link rel="stylesheet" href="profileStyles.css">
     <title>Profile</title>
 </head>
+
 <body onload="carregar()">
     <header>
         <div id="logo">
             <a href="../index.html" target="_self">
                 <img src="../imagens/BIGSlogo.png" alt="Logo" id="logoimg">
             </a>
-            <a href="../index.html" target="_self" id="nomedosite">Empre<span>Go</span></a>  
-            <i class='bx bx-menu' id="menu-icon"></i>     
+            <a href="../index.html" target="_self" id="nomedosite">Empre<span>Go</span></a>
+            <i class='bx bx-menu' id="menu-icon"></i>
         </div>
         <nav class="links">
-            <a href="../index.html" >Inicio</a>
+            <a href="../index.html">Inicio</a>
             <a class="headerlink" href="../sobre/sobre.html" target="_self">Sobre</a>
             <a class="headerlink" href="../suporte/suporte.html" target="_self">Suporte</a>
             <a class="headerlink" href="../login/login.html" target="_self">Login / Cadastrar</a>
-            <a class="headerlink"href="../profile/profile.html" target="_self">Perfil</a> 
+            <a class="headerlink" href="../profile/profile.html" target="_self">Perfil</a>
         </nav>
     </header>
 
     <div id="main">
-            <div id="impInfo">
-                <img id="fotoUsuario" src="../imagens/genPfp.png" alt="genPfp" >
-                <h1 id="nomUsuario"> John Doe</h1>
-                <a id="emailUsuario"> EmailGenerico@gmail.com</a>
-            </div>
+        <div id="impInfo">
+            <img id="fotoUsuario" src="../imagens/genPfp.png" alt="genPfp">
+            <h1 id="nomUsuario"> John Doe</h1>
+            <a id="emailUsuario"> EmailGenerico@gmail.com</a>
+        </div>
 
         <div id="bodyTop">
             <h1 id="nascUsuario">18/03/2017</h1>
-            <h1 id="cpfUsuario">123.456.789-10</h1>   
+            <h1 id="cpfUsuario">123.456.789-10</h1>
         </div>
         <div id="bodyTags">
             <input id="tagUsuario" placeholder="Insira uma tag sua aqui">
@@ -44,35 +46,44 @@
         </div>
 
         <div id="bodyTextArea">
-            <textarea id="descUsuario" placeholder="Insira aqui uma descrição sobre você e sua jornada no mercado de trabalho (Limite de 2000 caracteres)" maxlength="2000"></textarea>
+            <textarea id="descUsuario"
+                placeholder="Insira aqui uma descrição sobre você e sua jornada no mercado de trabalho (Limite de 2000 caracteres)"
+                maxlength="2000"></textarea>
         </div>
 
-        <div id="bodyMid">    
+        <div id="bodyMid">
             <img src="../imagens/gitLogo.png" alt="gitLogo" class="logo">
-            <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc"> GitBrabo123</a>
+            <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc">
+                GitBrabo123</a>
             <img src="../imagens/ytLogo.png" alt="ytLogo" class="logo">
             <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc"> YtExemplo24</a>
             <img src="../imagens/twitterLogo.png" alt="twitterLogo" class="logo">
-            <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc"> JohnDoeMarch18</a>
+            <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc">
+                JohnDoeMarch18</a>
         </div>
 
         <div id="bodyBottom">
             <div id="containerExemplo">
-                    <h1 id="titExemplo">Empresa exemplo</h1>
+                <h1 id="titExemplo">Empresa exemplo</h1>
                 <div id="boxExemplo">
-                    <img id="imgExemplo" src="https://i.pinimg.com/736x/d2/a2/82/d2a28224f80a7f6544cd4140d68c89f3.jpg" alt="imgExemplo">
-                    <a id="textExemplo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, consequuntur esse voluptates, accusantium asperiores nemo cum et labore obcaecati deserunt animi quam? Saepe ea nostrum voluptate, ullam eius corrupti vitae!</a>
+                    <img id="imgExemplo" src="https://i.pinimg.com/736x/d2/a2/82/d2a28224f80a7f6544cd4140d68c89f3.jpg"
+                        alt="imgExemplo">
+                    <a id="textExemplo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, consequuntur
+                        esse voluptates, accusantium asperiores nemo cum et labore obcaecati deserunt animi quam? Saepe
+                        ea nostrum voluptate, ullam eius corrupti vitae!</a>
                 </div>
             </div>
-            
+
             <div id="boxCriar">
                 <a href="/profile/caixaMaker.html">
-                <input type="image" id="fotoCriarBtn" src="../imagens/plusBtn.png" alt="plusBtn">
+                    <input type="image" id="fotoCriarBtn" src="../imagens/plusBtn.png" alt="plusBtn">
                 </a>
-                <a id="textCriar">Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado seu!</a>
+                <a id="textCriar">Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado
+                    seu!</a>
+            </div>
         </div>
-    </div>
-    
-    <footer>&copy;Emprego</footer>
+
+        <footer>&copy;Emprego</footer>
 </body>
+
 </html>

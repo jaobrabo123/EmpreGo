@@ -1,21 +1,33 @@
 * {
-    margin: 0; /* Remove a margem padrão de todos os elementos */
-    padding: 0; /* Remove o preenchimento (padding) padrão de todos os elementos */
-    box-sizing: border-box; /* Define que o tamanho dos elementos deve incluir bordas e padding */
-    text-decoration: none; /* Remove qualquer decoração de texto (como sublinhados) */
-    border: none; /* Remove as bordas de todos os elementos */
-    outline: none; /* Remove o contorno de foco */
-    scroll-behavior: smooth; /* Aplica rolagem suave ao clicar em âncoras */
-    font-family: "Poppins", sans-serif; /* Define a fonte padrão da página */
- 
+    margin: 0;
+    /* Remove a margem padrão de todos os elementos */
+    padding: 0;
+    /* Remove o preenchimento (padding) padrão de todos os elementos */
+    box-sizing: border-box;
+    /* Define que o tamanho dos elementos deve incluir bordas e padding */
+    text-decoration: none;
+    /* Remove qualquer decoração de texto (como sublinhados) */
+    border: none;
+    /* Remove as bordas de todos os elementos */
+    outline: none;
+    /* Remove o contorno de foco */
+    scroll-behavior: smooth;
+    /* Aplica rolagem suave ao clicar em âncoras */
+    font-family: "Poppins", sans-serif;
+    /* Define a fonte padrão da página */
+
 }
 
 /* Definindo variáveis de cores no :root, que são reutilizáveis */
 :root {
-    --text-color: #ffffff;/* Cor do texto */
-    --bg-color: #18122B; /* Cor de fundo principal */    
-    --second-bg-color: #443C68; /* Segunda cor de fundo, quase preta */
-    --main-color:  #635985;  /* Cor principal */
+    --text-color: #ffffff;
+    /* Cor do texto */
+    --bg-color: #18122B;
+    /* Cor de fundo principal */
+    --second-bg-color: #443C68;
+    /* Segunda cor de fundo, quase preta */
+    --main-color: #635985;
+    /* Cor principal */
     --primary: #393053;
     --barra-lateral: black;
 }
@@ -23,45 +35,66 @@
 
 /* Regras para o HTML */
 html {
-    font-size: 60%; /* Reduz o tamanho da fonte base para 60% do padrão */
-    overflow-x: hidden; /* Impede o overflow horizontal, não permitindo rolagem para os lados */
+    font-size: 60%;
+    /* Reduz o tamanho da fonte base para 60% do padrão */
+    overflow-x: hidden;
+    /* Impede o overflow horizontal, não permitindo rolagem para os lados */
 }
 
 /* Regras para o corpo da página */
 body {
-    background: var(--bg-color); /* Define o fundo do body como a cor definida em --bg-color */
-    color: var(--text-color); /* Define a cor do texto como a cor definida em --text-color */
+    background: var(--bg-color);
+    /* Define o fundo do body como a cor definida em --bg-color */
+    color: var(--text-color);
+    /* Define a cor do texto como a cor definida em --text-color */
 }
 
 /* Estilo do cabeçalho (header) */
 .header {
     width: 1200;
     height: 1200;
-    top: 0; /* Posiciona o cabeçalho no topo da tela */
-    left: 0; /* Posiciona o cabeçalho à esquerda */
-    width: 100%; /* O cabeçalho ocupa toda a largura da tela */
-    padding: 4rem 12%; /* Define o padding interno, com 4rem de altura e 12% de largura */
-    background: rgba(0, 0, 0, 0.3); /* Define o fundo com transparência */
-    backdrop-filter: blur(10px); /* Aplica um desfoque ao fundo do cabeçalho */
-    display: flex; /* Utiliza flexbox para alinhar os itens dentro do cabeçalho */
-    justify-content: space-between; /* Distribui o conteúdo com espaçamento entre eles */
-    align-items: center; /* Alinha os itens ao centro verticalmente */
-    z-index: 1000; /* Garante que o cabeçalho apareça acima de outros elementos */
+    top: 0;
+    /* Posiciona o cabeçalho no topo da tela */
+    left: 0;
+    /* Posiciona o cabeçalho à esquerda */
+    width: 100%;
+    /* O cabeçalho ocupa toda a largura da tela */
+    padding: 4rem 12%;
+    /* Define o padding interno, com 4rem de altura e 12% de largura */
+    background: rgba(0, 0, 0, 0.3);
+    /* Define o fundo com transparência */
+    backdrop-filter: blur(10px);
+    /* Aplica um desfoque ao fundo do cabeçalho */
+    display: flex;
+    /* Utiliza flexbox para alinhar os itens dentro do cabeçalho */
+    justify-content: space-between;
+    /* Distribui o conteúdo com espaçamento entre eles */
+    align-items: center;
+    /* Alinha os itens ao centro verticalmente */
+    z-index: 1000;
+    /* Garante que o cabeçalho apareça acima de outros elementos */
 }
 
 /*Tamanho-Seções*/
 section {
-    min-height: 100vh; /* Garante que cada seção tenha pelo menos a altura da tela */
-    padding: 10rem 12%; /* Define o padding das seções */
+    min-height: 100vh;
+    /* Garante que cada seção tenha pelo menos a altura da tela */
+    padding: 10rem 12%;
+    /* Define o padding das seções */
 }
 
 /*Início*/
 .home {
-    display: flex; /* Usa flexbox para dispor os itens */
-    flex-direction: row; /* Organiza os itens horizontalmente */
-    align-items: center; /* Alinha os itens no centro verticalmente */
-    justify-content: space-between; /* Espaça igualmente os itens */
-    gap: 5rem; /* Define um espaço entre os itens */
+    display: flex;
+    /* Usa flexbox para dispor os itens */
+    flex-direction: row;
+    /* Organiza os itens horizontalmente */
+    align-items: center;
+    /* Alinha os itens no centro verticalmente */
+    justify-content: space-between;
+    /* Espaça igualmente os itens */
+    gap: 5rem;
+    /* Define um espaço entre os itens */
     background-image: url("/imagens/SalsaHire.png");
     background-position-x: 75%;
     background-position-y: 50%;
@@ -70,115 +103,174 @@ section {
 
 /*Conteudo-Inicio*/
 .home-content {
-    display: flex; /* Usa flexbox para organizar o conteúdo */
-    flex-direction: column; /* Organiza os itens verticalmente */
-    align-items: baseline; /* Alinha os itens à linha de base */
-    text-align: left; /* Alinha o texto à esquerda */
-    justify-content: center; /* Alinha os itens no centro verticalmente */
-    margin-top: 3rem; /* Espaço superior */
-    width: 50%; /* Largura de 50% */
+    display: flex;
+    /* Usa flexbox para organizar o conteúdo */
+    flex-direction: column;
+    /* Organiza os itens verticalmente */
+    align-items: baseline;
+    /* Alinha os itens à linha de base */
+    text-align: left;
+    /* Alinha o texto à esquerda */
+    justify-content: center;
+    /* Alinha os itens no centro verticalmente */
+    margin-top: 3rem;
+    /* Espaço superior */
+    width: 50%;
+    /* Largura de 50% */
 }
 
 /*---------------------------TEXTO---------------------------*/
 span {
-    color: var(--main-color); /* Define a cor do span como a cor principal */
+    color: var(--main-color);
+    /* Define a cor do span como a cor principal */
 }
 
 /* Estilo do título h3 na seção home */
 .home-content h3 {
-    margin-bottom: 2rem; /* Espaço inferior */
-    margin-top: 1rem; /* Espaço superior */
-    font-size: 1.9rem; /* Tamanho da fonte */
+    margin-bottom: 2rem;
+    /* Espaço inferior */
+    margin-top: 1rem;
+    /* Espaço superior */
+    font-size: 1.9rem;
+    /* Tamanho da fonte */
 }
 
 /* Estilo do título h1 na seção home */
 .home-content h1 {
-    font-size: 4rem; /* Tamanho da fonte */
-    font-weight: 1100; /* Peso da fonte */
-    margin-top: 1.5rem; /* Espaço superior */
-    line-height: 1.0; /* Ajuste do espaçamento entre as linhas */
+    font-size: 4rem;
+    /* Tamanho da fonte */
+    font-weight: 1100;
+    /* Peso da fonte */
+    margin-top: 1.5rem;
+    /* Espaço superior */
+    line-height: 1.0;
+    /* Ajuste do espaçamento entre as linhas */
 }
 
 /* Estilo do parágrafo na seção home */
 .home-content p {
-    font-size: 1.5rem; /* Tamanho da fonte */
-    font-weight: 500; /* Peso da fonte */
-    line-height: 1.8; /* Espaçamento entre as linhas */
-    max-width: 1000px; /* Largura máxima do parágrafo */
+    font-size: 1.5rem;
+    /* Tamanho da fonte */
+    font-weight: 500;
+    /* Peso da fonte */
+    line-height: 1.8;
+    /* Espaçamento entre as linhas */
+    max-width: 1000px;
+    /* Largura máxima do parágrafo */
 }
 
 
 /*---------------------------ÍCONES---------------------------*/
 .social-icons a {
-    display: inline-flex; /* Exibe os ícones em linha e com flexbox */
-    justify-content: center; /* Centraliza os ícones horizontalmente */
-    align-items: center; /* Centraliza os ícones verticalmente */
-    width: 4.5rem; /* Largura dos ícones */
-    height: 4.5rem; /* Altura dos ícones */
-    background: transparent; /* Fundo transparente */
-    border: 2px solid var(--main-color); /* Borda com a cor principal */
-    font-size: 2.5rem; /* Tamanho do ícone */
-    border-radius: 50%; /* Torna os ícones circulares */
-    color: var(--main-color); /* Cor do ícone */
-    margin: 3rem 1.5rem 3rem 0; /* Margens para espaçamento */
-    transition: 0.3s ease-in-out; /* Transição suave ao passar o mouse */
+    display: inline-flex;
+    /* Exibe os ícones em linha e com flexbox */
+    justify-content: center;
+    /* Centraliza os ícones horizontalmente */
+    align-items: center;
+    /* Centraliza os ícones verticalmente */
+    width: 4.5rem;
+    /* Largura dos ícones */
+    height: 4.5rem;
+    /* Altura dos ícones */
+    background: transparent;
+    /* Fundo transparente */
+    border: 2px solid var(--main-color);
+    /* Borda com a cor principal */
+    font-size: 2.5rem;
+    /* Tamanho do ícone */
+    border-radius: 50%;
+    /* Torna os ícones circulares */
+    color: var(--main-color);
+    /* Cor do ícone */
+    margin: 3rem 1.5rem 3rem 0;
+    /* Margens para espaçamento */
+    transition: 0.3s ease-in-out;
+    /* Transição suave ao passar o mouse */
 }
 
 /* Efeito de hover nos ícones sociais */
 .social-icons a:hover {
-    color: var(--text-color); /* Muda a cor do ícone ao passar o mouse */
-    transform: scale(1.3) translateY(-5px); /* Aumenta o ícone e move para cima */
-    box-shadow: 0 0 25px var(--main-color); /* Aplica sombra ao ícone */
-    background-color: var(--main-color); /* Muda o fundo para a cor principal */
+    color: var(--text-color);
+    /* Muda a cor do ícone ao passar o mouse */
+    transform: scale(1.3) translateY(-5px);
+    /* Aumenta o ícone e move para cima */
+    box-shadow: 0 0 25px var(--main-color);
+    /* Aplica sombra ao ícone */
+    background-color: var(--main-color);
+    /* Muda o fundo para a cor principal */
 }
 
 
 /*---------------------------BOTOES---------------------------*/
 .btn {
-    display: inline-block; /* Exibe o botão como um bloco em linha */
-    padding: 1rem 2.8rem; /* Padding do botão */
-    background: var(--main-color); /* Cor de fundo do botão */
-    box-shadow: 0 0 25px var(--main-color); /* Sombra ao redor do botão */
-    border-radius: 4rem; /* Bordas arredondadas */
-    font-size: 1.6rem; /* Tamanho da fonte do botão */
-    color: black; /* Cor do texto */
-    border: 2px solid transparent; /* Borda transparente */
-    letter-spacing: 0.1rem; /* Espaçamento entre letras */
-    font-weight: 600; /* Peso da fonte */
-    transition: 0.3s ease-in-out; /* Transição suave ao passar o mouse */
-    cursor: pointer; /* Torna o botão clicável */
+    display: inline-block;
+    /* Exibe o botão como um bloco em linha */
+    padding: 1rem 2.8rem;
+    /* Padding do botão */
+    background: var(--main-color);
+    /* Cor de fundo do botão */
+    box-shadow: 0 0 25px var(--main-color);
+    /* Sombra ao redor do botão */
+    border-radius: 4rem;
+    /* Bordas arredondadas */
+    font-size: 1.6rem;
+    /* Tamanho da fonte do botão */
+    color: black;
+    /* Cor do texto */
+    border: 2px solid transparent;
+    /* Borda transparente */
+    letter-spacing: 0.1rem;
+    /* Espaçamento entre letras */
+    font-weight: 600;
+    /* Peso da fonte */
+    transition: 0.3s ease-in-out;
+    /* Transição suave ao passar o mouse */
+    cursor: pointer;
+    /* Torna o botão clicável */
 }
 
 /* Efeito de hover no botão */
 .btn:hover {
-    transform: scale(1.05); /* Aumenta o botão ao passar o mouse */
-    box-shadow: 0 0 50px var(--main-color); /* Aumenta a sombra ao passar o mouse */
+    transform: scale(1.05);
+    /* Aumenta o botão ao passar o mouse */
+    box-shadow: 0 0 50px var(--main-color);
+    /* Aumenta a sombra ao passar o mouse */
 }
 
 /* Estilo do grupo de botões */
 .btn-group {
-    display: flex; /* Exibe os botões em linha */
-    align-items: center; /* Alinha os botões verticalmente */
-    gap: 1.5rem; /* Espaço entre os botões */
+    display: flex;
+    /* Exibe os botões em linha */
+    align-items: center;
+    /* Alinha os botões verticalmente */
+    gap: 1.5rem;
+    /* Espaço entre os botões */
 }
 
 /* Estilo do segundo botão dentro do grupo */
 .btn-group a:nth-of-type(2) {
-    background-color: black; /* Fundo preto para o segundo botão */
-    color: var(--main-color); /* Cor do texto do botão */
-    border: 2px solid var(--main-color); /* Borda com a cor principal */
-    box-shadow: 0 0 25px transparent; /* Sombra transparente */
+    background-color: black;
+    /* Fundo preto para o segundo botão */
+    color: var(--main-color);
+    /* Cor do texto do botão */
+    border: 2px solid var(--main-color);
+    /* Borda com a cor principal */
+    box-shadow: 0 0 25px transparent;
+    /* Sombra transparente */
 }
 
 /* Efeito de hover no segundo botão do grupo */
 .btn-group a:nth-of-type(2):hover {
-    box-shadow: 0 0 25px var(--main-color); /* Aplica sombra ao botão */
-    background-color: var(--main-color); /* Muda o fundo para a cor principal */
-    color: black; /* Muda a cor do texto para preto */
+    box-shadow: 0 0 25px var(--main-color);
+    /* Aplica sombra ao botão */
+    background-color: var(--main-color);
+    /* Muda o fundo para a cor principal */
+    color: black;
+    /* Muda a cor do texto para preto */
 }
 
 
-.heading{
+.heading {
     font-size: 8rem;
     text-align: center;
     margin: 5rem 0;
@@ -282,57 +374,57 @@ span {
 
 /*---------------------------BARRA LATERAL---------------------------*/
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     width: 5px;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
     background-color: var(--main-color);
 }
 
-::-webkit-scrollbar-track{
+::-webkit-scrollbar-track {
     background-color: var(--bg-color);
     width: 50px;
 }
 
 /*---------------------------PERFIS---------------------------*/
 
-.testperfis{
+.testperfis {
     background: var(--second-bg-color);
 }
 
-.testperfis-box{
+.testperfis-box {
     display: flex;
     align-items: center;
     justify-self: center;
     flex-direction: column;
 }
 
-.testperfis .heading{
+.testperfis .heading {
     margin-bottom: 5rem;
 }
 
-.testperfis-box img{
+.testperfis-box img {
     width: 15rem;
     border-radius: 50%;
     border: 3px solid var(--main-color);
     box-shadow: 0 0 25px var(--main-color);
 }
 
-.wrapper{
+.wrapper {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 3rem;
 }
 
-.testperfis-item{
+.testperfis-item {
     min-height: 350px;
     max-width: 450px;
     background: rgba(0, 0, 0, 0.7);
     border: 3px solid rgba(255, 255, 255, 0.2);
     border-radius: 2rem;
     margin: 0 2rem;
-    padding:  30px 60px;
+    padding: 30px 60px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -344,18 +436,18 @@ span {
     transition: 0.4s ease-in-out;
 }
 
-.testperfis-item:hover{
+.testperfis-item:hover {
     border: 3px solid var(--main-color);
     transform: translateY(-10px)scale(1.03);
     box-shadow: 0 0 50px var(--main-color);
 }
 
-.testperfis-item h2{
+.testperfis-item h2 {
     font-size: 2.2rem;
     justify-content: center;
 }
 
-.testperfis-item p{
+.testperfis-item p {
     font-size: 1.3;
 }
 
@@ -373,56 +465,64 @@ span {
 /*---------------------------PARTE DE BAIXO DO SITE---------------------------*/
 /*mexendo na imagem em baixo das biografias*/
 
-#salsaJoy{
-   height: 400px;
-   width: 380px;
-   margin-bottom: -100px;
-   margin-left: 460px;
-   margin-top: -80px;
+#salsaJoy {
+    height: 400px;
+    width: 380px;
+    margin-bottom: -100px;
+    margin-left: 460px;
+    margin-top: -80px;
 }
 
 /*---------------------------CELULAR---------------------------*/
 
-@media(max-width:1285px){
-    html{
+@media(max-width:1285px) {
+    html {
         font-size: 55%;
     }
 }
 
-@media(max-width:991px){
-    .header{
+@media(max-width:991px) {
+    .header {
         padding: 2rem 3%;
     }
-    .selection{
+
+    .selection {
         padding: 10rem 3% 2rem;
     }
-    .linha-items::before{
+
+    .linha-items::before {
         left: 7px;
     }
-    .linha-item:nth-child(odd){
+
+    .linha-item:nth-child(odd) {
         padding-right: 0;
         text-align: left;
     }
+
     .linha-item:nth-child(odd),
-    .linha-item:nth-child(even){
+    .linha-item:nth-child(even) {
         padding: 37px;
     }
-    .linha-dot{
+
+    .linha-dot {
         left: 0;
     }
-    .testprfis .wrapper{
-        grid-template-columns: repeat(1,1fr);
+
+    .testprfis .wrapper {
+        grid-template-columns: repeat(1, 1fr);
     }
-    .footer{
+
+    .footer {
         padding: 2rem 3%;
     }
 }
 
-@media(max-width:895px){
-    #logoimg{
+@media(max-width:895px) {
+    #logoimg {
         display: block;
     }
-    .links{
+
+    .links {
         position: absolute;
         top: 100%;
         right: 0;
@@ -435,25 +535,29 @@ span {
         border-bottom: 2px solid var(--main-color);
         display: none;
     }
-    .links a{
+
+    .links a {
         display: block;
         font-size: 2rem;
         margin: 3rem 0;
         color: white;
     }
-    .home{
+
+    .home {
         flex-direction: column-reverse;
         margin: 5rem 4rem;
     }
-    .home-content h3{
+
+    .home-content h3 {
         font-size: 2.6;
     }
-    .home-content h1{
+
+    .home-content h1 {
         font-size: 8rem;
         margin-top: 3rem;
     }
-    .home-img img{
+
+    .home-img img {
         width: 56vw;
     }
-
 }

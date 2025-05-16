@@ -18,11 +18,11 @@ function handlePasswordToggle(inputId, eyeIconId, toggleBtnId) {
 
   passwordInput.addEventListener("input", function () {
     if (passwordInput.value.length > 0) {
-      eyeIcon.style.display = "block"; 
+      eyeIcon.style.display = "block";
       togglePasswordBtn.style.display = "block";
     } else {
-      eyeIcon.style.display = "none"; 
-      togglePasswordBtn.style.display = "none"; 
+      eyeIcon.style.display = "none";
+      togglePasswordBtn.style.display = "none";
     }
   });
 
@@ -30,19 +30,19 @@ function handlePasswordToggle(inputId, eyeIconId, toggleBtnId) {
   togglePasswordBtn.addEventListener("click", function () {
     if (passwordInput.value.length > 0) {
       if (passwordInput.type === "password") {
-        passwordInput.type = "text"; 
+        passwordInput.type = "text";
         eyeIcon.src = "/imagens/olho.png";
       } else {
-        passwordInput.type = "password"; 
-        eyeIcon.src = "/imagens/escondido.png"; 
+        passwordInput.type = "password";
+        eyeIcon.src = "/imagens/escondido.png";
       }
     }
   });
 
   passwordInput.addEventListener("focus", function () {
     if (passwordInput.value.length > 0 && passwordInput.type !== "password") {
-      passwordInput.type = "password"; 
-      eyeIcon.src = "/imagens/escondido.png"; 
+      passwordInput.type = "password";
+      eyeIcon.src = "/imagens/escondido.png";
     }
   });
 }
@@ -57,7 +57,7 @@ document.querySelector("form.transição-log-cadast").addEventListener("submit",
 
   if (password !== confirmPassword) {
     alert("As senhas não coincidem. Por favor, tente novamente.");
-    event.preventDefault(); 
+    event.preventDefault();
   }
 });
 
@@ -78,7 +78,7 @@ const registerBtn = document.getElementById('registerBtn');
 
 function checkLoginFields() {
   if (loginUsername.value && loginPassword.value) {
-    loginBtn.disabled = false; 
+    loginBtn.disabled = false;
   } else {
     loginBtn.disabled = true;
   }
@@ -95,7 +95,7 @@ function checkRegisterFields() {
   ) {
     registerBtn.disabled = false;
   } else {
-    registerBtn.disabled = true; 
+    registerBtn.disabled = true;
   }
 }
 
@@ -110,13 +110,13 @@ dob.addEventListener('input', checkRegisterFields);
 genderSelect.addEventListener('change', checkRegisterFields);
 
 // ________________________DATA_______________________
- function calcularLimitesIdade() {
+function calcularLimitesIdade() {
   const hoje = new Date();
-  
+
 
   const minDate = new Date(hoje.setFullYear(hoje.getFullYear() - 16));
-  const minDateString = minDate.toISOString().split('T')[0]; 
-  
+  const minDateString = minDate.toISOString().split('T')[0];
+
   const maxDate = new Date(hoje.setFullYear(hoje.getFullYear() - 100));
   const maxDateString = maxDate.toISOString().split('T')[0];
 
@@ -126,17 +126,17 @@ genderSelect.addEventListener('change', checkRegisterFields);
 const { minDateString, maxDateString } = calcularLimitesIdade();
 const dobField = document.getElementById('dob');
 
-dobField.min = maxDateString; 
+dobField.min = maxDateString;
 dobField.max = minDateString;
 
 dobField.addEventListener('focus', function () {
-  dobField.showPicker(); 
+  dobField.showPicker();
 });
 
 document.querySelector("form").addEventListener("submit", function (event) {
   const dob = new Date(dobField.value);
   const idade = new Date().getFullYear() - dob.getFullYear();
-  
+
   if (idade < 16 || idade > 100) {
     alert("Você precisa ter entre 16 e 100 anos para se cadastrar.");
     event.preventDefault();
@@ -147,10 +147,10 @@ function calcularLimitesIdade() {
   const hoje = new Date();
 
   const minDate = new Date(hoje.setFullYear(hoje.getFullYear() - 16));
-  const minDateString = minDate.toISOString().split('T')[0]; 
-  
+  const minDateString = minDate.toISOString().split('T')[0];
+
   const maxDate = new Date(hoje.setFullYear(hoje.getFullYear() - 100));
-  const maxDateString = maxDate.toISOString().split('T')[0]; 
+  const maxDateString = maxDate.toISOString().split('T')[0];
 
   return { minDateString, maxDateString };
 }

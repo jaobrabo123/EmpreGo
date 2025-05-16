@@ -1,9 +1,9 @@
-#main{
+#main {
     display: flex;
     flex-direction: column;
 }
 
-#caixaNova{
+#caixaNova {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -14,14 +14,14 @@
     border-width: 5px;
 }
 
-#caixaText{
+#caixaText {
     min-width: 685px;
     height: 300px;
     resize: none;
     background-color: #393053;
     color: white;
     border-radius: 20px;
-    text-align:justify;
+    text-align: justify;
     font-size: 16px;
     padding-left: 10px;
     padding-right: 10px;
@@ -33,8 +33,8 @@
     margin-bottom: 5px;
 }
 
-#inputTitulo{
-    width:250px;
+#inputTitulo {
+    width: 250px;
     margin-left: 20px;
     margin-bottom: 30px;
     font-size: 16px;
@@ -47,7 +47,7 @@
     text-align: center;
 }
 
-#imgPlaceholder{
+#imgPlaceholder {
     width: 300px;
     height: 275px;
     max-width: 300px;
@@ -56,12 +56,12 @@
     padding-left: 20px;
 }
 
-#btns{
-display: flex;
-flex-direction: row;
+#btns {
+    display: flex;
+    flex-direction: row;
 }
 
-.btn{
+.btn {
     margin-top: 20px;
     min-width: 90px;
     height: 50px;
@@ -75,17 +75,16 @@ flex-direction: row;
     border-width: 5px;
 }
 
-.btn:hover{
+.btn:hover {
     opacity: 85%;
     cursor: pointer;
 }
 
-#btnSalvar{
+#btnSalvar {
     margin-right: 5px;
 }
 
-#btnVoltar{
+#btnVoltar {
     width: 110px;
     margin-left: 5px;
 }
-

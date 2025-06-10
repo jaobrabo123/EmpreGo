@@ -1,0 +1,84 @@
+/* Estilo para os containers de login e cadastro */
+#login, #cadastro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--primary);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    color: var(--text);
+}
+
+/* Estilo para os títulos dos formulários */
+#formLogin h2, #formCadastro h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: var(--accent);
+    text-align: center;
+}
+
+/* Estilo dos formulários */
+#formLogin, #formCadastro {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Estilo para os inputs */
+#formLogin input, #formCadastro input, #formCadastro select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid var(--secondary);
+    border-radius: 8px;
+    background-color: var(--background);
+    color: var(--text);
+    font-size: 1.4rem;
+    transition: border-color 0.3s ease;
+}
+
+#formLogin input:focus, #formCadastro input:focus, #formCadastro select:focus {
+    border-color: var(--accent);
+}
+
+/* Estilo para o botão */
+#formLogin button, #formCadastro button {
+    padding: 10px 20px;
+    margin-top: 15px;
+    background-color: var(--accent);
+    color: var(--text);
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#formLogin button:hover, #formCadastro button:hover {
+    background-color: var(--secondary);
+    transform: scale(1.05);
+}
+
+/* Estilo para as mensagens abaixo dos formulários */
+#login p, #cadastro p {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+#login p span, #cadastro p span {
+    color: var(--accent);
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#login p span:hover, #cadastro p span:hover {
+    color: var(--secondary);
+}

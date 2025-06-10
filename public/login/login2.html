@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../imagens/ajunet.ico" type="image/x-icon">
+    <script src="../script.js"></script>
+    <script src="login2.js" defer></script>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="login2.css">
+    <title>Sobre</title>
+</head>
+
+<body onload="carregar()">
+    <header>
+        <div id="logo">
+            <a href="../index/index.html" target="_self">
+                <img src="../imagens\BIGSlogo.png" alt="Logo" id="logoimg">
+            </a>
+            <a href="../index/index.html" target="_self" id="nomedosite">Empre<span>Go</span></a>
+        </div>
+        <nav class="links">
+            <a href="../index.html">Inicio</a>
+            <a class="headerlink" href="../sobre/sobre.html" target="_self">Sobre</a>
+            <a class="headerlink" href="../suporte/suporte.html" target="_self">Suporte</a>
+            <a class="headerlink" href="login2.html" target="_self">Login / Cadastrar</a>
+            <!--Temporariamente linkando a profile por aqui so pra testar-->
+            <a class="headerlink" href="../profile/profile.html" target="_self">Perfil</a>
+        </nav>
+    </header>
+
+    <div id="main">
+        <div id="login">
+            <form method="post" id="formLogin">
+                <h2>Login</h2>
+                <input type="email" id="emailLogin" placeholder="Digite o seu email" required>
+                <input type="password" id="senhaLogin" placeholder="Digite a sua senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+            <p>Novo aqui? <span onclick="trocarCadastrar()">Crie uma conta!</span></p>
+        </div>
+        <div id="cadastro" style="display: none;">
+            <form method="post" id="formCadastro">
+                <h2>Cadastro</h2>
+                <input type="text" id="nome" placeholder="Digite o seu nome" required>
+                <input type="email" id="emailCadastro" placeholder="Digite o seu email" required>
+                <input type="password" id="senhaCadastro" placeholder="Digite a sua senha" required>
+                <input type="password" id="senhaCadastro2" placeholder="Digite a sua senha novamente" required>
+                <select id="genero" name="genero">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>
+                <input type="date" id="datanasc" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p id="mensagemErro" style="color: red; display: none;">As senhas não coincidem.</p>
+            <p>Já tem uma conta? <span onclick="trocarLogar()">Faça login!</span></p>
+        </div>
+    </div>
+
+    <footer>&copy; EmpreGo</footer>
+</body>
+
+</html>

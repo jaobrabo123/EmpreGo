@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 //metodo pra estabelecer conexao com o banco de dados
 import { getDatabase } from './conexaodb.js';
@@ -33,10 +34,9 @@ app.post('/login', async (req, res) => {
     const { email, senha } = req.body;
     try {
         const db = await getDatabase();
+        const usuario = await db.get('SELECT * FROM cadastro_usuarios WHERE email = ?', [email]);
 
-        const usuario = await db.get('SELECT * FROM cadastro_usuarios WHERE email = ? AND senha = ?', [email, senha]);
-
-        if (usuario) {
+        if (usuario && await bcrypt.compare(senha, usuario.senha)) {
             const token = jwt.sign({ id: usuario.id_usuario }, SECRET_KEY, { expiresIn: '1d' });
             res.json({ token });
         } else {

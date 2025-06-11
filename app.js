@@ -1,7 +1,11 @@
 import { getDatabase } from './conexaodb.js';
+import bcrypt from 'bcryptjs';
 
 export async function criarEPopularTabelaUsuarios(nome, email, senha, genero, datanasc) {
     const db = await getDatabase();
+
+    //criptografa a senha
+    const senhaCripitografada = await bcrypt.hash(senha, 10);
 
     await db.run(`
         CREATE TABLE IF NOT EXISTS cadastro_usuarios (
@@ -16,8 +20,8 @@ export async function criarEPopularTabelaUsuarios(nome, email, senha, genero, da
 
     await db.run(
         `INSERT INTO cadastro_usuarios (nome, email, senha, genero, datanasc) VALUES (?, ?, ?, ?, ?)`,
-        [nome, email, senha, genero, datanasc]
-    )
+        [nome, email, senhaCripitografada, genero, datanasc]
+    );
 }
 
 export async function criarTabelaUsuariosPerfil(idusuario) {

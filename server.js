@@ -4,7 +4,7 @@ import express from 'express';
 import pool from './db.js';
 
 //tabelas
-import { criarEPopularTabelaUsuarios, criarTabelaUsuariosPerfil, criarEPopularTabelaTags } from './app.js';
+import { criarEPopularTabelaUsuarios, criarTabelaUsuariosPerfil, criarEPopularTabelaTags, criarEPopularTabelaExperiencias} from './app.js';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -98,5 +98,30 @@ app.get('/tags', async (req, res) => {
         res.status(500).send('Erro ao buscar tags: ' + error.message);
     }
 });
+
+app.post('/exps', authenticateToken, async (req, res) => {
+  try {
+    const { titulo_exp, descricao_exp, img_exp } = req.body;
+    const id_usuario = req.user.id;
+
+    await criarEPopularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario);
+    res.status(201).json({ message: 'Experiência cadastrada com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao cadastrar experiência:', error);
+    res.status(500).json({ error: 'Erro ao cadastrar experiência: ' + error.message });
+  }
+});
+
+
+app.get('/exps', async (req, res) => {
+    try {
+        const resultado = await pool.query('SELECT * FROM experiencia_usuario');
+        res.json(resultado.rows);
+    } catch (error) {
+        console.error('Erro no GET /exps:', error);  // 👈 log detalhado
+        res.status(500).send('Erro ao buscar experiências: ' + error.message);
+    }
+});
+
 
 app.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

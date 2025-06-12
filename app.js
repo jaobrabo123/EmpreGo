@@ -29,23 +29,10 @@ export async function criarEPopularTabelaTags(nome_tag, id_usuario) {
     )
 }
 
-/*
-export async function criarEPopularTabelaExperiencias(titulo, descricao, imagem, id_usuario) {
+export async function criarEPopularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario) {
 
-    await db.run(`
-        CREATE TABLE IF NOT EXISTS experiencias_usuario (
-            id_experiencia INTEGER PRIMARY KEY AUTOINCREMENT,
-            titulo TEXT,
-            descricao TEXT,
-            imagem TEXT DEFAULT 'caminho da imagem',
-            id_usuario INTEGER,
-            FOREIGN KEY (id_usuario) REFERENCES cadastro_usuarios(id_usuario)
-        )
-    `)
-
-    await db.run(
-        `INSERT INTO experiencias_usuario (titulo, descricao, imagem, id_usuario) VALUES (?, ?, ?, ?)`,
-        [titulo, descricao, imagem, id_usuario]
+    await pool.query(
+        `INSERT INTO experiencia_usuario (titulo_exp, descricao_exp, img_exp, id_usuario) VALUES ($1, $2, $3, $4)`,
+        [titulo_exp, descricao_exp, img_exp, id_usuario]
     )
 }
-    */

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="/profile/caixaMakerStyles.css">
+    <script src="caixaMaker.js" defer></script>
 
     <title>Nova Caixa</title>
 </head>
@@ -36,7 +37,8 @@
         <div id="caixaNova">
             <div id="imgTitulo">
                 <input id="inputTitulo" type="text" maxlength="30" placeholder="Titulo (Max 30 caracteres)">
-                <img id="imgPlaceholder" src="https://upload.wikimedia.org/wikipedia/pt/7/73/Trollface.png">
+                <input id="imgPlaceholder" type="text" placeholder="Escreva o caminho da imagem (temp)">
+                <!--<img id="imgPlaceholder" src="https://upload.wikimedia.org/wikipedia/pt/7/73/Trollface.png">-->
                 <!--Comentado temporariamente-->
                 <!--<input id="caixaImg" type="file">-->
             </div>
@@ -45,7 +47,7 @@
         </div>
 
         <div id="btns">
-            <button class="btn" id="btnSalvar">Salvar</button>
+            <button class="btn" id="btnSalvar" onclick="adicionarExp()">Salvar</button>
             <a href="/profile/profile.html">
                 <button class="btn" id="btnVoltar">Retornar</button>
             </a>

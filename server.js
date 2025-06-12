@@ -1,13 +1,10 @@
-import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-
-//metodo pra estabelecer conexao com o banco de dados
-import { getDatabase } from './conexaodb.js';
+import express from 'express';
+import pool from './db.js';
 
 //tabelas
-import { criarEPopularTabelaUsuarios } from './app.js';
-import { criarTabelaUsuariosPerfil } from './app.js';
+import { criarEPopularTabelaUsuarios, criarTabelaUsuariosPerfil, criarEPopularTabelaTags } from './app.js';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -33,8 +30,8 @@ function authenticateToken(req, res, next) {
 app.post('/login', async (req, res) => {
     const { email, senha } = req.body;
     try {
-        const db = await getDatabase();
-        const usuario = await db.get('SELECT * FROM cadastro_usuarios WHERE email = ?', [email]);
+        const resultado = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
+        const usuario = resultado.rows[0];
 
         if (usuario && await bcrypt.compare(senha, usuario.senha)) {
             const token = jwt.sign({ id: usuario.id_usuario }, SECRET_KEY, { expiresIn: '1d' });
@@ -48,15 +45,57 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/usuarios', async (req, res) => {
+  try {
     const { nome, email, senha, genero, datanasc } = req.body;
+
+    // Verificar se o email já existe
+    const { rows } = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
+    if (rows.length > 0) {
+      return res.status(400).json({ error: 'Email já cadastrado.' });
+    }
+
+    // Criar usuário no banco
+    await criarEPopularTabelaUsuarios(nome, email, senha, genero, datanasc);
+    const resultado = await pool.query('SELECT id_usuario FROM cadastro_usuarios WHERE email = $1', [email]);
+    const idusuario = resultado.rows[0].id_usuario;
+    await criarTabelaUsuariosPerfil(idusuario);
+
+    res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao cadastrar usuário: ' + error.message });
+  }
+});
+
+app.get('/usuarios', async (req, res) => {
     try {
-        await criarEPopularTabelaUsuarios(nome, email, senha, genero, datanasc);
-        const db = await getDatabase();
-        const idusuario = await db.get('SELECT id_usuario FROM cadastro_usuarios WHERE email = ?', [email]);
-        await criarTabelaUsuariosPerfil(Number(idusuario.id_usuario));
-        res.status(200).send('Usuário inserido com sucesso!');
+        const resultado = await pool.query('SELECT id_usuario, nome, email, genero, datanasc FROM cadastro_usuarios');
+        res.json(resultado.rows);
     } catch (error) {
-        res.status(500).send('Erro ao inserir usuário: ' + error.message);
+        console.error('Erro no GET /usuarios:', error);  // 👈 log detalhado
+        res.status(500).send('Erro ao buscar usuários: ' + error.message);
+    }
+});
+
+app.post('/tags', authenticateToken, async (req, res) => {
+  try {
+    const { nome_tag } = req.body;
+    const id_usuario = req.user.id;
+
+    await criarEPopularTabelaTags(nome_tag, id_usuario);
+    res.status(201).json({ message: 'Tag cadastrada com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao cadastrar tag:', error);
+    res.status(500).json({ error: 'Erro ao cadastrar tag: ' + error.message });
+  }
+});
+
+app.get('/tags', async (req, res) => {
+    try {
+        const resultado = await pool.query('SELECT * FROM tags_usuario');
+        res.json(resultado.rows);
+    } catch (error) {
+        console.error('Erro no GET /tags:', error);  // 👈 log detalhado
+        res.status(500).send('Erro ao buscar tags: ' + error.message);
     }
 });
 

@@ -18,7 +18,7 @@ if (token) {
     .catch(() => {
         alert('Sua sessão expirou.');
         localStorage.removeItem('token');
-        window.location.href = '../index.html';
+        window.location.href = window.location.pathname;
     });
 } else {
     document.querySelector('#logout').style.display = 'none';

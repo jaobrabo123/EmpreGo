@@ -4,16 +4,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "postinstall": "npm rebuild sqlite3 --build-from-source"
+    "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "João Pedro Azevedo, João Pedro Souza, Alec Vinícius, Mateus Ricardo e Lucas",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
-    "jsonwebtoken": "^x.x.x",
+    "jsonwebtoken": "^9.0.0",
     "multer": "^2.0.1",
     "pg": "^8.16.0",
     "sqlite": "^5.1.1",

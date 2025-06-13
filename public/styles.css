@@ -203,3 +203,14 @@ footer{
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
+
+#fotoPerfilImg{
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+
+#fotoPerfil{
+    width: min-content;
+    height: min-content;
+}

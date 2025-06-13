@@ -144,4 +144,26 @@ app.get('/exps', async (req, res) => {
   }
 });
 
+app.get('/perfil', authenticateToken, async (req, res) => {
+  try {
+    const id_usuario = req.user.id;
+
+    const usuario = await pool.query(
+      `SELECT c.nome, c.datanasc, c.email, u.foto_perfil 
+       FROM cadastro_usuarios c 
+       JOIN usuarios_perfil u ON c.id_usuario = u.id_usuario
+       WHERE c.id_usuario = $1`,
+      [id_usuario]
+    );
+
+    if (usuario.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    res.json(usuario.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar perfil: ' + error.message });
+  }
+});
+
 app.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

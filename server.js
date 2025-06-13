@@ -3,6 +3,30 @@ import bcrypt from 'bcryptjs';
 import express from 'express';
 import pool from './db.js';
 
+//Configurando o upload de imagens
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+const pastaUploads = './public/uploads';
+
+if (!fs.existsSync(pastaUploads)) {
+  fs.mkdirSync(pastaUploads, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, pastaUploads);
+  },
+  filename: (req, file, cb) => {
+    const nomeArquivo = `${Date.now()}-${file.originalname}`;
+    cb(null, nomeArquivo);
+  }
+});
+
+const upload = multer({ storage: storage });
+//fim da configuracao
+
 //tabelas
 import { criarEPopularTabelaUsuarios, criarTabelaUsuariosPerfil, criarEPopularTabelaTags, criarEPopularTabelaExperiencias} from './app.js';
 
@@ -99,10 +123,13 @@ app.get('/tags', async (req, res) => {
     }
 });
 
-app.post('/exps', authenticateToken, async (req, res) => {
+app.post('/exps', authenticateToken, upload.single('img_exp'), async (req, res) => {
   try {
-    const { titulo_exp, descricao_exp, img_exp } = req.body;
+    const { titulo_exp, descricao_exp } = req.body;
     const id_usuario = req.user.id;
+    const img_exp = req.file ? `/uploads/${req.file.filename}` : null;
+
+    if (!img_exp) return res.status(400).json({ error: 'Imagem não enviada' });
 
     await criarEPopularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario);
     res.status(201).json({ message: 'Experiência cadastrada com sucesso!' });
@@ -111,6 +138,7 @@ app.post('/exps', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Erro ao cadastrar experiência: ' + error.message });
   }
 });
+
 
 
 app.get('/exps', async (req, res) => {

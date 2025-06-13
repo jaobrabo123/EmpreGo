@@ -14,11 +14,11 @@
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^x.x.x",
+    "multer": "^2.0.1",
     "pg": "^8.16.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },
   "type": "module",
-  "description": "",
-  "devDependencies": {}
+  "description": ""
 }

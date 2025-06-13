@@ -3,82 +3,76 @@ import bcrypt from 'bcryptjs';
 import express from 'express';
 import pool from './db.js';
 
-//Configurando o upload de imagens
+// Cloudinary + Multer
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import cloudinary from './cloudinary.js';
 
-const pastaUploads = './public/uploads';
-
-if (!fs.existsSync(pastaUploads)) {
-  fs.mkdirSync(pastaUploads, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, pastaUploads);
-  },
-  filename: (req, file, cb) => {
-    const nomeArquivo = `${Date.now()}-${file.originalname}`;
-    cb(null, nomeArquivo);
-  }
-});
-
-const upload = multer({ storage: storage });
-//fim da configuracao
-
-//tabelas
-import { criarEPopularTabelaUsuarios, criarTabelaUsuariosPerfil, criarEPopularTabelaTags, criarEPopularTabelaExperiencias} from './app.js';
+// Tabelas
+import {
+  criarEPopularTabelaUsuarios,
+  criarTabelaUsuariosPerfil,
+  criarEPopularTabelaTags,
+  criarEPopularTabelaExperiencias
+} from './app.js';
 
 const app = express();
 const port = process.env.PORT || 3001;
 const SECRET_KEY = 'seu-segredo-super-seguro';
 
-app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Autenticação JWT
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Token não fornecido' });
 
-    if (!token) return res.status(401).json({ error: 'Token não fornecido' });
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Token inválido' });
-        req.user = user; // Adiciona o usuário decodificado à requisição
-        next();
-    });
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Token inválido' });
+    req.user = user;
+    next();
+  });
 }
 
-app.post('/login', async (req, res) => {
-    const { email, senha } = req.body;
-    try {
-        const resultado = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
-        const usuario = resultado.rows[0];
+// Multer + Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'experiencias',
+    allowed_formats: ['jpg', 'jpeg', 'png']
+  }
+});
+const upload = multer({ storage });
 
-        if (usuario && await bcrypt.compare(senha, usuario.senha)) {
-            const token = jwt.sign({ id: usuario.id_usuario }, SECRET_KEY, { expiresIn: '1d' });
-            res.json({ token });
-        } else {
-            res.status(401).send('Email ou senha inválidos.');
-        }
-    } catch (error) {
-        res.status(500).send('Erro ao fazer login: ' + error.message);
+// Rotas
+app.post('/login', async (req, res) => {
+  const { email, senha } = req.body;
+  try {
+    const resultado = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
+    const usuario = resultado.rows[0];
+
+    if (usuario && await bcrypt.compare(senha, usuario.senha)) {
+      const token = jwt.sign({ id: usuario.id_usuario }, SECRET_KEY, { expiresIn: '1d' });
+      res.json({ token });
+    } else {
+      res.status(401).send('Email ou senha inválidos.');
     }
+  } catch (error) {
+    res.status(500).send('Erro ao fazer login: ' + error.message);
+  }
 });
 
 app.post('/usuarios', async (req, res) => {
   try {
     const { nome, email, senha, genero, datanasc } = req.body;
-
-    // Verificar se o email já existe
     const { rows } = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
+
     if (rows.length > 0) {
       return res.status(400).json({ error: 'Email já cadastrado.' });
     }
 
-    // Criar usuário no banco
     await criarEPopularTabelaUsuarios(nome, email, senha, genero, datanasc);
     const resultado = await pool.query('SELECT id_usuario FROM cadastro_usuarios WHERE email = $1', [email]);
     const idusuario = resultado.rows[0].id_usuario;
@@ -91,13 +85,13 @@ app.post('/usuarios', async (req, res) => {
 });
 
 app.get('/usuarios', async (req, res) => {
-    try {
-        const resultado = await pool.query('SELECT id_usuario, nome, email, genero, datanasc FROM cadastro_usuarios');
-        res.json(resultado.rows);
-    } catch (error) {
-        console.error('Erro no GET /usuarios:', error);  // 👈 log detalhado
-        res.status(500).send('Erro ao buscar usuários: ' + error.message);
-    }
+  try {
+    const resultado = await pool.query('SELECT id_usuario, nome, email, genero, datanasc FROM cadastro_usuarios');
+    res.json(resultado.rows);
+  } catch (error) {
+    console.error('Erro no GET /usuarios:', error);
+    res.status(500).send('Erro ao buscar usuários: ' + error.message);
+  }
 });
 
 app.post('/tags', authenticateToken, async (req, res) => {
@@ -114,20 +108,20 @@ app.post('/tags', authenticateToken, async (req, res) => {
 });
 
 app.get('/tags', async (req, res) => {
-    try {
-        const resultado = await pool.query('SELECT * FROM tags_usuario');
-        res.json(resultado.rows);
-    } catch (error) {
-        console.error('Erro no GET /tags:', error);  // 👈 log detalhado
-        res.status(500).send('Erro ao buscar tags: ' + error.message);
-    }
+  try {
+    const resultado = await pool.query('SELECT * FROM tags_usuario');
+    res.json(resultado.rows);
+  } catch (error) {
+    console.error('Erro no GET /tags:', error);
+    res.status(500).send('Erro ao buscar tags: ' + error.message);
+  }
 });
 
 app.post('/exps', authenticateToken, upload.single('img_exp'), async (req, res) => {
   try {
     const { titulo_exp, descricao_exp } = req.body;
     const id_usuario = req.user.id;
-    const img_exp = req.file ? `/uploads/${req.file.filename}` : null;
+    const img_exp = req.file ? req.file.path : null;
 
     if (!img_exp) return res.status(400).json({ error: 'Imagem não enviada' });
 
@@ -139,17 +133,14 @@ app.post('/exps', authenticateToken, upload.single('img_exp'), async (req, res) 
   }
 });
 
-
-
 app.get('/exps', async (req, res) => {
-    try {
-        const resultado = await pool.query('SELECT * FROM experiencia_usuario');
-        res.json(resultado.rows);
-    } catch (error) {
-        console.error('Erro no GET /exps:', error);  // 👈 log detalhado
-        res.status(500).send('Erro ao buscar experiências: ' + error.message);
-    }
+  try {
+    const resultado = await pool.query('SELECT * FROM experiencia_usuario');
+    res.json(resultado.rows);
+  } catch (error) {
+    console.error('Erro no GET /exps:', error);
+    res.status(500).send('Erro ao buscar experiências: ' + error.message);
+  }
 });
-
 
 app.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

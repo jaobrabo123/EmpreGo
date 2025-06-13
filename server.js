@@ -22,6 +22,7 @@ const SECRET_KEY = 'seu-segredo-super-seguro';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // Autenticação JWT
 function authenticateToken(req, res, next) {

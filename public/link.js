@@ -1,3 +1,4 @@
+//Script pra ajeitar os links baseado no token
 const token = localStorage.getItem('token');
 
 if (token) {
@@ -24,6 +25,7 @@ if (token) {
     document.querySelector('#logout').style.display = 'none';
 }
 
+//Função pra deslogar
 function logout(){
     localStorage.removeItem('token');
     window.location.href = window.location.pathname;

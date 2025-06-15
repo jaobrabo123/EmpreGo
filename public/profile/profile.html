@@ -8,10 +8,11 @@
     <script src="profile.js" defer></script>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="profileStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>Profile</title>
 </head>
 
-<body onload="carregar()">
+<body>
     <header>
         <div id="logo">
             <a href="../index.html" target="_self">
@@ -32,7 +33,11 @@
 
     <div id="main">
         <div id="impInfo">
-            <img id="fotoUsuario" src="../imagens/genPfp.png" alt="genPfp">
+            <img id="fotoUsuario" src="../imagens/genPfp.png" alt="genPfp" onclick="trocarFotoPerfil()">
+            <form id="formFotoPerfil" style="display: none;">
+                <input type="file" id="inputFotoPerfil" name="valor" accept="image/*">
+            </form>
+
             <h1 id="nomUsuario">Skibidi</h1>
             <a id="emailUsuario"> EmailGenerico@gmail.com</a>
         </div>
@@ -47,10 +52,12 @@
         </div>
 
         <div id="bodyTextArea">
-            <textarea id="descUsuario"
-                placeholder="Insira aqui uma descrição sobre você e sua jornada no mercado de trabalho (Limite de 2000 caracteres)"
-                maxlength="2000"></textarea>
+            <p id="descUsuario">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis et nam facere deserunt voluptas rem quam, aut nihil culpa voluptatum velit saepe unde obcaecati</p>
+            <textarea id="editDesc" style="display: none;"></textarea>
         </div>
+        <button onclick="mudarDesc()" id="editarDescr">Editar<i class="fa-solid fa-pencil" ></i></button>
+        <button onclick="editarDesc()" style="display: none;" id="enviarDesc">Enviar<i class="fa-solid fa-floppy-disk"></i></button>
+        <button onclick="cancelarEditDesc()" id="cancelDesc" style="display: none;">Cancelar<i class="fa-solid fa-ban"></i></button>
 
         <div id="bodyMid">
             <img src="../imagens/gitLogo.png" alt="gitLogo" class="logo">
@@ -62,28 +69,15 @@
             <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc">
                 JohnDoeMarch18</a>
         </div>
-
-        <div id="bodyBottom">
-            <div id="containerExemplo">
-                <h1 id="titExemplo">Empresa exemplo</h1>
-                <div id="boxExemplo">
-                    <img id="imgExemplo" src="https://i.pinimg.com/736x/d2/a2/82/d2a28224f80a7f6544cd4140d68c89f3.jpg"
-                        alt="imgExemplo">
-                    <a id="textExemplo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, consequuntur
-                        esse voluptates, accusantium asperiores nemo cum et labore obcaecati deserunt animi quam? Saepe
-                        ea nostrum voluptate, ullam eius corrupti vitae!</a>
-                </div>
-            </div>
-
-            <div id="boxCriar">
-                <a href="/profile/caixaMaker.html">
-                    <input type="image" id="fotoCriarBtn" src="../imagens/plusBtn.png" alt="plusBtn">
-                </a>
-                <a id="textCriar">Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado
-                    seu!</a>
-            </div>
+        <div id="boxCriar">
+            <a href="/profile/caixaMaker.html">
+                <input type="image" id="fotoCriarBtn" src="../imagens/plusBtn.png" alt="plusBtn">
+            </a>
+            <a id="textCriar">Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado
+                seu!</a>
         </div>
-
+        <div id="bodyBottom">
+        </div>
         <footer>&copy;Emprego</footer>
 </body>
 

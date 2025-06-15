@@ -1,4 +1,4 @@
-// cloudinary.js
+//Conexão com o Cloudinary (nuvem das imagens)
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({

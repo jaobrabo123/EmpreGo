@@ -25,7 +25,7 @@ formLogin.addEventListener('submit', async (event) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha })
     })
-
+    
     .then(res => {
         if (res.ok) {
             return res.json();
@@ -34,8 +34,8 @@ formLogin.addEventListener('submit', async (event) => {
         }
     })
     .then(data => {
-        localStorage.setItem('token', data.token); // Salvar token no armazenamento local
-        window.location.href = '../index/index.html'; // Redirecionar para a página inicial
+        localStorage.setItem('token', data.token);
+        window.location.href = '../index/index.html';
     })
     .catch(err => alert('Erro: ' + err.message));
 })

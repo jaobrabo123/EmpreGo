@@ -27,25 +27,17 @@ input {
 /* --------------------------ICONES--------------------- */
 .all-icon {
   width: 2.6rem;
-  /* Largura dos ícones */
   height: 2.6rem;
-  /* Altura dos ícones */
   background: transparent;
-  /* Fundo transparente */
   margin-top: 1px;
-  /* Ajuste o valor conforme necessário */
   margin-left: 1px;
 }
 
 .person {
   width: 3.4rem;
-  /* Largura dos ícones */
   height: 3.4rem;
-  /* Altura dos ícones */
   background: transparent;
-  /* Fundo transparente */
   margin-top: 1px;
-  /* Ajuste o valor conforme necessário */
   margin-left: -3px;
 }
 
@@ -80,17 +72,14 @@ input {
 input[type="password"]::-ms-reveal,
 input[type="password"]::-webkit-credentials-auto-fill-button {
   display: none;
-  /* Remove o ícone de senha padrão */
 }
 
 input[type="password"] {
   -webkit-appearance: none;
-  /* Remove qualquer aparência do navegador */
   -moz-appearance: none;
   appearance: none;
 }
 
-/* Adicione este código para os ícones do campo de confirmação de senha */
 
 #eyeIconConfirm {
   width: 20px;
@@ -124,12 +113,27 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   display: none;
 }
 
-/* --------------------------SENHA--------------------- */
-
 
 /* --------------------------DATA--------------------- */
 
-/* Estilo do campo de data */
+/* Estilo do campo de data, username e genero*/
+
+
+#dob::placeholder {
+  font-weight: bold;
+}
+
+#regUsername::placeholder {
+  font-weight: bold;
+}
+
+#outroGeneroInput::placeholder {
+  font-weight: bold;
+}
+
+#username::placeholder {
+  font-weight: bold;
+}
 
 /* Estilo quando o campo de data está em foco */
 #dob:focus {
@@ -153,45 +157,6 @@ input[type="date"]::-webkit-inner-spin-button {
   background-color: transparent;
 }
 
-
-/* --------------------------CAIXA GENERO--------------------- */
-.gender-container {
-  position: relative;
-  width: 80%;
-  /* Menor largura */
-  max-width: 300px;
-  /* Tamanho máximo reduzido */
-  background-color: var(--second-bg-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  text-align: center;
-}
-
-.dropdown {
-  width: 100%;
-  padding: 8px;
-  /* Menor padding */
-  font-size: 14px;
-  /* Tamanho da fonte menor */
-  border-radius: var(--border-radius);
-  border: 2px solid var(--primary);
-  outline: none;
-  background: var(--barra-lateral);
-  color: var(--text-color);
-  cursor: pointer;
-}
-
-.dropdown:hover,
-.dropdown:focus {
-  border-color: var(--main-color);
-}
-
-.selected-text {
-  margin-top: 8px;
-  /* Menor margem */
-  font-weight: bold;
-  color: var(--main-color);
-}
 
 /* --------------------------CAIXAS PRINCIPAIS--------------------- */
 .container {
@@ -425,6 +390,136 @@ form.transicao-login {
 .container.sign-up-mode .right-panel {
   pointer-events: all;
 }
+
+/*---------------------------AVANÇA-ESCONDER ETAPA---------------------------*/
+.step {
+  display: none;
+}
+.step.active {
+  display: block;
+}
+
+/*---------------------------CALENDARIO E GENERO INDIVIDUAL---------------------------*/
+.caixa-text {
+  position: relative;
+  width: 320px;
+  font-family: 'Poppins', sans-serif;
+  user-select: none;
+  margin-bottom: 15px;
+
+}
+
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: white;
+  font-weight: bold;
+  font-weight: 600;
+}
+
+
+.custom-dropdown {
+  position: relative;
+  border-radius: 10px;
+  background: #f9f9f9;
+  padding: 7px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.custom-dropdown .selected {
+  flex-grow: 1;
+  color: #000000;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-dropdown .options {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  max-height: 160px;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: opacity 0.3s ease;
+}
+
+.custom-dropdown .options::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-dropdown .options::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.custom-dropdown .options::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+.custom-dropdown.active .options {
+  display: block;
+  opacity: 1;
+}
+
+.custom-dropdown .options div {
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.custom-dropdown .options div:hover {
+  background-color: #e4e0ff;
+  color: var(--bg-color);
+}
+
+#outroGeneroContainer {
+  flex-shrink: 0;
+  min-width: 140px;
+  margin-left: 3rem;
+  transform: translatey( -3rem);
+  transition: width 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+
+}
+
+.caixa-text.show-outro #outroGeneroContainer {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#outroGeneroInput {
+  padding: 10px;
+  border-radius: 81px;
+  font-size: 0.9rem;
+  width: 160px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.caixa-text.show-outro .custom-dropdown .options {
+  max-width: calc(100% - 160px);
+  overflow-x: hidden;
+  transition: max-width 0.3s ease;
+  left: 0;
+}
+
+
+
 
 /*---------------------------CELULAR---------------------------*/
 

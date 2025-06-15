@@ -16,7 +16,7 @@
         <h2 class="title">Login</h2>
         <div class="caixa-text">
           <img src="../imagens/alvo.png" class="person">
-          <input type="text" id="username" placeholder="Username" required />
+          <input type="email" id="username" placeholder="Email" required />
         </div>
         <div class="caixa-text">
           <img src="../imagens/cadeado.png" class="all-icon">
@@ -71,14 +71,11 @@
             <img src="../imagens/genero.png" class="all-icon" />
             <div class="custom-dropdown" id="genderDropdown">
               <div class="selected" onclick="toggleDropdown()">-- Escolha seu gênero --</div>
-              <div class="options">
-                <div onclick="selectGender('Masculino')">Masculino</div>
-                <div onclick="selectGender('Feminino')">Feminino</div>
-                <div onclick="selectGender('Outro')">Outro</div>
-                <div onclick="selectGender('')"></div>
-                <div onclick="selectGender('')"></div>
-                <div onclick="selectGender('')"></div>
-              </div>
+              <select class="options" id="selectGenderGuis" onchange="selectGender()">
+                <option value='Masculino'>Masculino</div>
+                <option value='Feminino'>Feminino</div>
+                <option value='Outro'>Outro</div>
+              </select>
             </div>
             <div id="outroGeneroContainer" style="display: none; margin-top: 10px;">
               <input type="text" id="outroGeneroInput" placeholder="Escreva seu gênero" />

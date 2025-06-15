@@ -126,15 +126,15 @@ function toggleDropdown() {
   document.getElementById('genderDropdown').classList.toggle('active');
 }
 
-function selectGender(value) {
-  const selectedText = document.querySelector('#genderDropdown .selected');
+function selectGender() {
+  const value = document.querySelector("#selectGenderGuis").value
   const outroContainer = document.getElementById('outroGeneroContainer');
   const outroInput = document.getElementById('outroGeneroInput');
-  const genderSelect = document.getElementById('genderSelect');
   const caixaText = document.getElementById('genderDropdown').closest('.caixa-text');
-
-  selectedText.innerText = value;
+  const selectedText = document.querySelector('#genderDropdown .selected');
+  const genderSelect = document.getElementById('genderSelect');
   genderSelect.value = value;
+  selectedText.innerText = value;
 
   if (value === 'Outro') {
     outroContainer.style.display = 'block';
@@ -252,5 +252,71 @@ function cadastrar() {
     return;
   }
 
-  alert("Cadastro realizado com sucesso!");
+  const nome = document.querySelector('#regUsername').value;
+  const email = document.querySelector('#email').value;
+  const senha = document.querySelector('#registerPassword').value;
+  var genero = document.querySelector('#selectGenderGuis').value;
+  if (genero=='Outro'){
+    genero = document.querySelector("#outroGeneroInput").value
+  }
+  var datanasc = document.querySelector('#dob').value;
+
+  const [dia, mes, ano] = datanasc.split('/');
+  datanasc = `${ano}-${mes}-${dia}`
+
+  fetch('/usuarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, senha, genero, datanasc })
+  })
+  .then(res => {
+      if (res.ok) {
+          // Cadastro bem-sucedido, agora faz login automático
+          return fetch('/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, senha })
+          });
+      } else {
+          throw new Error('Erro ao cadastrar o usuário.');
+      }
+  })
+  .then(res => {
+      if (res.ok) {
+          return res.json();
+      } else {
+          throw new Error('Login automático falhou.');
+      }
+  })
+  .then(data => {
+      localStorage.setItem('token', data.token);
+      alert("Cadastro realizado com sucesso!");
+      window.location.href = '../index/index.html';
+  })
+  .catch(err => alert('Erro: ' + err.message));  
 }
+
+document.querySelector("#loginForm").addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const email = document.querySelector("#username").value
+  const senha = document.querySelector("#password").value
+
+  fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha })
+    })
+    
+    .then(res => {
+        if (res.ok) {
+            return res.json();
+        } else {
+            throw new Error('Login inválido.');
+        }
+    })
+    .then(data => {
+        localStorage.setItem('token', data.token);
+        window.location.href = '../index/index.html';
+    })
+    .catch(err => alert('Erro: ' + err.message));
+})

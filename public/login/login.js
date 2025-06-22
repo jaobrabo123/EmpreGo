@@ -269,7 +269,7 @@ function cadastrar() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, email, senha, genero, datanasc })
   })
-  .then(res => {
+  .then(async res => {
       if (res.ok) {
           // Cadastro bem-sucedido, agora faz login automático
           return fetch('/login', {
@@ -278,7 +278,8 @@ function cadastrar() {
               body: JSON.stringify({ email, senha })
           });
       } else {
-          throw new Error('Erro ao cadastrar o usuário.');
+          const erro = await res.json();
+          throw new Error(erro.error || 'Erro ao cadastrar o usuário.');
       }
   })
   .then(res => {
@@ -293,7 +294,7 @@ function cadastrar() {
       alert("Cadastro realizado com sucesso!");
       window.location.href = '../index/index.html';
   })
-  .catch(err => alert('Erro: ' + err.message));  
+  .catch(err => alert('Erro: ' + err.message));
 }
 
 document.querySelector("#loginForm").addEventListener('submit', async (event) => {

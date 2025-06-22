@@ -1,0 +1,126 @@
+/* Container do formulário */
+#main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background: none;
+}
+
+#formEditarPerfil {
+    background: var(--primary);
+    padding: 32px 28px;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+    max-width: 420px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 32px 0;
+}
+
+#formEditarPerfil .info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#formEditarPerfil label.labelsEditar {
+    font-size: 1.5rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+#formEditarPerfil input[type="text"],
+#formEditarPerfil input[type="file"],
+#formEditarPerfil select {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text);
+    font-size: 1.4rem;
+    border: 1.5px solid var(--accent);
+    transition: border-color 0.2s;
+}
+
+#formEditarPerfil input[type="text"]:focus,
+#formEditarPerfil select:focus {
+    border-color: var(--secondary);
+    background: #221a36;
+}
+
+#formEditarPerfil input[type="file"] {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.2rem;
+    padding-left: 0;
+}
+
+#formEditarPerfil button[type="submit"] {
+    margin-top: 10px;
+    padding: 12px 0;
+    background: var(--accent);
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(99,89,133,0.15);
+    letter-spacing: 1px;
+}
+
+#formEditarPerfil button[type="submit"]:hover {
+    background: var(--secondary);
+    transform: translateY(-2px) scale(1.03);
+}
+
+@media (max-width: 600px) {
+    #formEditarPerfil {
+        padding: 18px 8px;
+        max-width: 98vw;
+    }
+    #main {
+        padding: 0;
+    }
+}
+
+/* Espaço entre campos */
+#formEditarPerfil .info:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+#mensagemErro {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #c62828;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  display: none;
+}
+
+.btn-voltar-perfil {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding: 10px 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid var(--accent);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-voltar-perfil:hover {
+  background: var(--accent);
+  color: #fff;
+}

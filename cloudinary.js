@@ -1,10 +1,14 @@
 //Conexão com o Cloudinary (nuvem das imagens)
 import { v2 as cloudinary } from 'cloudinary';
 
+// Importando dotenv
+import dotenv from 'dotenv';
+dotenv.config();
+
 cloudinary.config({
-  cloud_name: 'ddbfifdxd',
-  api_key: '574444269812852',
-  api_secret: 'UP68sB9ph4wslC3sn3MTHY_xhU8'
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 export default cloudinary;

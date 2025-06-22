@@ -20,8 +20,7 @@ if (token) {
         document.querySelector('#nomUsuario').textContent = data.nome;
         document.querySelector('#emailUsuario').textContent = data.email;
         document.querySelector('#fotoUsuario').src = data.foto_perfil;
-        textoDesc = data.descricao
-        document.querySelector("#editDesc").value = data.descricao
+        document.querySelector("#cpfUsuario").textContent = data.cpf;
 
         const dataNasc = new Date(data.datanasc);
         const dia = String(dataNasc.getDate()).padStart(2, '0');
@@ -106,69 +105,6 @@ function adicionarTag() {
         alert("Você precisa digitar uma tag.");
     }
 }
-
-function mudarDesc(){
-    document.querySelector("#editDesc").style.display = 'flex'
-    document.querySelector("#enviarDesc").style.display = 'flex'
-    document.querySelector("#editarDescr").style.display = 'none'
-    document.querySelector('#descUsuario').style.display = 'none'
-    document.querySelector('#cancelDesc').style.display = 'flex'
-}
-
-function editarDesc(){
-    atributo = 'descricao'
-    valor = document.querySelector("#editDesc").value
-    
-    fetch('/perfil-edit', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ atributo, valor })
-    })
-    window.location.href = window.location.pathname;
-}
-
-function cancelarEditDesc(){
-    document.querySelector("#editDesc").style.display = 'none'
-    document.querySelector("#enviarDesc").style.display = 'none'
-    document.querySelector("#editarDescr").style.display = 'flex'
-    document.querySelector('#descUsuario').style.display = 'flex'
-    document.querySelector('#cancelDesc').style.display = 'none'
-    document.querySelector("#editDesc").value = textoDesc
-    
-}
-
-document.getElementById('fotoUsuario').addEventListener('click', () => {
-    document.getElementById('inputFotoPerfil').click();
-});
-
-document.getElementById('inputFotoPerfil').addEventListener('change', function () {
-    if (this.files.length === 0) return;
-    const formData = new FormData();
-    const foto_perfil = document.querySelector("#inputFotoPerfil").files[0];
-
-    formData.append('valor', foto_perfil);
-    formData.append('atributo', 'foto_perfil');
-
-    fetch('/perfil-edit', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message || 'Foto adicionada com sucesso!');
-        window.location.href = window.location.pathname;
-    })
-    .catch(error => {
-        console.error('Erro ao adicionar foto de perfil:', error);
-        alert('Erro ao adicionar foto de perfil');
-    });
-})
 
 function logout(){
     localStorage.removeItem('token');

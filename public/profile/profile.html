@@ -33,13 +33,14 @@
 
     <div id="main">
         <div id="impInfo">
-            <img id="fotoUsuario" src="../imagens/genPfp.png" alt="genPfp" onclick="trocarFotoPerfil()">
-            <form id="formFotoPerfil" style="display: none;">
-                <input type="file" id="inputFotoPerfil" name="valor" accept="image/*">
-            </form>
+            <img id="fotoUsuario" src="../imagens/genPfp.png" alt="genPfp">
 
             <h1 id="nomUsuario">Skibidi</h1>
+            
             <a id="emailUsuario"> EmailGenerico@gmail.com</a>
+            <button id="btnEditarPerfil" onclick="window.location.href='editarPerfil.html'" class="btn-editar-perfil">
+                Editar Perfil
+            </button>
         </div>
 
         <div id="bodyTop">
@@ -55,9 +56,6 @@
             <p id="descUsuario">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis et nam facere deserunt voluptas rem quam, aut nihil culpa voluptatum velit saepe unde obcaecati</p>
             <textarea id="editDesc" style="display: none;"></textarea>
         </div>
-        <button onclick="mudarDesc()" id="editarDescr">Editar<i class="fa-solid fa-pencil" ></i></button>
-        <button onclick="editarDesc()" style="display: none;" id="enviarDesc">Enviar<i class="fa-solid fa-floppy-disk"></i></button>
-        <button onclick="cancelarEditDesc()" id="cancelDesc" style="display: none;">Cancelar<i class="fa-solid fa-ban"></i></button>
 
         <div id="bodyMid">
             <img src="../imagens/gitLogo.png" alt="gitLogo" class="logo">

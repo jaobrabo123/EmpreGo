@@ -180,7 +180,6 @@ a {
     border-style: solid;
     border-color: white;
     border-width: 5px;
-    cursor: pointer;
 }
 
 #fotoCriarBtn {
@@ -191,4 +190,21 @@ a {
 
 #fotoCriarBtn:hover {
     opacity: 80%;
+}
+
+.btn-editar-perfil {
+  margin: 20px auto 0 auto;
+  display: block;
+  background: #635985;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-editar-perfil:hover {
+  background: #443C68;
 }

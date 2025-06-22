@@ -18,9 +18,13 @@ import {
   editarPerfil
 } from './app.js';
 
+// Importando dotenv
+import dotenv from 'dotenv';
+dotenv.config();
+
 const app = express();
 const port = process.env.PORT || 3001;
-const SECRET_KEY = 'seu-segredo-super-seguro';
+const SECRET_KEY = process.env.JWT_SECRET;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -103,7 +107,7 @@ app.post('/usuarios', async (req, res) => {
 });
 
 //Rota para pegar todos os usuários
-app.get('/usuarios', async (req, res) => {
+app.get('/usuarios', authenticateToken, async (req, res) => {
   try {
     const resultado = await pool.query('SELECT id_usuario, nome, email, genero, datanasc FROM cadastro_usuarios');
     res.json(resultado.rows);
@@ -116,8 +120,18 @@ app.get('/usuarios', async (req, res) => {
 //Rota pra adicionar tag ao usuário
 app.post('/tags', authenticateToken, async (req, res) => {
   try {
-    const { nome_tag } = req.body;
+    let { nome_tag } = req.body;
     const id_usuario = req.user.id;
+
+    if (!nome_tag || nome_tag.trim().length === 0) {
+      return res.status(400).json({ error: 'Nome da tag não pode estar vazio.' });
+    }
+
+    if (nome_tag.trim().length > 20) {
+      return res.status(400).json({ error: 'O nome da tag deve ter no máximo 20 caracteres.' });
+    }
+
+    nome_tag = nome_tag.trim()
 
     await popularTabelaTags(nome_tag, id_usuario);
     res.status(201).json({ message: 'Tag cadastrada com sucesso!' });
@@ -160,6 +174,7 @@ app.post('/exps', authenticateToken, uploadExp.single('img_exp'), async (req, re
 app.get('/exps', authenticateToken, async (req, res) => {
   try {
     const id_usuario = req.user.id;
+
     const resultado = await pool.query(
       `SELECT e.titulo_exp, e.descricao_exp, e.img_exp
       FROM experiencia_usuario e
@@ -181,7 +196,7 @@ app.get('/perfil', authenticateToken, async (req, res) => {
     const id_usuario = req.user.id;
 
     const usuario = await pool.query(
-      `SELECT c.nome, c.datanasc, c.email, u.descricao, u.foto_perfil 
+      `SELECT c.nome, c.datanasc, c.email, u.descricao, u.foto_perfil, u.cpf 
        FROM cadastro_usuarios c 
        JOIN usuarios_perfil u ON c.id_usuario = u.id_usuario
        WHERE c.id_usuario = $1`,
@@ -199,25 +214,30 @@ app.get('/perfil', authenticateToken, async (req, res) => {
 });
 
 //Rota para editar o perfil do usuário
-app.post('/perfil-edit', authenticateToken, uploadPerfil.single('valor'), async (req, res) =>{
+app.post('/perfil-edit', authenticateToken, uploadPerfil.single('foto_perfil'), async (req, res) =>{
   try {
-    const { atributo } = req.body;
     const id_usuario = req.user.id;
-
-    let valor;
+    const dados = { ...req.body };
+    
     if (req.file) {
-      valor = req.file.path;
-    } else {
-      valor = req.body.valor;
+      dados.foto_perfil = req.file.path;
     }
 
-    await editarPerfil(atributo, valor, id_usuario);
-    res.status(201).json({ message: `Atributo "${atributo}" atualizado com sucesso!` });
+    const atributos = Object.keys(dados);
+    const valores = Object.values(dados);
+
+    if (atributos.length === 0) {
+      return res.status(400).json({ error: 'Nenhum atributo para atualizar.' });
+    }
+
+    await editarPerfil(atributos, valores, id_usuario);
+    res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
   } catch (error) {
-    console.error('Erro ao cadastrar atributo:', error);
-    res.status(500).json({ error: 'Erro ao cadastrar atributo: ' + error.message });
+    console.error('Erro ao editar perfil:', error);
+    res.status(500).json({ error: 'Erro ao editar perfil: ' + error.message });
   }
 })
+
 
 //Porta do servidor
 app.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

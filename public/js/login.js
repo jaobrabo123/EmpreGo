@@ -186,6 +186,31 @@ function validarDataNascimento(dobStr) {
   return idade >= 12 && idade <= 120;
 }
 
+loginForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  login();
+});
+
+function login() {
+  const email = loginUsername.value.trim();
+  const senha = loginPassword.value.trim();
+
+  fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, senha })
+  })
+    .then(async (res) => {
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao fazer login.');
+      }
+      localStorage.setItem('token', data.token);
+      window.location.href = './index.html';
+    })
+    .catch(err => alert(err.message));
+}
+
 // ________________________ CADASTRO _______________________
 registerForm.addEventListener('submit', function (e) {
   e.preventDefault();
@@ -252,5 +277,5 @@ function cadastrar() {
       alert("Cadastro realizado com sucesso!");
       window.location.href = './index.html';
     })
-    .catch(err => alert('Erro: ' + err.message));
+    .catch(err => alert(err.message));
 }

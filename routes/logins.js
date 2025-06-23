@@ -17,11 +17,17 @@ router.post('/login', async (req, res) => {
     const resultado = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
     const usuario = resultado.rows[0];
 
-    if (usuario && await bcrypt.compare(senha, usuario.senha)) {
-      const token = jwt.sign({ id: usuario.id_usuario }, SECRET_KEY, { expiresIn: '1d' });
-      res.json({ token });
-    } else {
-      res.status(401).send('Email ou senha inválidos.');
+    if(usuario){
+      if(await bcrypt.compare(senha, usuario.senha)){
+        const token = jwt.sign({ id: usuario.id_usuario }, SECRET_KEY, { expiresIn: '1d' });
+        res.json({ token });
+      }
+      else{
+        res.status(401).json({ error: 'Senha inválida.' });
+      }
+    }
+    else{
+      res.status(401).json({ error: 'Email inválido.' });
     }
   } catch (error) {
     res.status(500).send('Erro ao fazer login: ' + error.message);

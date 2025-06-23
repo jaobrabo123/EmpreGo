@@ -7,6 +7,17 @@ export async function popularTabelaUsuarios(nome, email, senha, genero, datanasc
     //criptografa a senha
     const senhaCripitografada = await bcrypt.hash(senha, 10);
 
+    if(nome.length>100){
+      throw new Error('O nome do usuário não pode ter mais de 100 caracteres');
+    }
+    if(genero.length>30){
+      throw new Error('O gênero não pode conter mais de 20 caracteres');
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error('O e-mail fornecido não é válido');
+    }
+
     //insere os dados na tabela cadastro_usuarios
     await pool.query(
         `INSERT INTO cadastro_usuarios (nome, email, senha, genero, datanasc) VALUES ($1, $2, $3, $4, $5)`,

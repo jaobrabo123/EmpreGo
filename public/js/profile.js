@@ -77,7 +77,7 @@ if (token) {
 
 } else {
     alert('Você precisa estar logado para acessar o perfil.');
-    window.location.href = '../index.html';
+    window.location.href = './index.html';
 }
 
 function adicionarTag() {
@@ -108,6 +108,6 @@ function adicionarTag() {
 
 function logout(){
     localStorage.removeItem('token');
-    window.location.href = '../index.html';
+    window.location.href = './index.html';
     alert('Você foi desconectado.');
 }

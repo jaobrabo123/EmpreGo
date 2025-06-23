@@ -1,0 +1,913 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+input {
+    font-family: "Poppins", sans-serif;
+}
+
+:root {
+    --text-color: #ffffff;
+    /* Cor do texto */
+    --bg-color: #18122B;
+    /* Cor de fundo principal */
+    --second-bg-color: #443C68;
+    /* Segunda cor de fundo */
+    --main-color: #635985;
+    /* Cor principal */
+    --primary: #393053;
+}
+
+/* --------------------------ICONES--------------------- */
+.all-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    background: transparent;
+    margin-top: 9px;
+    margin-left: 1px;
+}
+
+
+.person {
+    width: 2.3rem;
+    height: 2.3rem;
+    background: transparent;
+    margin-top: 5px;
+    margin-left: -4px;
+}
+
+/* --------------------------esqueceu a senha?--------------------- */
+.problema {
+    color: var(--text-color);
+}
+
+/* --------------------------Olho--------------------- */
+
+.eye-icon {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none;
+}
+
+input[type="password"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#eyeIconConfirm {
+    width: 20px;
+    height: 20px;
+}
+
+#toggleConfirmPassword {
+    display: none;
+}
+
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none;
+}
+
+
+/* --------------------------DATA--------------------- */
+
+/* Estilo do campo de data e username*/
+
+
+#dob::placeholder {
+    font-weight: bold;
+}
+
+#regUsername::placeholder {
+    font-weight: bold;
+}
+
+
+
+#username::placeholder {
+    font-weight: bold;
+}
+
+
+/* --------------------------CAIXAS PRINCIPAIS--------------------- */
+.container {
+    position: relative;
+    width: 100%;
+    background-color: var(--primary);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* --------------------------Form--------------------- */
+.forms-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.login-cadastro {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 75%;
+    width: 50%;
+    transition: 1s 0.7s ease-in-out;
+    display: grid;
+    grid-template-columns: 1fr;
+    z-index: 5;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0rem 5rem;
+    transition: all 0.2s 0.7s;
+    overflow: hidden;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+    transition: all 0.4s 0.4s;
+}
+
+form.transição-log-cadast {
+    opacity: 0;
+    z-index: 1;
+}
+
+form.transicao-login {
+    z-index: 2;
+}
+
+/* -----------TITULO--------- */
+.title {
+    font-size: 2.2rem;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+#title-cadastro {
+    position: relative;
+    top: 110px;
+}
+
+/* -----------Onde fica os caixa-text--------- */
+.caixa-text {
+    position: relative;
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+}
+
+.caixa-text button {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 2;
+}
+
+.caixa-text i {
+    text-align: center;
+    line-height: 155px;
+    color: var(--barra-lateral);
+    transition: 0.5s;
+    font-size: 1.1rem;
+}
+
+.caixa-text input {
+    background: none;
+    outline: none;
+    border: none;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #000000;
+    margin-top: 1px;
+    margin-left: 10px;
+}
+
+.caixa-text input::placeholder {
+    color: var(--barra-lateral);
+    font-weight: 600;
+}
+
+
+
+/* --------------------------CAIXAS INDIVIDUAIS--------------------- */
+.caixa-email {
+    position: relative;
+    grid-template-columns: 5% 85%;
+    padding: 0 0.4rem;
+    max-width: 600px;
+    position: relative;
+    left: 2px;
+    top: 120px;
+}
+
+.caixa-senha {
+    position: relative;
+    right: 135px;
+    top: 120px;
+}
+
+.caixa-senha-confirm {
+    position: relative;
+    left: 135px;
+    top: 55px;
+}
+
+.caixa-nome {
+    position: relative;
+    right: 135px;
+    top: 55px;
+}
+
+.caixa-calendario {
+    position: relative;
+    right: 135px;
+    bottom: 10px;
+}
+
+.caixa-genero {
+    position: relative;
+    left: 135px;
+    bottom: 75px;
+}
+
+.caixa-sobrenome {
+    position: relative;
+    left: 135px;
+    bottom: 10px;
+}
+
+
+
+/*-------------------------------BOTOES-------------------------------*/
+
+.btn {
+    width: 150px;
+    background-color: var(--main-color);
+    border: none;
+    outline: none;
+    height: 49px;
+    border-radius: 49px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.btn:hover {
+    background-color: var(--main-color);
+}
+
+#btn-cadastro {
+    position: relative;
+    bottom: 75px;
+}
+
+/*-------------------------------Circulo-------------------------------*/
+
+.circulo-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.container:before {
+    content: "";
+    position: absolute;
+    height: 2000px;
+    width: 2000px;
+    top: -10%;
+    right: 50%;
+    transform: translateY(-50%);
+    background-image: linear-gradient(-45deg, var(--bg-color) 0%, var(--bg-color) 100%);
+    transition: 1.8s ease-in-out;
+    border-radius: 0;
+    z-index: 6;
+}
+
+/*-------------------------ANIMAÇOES------------------------ */
+.panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-around;
+    text-align: center;
+    z-index: 6;
+}
+
+.left-panel {
+    pointer-events: all;
+    padding: 3rem 17% 2rem 12%;
+}
+
+.right-panel {
+    pointer-events: none;
+    padding: 3rem 26% 2rem 17%;
+}
+
+.panel .content {
+    color: #fff;
+    transition: transform 0.9s ease-in-out;
+    transition-delay: 0.6s;
+}
+
+.panel h3 {
+    font-weight: 600;
+    line-height: 1;
+    font-size: 1.5rem;
+}
+
+.panel p {
+    font-size: 0.95rem;
+    padding: 0.7rem 0;
+}
+
+.btn.transparent {
+    margin: 0;
+    background: none;
+    border: 2px solid #fff;
+    width: 130px;
+    height: 41px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.right-panel .image,
+.right-panel .content {
+    transform: translateX(800px);
+}
+
+
+.container.sign-up-mode:before {
+    transform: translate(100%, -50%);
+    right: 50%;
+}
+
+.container.sign-up-mode .left-panel .image,
+.container.sign-up-mode .left-panel .content {
+    transform: translateX(-800px);
+}
+
+.container.sign-up-mode .login-cadastro {
+    left: 25%;
+}
+
+.container.sign-up-mode form.transição-log-cadast {
+    opacity: 1;
+    z-index: 2;
+}
+
+.container.sign-up-mode form.transicao-login {
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.sign-up-mode .right-panel .image,
+.container.sign-up-mode .right-panel .content {
+    transform: translateX(0%);
+}
+
+.container.sign-up-mode .left-panel {
+    pointer-events: none;
+}
+
+.container.sign-up-mode .right-panel {
+    pointer-events: all;
+}
+
+
+/*---------------------------GENERO INDIVIDUAL---------------------------*/
+
+#genderSelect {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid white;
+    font-size: 1rem;
+    outline: none;
+    font-weight: 600;
+    color: #050505;
+    margin-bottom: 16px;
+    position: relative;
+    top: 2px;
+    left: -25px;
+    transition: border-color 0.15s ease;
+}
+
+/* Container do input de gênero personalizado */
+.other-gender-input-container {
+    display: none;
+    position: absolute;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.other-gender-input-container.show {
+    display: block;
+    opacity: 1;
+}
+
+.other-gender-input-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.other-gender-input-container input[type="text"] {
+    width: 11.2rem;
+    padding: 10px 14px;
+    border-radius: 18px;
+    border: 1px solid #ccd0d5;
+    background-color: white;
+    font-size: 1rem;
+    outline: none;
+    font-weight: 600;
+    color: #050505;
+    transition: border-color 0.15s ease;
+}
+
+.other-gender-input-container input[type="text"]:focus {
+    border-color: #000000;
+}
+
+
+/* ----------- EMPRESA: CAIXAS INDIVIDUAIS ----------- */
+
+#registerEmpresaForm {
+    margin-top: 160px; 
+}
+
+#registerForm{
+    margin-bottom: 60px; 
+}
+
+
+.caixa-razao {
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+}
+
+
+.caixa-senha-empresa {
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 130px;
+}
+
+.caixa-cep {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 65px;
+}
+
+.caixa-cnpj {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 65px;
+}
+
+.caixa-telefone {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 130px;
+}
+
+.caixa-senha-confirm-empresa {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 195px;
+}
+
+.caixa-email-empresa {
+    max-width: 600px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 5% 85%;
+    padding: 0 0.4rem;
+}
+
+/* ----------- Ajustes para inputs de empresa ----------- */
+#empresaCNPJ,
+#empresaCNPJRegister,
+#empresaRazao,
+#empresaTelefone,
+#empresaEmail,
+#empresaPassword,
+#empresaCep,
+#empresaRegisterPassword,
+#empresaConfirmPassword {
+    background: none;
+    outline: none;
+    border: none;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #000000;
+    margin-top: 1px;
+    margin-left: 10px;
+}
+
+#empresaCNPJ::placeholder,
+#empresaCNPJRegister::placeholder,
+#empresaRazao::placeholder,
+#empresaTelefone::placeholder,
+#empresaCep::placeholder,
+#empresaEmail::placeholder {
+    font-weight: bold;
+}
+
+/* ----------- Botão de cadastro/login empresa ----------- */
+#btn-cadastro-empresa,
+#loginEmpresaBtn {
+    width: 150px;
+    background-color: var(--main-color);
+    border: none;
+    outline: none;
+    height: 49px;
+    border-radius: 49px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+#btn-cadastro-empresa{
+    position: relative;
+    bottom: 195px;
+    width: 180px;
+}
+
+#empresa-cadastro-btn {
+    width: 100px;
+    position: relative;
+    bottom: 365px;
+    right: 250px;
+}
+
+#empresa-login-btn {
+    width: 100px;
+    position: relative;
+    bottom: 355px;
+    left: 270px;
+}
+
+h4 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    font-weight: 600;
+    position: relative;
+    bottom: 310px;
+    left: 57px;
+}
+
+h5 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    font-weight: 500;
+    position: relative;
+    bottom: 320px;
+    left: 30px;
+}
+
+/* ----------- EMPRESA: TRANSIÇÃO ----------- */
+form#loginEmpresaForm,
+form#registerEmpresaForm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0rem 5rem;
+    transition: all 0.4s 0.4s;
+    overflow: hidden;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.sign-up-mode form#loginEmpresaForm {
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.sign-up-mode form#registerEmpresaForm {
+    opacity: 1;
+    z-index: 2;
+}
+
+.container:not(.sign-up-mode) form#loginEmpresaForm {
+    opacity: 1;
+    z-index: 2;
+}
+
+.container:not(.sign-up-mode) form#registerEmpresaForm {
+    opacity: 0;
+    z-index: 1;
+}
+
+/* ----------- EMPRESA: login/cadastro ----------- */
+
+/* Esconde todos os formulários de usuário por padrão no modo empresa */
+.container.empresa-mode #loginForm,
+.container.empresa-mode #registerForm {
+    opacity: 0 !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+.container.empresa-mode:not(.sign-up-mode) #loginEmpresaForm {
+    opacity: 1;
+    z-index: 2;
+    pointer-events: all;
+    transition-delay: 0.7s;
+}
+
+.container.empresa-mode.sign-up-mode #registerEmpresaForm {
+    opacity: 1;
+    z-index: 2;
+    pointer-events: all;
+    transition-delay: 0.7s;
+}
+
+/* Esconde formulários de empresa no modo usuário */
+.container:not(.empresa-mode) #loginEmpresaForm,
+.container:not(.empresa-mode) #registerEmpresaForm {
+    opacity: 0 !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+
+.container:not(.empresa-mode):not(.sign-up-mode) #loginForm {
+    opacity: 1;
+    z-index: 2;
+    pointer-events: all;
+    transition-delay: 0.7s;
+}
+
+.container:not(.empresa-mode) .sign-up-mode #registerForm {
+    opacity: 1;
+    z-index: 2;
+    pointer-events: all;
+    transition-delay: 0.7s;
+}
+
+.container:not(.empresa-mode).sign-up-mode #registerForm {
+    opacity: 1;
+    z-index: 2;
+    pointer-events: all;
+    transition-delay: 0.7s;
+}
+
+/* ----------- EMPRESA: AJUSTES RESPONSIVOS ----------- */
+@media (max-width: 870px) {
+
+    .caixa-cnpj,
+    .caixa-razao,
+    .caixa-telefone,
+    .caixa-email-empresa,
+    .caixa-senha-empresa,
+    .caixa-senha-confirm-empresa {
+        max-width: 100%;
+        padding: 0 0.2rem;
+    }
+
+    form#loginEmpresaForm,
+    form#registerEmpresaForm {
+        padding: 0 1.5rem;
+    }
+}
+
+/*---------------------------CELULAR---------------------------*/
+
+@media (max-width: 870px) {
+    .container {
+        min-height: 800px;
+        height: 100vh;
+    }
+
+    .login-cadastro {
+        width: 100%;
+        top: 95%;
+        transform: translate(-50%, -100%);
+        transition: 1s 0.8s ease-in-out;
+    }
+
+    .login-cadastro,
+    .container.sign-up-mode .login-cadastro {
+        left: 50%;
+    }
+
+    .circulo-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 2fr 1fr;
+    }
+
+    .panel {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 2.5rem 8%;
+        grid-column: 1 / 2;
+    }
+
+    .right-panel {
+        grid-row: 3 / 4;
+    }
+
+    .left-panel {
+        grid-row: 1 / 2;
+    }
+
+    .image {
+        width: 200px;
+        transition: transform 0.9s ease-in-out;
+        transition-delay: 0.6s;
+    }
+
+    .panel .content {
+        padding-right: 15%;
+        transition: transform 0.9s ease-in-out;
+        transition-delay: 0.8s;
+    }
+
+    .panel h3 {
+        font-size: 1.2rem;
+    }
+
+    .panel p {
+        font-size: 0.7rem;
+        padding: 0.5rem 0;
+    }
+
+    .btn.transparent {
+        width: 110px;
+        height: 35px;
+        font-size: 0.7rem;
+    }
+
+    .container:before {
+        width: 1500px;
+        height: 1500px;
+        transform: translateX(-50%);
+        left: 30%;
+        bottom: 68%;
+        right: initial;
+        top: initial;
+        transition: 2s ease-in-out;
+    }
+
+    .container.sign-up-mode:before {
+        transform: translate(-50%, 100%);
+        bottom: 32%;
+        right: initial;
+    }
+
+
+
+    .container.sign-up-mode .left-panel .image,
+    .container.sign-up-mode .left-panel .content {
+        transform: translateY(-300px);
+    }
+
+    .container.sign-up-mode .right-panel .image,
+    .container.sign-up-mode .right-panel .content {
+        transform: translateY(0px);
+    }
+
+    .right-panel .image,
+    .right-panel .content {
+        transform: translateY(300px);
+    }
+
+    .container.sign-up-mode .login-cadastro {
+        top: 5%;
+        transform: translate(-50%, 0);
+    }
+}
+
+@media (max-width: 570px) {
+    form {
+        padding: 0 1.5rem;
+    }
+
+    .image {
+        display: none;
+    }
+
+    .panel .content {
+        padding: 0.5rem 1rem;
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+
+    .container:before {
+        bottom: 72%;
+        left: 50%;
+    }
+
+    .container.sign-up-mode:before {
+        bottom: 28%;
+        left: 50%;
+    }
+}

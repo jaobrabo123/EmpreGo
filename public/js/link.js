@@ -19,7 +19,7 @@ if (token) {
     .catch(() => {
         alert('Sua sessão expirou.');
         localStorage.removeItem('token');
-        window.location.href = window.location.pathname;
+        window.location.href = './index.html';
     });
 } else {
     document.querySelector('#logout').style.display = 'none';
@@ -28,6 +28,6 @@ if (token) {
 //Função pra deslogar
 function logout(){
     localStorage.removeItem('token');
-    window.location.href = window.location.pathname;
+    window.location.href = './index.html';
     alert('Você foi desconectado.');
 }

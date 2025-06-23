@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../assets/icons/ajunet.ico" type="image/x-icon">
+  <script src="../js/login.js" defer></script>
+  <link rel="stylesheet" href="../css/login.css">
+  <title>Login</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="forms-container">
+      <!-- Login -->
+      <div class="login-cadastro">
+        <form id="loginForm" action="#" class="transicao-login">
+          <!-- Email/login/US -->
+          <h3 class="title">Login</h3>
+          <div class="caixa-text">
+            <img src="../assets/imgs/alvo.png" class="person">
+            <input type="email" id="username" placeholder="E-mail" required />
+          </div>
+          <!-- Senha/login/US -->
+          <div class="caixa-text">
+            <img src="../assets/imgs/cadeado.png" class="all-icon">
+            <input type="password" id="password" placeholder="Senha" required />
+            <button type="button" id="togglePassword">
+              <img src="../assets/imgs/escondido.png" id="eyeIcon" class="eye-icon">
+            </button>
+          </div>
+          <input type="submit" value="Login" class="btn solid" id="loginBtn" disabled />
+          <a class="problema">Esqueceu sua senha?</a>
+        </form>
+        <!---------->
+        <form id="registerForm" action="#" class="transição-log-cadast" onsubmit="return false;">
+          <h2 class="title" id="title-cadastro">Cadastrar-se</h2>
+          <!-- Email/Cadastro/US -->
+          <div class="caixa-text caixa-email">
+            <img src="../assets/imgs/o-email.png" class="all-icon" />
+            <input type="email" id="email" placeholder="E-mail" required />
+          </div>
+          <!-- Senha/Cadastro/US -->
+          <div class="caixa-text caixa-senha">
+            <img src="../assets/imgs/cadeado.png" class="all-icon" />
+            <input type="password" id="registerPassword" placeholder="Senha" required />
+            <button type="button" id="toggleRegisterPassword">
+              <img src="../assets/imgs/escondido.png" id="eyeIconRegister" class="eye-icon" />
+            </button>
+          </div>
+          <div class="caixa-text caixa-senha-confirm">
+            <img src="../assets/imgs/cadeado.png" class="all-icon" />
+            <input type="password" id="confirmPassword" placeholder="Confirmar Senha" required />
+            <button type="button" id="toggleConfirmPassword">
+              <img src="../assets/imgs/escondido.png" id="eyeIconConfirm" class="eye-icon" />
+            </button>
+          </div>
+          <!---------->
+          <!-- Name/Cadastro/US -->
+          <div class="caixa-text caixa-nome">
+            <img src="../assets/imgs/alvo.png" class="person" />
+            <input type="text" id="regUsername" placeholder="Nome" required />
+          </div>
+          <div class="caixa-text caixa-sobrenome">
+            <img src="../assets/imgs/alvo.png" class="person" />
+            <input type="text" id="regUsernameSobre" placeholder="Sobrenome" required />
+          </div>
+          <!-- Calendario/Cadastro/US -->
+          <div class="caixa-text caixa-calendario">
+            <img src="../assets/imgs/calendario.png" class="all-icon" />
+            <input type="text" id="dob" placeholder="DD/MM/AAAA" required />
+          </div>
+          <!-- Genero/Cadastro/US -->
+          <div class="caixa-text caixa-genero">
+            <label for="genderSelect"></label>
+            <select id="genderSelect" onchange="handleGenderChange()" required>
+              <option value="" disabled selected hidden>-- Selecione seu gênero --</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Feminino">Feminino</option>
+              <option value="Outro">Outro / Personalizado</option>
+              <option value="PrefiroNãoInformar">Prefiro não dizer</option>
+            </select>
+            <div class="other-gender-input-container">
+              <input type="text" id="outroGeneroInput" placeholder="Seu Gênero" />
+            </div>
+          </div>
+          <!---------->
+          <input type="submit" class="btn" id="btn-cadastro" value="Cadastrar-se" onclick="cadastrar()" />
+        </form>
+
+        <!-- Login Empresa -->
+        <form id="loginEmpresaForm" action="#" class="transicao-login" style="margin-top: 30px;">
+          <h3 class="title">Login Empresa</h3>
+          <div class="caixa-text">
+            <img src="../assets/imgs/alvo.png" class="person">
+            <input type="text" id="empresaCNPJ" placeholder="CNPJ" required />
+          </div>
+          <div class="caixa-text">
+            <img src="../assets/imgs/cadeado.png" class="all-icon">
+            <input type="password" id="empresaPassword" placeholder="Senha" required />
+            <button type="button" id="toggleEmpresaPassword">
+              <img src="../assets/imgs/escondido.png" id="eyeIconEmpresa" class="eye-icon">
+            </button>
+          </div>
+          <input type="submit" value="Login Empresa" class="btn solid" id="loginEmpresaBtn" disabled />
+          <a class="problema">Esqueceu sua senha?</a>
+        </form>
+
+        <!-- Cadastro Empresa -->
+        <form id="registerEmpresaForm" action="#" class="transição-log-cadast" onsubmit="return false;">
+            <h2 class="title" id="title-cadastro-empresa">Cadastrar Empresa</h2>
+            <div class="caixa-text caixa-email-empresa">
+              <img src="../assets/imgs/o-email.png" class="all-icon" />
+              <input type="email" id="empresaEmail" placeholder="E-mail da Empresa" required />
+            </div>
+            <div class="caixa-text caixa-razao">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaRazao" placeholder="Razão Social" required />
+            </div>
+            <div class="caixa-text caixa-cnpj">
+              <img src="../assets/imgs/o-email.png" class="all-icon" />
+              <input type="text" id="empresaCNPJRegister" placeholder="CNPJ" required />
+            </div>
+            <!-- Endereço/Cadastro/Empresa AZEVEDO MODIFICAÇOES -->
+            <div class="caixa-text caixa-cep">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaCep" placeholder="CEP" />
+            </div>
+            <!-- -------------------------------------------------------------------------------->
+            <div class="caixa-text caixa-telefone">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaTelefone" placeholder="Telefone" />
+            </div>
+            <div class="caixa-text caixa-senha-empresa">
+              <img src="../assets/imgs/cadeado.png" class="all-icon" />
+              <input type="password" id="empresaRegisterPassword" placeholder="Senha" required />
+              <button type="button" id="toggleEmpresaRegisterPassword">
+                <img src="../assets/imgs/escondido.png" id="eyeIconEmpresaRegister" class="eye-icon" />
+              </button>
+            </div>
+            <div class="caixa-text caixa-senha-confirm-empresa">
+              <img src="../assets/imgs/cadeado.png" class="all-icon" />
+              <input type="password" id="empresaConfirmPassword" placeholder="Confirmar Senha" required />
+              <button type="button" id="toggleEmpresaConfirmPassword">
+                <img src="../assets/imgs/escondido.png" id="eyeIconEmpresaConfirm" class="eye-icon" />
+              </button>
+            </div>
+          <input type="submit" class="btn" id="btn-cadastro-empresa" value="Cadastrar Empresa"
+            onclick="cadastrarEmpresa()" />
+        </form>
+      </div>
+    </div>
+    <!-- Estilização/Cadastro/US -->
+    <div class="circulo-container">
+      <div class="panel left-panel">
+        <div class="content">
+          <h3>Você é novo por aqui?</h3>
+          <p>Se ainda não tiver uma conta, juntando-se a nós e faça seu cadastro logo abaixo.</p>
+          <button class="btn transparente" id="login-up-btn">Cadastrar-se</button>
+          <h5>Deseja cadastrar uma empresa? / ja tem uma empresa?</h5>
+          <button class="btn transparente" id="empresa-cadastro-btn">Cadastrar Empresa</button>
+        </div>
+      </div>
+      <div class="panel right-panel">
+        <div class="content">
+          <h3>Já tem uma conta?</h3>
+          <p>Conecte-se novamente à nossa comunidade.</p>
+          <button class="btn transparente" id="login-in-btn">Login</button>
+          <h4>Já tem uma empresa cadastrada?</h4>
+          <button class="btn transparente" id="empresa-login-btn">Login Empresa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>

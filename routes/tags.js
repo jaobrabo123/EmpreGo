@@ -1,0 +1,45 @@
+//Imports
+import express from 'express';
+import pool from '../db.js';
+import { popularTabelaTags } from '../app.js';
+import authenticateToken from '../token.js';
+
+//Router
+const router = express.Router();
+
+//Rota pra adicionar tag ao usuário
+router.post('/tags', authenticateToken, async (req, res) => {
+  try {
+    let { nome_tag } = req.body;
+    const id_usuario = req.user.id;
+
+    if (!nome_tag || nome_tag.trim().length === 0) {
+      return res.status(400).json({ error: 'Nome da tag não pode estar vazio.' });
+    }
+
+    if (nome_tag.trim().length > 20) {
+      return res.status(400).json({ error: 'O nome da tag deve ter no máximo 20 caracteres.' });
+    }
+
+    nome_tag = nome_tag.trim()
+
+    await popularTabelaTags(nome_tag, id_usuario);
+    res.status(201).json({ message: 'Tag cadastrada com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao cadastrar tag:', error);
+    res.status(500).json({ error: 'Erro ao cadastrar tag: ' + error.message });
+  }
+});
+
+//Rota para pegar todas as tags
+router.get('/tags', async (req, res) => {
+  try {
+    const resultado = await pool.query('SELECT * FROM tags_usuario');
+    res.json(resultado.rows);
+  } catch (error) {
+    console.error('Erro no GET /tags:', error);
+    res.status(500).send('Erro ao buscar tags: ' + error.message);
+  }
+});
+
+export default router;

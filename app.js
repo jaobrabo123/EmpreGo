@@ -1,4 +1,3 @@
-
 import bcrypt from 'bcryptjs';
 
 import pool from './db.js';
@@ -8,7 +7,7 @@ export async function popularTabelaUsuarios(nome, email, senha, genero, datanasc
     //criptografa a senha
     const senhaCripitografada = await bcrypt.hash(senha, 10);
 
-    //
+    //insere os dados na tabela cadastro_usuarios
     await pool.query(
         `INSERT INTO cadastro_usuarios (nome, email, senha, genero, datanasc) VALUES ($1, $2, $3, $4, $5)`,
         [nome, email, senhaCripitografada, genero, datanasc]
@@ -18,17 +17,18 @@ export async function popularTabelaUsuarios(nome, email, senha, genero, datanasc
 
 export async function criarTabelaUsuariosPerfil(idusuario) {
 
+    // Verifica se o usuário já tem um perfil
     const existente = await pool.query(`SELECT * FROM usuarios_perfil WHERE id_usuario = $1`, [idusuario]);
-
+    // Se não existir, cria um novo perfil
     if (existente.rows.length === 0) {
         await pool.query(`INSERT INTO usuarios_perfil (id_usuario) VALUES ($1)`, [idusuario]);
     }
 
 }
 
-
 export async function popularTabelaTags(nome_tag, id_usuario) {
 
+    // Insere a tag na tabela tags_usuario
     await pool.query(
         `INSERT INTO tags_usuario (nome_tag, id_usuario) VALUES ($1, $2)`,
         [nome_tag, id_usuario]
@@ -38,6 +38,7 @@ export async function popularTabelaTags(nome_tag, id_usuario) {
 
 export async function popularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario) {
 
+    // Insere a experiência na tabela experiencia_usuario
     await pool.query(
         `INSERT INTO experiencia_usuario (titulo_exp, descricao_exp, img_exp, id_usuario) VALUES ($1, $2, $3, $4)`,
         [titulo_exp, descricao_exp, img_exp, id_usuario]
@@ -68,11 +69,9 @@ export async function editarPerfil(atributos, valores, id_usuario) {
         throw new Error(`Atributo foto_perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
       }
     }
-
     if (atri === 'cpf' && !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(valor)) {
       throw new Error(`CPF inválido. Formato correto: 123.456.789-10`);
     }
-
     if (atri === 'estado' && valor !== 'NM') {
       const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
       const estados = await response.json();
@@ -80,8 +79,10 @@ export async function editarPerfil(atributos, valores, id_usuario) {
       if (!siglas.includes(valor.toUpperCase())) {
         throw new Error(`Estado inválido. Use uma sigla válida.`);
       }
+      if(atributos.findIndex(x => x === 'cidade') === -1){
+        await pool.query('UPDATE usuarios_perfil SET cidade = null WHERE id_usuario = $1', [id_usuario]);
+      }
     }
-
     if (atri === 'cidade') {
       let estado = '';
       const resultado = await pool.query(
@@ -96,7 +97,6 @@ export async function editarPerfil(atributos, valores, id_usuario) {
       } else {
         throw new Error(`Você deve fornecer o estado antes de atualizar a cidade.`);
       }
-
       const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`);
       const cidades = await response.json();
       const nomesCidades = cidades.map(c => c.nome.toLowerCase());
@@ -106,6 +106,9 @@ export async function editarPerfil(atributos, valores, id_usuario) {
     }
     if (atri === 'endereco' && valor.length > 200) {
       throw new Error(`Endereço não pode exceder 200 caracteres.`);
+    }
+    if (atri === 'descricao' && valor.length > 2000) {
+      throw new Error(`Descrição não pode exceder 2000 caracteres.`);
     }
     if (atri === 'instagram' && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error(`URL do Instagram inválida.`);

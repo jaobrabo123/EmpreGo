@@ -27,7 +27,7 @@ function adicionarExp() {
         .then(response => response.json())
         .then(data => {
             alert(data.message || 'Experiência adicionada com sucesso!');
-            window.location.href = 'profile.html';
+            window.location.href = './profile.html';
         })
         .catch(error => {
             console.error('Erro ao adicionar experiência:', error);

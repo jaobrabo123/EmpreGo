@@ -2,7 +2,7 @@
 import express from 'express';
 import pool from '../db.js';
 import { editarPerfil } from '../app.js';
-import authenticateToken from '../token.js';
+import {authenticateToken} from '../middlewares/auth.js';
 // Cloudinary + Multer
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';

@@ -2,7 +2,7 @@
 import express from 'express';
 import pool from '../db.js';
 import { popularTabelaTags } from '../app.js';
-import authenticateToken from '../token.js';
+import {authenticateToken} from '../middlewares/auth.js';
 
 //Router
 const router = express.Router();

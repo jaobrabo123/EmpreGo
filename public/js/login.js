@@ -198,14 +198,14 @@ function login() {
   fetch('/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, senha })
+    body: JSON.stringify({ email, senha }),
+    credentials: 'include'
   })
     .then(async (res) => {
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || 'Erro ao fazer login.');
       }
-      localStorage.setItem('token', data.token);
       window.location.href = './index.html';
     })
     .catch(err => alert(err.message));
@@ -258,7 +258,8 @@ function cadastrar() {
         return fetch('/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, senha })
+          body: JSON.stringify({ email, senha }),
+          credentials: 'include'
         });
       } else {
         const erro = await res.json();
@@ -272,8 +273,7 @@ function cadastrar() {
         throw new Error('Login automático falhou.');
       }
     })
-    .then(data => {
-      localStorage.setItem('token', data.token);
+    .then(() => {
       alert("Cadastro realizado com sucesso!");
       window.location.href = './index.html';
     })

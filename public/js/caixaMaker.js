@@ -8,10 +8,9 @@ function adicionarExp() {
     const titulo_exp = document.querySelector("#inputTitulo").value
     const img_exp = document.querySelector("#imgPlaceholder").files[0];
     const descricao_exp = document.querySelector("#caixaText").value
-    const token = localStorage.getItem('token');
 
     
-    if (token && titulo_exp && img_exp && descricao_exp) {
+    if (titulo_exp && img_exp && descricao_exp) {
         const formData = new FormData();
         formData.append('titulo_exp', titulo_exp);
         formData.append('descricao_exp', descricao_exp);
@@ -19,9 +18,7 @@ function adicionarExp() {
 
         fetch('/exps', {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
+            credentials: 'include',
             body: formData
         })
         .then(response => response.json())

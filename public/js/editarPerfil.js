@@ -22,8 +22,6 @@ document.getElementById("formEditarPerfil").addEventListener("submit", function(
 function enviarEdicao() {
   limparErro();
 
-  const token = localStorage.getItem("token");
-
   const fotoPerfil = document.getElementById("inputFotoPerfil").files[0];
   const descricao = document.getElementById("inputDescricao").value;
   const cpf = document.getElementById("inputCpf").value;
@@ -56,9 +54,7 @@ function enviarEdicao() {
 
   fetch("/perfil-edit", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: 'include',
     body: formData,
   })
     .then(async (response) => {

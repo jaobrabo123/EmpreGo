@@ -17,21 +17,56 @@ router.post('/login', async (req, res) => {
     const resultado = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
     const usuario = resultado.rows[0];
 
-    if(usuario){
-      if(await bcrypt.compare(senha, usuario.senha)){
-        const token = jwt.sign({ id: usuario.id_usuario }, SECRET_KEY, { expiresIn: '1d' });
-        res.json({ token });
-      }
-      else{
-        res.status(401).json({ error: 'Senha inválida.' });
-      }
+    if(usuario && await bcrypt.compare(senha, usuario.senha)){
+      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'usuario' }, SECRET_KEY, { expiresIn: '1d' });
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 86400000
+      });
+      res.status(200).json({ message: 'Logado com sucesso!' });
     }
     else{
-      res.status(401).json({ error: 'Email inválido.' });
+      res.status(401).json({ error: 'Credenciais inválidas.' });
     }
   } catch (error) {
     res.status(500).send('Erro ao fazer login: ' + error.message);
   }
 });
+
+router.post('/login-empresa', async (req, res) =>{
+  const { cnpj, senha } = req.body;
+  try{
+    const resultado = await pool.query('SELECT * FROM cadastro_empresa WHERE cnpj = $1', [cnpj]);
+    const empresa = resultado.rows[0];
+    if(empresa && await bcrypt.compare(senha, empresa.senhaempre)){
+      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'usuario' }, SECRET_KEY, { expiresIn: '1d' });
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 86400000
+      });
+      res.status(200).json({ message: 'Logado com sucesso!' });
+    }
+    else{
+      res.status(401).json({ error: 'Credenciais inválidas.' });
+    }
+  }
+  catch(error){
+    res.status(500).send('Erro ao fazer login: ' + error.message);
+  }
+})
+
+router.post('/logout', (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+  });
+  res.json({ message: 'Logout realizado com sucesso' });
+});
+
 
 export default router;

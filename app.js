@@ -15,7 +15,7 @@ export async function popularTabelaUsuarios(nome, email, senha, genero, datanasc
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      throw new Error('O e-mail fornecido não é válido');
+      throw new Error('O e-mail não é válido');
     }
 
     //insere os dados na tabela cadastro_usuarios
@@ -146,5 +146,26 @@ export async function editarPerfil(atributos, valores, id_usuario) {
   const valoresComId = [...valores, id_usuario];
 
   await pool.query(query, valoresComId);
+
+}
+
+export async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, cep, complemento, num) {
+
+  const senhaCripitografada = await bcrypt.hash(senha, 10);
+
+  await pool.query(
+      `INSERT INTO cadastro_empresa (cnpj, nomeempre, telefoneempre, emailcadas, senhaempre, nomejuridico, cep, complemento, num) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [cnpj, nome, telefone, email, senhaCripitografada, razao, cep, complemento, num]
+  );
+}
+
+export async function criarEmpresasPerfil(cnpj) {
+
+    // Verifica se a empresa já tem um perfil
+    const existente = await pool.query(`SELECT * FROM cadastro_empresa WHERE cnpj = $1`, [cnpj]);
+    // Se não existir, cria um novo perfil
+    if (existente.rows.length === 0) {
+      await pool.query(`INSERT INTO empresa_perfil (cnpj) VALUES ($1)`, [cnpj]);
+    }
 
 }

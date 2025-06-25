@@ -426,12 +426,10 @@ function login() {
 }
 
 // ________________________ CADASTRO/US _______________________
-registerForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-  cadastrar();
-});
+registerForm.addEventListener('submit', cadastrar)
 
-function cadastrar() {
+function cadastrar(e) {
+  e.preventDefault();
   [
     registerUsername,
     registerEmail,
@@ -439,19 +437,18 @@ function cadastrar() {
     confirmPassword,
     dob
   ].forEach(clearInputError);
-
-  const username = registerUsername.value.trim();
+  const nome = registerUsername.value.trim();
   const dobValue = dob.value.trim();
   const email = registerEmail.value.trim();
   const senha = registerPassword.value.trim();
   const confirmSenha = confirmPassword.value.trim();
   var genero = genderSelect.value;
 
-  if (!username) {
+  if (!nome) {
     showInputError(registerUsername, "Por favor, preencha o nome.");
     return;
   }
-  if (username.length < 4) {
+  if (nome.length < 4) {
     showInputError(registerUsername, "O Username deve ter no mínimo 4 caracteres.");
     return;
   }

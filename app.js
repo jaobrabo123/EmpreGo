@@ -3,57 +3,92 @@ import bcrypt from 'bcryptjs';
 import pool from './db.js';
 
 export async function popularTabelaUsuarios(nome, email, senha, genero, datanasc) {
-    
-    //criptografa a senha
-    const senhaCripitografada = await bcrypt.hash(senha, 10);
 
-    if(nome.length>100){
-      throw new Error('O nome do usuário não pode ter mais de 100 caracteres');
-    }
-    if(genero.length>30){
-      throw new Error('O gênero não pode conter mais de 20 caracteres');
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      throw new Error('O e-mail não é válido');
-    }
+  if(senha.length < 8) {
+    throw new Error('A senha deve ter pelo menos 8 caracteres');
+  }
 
-    //insere os dados na tabela cadastro_usuarios
-    await pool.query(
-        `INSERT INTO cadastro_usuarios (nome, email, senha, genero, datanasc) VALUES ($1, $2, $3, $4, $5)`,
-        [nome, email, senhaCripitografada, genero, datanasc]
-    );
+  //criptografa a senha
+  const senhaCripitografada = await bcrypt.hash(senha, 10);
+
+  if(nome.length>100){
+    throw new Error('O nome do usuário não pode ter mais de 100 caracteres');
+  }
+
+  if(genero.length>30){
+    throw new Error('O gênero não pode conter mais de 20 caracteres');
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new Error('O e-mail não é válido');
+  }
+
+  const hoje = new Date();
+  const nascimento = new Date(datanasc);
+  const idade = hoje.getFullYear() - nascimento.getFullYear();
+  const mes = hoje.getMonth() - nascimento.getMonth();
+  const dia = hoje.getDate() - nascimento.getDate();
+
+  const tem14Anos = idade > 14 || (idade === 14 && (mes > 0 || (mes === 0 && dia >= 0)));
+
+  if (!tem14Anos) {
+    throw new Error('Você precisa ter no mínimo 14 anos para se cadastrar.');
+  }
+
+  //insere os dados na tabela cadastro_usuarios
+  await pool.query(
+      `INSERT INTO cadastro_usuarios (nome, email, senha, genero, datanasc) VALUES ($1, $2, $3, $4, $5)`,
+      [nome, email, senhaCripitografada, genero, datanasc]
+  );
 
 }
 
 export async function criarTabelaUsuariosPerfil(idusuario) {
 
-    // Verifica se o usuário já tem um perfil
-    const existente = await pool.query(`SELECT * FROM usuarios_perfil WHERE id_usuario = $1`, [idusuario]);
-    // Se não existir, cria um novo perfil
-    if (existente.rows.length === 0) {
-        await pool.query(`INSERT INTO usuarios_perfil (id_usuario) VALUES ($1)`, [idusuario]);
-    }
+  // Verifica se o usuário já tem um perfil
+  const existente = await pool.query(`SELECT * FROM usuarios_perfil WHERE id_usuario = $1`, [idusuario]);
+  // Se não existir, cria um novo perfil
+  if (existente.rows.length === 0) {
+    await pool.query(`INSERT INTO usuarios_perfil (id_usuario) VALUES ($1)`, [idusuario]);
+  }
 
 }
 
 export async function popularTabelaTags(nome_tag, id_usuario) {
 
-    // Insere a tag na tabela tags_usuario
-    await pool.query(
-        `INSERT INTO tags_usuario (nome_tag, id_usuario) VALUES ($1, $2)`,
-        [nome_tag, id_usuario]
-    )
+  if(nome_tag.length > 25) {
+    throw new Error('O nome da tag não pode ter mais de 25 caracteres');
+  }
+  // Insere a tag na tabela tags_usuario
+  await pool.query(
+    `INSERT INTO tags_usuario (nome_tag, id_usuario) VALUES ($1, $2)`,
+    [nome_tag, id_usuario]
+  )
 
 }
 
 export async function popularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario) {
 
-    // Insere a experiência na tabela experiencia_usuario
-    await pool.query(
-        `INSERT INTO experiencia_usuario (titulo_exp, descricao_exp, img_exp, id_usuario) VALUES ($1, $2, $3, $4)`,
-        [titulo_exp, descricao_exp, img_exp, id_usuario]
-    )
+  if(titulo_exp.length > 30) {
+    throw new Error('O título da experiência não pode ter mais de 30 caracteres'); 
+  }
+
+  if(descricao_exp.length > 1500) {
+    throw new Error('A descrição da experiência não pode ter mais de 1500 caracteres');
+  }
+  if(img_exp!=='imagem padrão'){
+    const prefix = 'https://res.cloudinary.com/ddbfifdxd/image/upload/';
+    if(img_exp && !img_exp.startsWith(prefix)) {
+      throw new Error('A imagem da experiência não pode ser atualizado diretamente. Use o upload de arquivo.');
+    }
+  }
+
+  // Insere a experiência na tabela experiencia_usuario
+  await pool.query(
+    `INSERT INTO experiencia_usuario (titulo_exp, descricao_exp, img_exp, id_usuario) VALUES ($1, $2, $3, $4)`,
+    [titulo_exp, descricao_exp, img_exp, id_usuario]
+  )
 
 }
 
@@ -77,7 +112,7 @@ export async function editarPerfil(atributos, valores, id_usuario) {
     if (atri === 'foto_perfil') {
       const prefix = 'https://res.cloudinary.com/ddbfifdxd/image/upload/';
       if (!valor.startsWith(prefix)) {
-        throw new Error(`Atributo foto_perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
+        throw new Error(`A foto de perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
       }
     }
     if (atri === 'cpf' && !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(valor)) {
@@ -151,21 +186,74 @@ export async function editarPerfil(atributos, valores, id_usuario) {
 
 export async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, cep, complemento, num) {
 
+  if(senha.length < 8) {
+    throw new Error('A senha deve ter pelo menos 8 caracteres');
+  }
+
   const senhaCripitografada = await bcrypt.hash(senha, 10);
 
+  const cnpjLimpo = cnpj.replace(/[^\d]/g, '');
+  if (cnpjLimpo.length !== 14) {
+    throw new Error('CNPJ inválido. Deve conter 14 dígitos numéricos.');
+  }
+
+  if (nome.length > 50) {
+    throw new Error('O nome da empresa não pode ter mais de 50 caracteres');
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new Error('O e-mail não é válido');
+  }
+
+  if (razao.length > 100) {
+    throw new Error('A razão social não pode ter mais de 100 caracteres');
+  }
+
+  const cepLimpo = cep.replace(/[^\d]/g, '');
+  if (cepLimpo.length !== 8) {
+    throw new Error('CEP inválido. Deve conter 8 dígitos numéricos.');
+  }
+
+  if (complemento.length > 100) {
+    throw new Error('O complemento não pode ter mais de 100 caracteres');
+  }
+
+  if (num.length < 1 || num.length > 10) {
+    throw new Error('Número do endereço inválido');
+  }
+
+  const telefoneLimpo = telefone.replace(/[^\d]/g, '');
+  if (telefoneLimpo.length < 12 || telefoneLimpo.length > 13) {
+    throw new Error('Telefone inválido. Deve conter entre 12 e 13 dígitos com DDI.');
+  }
+
   await pool.query(
-      `INSERT INTO cadastro_empresa (cnpj, nomeempre, telefoneempre, emailcadas, senhaempre, nomejuridico, cep, complemento, num) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-      [cnpj, nome, telefone, email, senhaCripitografada, razao, cep, complemento, num]
+    `INSERT INTO cadastro_empresa 
+     (cnpj, nomeempre, telefoneempre, emailcadas, senhaempre, nomejuridico, cep, complemento, num) 
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+    [cnpjLimpo, nome, telefoneLimpo, email, senhaCripitografada, razao, cepLimpo, complemento, num]
   );
+  
 }
 
 export async function criarEmpresasPerfil(cnpj) {
 
-    // Verifica se a empresa já tem um perfil
-    const existente = await pool.query(`SELECT * FROM cadastro_empresa WHERE cnpj = $1`, [cnpj]);
-    // Se não existir, cria um novo perfil
-    if (existente.rows.length === 0) {
-      await pool.query(`INSERT INTO empresa_perfil (cnpj) VALUES ($1)`, [cnpj]);
-    }
+  // Verifica se a empresa já tem um perfil
+  const existente = await pool.query(`SELECT * FROM empresa_perfil WHERE cnpj = $1`, [cnpj]);
+  // Se não existir, cria um novo perfil
+  if (existente.rows.length === 0) {
+    await pool.query(`INSERT INTO empresa_perfil (cnpj) VALUES ($1)`, [cnpj]);
+  }
 
 }
+
+/*export async function popularTabelaVagas(titulo_vaga, descricao_vaga, salario, beneficios, requisitos, cnpj) {
+
+  // Insere a vaga na tabela vagas_empresa
+  await pool.query(
+      `INSERT INTO vagas_empresa (titulo_vaga, descricao_vaga, salario, beneficios, requisitos, cnpj) VALUES ($1, $2, $3, $4, $5, $6)`,
+      [titulo_vaga, descricao_vaga, salario, beneficios, requisitos, cnpj]
+  );
+
+}*/

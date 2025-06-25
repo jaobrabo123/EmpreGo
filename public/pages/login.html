@@ -12,6 +12,7 @@
 
 <body>
   <div class="container">
+    <div id="global-error" class="global-error" style="display:none"></div>
     <div class="forms-container">
       <!-- Login -->
       <div class="login-cadastro">
@@ -110,28 +111,68 @@
         <!-- Cadastro Empresa -->
         <form id="registerEmpresaForm" action="#" class="transição-log-cadast" onsubmit="return false;">
             <h2 class="title" id="title-cadastro-empresa">Cadastrar Empresa</h2>
+            <!-------------------------- Caixas Empresa -------------------------->
+            <!-- EMAIL -->
             <div class="caixa-text caixa-email-empresa">
               <img src="../assets/imgs/o-email.png" class="all-icon" />
               <input type="email" id="empresaEmail" placeholder="E-mail da Empresa" required />
             </div>
+            <!-- TELEFONE -->
+            <div class="caixa-text caixa-telefone">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaTelefone" placeholder="Telefone" required/>
+            </div>
+            <!-- NOME DA EMPRESA -->
             <div class="caixa-text caixa-razao">
               <img src="../assets/imgs/alvo.png" class="person" />
               <input type="text" id="empresaRazao" placeholder="Razão Social" required />
             </div>
+            <!-- NOME VISIVEL -->
+            <div class="caixa-text caixa-fantasia">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaFantasia" placeholder="Fantasia" required/>
+            </div>
+            <!-- CNNPJ -->
             <div class="caixa-text caixa-cnpj">
               <img src="../assets/imgs/o-email.png" class="all-icon" />
               <input type="text" id="empresaCNPJRegister" placeholder="CNPJ" required />
             </div>
-            <!-- Endereço/Cadastro/Empresa AZEVEDO MODIFICAÇOES -->
+            <!-- CEP -->
             <div class="caixa-text caixa-cep">
               <img src="../assets/imgs/alvo.png" class="person" />
-              <input type="text" id="empresaCep" placeholder="CEP" />
+              <input type="text" id="empresaCep" inputmode="numeric"  maxlength="9"  placeholder="CEP" required/>
             </div>
-            <!-- -------------------------------------------------------------------------------->
-            <div class="caixa-text caixa-telefone">
+            <!-- RUA -->
+            <div class="caixa-text caixa-rua">
               <img src="../assets/imgs/alvo.png" class="person" />
-              <input type="text" id="empresaTelefone" placeholder="Telefone" />
+              <input type="text" id="empresaRua" placeholder="Rua" readonly />
             </div>
+            <!-- BAIRRO -->
+            <div class="caixa-text caixa-bairro">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaBairro" placeholder="Bairro" readonly />
+            </div>
+            <!-- CIDADE -->
+            <div class="caixa-text caixa-cidade">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaCidade" placeholder="Cidade" readonly />
+            </div>
+            <!-- ESTADO -->
+            <div class="caixa-text caixa-estado">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaEstado" placeholder="Estado" readonly />
+            </div>
+            <!-- NUMERO -->
+            <div class="caixa-text caixa-numero">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaNumero" maxlength="10" pattern="[0-9A-Za-z]+" placeholder="Numero" required />
+            </div>
+            <!-- COMPLEMENTO -->
+            <div class="caixa-text caixa-complemento">
+              <img src="../assets/imgs/alvo.png" class="person" />
+              <input type="text" id="empresaComplemento" placeholder="Complemento" required />
+            </div>
+            <!-- SENHA -->
             <div class="caixa-text caixa-senha-empresa">
               <img src="../assets/imgs/cadeado.png" class="all-icon" />
               <input type="password" id="empresaRegisterPassword" placeholder="Senha" required />
@@ -139,6 +180,7 @@
                 <img src="../assets/imgs/escondido.png" id="eyeIconEmpresaRegister" class="eye-icon" />
               </button>
             </div>
+            <!-- CONFIRAR SENHA -->
             <div class="caixa-text caixa-senha-confirm-empresa">
               <img src="../assets/imgs/cadeado.png" class="all-icon" />
               <input type="password" id="empresaConfirmPassword" placeholder="Confirmar Senha" required />
@@ -175,5 +217,4 @@
   </div>
   </div>
 </body>
-
 </html>

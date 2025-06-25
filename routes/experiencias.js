@@ -25,9 +25,7 @@ router.post('/exps', authenticateToken, uploadExp.single('img_exp'), async (req,
   try {
     const { titulo_exp, descricao_exp } = req.body;
     const id_usuario = req.user.id;
-    const img_exp = req.file ? req.file.path : null;
-
-    if (!img_exp) return res.status(400).json({ error: 'Imagem não enviada' });
+    const img_exp = req.file?.path || 'imagem padrão';
 
     await popularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario);
     res.status(201).json({ message: 'Experiência cadastrada com sucesso!' });

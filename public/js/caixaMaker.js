@@ -10,7 +10,7 @@ function adicionarExp() {
     const descricao_exp = document.querySelector("#caixaText").value
 
     
-    if (titulo_exp && img_exp && descricao_exp) {
+    if (titulo_exp && descricao_exp) {
         const formData = new FormData();
         formData.append('titulo_exp', titulo_exp);
         formData.append('descricao_exp', descricao_exp);
@@ -21,18 +21,23 @@ function adicionarExp() {
             credentials: 'include',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message || 'Experiência adicionada com sucesso!');
+        .then(async (response) => {
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Erro ao adicionar experiência');
+            }
+
+            alert('Experiência adicionada com sucesso!');
             window.location.href = './profile.html';
         })
         .catch(error => {
             console.error('Erro ao adicionar experiência:', error);
-            alert('Erro ao adicionar experiência');
-            liberar = true
+            alert(error.message);
+            liberar = true;
         });
     } else {
-        alert("Você precisa digitar todas as informações na caixa");
+        alert("A experiencia deve ter um título e uma descrição.");
     }
 
 

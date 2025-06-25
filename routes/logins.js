@@ -41,7 +41,7 @@ router.post('/login-empresa', async (req, res) =>{
     const resultado = await pool.query('SELECT * FROM cadastro_empresa WHERE cnpj = $1', [cnpj]);
     const empresa = resultado.rows[0];
     if(empresa && await bcrypt.compare(senha, empresa.senhaempre)){
-      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'usuario' }, SECRET_KEY, { expiresIn: '1d' });
+      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'empresa' }, SECRET_KEY, { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,
         secure: true,

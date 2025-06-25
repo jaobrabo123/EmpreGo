@@ -10,15 +10,16 @@ input {
 }
 
 :root {
-    --text-color: #ffffff;
     /* Cor do texto */
-    --bg-color: #18122B;
+    --text-color: #ffffff;
+    /* Cor da transição */
+    --bg-color: #0E0E10;
     /* Cor de fundo principal */
-    --second-bg-color: #443C68;
-    /* Segunda cor de fundo */
-    --main-color: #635985;
+    --second-bg-color: #ff0000;
+    /* Segunda cor dos botoes */
+    --main-color: #1E1C29;
     /* Cor principal */
-    --primary: #393053;
+    --primary: #18181B;
 }
 
 /* --------------------------ICONES--------------------- */
@@ -39,11 +40,33 @@ input {
     margin-left: -4px;
 }
 
-/* --------------------------esqueceu a senha?--------------------- */
+/* --------------------------esqueceu a senha?/ocorreu algum erro?--------------------- */
 .problema {
     color: var(--text-color);
 }
 
+.erro-input {
+  border: 1px solid #e57373; /* vermelho claro */
+  background-color: #fff0f0;
+}
+
+.erro-mensagem {
+  color: #ff0000;
+  font-size: 12px;
+  display: block;
+  font-family: Arial, sans-serif;
+  align-items: center;
+  gap: 4px;
+  position: absolute;
+  top: 50px;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  background: #fff0f0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  z-index: -3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
 /* --------------------------Olho--------------------- */
 
 .eye-icon {
@@ -218,7 +241,10 @@ form.transicao-login {
     font-weight: 600;
 }
 
-
+.caixa-text input[type="password"],
+.caixa-text input[type="text"] {
+    padding-right: 24px !important; /* aumenta o espaço à direita */
+}
 
 /* --------------------------CAIXAS INDIVIDUAIS--------------------- */
 .caixa-email {
@@ -471,43 +497,14 @@ form.transicao-login {
 /* ----------- EMPRESA: CAIXAS INDIVIDUAIS ----------- */
 
 #registerEmpresaForm {
-    margin-top: 160px; 
+    margin-top: 440px; 
 }
 
 #registerForm{
     margin-bottom: 60px; 
 }
 
-
-.caixa-razao {
-    width: 100%;
-    background-color: var(--text-color);
-    margin: 10px 0px;
-    height: 45px;
-    border-radius: 10px;
-    display: grid;
-    grid-template-columns: 10% 85%;
-    padding: 0 0.4rem;
-    position: relative;
-    right: 130px;
-}
-
-
-.caixa-senha-empresa {
-    width: 100%;
-    background-color: var(--text-color);
-    margin: 10px 0px;
-    height: 45px;
-    border-radius: 10px;
-    display: grid;
-    grid-template-columns: 10% 85%;
-    padding: 0 0.4rem;
-    position: relative;
-    right: 130px;
-    bottom: 130px;
-}
-
-.caixa-cep {
+.caixa-email-empresa {
     max-width: 250px;
     width: 100%;
     background-color: var(--text-color);
@@ -518,23 +515,8 @@ form.transicao-login {
     grid-template-columns: 10% 85%;
     padding: 0 0.4rem;
     position: relative;
+    top: 10px;
     right: 130px;
-    bottom: 65px;
-}
-
-.caixa-cnpj {
-    max-width: 250px;
-    width: 100%;
-    background-color: var(--text-color);
-    margin: 10px 0px;
-    height: 45px;
-    border-radius: 10px;
-    display: grid;
-    grid-template-columns: 10% 85%;
-    padding: 0 0.4rem;
-    position: relative;
-    left: 130px;
-    bottom: 65px;
 }
 
 .caixa-telefone {
@@ -549,7 +531,169 @@ form.transicao-login {
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
-    bottom: 130px;
+    bottom: 55px;
+}
+
+.caixa-razao {
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 55px;
+}
+
+.caixa-fantasia{
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 120px;
+}
+
+.caixa-cnpj {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 120px;
+}
+
+.caixa-cep {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 185px;
+}
+
+.caixa-rua {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 185px;
+}
+
+.caixa-bairro {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 250px;
+}
+
+.caixa-cidade {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 250px;
+}
+
+.caixa-estado {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 315px;
+}
+
+.caixa-numero {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    left: 130px;
+    bottom: 315px;
+}
+
+.caixa-complemento {
+    max-width: 250px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 380px;
+}
+
+.caixa-senha-empresa {
+    width: 100%;
+    background-color: var(--text-color);
+    margin: 10px 0px;
+    height: 45px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 10% 85%;
+    padding: 0 0.4rem;
+    position: relative;
+    right: 130px;
+    bottom: 380px;
 }
 
 .caixa-senha-confirm-empresa {
@@ -564,19 +708,7 @@ form.transicao-login {
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
-    bottom: 195px;
-}
-
-.caixa-email-empresa {
-    max-width: 600px;
-    width: 100%;
-    background-color: var(--text-color);
-    margin: 10px 0;
-    height: 45px;
-    border-radius: 10px;
-    display: grid;
-    grid-template-columns: 5% 85%;
-    padding: 0 0.4rem;
+    bottom: 445px;
 }
 
 /* ----------- Ajustes para inputs de empresa ----------- */
@@ -584,9 +716,16 @@ form.transicao-login {
 #empresaCNPJRegister,
 #empresaRazao,
 #empresaTelefone,
+#empresaFantasia,
 #empresaEmail,
 #empresaPassword,
 #empresaCep,
+#empresaRua,
+#empresaBairro,
+#empresaCidade,
+#empresaEstado,
+#empresaNumero,
+#empresaComplemento,
 #empresaRegisterPassword,
 #empresaConfirmPassword {
     background: none;
@@ -628,7 +767,7 @@ form.transicao-login {
 
 #btn-cadastro-empresa{
     position: relative;
-    bottom: 195px;
+    bottom: 445px;
     width: 180px;
 }
 
@@ -637,6 +776,11 @@ form.transicao-login {
     position: relative;
     bottom: 365px;
     right: 250px;
+}
+
+#title-cadastro-empresa{
+    position: relative;
+    top: 15px;
 }
 
 #empresa-login-btn {

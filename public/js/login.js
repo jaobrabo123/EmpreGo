@@ -3,9 +3,12 @@ const sign_in_btn = document.querySelector("#login-in-btn");
 const sign_up_btn = document.querySelector("#login-up-btn");
 const container = document.querySelector(".container");
 
-sign_up_btn.addEventListener("click", () => container.classList.add("sign-up-mode"));
-sign_in_btn.addEventListener("click", () => container.classList.remove("sign-up-mode"));
-
+sign_up_btn.addEventListener("click", () =>
+  container.classList.add("sign-up-mode")
+);
+sign_in_btn.addEventListener("click", () =>
+  container.classList.remove("sign-up-mode")
+);
 
 const empresaLoginBtn = document.getElementById("empresa-login-btn");
 const empresaCadastroBtn = document.getElementById("empresa-cadastro-btn");
@@ -23,8 +26,12 @@ empresaCadastroBtn.addEventListener("click", () => {
   container.classList.add("sign-up-mode");
 });
 
-sign_in_btn.addEventListener("click", () => container.classList.remove("empresa-mode"));
-sign_up_btn.addEventListener("click", () => container.classList.remove("empresa-mode"));
+sign_in_btn.addEventListener("click", () =>
+  container.classList.remove("empresa-mode")
+);
+sign_up_btn.addEventListener("click", () =>
+  container.classList.remove("empresa-mode")
+);
 
 // _________________________ OLHO SENHA _______________________
 function handlePasswordToggle(inputId, eyeIconId, toggleBtnId) {
@@ -34,51 +41,77 @@ function handlePasswordToggle(inputId, eyeIconId, toggleBtnId) {
 
   function updateVisibility() {
     eyeIcon.style.display = passwordInput.value.length > 0 ? "block" : "none";
-    togglePasswordBtn.style.display = passwordInput.value.length > 0 ? "block" : "none";
+    togglePasswordBtn.style.display =
+      passwordInput.value.length > 0 ? "block" : "none";
   }
 
   passwordInput.addEventListener("input", updateVisibility);
   updateVisibility();
 
   togglePasswordBtn.addEventListener("click", function () {
-    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-    eyeIcon.src = passwordInput.type === "password" ? "../assets/imgs/escondido.png" : "../assets/imgs/olho.png";
+    passwordInput.type =
+      passwordInput.type === "password" ? "text" : "password";
+    eyeIcon.src =
+      passwordInput.type === "password"
+        ? "../assets/imgs/escondido.png"
+        : "../assets/imgs/olho.png";
   });
 }
 
 handlePasswordToggle("password", "eyeIcon", "togglePassword");
-handlePasswordToggle("registerPassword", "eyeIconRegister", "toggleRegisterPassword");
-handlePasswordToggle("confirmPassword", "eyeIconConfirm", "toggleConfirmPassword");
+handlePasswordToggle(
+  "registerPassword",
+  "eyeIconRegister",
+  "toggleRegisterPassword"
+);
+handlePasswordToggle(
+  "confirmPassword",
+  "eyeIconConfirm",
+  "toggleConfirmPassword"
+);
 // EMPRESA OLHO
-handlePasswordToggle("empresaPassword", "eyeIconEmpresa", "toggleEmpresaPassword");
-handlePasswordToggle("empresaRegisterPassword", "eyeIconEmpresaRegister", "toggleEmpresaRegisterPassword");
-handlePasswordToggle("empresaConfirmPassword", "eyeIconEmpresaConfirm", "toggleEmpresaConfirmPassword");
+handlePasswordToggle(
+  "empresaPassword",
+  "eyeIconEmpresa",
+  "toggleEmpresaPassword"
+);
+handlePasswordToggle(
+  "empresaRegisterPassword",
+  "eyeIconEmpresaRegister",
+  "toggleEmpresaRegisterPassword"
+);
+handlePasswordToggle(
+  "empresaConfirmPassword",
+  "eyeIconEmpresaConfirm",
+  "toggleEmpresaConfirmPassword"
+);
 
 // _________________________ CAMPOS OBRIGATÓRIOS _______________________
-const loginForm = document.getElementById('loginForm');
-const loginUsername = document.getElementById('username');
-const loginPassword = document.getElementById('password');
-const loginBtn = document.getElementById('loginBtn');
-
-const registerForm = document.getElementById('registerForm');
-const registerUsername = document.getElementById('regUsername');
-const registerEmail = document.getElementById('email');
-const registerPassword = document.getElementById('registerPassword');
-const confirmPassword = document.getElementById('confirmPassword');
-const dob = document.getElementById('dob');
-const genderSelect = document.getElementById('genderSelect');
-const outroGeneroInput = document.getElementById('outroGeneroInput');
+const loginForm = document.getElementById("loginForm");
+const loginUsername = document.getElementById("username");
+const loginPassword = document.getElementById("password");
+const loginBtn = document.getElementById("loginBtn");
+const registerForm = document.getElementById("registerForm");
+const registerUsername = document.getElementById("regUsername");
+const registerSobrenome = document.getElementById("regUsernameSobre");
+const registerEmail = document.getElementById("email");
+const registerPassword = document.getElementById("registerPassword");
+const confirmPassword = document.getElementById("confirmPassword");
+const dob = document.getElementById("dob");
+const genderSelect = document.getElementById("genderSelect");
+const outroGeneroInput = document.getElementById("outroGeneroInput");
 
 function checkLoginFields() {
   loginBtn.disabled = !(loginUsername.value && loginPassword.value);
 }
 
 function checkRegisterFields() {
-  const outroGeneroVal = outroGeneroInput ? outroGeneroInput.value.trim() : '';
+  const outroGeneroVal = outroGeneroInput ? outroGeneroInput.value.trim() : "";
   const generoSelecionado = genderSelect.value;
 
-  const generoPreenchido = (generoSelecionado !== '' && generoSelecionado !== 'Outro') ||
-    (generoSelecionado === 'Outro' && outroGeneroVal !== '');
+  const generoPreenchido =
+    (generoSelecionado !== "" && generoSelecionado !== "Outro") ||
+    (generoSelecionado === "Outro" && outroGeneroVal !== "");
 
   const allFieldsFilled =
     registerUsername.value.trim() &&
@@ -90,11 +123,23 @@ function checkRegisterFields() {
 }
 
 const loginInputs = [loginUsername, loginPassword];
-const registerInputs = [registerUsername, registerEmail, registerPassword, confirmPassword, dob, genderSelect];
+const registerInputs = [
+  registerUsername,
+  registerEmail,
+  registerPassword,
+  confirmPassword,
+  dob,
+  genderSelect,
+];
 
-loginInputs.forEach(input => input.addEventListener('input', checkLoginFields));
-registerInputs.forEach(input => input.addEventListener('input', checkRegisterFields));
-if (outroGeneroInput) outroGeneroInput.addEventListener('input', checkRegisterFields);
+loginInputs.forEach((input) =>
+  input.addEventListener("input", checkLoginFields)
+);
+registerInputs.forEach((input) =>
+  input.addEventListener("input", checkRegisterFields)
+);
+if (outroGeneroInput)
+  outroGeneroInput.addEventListener("input", checkRegisterFields);
 
 // Inicializa estado dos botões
 checkLoginFields();
@@ -102,46 +147,55 @@ checkRegisterFields();
 // ________________________________________________________USUARIO ________________________________________________________________________
 // ________________________ DROPDOWN DE GÊNERO _______________________
 function handleGenderChange() {
-  const select = document.getElementById('genderSelect');
-  const otherInputContainer = document.querySelector('.other-gender-input-container');
+  const select = document.getElementById("genderSelect");
+  const otherInputContainer = document.querySelector(
+    ".other-gender-input-container"
+  );
 
-  if (select.value === 'Outro') {
-    otherInputContainer.style.display = 'block';
+  if (select.value === "Outro") {
+    otherInputContainer.style.display = "block";
     setTimeout(() => {
-      otherInputContainer.classList.add('show');
+      otherInputContainer.classList.add("show");
     }, 10);
   } else {
-    otherInputContainer.classList.remove('show');
+    otherInputContainer.classList.remove("show");
     setTimeout(() => {
-      otherInputContainer.style.display = 'none';
+      otherInputContainer.style.display = "none";
     }, 300);
   }
   checkRegisterFields();
 }
 
 // ________________________ MÁSCARA DE DATA DE NASCIMENTO _______________________
-document.addEventListener('DOMContentLoaded', function () {
-  const dobInput = document.getElementById('dob');
+document.addEventListener("DOMContentLoaded", function () {
+  const dobInput = document.getElementById("dob");
 
   // Máscara de data de nascimento
-  dobInput.addEventListener('input', function () {
-    var value = dobInput.value.replace(/\D/g, '');
+  dobInput.addEventListener("input", function () {
+    var value = dobInput.value.replace(/\D/g, "");
 
     value = value.slice(0, 8);
 
     if (value.length >= 5) {
-      value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
+      value =
+        value.slice(0, 2) + "/" + value.slice(2, 4) + "/" + value.slice(4);
     } else if (value.length >= 3) {
-      value = value.slice(0, 2) + '/' + value.slice(2);
+      value = value.slice(0, 2) + "/" + value.slice(2);
     }
 
     dobInput.value = value;
   });
 
   // Permitir apenas números e teclas de navegação
-  dobInput.addEventListener('keydown', function (e) {
+  dobInput.addEventListener("keydown", function (e) {
     const key = e.key;
-    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    const allowedKeys = [
+      "Backspace",
+      "Delete",
+      "ArrowLeft",
+      "ArrowRight",
+      "Tab",
+    ];
     if (!/[0-9]/.test(key) && !allowedKeys.includes(key)) {
       e.preventDefault();
     }
@@ -150,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Função de validação da data de nascimento
 function validarDataNascimento(dobStr) {
-  const partes = dobStr.split('/');
+  const partes = dobStr.split("/");
   if (partes.length !== 3) return false;
 
   const dia = parseInt(partes[0], 10);
@@ -183,49 +237,50 @@ function validarDataNascimento(dobStr) {
 // ________________________________________________________EMPRESA ________________________________________________________________________
 // ________________________ CEP _______________________
 async function preencherEnderecoPorCep() {
-  const cepInput = document.getElementById('empresaCep');
-  const cep = cepInput.value.replace(/\D/g, '');
+  const cepInput = document.getElementById("empresaCep");
+  const cep = cepInput.value.replace(/\D/g, "");
 
   if (cep.length !== 8) {
-    document.getElementById('empresaRua').value = '';
-    document.getElementById('empresaBairro').value = '';
-    document.getElementById('empresaCidade').value = '';
-    document.getElementById('empresaEstado').value = '';
+    document.getElementById("empresaRua").value = "";
+    document.getElementById("empresaBairro").value = "";
+    document.getElementById("empresaCidade").value = "";
+    document.getElementById("empresaEstado").value = "";
     return;
   }
 
   try {
     const API_CEP = await fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`);
-    if (!API_CEP.ok) throw new Error('CEP não encontrado');
+    if (!API_CEP.ok) throw new Error("CEP não encontrado");
     const DADOS_API = await API_CEP.json();
 
-    document.getElementById('empresaRua').value = DADOS_API.street || '';
-    document.getElementById('empresaBairro').value = DADOS_API.neighborhood || '';
-    document.getElementById('empresaCidade').value = DADOS_API.city || '';
-    document.getElementById('empresaEstado').value = DADOS_API.state || '';
+    document.getElementById("empresaRua").value = DADOS_API.street || "";
+    document.getElementById("empresaBairro").value =
+      DADOS_API.neighborhood || "";
+    document.getElementById("empresaCidade").value = DADOS_API.city || "";
+    document.getElementById("empresaEstado").value = DADOS_API.state || "";
   } catch (err) {
-    document.getElementById('empresaRua').value = '';
-    document.getElementById('empresaBairro').value = '';
-    document.getElementById('empresaCidade').value = '';
-    document.getElementById('empresaEstado').value = '';
+    document.getElementById("empresaRua").value = "";
+    document.getElementById("empresaBairro").value = "";
+    document.getElementById("empresaCidade").value = "";
+    document.getElementById("empresaEstado").value = "";
   }
 }
 
-const empresaCepInput = document.getElementById('empresaCep');
+const empresaCepInput = document.getElementById("empresaCep");
 if (empresaCepInput) {
-  empresaCepInput.addEventListener('input', function () {
-    var value = this.value.replace(/\D/g, '');
+  empresaCepInput.addEventListener("input", function () {
+    var value = this.value.replace(/\D/g, "");
 
     if (value.length > 5) {
-      value = value.slice(0, 5) + '-' + value.slice(5, 8);
+      value = value.slice(0, 5) + "-" + value.slice(5, 8);
     }
     this.value = value;
 
     if (value.length === 0) {
-      document.getElementById('empresaRua').value = '';
-      document.getElementById('empresaBairro').value = '';
-      document.getElementById('empresaCidade').value = '';
-      document.getElementById('empresaEstado').value = '';
+      document.getElementById("empresaRua").value = "";
+      document.getElementById("empresaBairro").value = "";
+      document.getElementById("empresaCidade").value = "";
+      document.getElementById("empresaEstado").value = "";
     }
 
     if (value.length === 9) {
@@ -233,174 +288,362 @@ if (empresaCepInput) {
     }
   });
 
-  empresaCepInput.addEventListener('blur', preencherEnderecoPorCep);
+  empresaCepInput.addEventListener("blur", preencherEnderecoPorCep);
 }
 // ________________________ Numero De Telefone _______________________
-const empresaTelefoneInput = document.getElementById('empresaTelefone');
+const empresaTelefoneInput = document.getElementById("empresaTelefone");
 
 if (empresaTelefoneInput) {
-  empresaTelefoneInput.addEventListener('input', function () {
+  empresaTelefoneInput.addEventListener("input", function () {
     // Remove o +55 se já estiver presente para evitar duplicação
-    let raw = this.value.replace(/\D/g, '');
+    let raw = this.value.replace(/\D/g, "");
 
     // Remove os dois primeiros dígitos se forem 55
-    if (raw.startsWith('55')) {
+    if (raw.startsWith("55")) {
       raw = raw.slice(2);
     }
 
     // Limita a 11 dígitos (2 DDD + 9 número)
     raw = raw.slice(0, 11);
 
-    let formatted = '+55';
+    let formatted = "+55";
 
     if (raw.length > 0) {
-      formatted += ' ' + raw.slice(0, 2); // DDD
+      formatted += " " + raw.slice(0, 2);
     }
     if (raw.length > 2) {
-      formatted += ' ' + raw.slice(2, 7);
+      formatted += " " + raw.slice(2, 7);
     }
     if (raw.length > 7) {
-      formatted += '-' + raw.slice(7, 11);
+      formatted += "-" + raw.slice(7, 11);
     }
 
     this.value = formatted;
   });
 }
 // ________________________ CNPJ _______________________
-const cnpjInput = document.getElementById('empresaCNPJRegister');
+function aplicarMascaraCNPJ(input) {
+  input.addEventListener("input", function () {
+    let value = this.value.replace(/\D/g, "").slice(0, 14);
 
-cnpjInput.addEventListener('input', function () {
-  var value = this.value.replace(/\D/g, ''); // Remove tudo que não for número
-  value = value.slice(0, 14); // Limita a 14 dígitos
+    if (value.length >= 3) value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+    if (value.length >= 6)
+      value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+    if (value.length >= 9)
+      value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3/$4");
+    if (value.length >= 13)
+      value = value.replace(
+        /^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d)/,
+        "$1.$2.$3/$4-$5"
+      );
 
-  // Aplica a máscara
-  if (value.length >= 3) value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-  if (value.length >= 6) value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-  if (value.length >= 9) value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3/$4');
-  if (value.length >= 13) value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d)/, '$1.$2.$3/$4-$5');
+    this.value = value;
+  });
+}
 
-  this.value = value;
-});
+const cnpjRegisterInput = document.getElementById("empresaCNPJRegister");
+if (cnpjRegisterInput) aplicarMascaraCNPJ(cnpjRegisterInput);
+
+const cnpjLoginInput = document.getElementById("empresaCNPJ");
+if (cnpjLoginInput) aplicarMascaraCNPJ(cnpjLoginInput);
 
 // ________________________________________________________________________________________________________________________________
-// ________________________ LOGIN/EMPRESA _______________________
-document.getElementById('loginEmpresaForm').addEventListener('submit', function (e) {
-  e.preventDefault();
 
-  const cnpjInput = document.getElementById('empresaCNPJ');
-  const senhaInput = document.getElementById('empresaPassword');
-
-  [cnpjInput, senhaInput].forEach(clearInputError);
-  
-  const cnpj = cnpjInput.value.trim();
-  const senha = senhaInput.value.trim();
-
-  if (cnpj.length !== 18 || !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj)) {
-    showInputError(cnpjInput, 'CNPJ inválido. Use o formato 00.000.000/0000-00.');
-    return;
-  }
-
-  if (senha.length < 8) {
-    showInputError(senhaInput, 'A senha deve ter no mínimo 8 caracteres.');
-    return;
-  }
-
-});
-// ________________________ CADASTRO/EMPRESA _______________________
-
+// ________________________ ERRO _______________________
 
 function showInputError(input, message) {
   clearInputError(input);
 
-  input.classList.add('erro-input');
-  const errorDiv = document.createElement('div');
-  errorDiv.className = 'erro-mensagem';
-  errorDiv.innerHTML = `<span class="icon">⚠️</span> ${message}`;
-  errorDiv.style.display = 'block';
+  input.classList.add("erro-input");
+  const errorDiv = document.createElement("div");
+  errorDiv.className = "erro-mensagem";
+  errorDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+  errorDiv.style.display = "block";
 
   input.parentNode.appendChild(errorDiv);
 }
 
 function clearInputError(input) {
-  input.classList.remove('erro-input');
-  const error = input.parentNode.querySelector('.erro-mensagem');
+  input.classList.remove("erro-input");
+  const error = input.parentNode.querySelector(".erro-mensagem");
   if (error) error.remove();
 }
 
-const registerEmpresaForm = document.getElementById('registerEmpresaForm');
+function mostrarErro(input, mensagem) {
+  input.classList.add("erro-input");
+  var erro = input.parentElement.querySelector(".erro-mensagem");
+  if (!erro) {
+    erro = document.createElement("span");
+    erro.className = "erro-mensagem";
+    input.parentElement.appendChild(erro);
+  }
+  erro.textContent = mensagem;
+  erro.style.display = "block";
+}
+
+function removerErros() {
+  document
+    .querySelectorAll(".erro-input")
+    .forEach((el) => el.classList.remove("erro-input"));
+  document
+    .querySelectorAll(".erro-mensagem")
+    .forEach((el) => (el.style.display = "none"));
+}
+
+document.addEventListener(
+  "click",
+  function () {
+    removerErros();
+  },
+  true
+);
+
+// ________________________ LOGIN/EMPRESA _______________________
+document
+  .getElementById("loginEmpresaForm")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const cnpjInput = document.getElementById("empresaCNPJ");
+    const senhaInput = document.getElementById("empresaPassword");
+
+    [cnpjInput, senhaInput].forEach(clearInputError);
+
+    const cnpj1 = cnpjInput.value.trim();
+    const senha = senhaInput.value.trim();
+
+    if (
+      cnpj1.length !== 18 ||
+      !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)
+    ) {
+      showInputError(cnpjInput, "CNPJ inválido. formato 00.000.000/0000-00.");
+      return;
+    }
+
+    if (
+      cnpj1.length !== 18 ||
+      !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)
+    ) {
+      showInputError(cnpjInput, "CNPJ inválido. formato 00.000.000/0000-00.");
+      return;
+    }
+
+    if (senha.length < 8) {
+      showInputError(senhaInput, "mínimo 8 caracteres.");
+      return;
+    }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
+      showInputError(
+        senhaInput,
+        "Senha deve ter maiúscula, minúscula, número e caractere especial."
+      );
+      return;
+    }
+
+    const cnpj = cnpj1.replace(/[^\d]/g, "");
+
+    fetch("/login-empresa", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cnpj, senha }),
+      credentials: "include",
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Erro ao fazer login.");
+        }
+        window.location.href = "./index.html";
+      })
+      .catch((err) => alert(err.message));
+  });
+
+// ________________________ CADASTRO/EMPRESA _______________________
+const registerEmpresaForm = document.getElementById("registerEmpresaForm");
 if (registerEmpresaForm) {
-  registerEmpresaForm.addEventListener('submit', function (e) {
+  registerEmpresaForm.addEventListener("submit", function (e) {
     e.preventDefault();
     cadastrarEmpresa();
   });
 }
 
 function cadastrarEmpresa() {
-  const emailInput = document.getElementById('empresaEmail');
-  const razaoInput = document.getElementById('empresaRazao');
-  const cnpjInput = document.getElementById('empresaCNPJRegister');
-  const senhaInput = document.getElementById('empresaRegisterPassword');
-  const confirmSenhaInput = document.getElementById('empresaConfirmPassword');
-  const telefoneInput = document.getElementById('empresaTelefone');
-  const cepInput = document.getElementById('empresaCep');
-  const numeroInput = document.getElementById('empresaNumero');
-  const complementoInput = document.getElementById('empresaComplemento');
+  const emailInput = document.getElementById("empresaEmail");
+  const razaoInput = document.getElementById("empresaRazao");
+  const cnpjInput = document.getElementById("empresaCNPJRegister");
+  const senhaInput = document.getElementById("empresaRegisterPassword");
+  const confirmSenhaInput = document.getElementById("empresaConfirmPassword");
+  const telefoneInput = document.getElementById("empresaTelefone");
+  const cepInput = document.getElementById("empresaCep");
+  const numeroInput = document.getElementById("empresaNumero");
+  const complementoInput = document.getElementById("empresaComplemento");
+  const empresaFantasiaInput = document.getElementById("empresaFantasia");
   [
-    emailInput, razaoInput, cnpjInput, senhaInput, confirmSenhaInput,
-    telefoneInput, cepInput, numeroInput, complementoInput
+    emailInput,
+    razaoInput,
+    cnpjInput,
+    senhaInput,
+    confirmSenhaInput,
+    telefoneInput,
+    cepInput,
+    numeroInput,
+    complementoInput,
+    empresaFantasiaInput,
   ].forEach(clearInputError);
 
   const email = emailInput.value.trim();
   const razao = razaoInput.value.trim();
-  const cnpj = cnpjInput.value.trim();
+  const cnpj1 = cnpjInput.value.trim();
   const senha = senhaInput.value.trim();
   const confirmSenha = confirmSenhaInput.value.trim();
   const telefone = telefoneInput.value.trim();
   const cep = cepInput.value.trim();
-  const numero = numeroInput.value.trim();
+  const num = numeroInput.value.trim();
   const complemento = complementoInput.value.trim();
+  const nome = empresaFantasiaInput.value.trim();
 
-  if (!email) { showInputError(emailInput, 'Por favor, preencha o e-mail.'); return; }
+  if (!email) {
+    showInputError(emailInput, "preencha o e-mail.");
+    return;
+  }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showInputError(emailInput, 'Por favor, insira um email válido.');
+    showInputError(emailInput, "insira um email válido.");
     return;
   }
-  if (!telefone) { showInputError(telefoneInput, 'Por favor, preencha o telefone.'); return; }
+  if (!telefone) {
+    showInputError(telefoneInput, "preencha o telefone.");
+    return;
+  }
   if (!/^\+55 \d{2} \d{4,5}-\d{4}$/.test(telefone)) {
-    showInputError(telefoneInput, 'Por favor, insira um telefone válido no formato +55 XX XXXXX-XXXX.');
+    showInputError(telefoneInput, "Telefone inválido (use +55 XX XXXXX-XXXX)");
     return;
   }
-  if (!razao) { showInputError(razaoInput, 'Por favor, preencha a razão social.'); return; }
-  if (!cnpj) { showInputError(cnpjInput, 'Por favor, preencha o CNPJ.'); return; }
-  if (cnpj.length !== 18 || !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj)) {
-    showInputError(cnpjInput, 'Por favor, insira um CNPJ válido.');
+  if (!razao) {
+    showInputError(razaoInput, "preencha a razão social.");
     return;
   }
-  if (!cep) { showInputError(cepInput, 'Por favor, preencha o CEP.'); return; }
+  if (!nome) {
+    showInputError(empresaFantasiaInput, "preencha o nome fantasia.");
+    return;
+  }
+  if (!cnpj1) {
+    showInputError(cnpjInput, "preencha o CNPJ.");
+    return;
+  }
+  if (
+    cnpj1.length !== 18 ||
+    !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)
+  ) {
+    showInputError(cnpjInput, "insira um CNPJ válido.");
+    return;
+  }
+  if (!cep) {
+    showInputError(cepInput, "preencha o CEP.");
+    return;
+  }
   if (!/^\d{5}-\d{3}$/.test(cep)) {
-    showInputError(cepInput, 'Por favor, insira um CEP válido no formato XXXXX-XXX.');
+    showInputError(cepInput, "CEP inválido (use XXXXX-XXX).");
     return;
   }
-  if (!numero) { showInputError(numeroInput, 'Por favor, preencha o número.'); return; }
-  if (!/[a-zA-Z0-9]/.test(numero)) {
-    showInputError(numeroInput, 'O número deve conter pelo menos um caractere alfanumérico.');
+  if (!num) {
+    showInputError(numeroInput, "Por favor, preencha o número.");
     return;
   }
-  if (!complemento) { showInputError(complementoInput, 'Por favor, preencha o complemento.'); return; }
-  if (!senha) { showInputError(senhaInput, 'Por favor, preencha a senha.'); return; }
+  if (!/[a-zA-Z0-9]/.test(num)) {
+    showInputError(numeroInput, "use letras ou números.");
+    return;
+  }
+  if (!complemento) {
+    showInputError(complementoInput, "Por favor, preencha o complemento.");
+    return;
+  }
+  if (!senha) {
+    showInputError(senhaInput, "Por favor, preencha a senha.");
+    return;
+  }
   if (senha.length < 8) {
-    showInputError(senhaInput, 'A senha deve ter pelo menos 8 caracteres.');
+    showInputError(senhaInput, "mínimo 8 caracteres.");
     return;
   }
-  if (!confirmSenha) { showInputError(confirmSenhaInput, 'Por favor, confirme a senha.'); return; }
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
+    showInputError(
+      senhaInput,
+      "Senha deve ter maiúscula, minúscula, número e caractere especial."
+    );
+    return;
+  }
+  if (!confirmSenha) {
+    showInputError(confirmSenhaInput, "confirme a senha.");
+    return;
+  }
   if (senha !== confirmSenha) {
-    showInputError(confirmSenhaInput, 'As senhas não coincidem.');
+    showInputError(confirmSenhaInput, "As senhas não coincidem.");
     return;
   }
+
+  const cnpj = cnpj1.replace(/[^\d]/g, "");
+
+  fetch("/empresas", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      cnpj,
+      nome,
+      telefone,
+      email,
+      senha,
+      razao,
+      cep,
+      complemento,
+      num,
+    }),
+  })
+    .then(async (res) => {
+      if (res.ok) {
+        return fetch("/login-empresa", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cnpj, senha }),
+          credentials: "include",
+        });
+      } else {
+        const erro = await res.json();
+        throw new Error(erro.error || "Erro ao cadastrar a empresa.");
+      }
+    })
+    .then(async (response) => {
+      if (!response.ok) {
+        const erro = await response.json();
+        throw new Error(erro.error || "Erro ao fazer login automático.");
+      }
+      alert("Empresa cadastrada com SUCESSO!");
+      window.location.href = "./index.html";
+    })
+    .catch((erro) => {
+      if (erro.message.includes("CNPJ já cadastrado.")) {
+        showInputError(cnpjInput, "CNPJ já cadastrado.");
+        return;
+      } else if (erro.message.includes("Email já cadastrado.")){
+        showInputError(
+          emailInput,
+          "E-mail já cadastrado."
+        );
+        return;
+      } else if(erro.message.includes('Razão social já cadastrada.')){
+        showInputError(
+          razaoInput,
+          "Razão social já cadastrada."
+        );
+        return;
+      }
+      else {
+        alert(erro.message || "Erro ao cadastrar empresa.");
+      }
+    });
 }
 
 // ________________________ LOGIN/US _______________________
-loginForm.addEventListener('submit', function (e) {
+loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
   login();
 });
@@ -409,24 +652,24 @@ function login() {
   const email = loginUsername.value.trim();
   const senha = loginPassword.value.trim();
 
-  fetch('/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  fetch("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, senha }),
-    credentials: 'include'
+    credentials: "include",
   })
     .then(async (res) => {
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Erro ao fazer login.');
+        throw new Error(data.error || "Erro ao fazer login.");
       }
-      window.location.href = './index.html';
+      window.location.href = "./index.html";
     })
-    .catch(err => alert(err.message));
+    .catch((err) => alert(err.message));
 }
 
 // ________________________ CADASTRO/US _______________________
-registerForm.addEventListener('submit', cadastrar)
+registerForm.addEventListener("submit", cadastrar);
 
 function cadastrar(e) {
   e.preventDefault();
@@ -435,61 +678,67 @@ function cadastrar(e) {
     registerEmail,
     registerPassword,
     confirmPassword,
-    dob
+    dob,
+    registerSobrenome,
   ].forEach(clearInputError);
-  const nome = registerUsername.value.trim();
+  const name = registerUsername.value.trim();
+  const sobrenome = registerSobrenome.value.trim();
   const dobValue = dob.value.trim();
   const email = registerEmail.value.trim();
   const senha = registerPassword.value.trim();
   const confirmSenha = confirmPassword.value.trim();
   var genero = genderSelect.value;
 
-  if (!nome) {
-    showInputError(registerUsername, "Por favor, preencha o nome.");
+  if (!name) {
+    showInputError(registerUsername, "preencha o nome.");
     return;
   }
-  if (nome.length < 4) {
-    showInputError(registerUsername, "O Username deve ter no mínimo 4 caracteres.");
+  if (!sobrenome) {
+    showInputError(registerSobrenome, "preencha o sobrenome.");
+    return;
+  }
+  if (name.length < 4) {
+    showInputError(registerUsername, "mínimo 4 caracteres.");
     return;
   }
   if (!dobValue) {
-    showInputError(dob, "Por favor, preencha a data de nascimento.");
+    showInputError(dob, "preencha a data de nascimento.");
     return;
   }
   if (!dobValue.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-    showInputError(dob, "Por favor, insira a data de nascimento no formato DD/MM/AAAA.");
+    showInputError(dob, "formato DD/MM/AAAA.");
     return;
   }
   if (!validarDataNascimento(dobValue)) {
-    showInputError(dob, "Por favor, insira uma data de nascimento válida. Sua idade deve ser entre 14 e 120 anos.");
+    showInputError(dob, "Data inválida (idade: 14 a 120 anos).");
     return;
   }
   if (!email) {
-    showInputError(registerEmail, "Por favor, preencha o e-mail.");
+    showInputError(registerEmail, "preencha o e-mail.");
     return;
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showInputError(registerEmail, "Por favor, insira um email válido.");
+    showInputError(registerEmail, "insira um email válido.");
     return;
   }
   if (!senha) {
-    showInputError(registerPassword, "Por favor, preencha a senha.");
+    showInputError(registerPassword, "preencha a senha.");
     return;
   }
   if (senha.length < 8) {
-    showInputError(registerPassword, "A senha deve ter no mínimo 8 caracteres.");
+    showInputError(registerPassword, "mínimo 8 caracteres.");
     return;
   }
-  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(senha)) {
-    showInputError(registerPassword, "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número.");
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
+    showInputError(registerPassword, "use maiúscula, minúscula, número e caractere especial.");
     return;
   }
   if (!confirmSenha) {
-    showInputError(confirmPassword, "Por favor, confirme a senha.");
+    showInputError(confirmPassword, "confirme a senha.");
     return;
   }
   if (confirmSenha.length < 8) {
-    showInputError(confirmPassword, "A confirmação de senha deve ter no mínimo 8 caracteres.");
+    showInputError(confirmPassword, "mínimo 8 caracteres.");
     return;
   }
   if (senha !== confirmSenha) {
@@ -497,51 +746,62 @@ function cadastrar(e) {
     return;
   }
   if (!genero) {
-    showInputError(genderSelect, "Por favor, selecione um gênero.");
+    showInputError(genderSelect, "selecione um gênero.");
     return;
   }
-  if (genero === 'Outro') {
+  if (genero === "Outro") {
     const outroGenero = outroGeneroInput.value.trim();
     if (!outroGenero) {
-      showInputError(outroGeneroInput, "Por favor, preencha o campo de gênero personalizado.");
+      showInputError(
+        outroGeneroInput,
+        "preencha o campo de gênero personalizado."
+      );
       return;
     }
     genero = outroGenero;
   }
 
-  const [dia, mes, ano] = dobValue.split('/');
+  const nome = `${name} ${sobrenome}`;
+  const [dia, mes, ano] = dobValue.split("/");
   const datanasc = `${ano}-${mes}-${dia}`;
 
-  fetch('/usuarios', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, email, senha, genero, datanasc })
+  fetch("/usuarios", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nome, email, senha, genero, datanasc }),
   })
-    .then(async res => {
+    .then(async (res) => {
       if (res.ok) {
-        return fetch('/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        return fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, senha }),
-          credentials: 'include'
+          credentials: "include",
         });
       } else {
         const erro = await res.json();
-        throw new Error(erro.error || 'Erro ao cadastrar o usuário.');
+        throw new Error(erro.error || "Erro ao cadastrar o usuário.");
       }
     })
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         return res.json();
       } else {
-        throw new Error('Login automático falhou.');
+        throw new Error("Login automático falhou.");
       }
     })
     .then(() => {
       alert("Cadastro realizado com sucesso!");
-      window.location.href = './index.html';
+      window.location.href = "./index.html";
     })
     .catch((err) => {
-      alert(`Erro do sistema ${err.message}`);
+      if (err.message.includes("Email já cadastrado.")) {
+        showInputError(
+          registerEmail,
+          "E-mail já cadastrado. Por favor, use outro e-mail."
+        );
+        return;
+      }
+      alert(`Erro do sistema: ${err.message}`);
     });
 }

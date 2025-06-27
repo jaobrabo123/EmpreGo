@@ -3,6 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import corsMiddleware  from './middlewares/cors.js';
+import {limiteGeral} from './middlewares/rateLimit.js';
 
 //Routes
 import loginRoutes from './routes/logins.js'
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(limiteGeral);
 
 //Rotas
 app.use(loginRoutes);

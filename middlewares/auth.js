@@ -28,8 +28,13 @@ function authenticateToken(req, res, next) {
 }
 
 function apenasEmpresa(req,res,next) {
-  if(req.user?.tipo!=='empresa') return next()
+  if(req.user?.tipo==='empresa') return next()
   return res.status(403).json({ error: 'Acesso apenas para empresas' });
 }
 
-export {authenticateToken, apenasEmpresa};
+function apenasUsuario(req,res,next) {
+  if(req.user?.tipo==='usuario') return next()
+  return res.status(403).json({ error: 'Acesso apenas para usuários' });
+}
+
+export {authenticateToken, apenasEmpresa, apenasUsuario};

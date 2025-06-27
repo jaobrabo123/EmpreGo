@@ -1,8 +1,8 @@
 //Imports
 import express from 'express';
 import pool from '../db.js';
-import { editarPerfil } from '../app.js';
-import {authenticateToken} from '../middlewares/auth.js';
+import { editarPerfil, editarPerfilEmpresa } from '../app.js';
+import {authenticateToken, apenasEmpresa, apenasUsuario} from '../middlewares/auth.js';
 // Cloudinary + Multer
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
@@ -18,11 +18,21 @@ const perfilStorage = new CloudinaryStorage({
 });
 const uploadPerfil = multer({ storage: perfilStorage });  // upload das fotos de perfil
 
+// storage para as fotos de perfil de empresa
+const empresaPerfilStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'fotos_perfil_empresa', //pasta no Cloudinary para as fotos de perfil de empresa
+    allowed_formats: ['jpg', 'jpeg', 'png']
+  }
+});
+const uploadEmpresaPerfil = multer({ storage: empresaPerfilStorage });  // upload das fotos de perfil de empresa
+
 //Router
 const router = express.Router();
 
 //Rota para pegar o perfil do usuário
-router.get('/perfil', authenticateToken, async (req, res) => {
+router.get('/perfil', authenticateToken, apenasUsuario, async (req, res) => {
   try {
     const id_usuario = req.user.id;
 
@@ -45,7 +55,7 @@ router.get('/perfil', authenticateToken, async (req, res) => {
 });
 
 //Rota para editar o perfil do usuário
-router.post('/perfil-edit', authenticateToken, uploadPerfil.single('foto_perfil'), async (req, res) =>{
+router.post('/perfil-edit', authenticateToken, apenasUsuario, uploadPerfil.single('foto_perfil'), async (req, res) =>{
   try {
     const id_usuario = req.user.id;
     const dados = { ...req.body };
@@ -66,6 +76,49 @@ router.post('/perfil-edit', authenticateToken, uploadPerfil.single('foto_perfil'
   } catch (error) {
     console.error('Erro ao editar perfil:', error);
     res.status(500).json({ error: 'Erro ao editar perfil: ' + error.message });
+  }
+})
+
+//Rota para editar o perfil da empresa
+router.post('/perfil-edit-empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('fotoempresa'), async (req, res) => {
+  try {
+    const cnpj = req.user.id;
+    const dados = { ...req.body };
+    if (req.file) {
+      dados.fotoempresa = req.file.path;
+    }
+    const atributos = Object.keys(dados);
+    const valores = Object.values(dados);
+    if (atributos.length === 0) {
+      return res.status(400).json({ error: 'Nenhum atributo para atualizar.' });
+    }
+    await editarPerfilEmpresa(atributos, valores, cnpj);
+    res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
+  } catch (error) {
+    console.error('Erro ao editar perfil da empresa:', error);
+    res.status(500).json({ error: 'Erro ao editar perfil da empresa: ' + error.message });
+  }
+});
+
+router.get('/perfil-empresa', authenticateToken, apenasEmpresa, async (req, res) => {
+  try{
+    const cnpj = req.user.id;
+
+    const empresa = await pool.query(
+      `SELECT c.nomeempre, c.telefoneempre,c.cep, c.complemento, c.num, e.descricaoempre, e.setor, e.porte, e.dataempresa, e.emailcontato, e.siteempresa, e.instagramempre, e.githubempre, e.youtubeempre, e.twitterempre, e.fotoempresa
+       FROM cadastro_empresa c 
+       JOIN empresa_perfil e ON c.cnpj = e.cnpj
+       WHERE c.cnpj = $1`,
+      [cnpj]
+    );
+
+    if (empresa.rows.length === 0) {
+      return res.status(404).json({ error: 'Empresa não encontrada' });
+    }
+
+    res.json(empresa.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar perfil da empresa: ' + error.message });
   }
 })
 

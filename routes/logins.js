@@ -3,7 +3,7 @@ import express from 'express';
 import pool from '../db.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-
+import {limiteLogin} from '../middlewares/rateLimit.js';
 //Router
 const router = express.Router();
 
@@ -11,7 +11,7 @@ const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET;
 
 //Rota de login
-router.post('/login', async (req, res) => {
+router.post('/login', limiteLogin, async (req, res) => {
   const { email, senha } = req.body;
   try {
     const resultado = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
@@ -35,13 +35,13 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/login-empresa', async (req, res) =>{
+router.post('/login-empresa', limiteLogin, async (req, res) =>{
   const { cnpj, senha } = req.body;
   try{
     const resultado = await pool.query('SELECT * FROM cadastro_empresa WHERE cnpj = $1', [cnpj]);
     const empresa = resultado.rows[0];
     if(empresa && await bcrypt.compare(senha, empresa.senhaempre)){
-      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'empresa' }, SECRET_KEY, { expiresIn: '1d' });
+      const token = jwt.sign({ id: empresa.cnpj, tipo: 'empresa' }, SECRET_KEY, { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,
         secure: true,

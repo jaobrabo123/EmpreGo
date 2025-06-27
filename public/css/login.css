@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -10,44 +11,32 @@ input {
 }
 
 :root {
-    /* Cor do texto */
+    /* Cor do texto principal */
     --text-color: #ffffff;
-    /* Cor da transição */
-    --bg-color: #0E0E10;
-    /* Cor de fundo principal */
-    --second-bg-color: #ff0000;
-    /* Segunda cor dos botoes */
-    --main-color: #1E1C29;
+    /* Cor de text (titulo, links...)*/
+    --text-secondary-color: #0F4C81;
+    --bg-caixa-text-color: #222;
     /* Cor principal */
     --primary: #18181B;
+    /* Segunda cor de fundo */
+    --bg-color: #0E0E10;
+    /* cor dos botoes */
+    --main-color: #0056b3;
+    --btn-hover-color: #007BFF;
 }
 
 /* --------------------------ICONES--------------------- */
-.all-icon {
+/*.all-icon {
     width: 1.8rem;
     height: 1.8rem;
     background: transparent;
     margin-top: 9px;
     margin-left: 1px;
-}
-
-
-.person {
-    width: 2.3rem;
-    height: 2.3rem;
-    background: transparent;
-    margin-top: 5px;
-    margin-left: -4px;
-}
+}*/
 
 /* --------------------------esqueceu a senha?/ocorreu algum erro?--------------------- */
 .problema {
     color: var(--text-color);
-}
-
-.erro-input {
-  border: 1px solid #e57373; /* vermelho claro */
-  background-color: #fff0f0;
 }
 
 .erro-mensagem {
@@ -58,14 +47,13 @@ input {
   align-items: center;
   gap: 4px;
   position: absolute;
-  top: 50px;
+  top: 54px;
   transform: translateY(-50%);
   white-space: nowrap;
-  background: #fff0f0;
+  background: #ffffff;
   border-radius: 4px;
   padding: 2px 8px;
   z-index: -3;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 /* --------------------------Olho--------------------- */
 
@@ -181,7 +169,7 @@ form.transicao-login {
 /* -----------TITULO--------- */
 .title {
     font-size: 2.2rem;
-    color: var(--text-color);
+    color: var(--text-secondary-color);
     margin-bottom: 10px;
 }
 
@@ -195,13 +183,18 @@ form.transicao-login {
     position: relative;
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
+    border: 1px solid var(--text-color);
+    background-color: var(--bg-caixa-text-color);
     margin: 10px 0;
     height: 45px;
     border-radius: 10px;
-    display: grid;
-    grid-template-columns: 10% 85%;
+    display: flex;
+    align-items: center;
     padding: 0 0.4rem;
+}
+
+.caixa-text:hover {
+    background-color: #1e1e20;
 }
 
 .caixa-text button {
@@ -215,30 +208,31 @@ form.transicao-login {
     padding: 0;
     z-index: 2;
 }
-
-.caixa-text i {
+ 
+/*.caixa-text i {
     text-align: center;
     line-height: 155px;
-    color: var(--barra-lateral);
+    color: var(--text-color);
     transition: 0.5s;
     font-size: 1.1rem;
-}
+}*/
 
 .caixa-text input {
+    width: 100%;
+    height: 100%;
     background: none;
     outline: none;
     border: none;
-    line-height: 1;
     font-weight: 600;
     font-size: 1.1rem;
-    color: #000000;
-    margin-top: 1px;
-    margin-left: 10px;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .caixa-text input::placeholder {
-    color: var(--barra-lateral);
-    font-weight: 600;
+    color: var(--text-color);
 }
 
 .caixa-text input[type="password"],
@@ -249,15 +243,17 @@ form.transicao-login {
 /* --------------------------CAIXAS INDIVIDUAIS--------------------- */
 .caixa-email {
     position: relative;
-    grid-template-columns: 5% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     max-width: 600px;
     position: relative;
     left: 2px;
     top: 120px;
 }
-
-.caixa-senha {
+.caixa-email input{
+    border-radius: 10px;
+}
+.caixa-senha{
     position: relative;
     right: 135px;
     top: 120px;
@@ -267,6 +263,20 @@ form.transicao-login {
     position: relative;
     left: 135px;
     top: 55px;
+}
+
+.caixa-senha-confirm input,
+.caixa-senha input{
+    width: 230px;
+}
+
+.caixa-nome input,
+.caixa-sobrenome input,
+.caixa-calendario input{
+    width: 250px;
+    border-radius: 10px;
+    position: relative;
+    right: 6px;
 }
 
 .caixa-nome {
@@ -283,8 +293,8 @@ form.transicao-login {
 
 .caixa-genero {
     position: relative;
-    left: 135px;
-    bottom: 75px;
+    left: 142px;
+    bottom: 63px;
 }
 
 .caixa-sobrenome {
@@ -304,7 +314,7 @@ form.transicao-login {
     outline: none;
     height: 49px;
     border-radius: 49px;
-    color: #fff;
+    color: var(--text-color);
     text-transform: uppercase;
     font-weight: 600;
     margin: 10px 0;
@@ -313,7 +323,48 @@ form.transicao-login {
 }
 
 .btn:hover {
+    background-color: var(--btn-hover-color);
+}
+
+.btn.transparente {
+    margin: 0;
+    background: none;
     background-color: var(--main-color);
+    width: 130px;
+    height: 41px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.btnE{
+    width: 150px;
+    background-color: var(--main-color);
+    border: none;
+    outline: none;
+    height: 49px;
+    border-radius: 49px;
+    color: var(--text-color);
+    font-weight: 200;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.btnE.transparent{
+    margin: 0;
+    background: none;
+    width: 130px;
+    height: 41px;
+    font-size: 0.8rem;
+    color: var(--main-color);
+}
+
+.btnE.transparent:hover{
+    color: var(--btn-hover-color);
+}
+
+.btn:hover {
+    background-color: var(--btn-hover-color);
 }
 
 #btn-cadastro {
@@ -368,7 +419,7 @@ form.transicao-login {
 }
 
 .panel .content {
-    color: #fff;
+    color: var(--text-color);
     transition: transform 0.9s ease-in-out;
     transition-delay: 0.6s;
 }
@@ -382,16 +433,6 @@ form.transicao-login {
 .panel p {
     font-size: 0.95rem;
     padding: 0.7rem 0;
-}
-
-.btn.transparent {
-    margin: 0;
-    background: none;
-    border: 2px solid #fff;
-    width: 130px;
-    height: 41px;
-    font-weight: 600;
-    font-size: 0.8rem;
 }
 
 .right-panel .image,
@@ -441,56 +482,66 @@ form.transicao-login {
 /*---------------------------GENERO INDIVIDUAL---------------------------*/
 
 #genderSelect {
-    width: 100%;
+    width: 250px;
     padding: 10px 14px;
     border-radius: 8px;
     border: 1px solid white;
     font-size: 1rem;
     outline: none;
     font-weight: 600;
-    color: #050505;
+    color: var(--text-color);
+    background-color: var(--bg-caixa-text-color);
     margin-bottom: 16px;
     position: relative;
-    top: 2px;
-    left: -25px;
+    top: 0px;
+    left: -7px;
     transition: border-color 0.15s ease;
 }
 
 /* Container do input de gênero personalizado */
 .other-gender-input-container {
     display: none;
-    position: absolute;
+    width: 93%;
+    margin-bottom: -44px;
+    position: static;
     opacity: 1;
     transition: opacity 0.3s ease;
+    position: relative;
+    bottom: 60px;
+    left: -7px;
 }
 
 .other-gender-input-container.show {
     display: block;
-    opacity: 1;
 }
+
 
 .other-gender-input-container input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid white;
+    color: var(--text-color);
     border-radius: 5px;
+    background-color: var(--bg-caixa-text-color);
 }
 
 .other-gender-input-container input[type="text"] {
-    width: 11.2rem;
-    padding: 10px 14px;
-    border-radius: 18px;
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 10px;
     border: 1px solid #ccd0d5;
-    background-color: white;
     font-size: 1rem;
     outline: none;
     font-weight: 600;
-    color: #050505;
+    color: var(--text-color);
+    background-color: var(--bg-caixa-text-color);
     transition: border-color 0.15s ease;
+    margin-bottom: 0;
 }
 
-.other-gender-input-container input[type="text"]:focus {
-    border-color: #000000;
+.other-gender-input-container input::placeholder{
+    color: var(--text-color);
+    font-weight: bold;
 }
 
 
@@ -507,12 +558,11 @@ form.transicao-login {
 .caixa-email-empresa {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     top: 10px;
@@ -522,12 +572,11 @@ form.transicao-login {
 .caixa-telefone {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
@@ -535,27 +584,28 @@ form.transicao-login {
 }
 
 .caixa-razao {
+    max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     right: 130px;
     bottom: 55px;
 }
 
+
 .caixa-fantasia{
+    max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
@@ -565,12 +615,11 @@ form.transicao-login {
 .caixa-cnpj {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
@@ -580,12 +629,11 @@ form.transicao-login {
 .caixa-cep {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     right: 130px;
@@ -595,12 +643,11 @@ form.transicao-login {
 .caixa-rua {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
@@ -610,12 +657,11 @@ form.transicao-login {
 .caixa-bairro {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     right: 130px;
@@ -625,12 +671,11 @@ form.transicao-login {
 .caixa-cidade {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
@@ -640,12 +685,11 @@ form.transicao-login {
 .caixa-estado {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     right: 130px;
@@ -655,12 +699,11 @@ form.transicao-login {
 .caixa-numero {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
@@ -670,12 +713,11 @@ form.transicao-login {
 .caixa-complemento {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     right: 130px;
@@ -684,12 +726,11 @@ form.transicao-login {
 
 .caixa-senha-empresa {
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     right: 130px;
@@ -699,12 +740,11 @@ form.transicao-login {
 .caixa-senha-confirm-empresa {
     max-width: 250px;
     width: 100%;
-    background-color: var(--text-color);
     margin: 10px 0px;
     height: 45px;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 10% 85%;
+    grid-template-columns: 100%;
     padding: 0 0.4rem;
     position: relative;
     left: 130px;
@@ -717,7 +757,6 @@ form.transicao-login {
 #empresaRazao,
 #empresaTelefone,
 #empresaFantasia,
-#empresaEmail,
 #empresaPassword,
 #empresaCep,
 #empresaRua,
@@ -725,7 +764,23 @@ form.transicao-login {
 #empresaCidade,
 #empresaEstado,
 #empresaNumero,
-#empresaComplemento,
+#empresaComplemento{
+    width: 250px;
+    background: none;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-top: 1px;
+    margin-right: 8px;
+    position: relative;
+    bottom: 1px;
+    right: 7px;
+}
+
 #empresaRegisterPassword,
 #empresaConfirmPassword {
     background: none;
@@ -734,9 +789,29 @@ form.transicao-login {
     line-height: 1;
     font-weight: 600;
     font-size: 1.1rem;
-    color: #000000;
+    color: var(--text-color);
     margin-top: 1px;
-    margin-left: 10px;
+    margin-right: 8px;
+    position: relative;
+    bottom: 1px;
+    right: 7px;
+}
+
+#empresaEmail{
+    width: 250px;
+    background: none;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-top: 1px;
+    margin-right: 8px;
+    position: relative;
+    bottom: 1px;
+    right: 7px;
 }
 
 #empresaCNPJ::placeholder,
@@ -757,7 +832,7 @@ form.transicao-login {
     outline: none;
     height: 49px;
     border-radius: 49px;
-    color: #fff;
+    color: var(--text-color);
     text-transform: uppercase;
     font-weight: 600;
     margin: 10px 0;
@@ -772,10 +847,10 @@ form.transicao-login {
 }
 
 #empresa-cadastro-btn {
-    width: 100px;
+    width: 180px;
     position: relative;
-    bottom: 365px;
-    right: 250px;
+    bottom: 340px;
+    right: 65px; 
 }
 
 #title-cadastro-empresa{
@@ -784,30 +859,30 @@ form.transicao-login {
 }
 
 #empresa-login-btn {
-    width: 100px;
+    width: 150px;
     position: relative;
-    bottom: 355px;
-    left: 270px;
+    bottom: 340px;
+    left: 260px;
 }
 
 h4 {
-    color: #fff;
-    font-size: 1.2rem;
-    margin-top: 10px;
-    font-weight: 600;
-    position: relative;
-    bottom: 310px;
-    left: 57px;
-}
-
-h5 {
-    color: #fff;
-    font-size: 1.1rem;
+    color: var(--text-color);
+    font-size: 0.8rem;
     margin-top: 10px;
     font-weight: 500;
     position: relative;
-    bottom: 320px;
-    left: 30px;
+    bottom: 311px;
+    left: 110px;
+}
+
+h5 {
+    color: var(--text-color);
+    font-size: 0.8rem;
+    margin-top: 10px;
+    font-weight: 500;
+    position: relative;
+    bottom: 311px;
+    right: 220px;
 }
 
 /* ----------- EMPRESA: TRANSIÇÃO ----------- */

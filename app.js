@@ -114,10 +114,10 @@ export async function editarPerfil(atributos, valores, id_usuario) {
       if (!valor.startsWith(prefix)) {
         throw new Error(`A foto de perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
       }
-    }
+    } else
     if (atri === 'cpf' && !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(valor)) {
       throw new Error(`CPF inválido. Formato correto: 123.456.789-10`);
-    }
+    } else
     if (atri === 'estado' && valor !== 'NM') {
       const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
       const estados = await response.json();
@@ -128,7 +128,7 @@ export async function editarPerfil(atributos, valores, id_usuario) {
       if(atributos.findIndex(x => x === 'cidade') === -1){
         await pool.query('UPDATE usuarios_perfil SET cidade = null WHERE id_usuario = $1', [id_usuario]);
       }
-    }
+    } else
     if (atri === 'cidade') {
       let estado = '';
       const resultado = await pool.query(
@@ -149,25 +149,25 @@ export async function editarPerfil(atributos, valores, id_usuario) {
       if (!nomesCidades.includes(valor.toLowerCase())) {
         throw new Error(`Cidade inválida para o estado ${estado}.`);
       }
-    }
+    } else
     if (atri === 'endereco' && valor.length > 200) {
       throw new Error(`Endereço não pode exceder 200 caracteres.`);
-    }
+    } else
     if (atri === 'descricao' && valor.length > 2000) {
       throw new Error(`Descrição não pode exceder 2000 caracteres.`);
-    }
+    } else
     if (atri === 'instagram' && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error(`URL do Instagram inválida.`);
-    }
+    } else
     if (atri === 'github' && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error(`URL do GitHub inválida.`);
-    }
+    } else
     if (atri === 'youtube' && !/^https?:\/\/(www\.)?youtube\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error(`URL do YouTube inválida.`);
-    }
+    } else
     if (atri === 'twitter' && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error(`URL do Twitter inválida.`);
-    }
+    } else
     if (atri === 'pronomes' && valor.length > 20) {
       throw new Error(`Pronomes não podem exceder 20 caracteres.`);
     }
@@ -192,8 +192,7 @@ export async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, 
 
   const senhaCripitografada = await bcrypt.hash(senha, 10);
 
-  const cnpjLimpo = cnpj.replace(/[^\d]/g, '');
-  if (cnpjLimpo.length !== 14) {
+  if (!/^\d{14}$/.test(cnpj)) {
     throw new Error('CNPJ inválido. Deve conter 14 dígitos numéricos.');
   }
 
@@ -232,19 +231,90 @@ export async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, 
     `INSERT INTO cadastro_empresa 
      (cnpj, nomeempre, telefoneempre, emailcadas, senhaempre, nomejuridico, cep, complemento, num) 
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-    [cnpjLimpo, nome, telefoneLimpo, email, senhaCripitografada, razao, cepLimpo, complemento, num]
+    [cnpj, nome, telefoneLimpo, email, senhaCripitografada, razao, cepLimpo, complemento, num]
   );
   
 }
 
 export async function criarEmpresasPerfil(cnpj) {
-
   // Verifica se a empresa já tem um perfil
   const existente = await pool.query(`SELECT * FROM empresa_perfil WHERE cnpj = $1`, [cnpj]);
   // Se não existir, cria um novo perfil
   if (existente.rows.length === 0) {
     await pool.query(`INSERT INTO empresa_perfil (cnpj) VALUES ($1)`, [cnpj]);
   }
+
+}
+
+export async function editarPerfilEmpresa(atributos, valores, cnpj) {
+  
+  const colunasPermitidas = ['descricaoempre', 'setor','porte','dataempresa','emailcontato','siteempresa','instagramempre','githubempre','youtubeempre','twitterempre','fotoempresa'];
+
+  const atributosInvalidos = atributos.filter(col => !colunasPermitidas.includes(col));
+  if (atributosInvalidos.length > 0) {
+    throw new Error(`Atributos inválidos detectados: ${atributosInvalidos.join(', ')}`);
+  }
+
+  if(atributos.length !== valores.length) {
+    throw new Error('Números de atributos e valores não coincidem.');
+  }
+
+  for(let i = 0; i < atributos.length; i++){
+    const atributo = atributos[i]
+    const valor = valores[i]
+
+    if(atributo==='descricaoempre'&&valor.length>2000){
+      throw new Error("A descrição da empresa não pode conter mais de 2000 caracteres.");
+    }else
+    if(atributo==='setor'&&valor.length>70){
+      throw new Error("O setor da empresa não pode conter mais de 70 caracteres.");
+    }else
+    if(atributo==='porte'&&valor.length>30){
+      throw new Error("O porte da empresa não pode conter mais de 30 caracteres.");
+    }else
+    if (atributo === 'emailcontato' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+      throw new Error("E-mail de contato inválido.");
+    }else
+    if (atributo === 'siteempresa' && !/^https?:\/\/[^\s/$.?#].[^\s]*$/.test(valor)) {
+      throw new Error("URL do site da empresa inválida.");
+    }else
+    if (atributo === 'instagramempre' && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+      throw new Error("URL do Instagram da empresa inválida.");
+    }else
+    if (atributo === 'githubempre' && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+      throw new Error("URL do GitHub da empresa inválida.");
+    }else
+    if (atributo === 'youtubeempre' && !/^https?:\/\/(www\.)?youtube\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+      throw new Error("URL do YouTube da empresa inválida.");
+    }else
+    if (atributo === 'twitterempre' && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+      throw new Error("URL do Twitter da empresa inválida.");
+    }else
+    if (atributo === 'fotoempresa') {
+      const prefix = 'https://res.cloudinary.com/ddbfifdxd/image/upload/';
+      if (!valor.startsWith(prefix)) {
+        throw new Error("A foto da empresa não pode ser atualizada diretamente. Use o upload de arquivo.");
+      }
+    }else
+    if (atributo === 'dataempresa') {
+      const data = new Date(valor);
+      if (isNaN(data.getTime())) {
+        throw new Error("Data de fundação da empresa inválida.");
+      }
+      const hoje = new Date();
+      if (data > hoje) {
+        throw new Error("A data de fundação da empresa não pode ser no futuro.");
+      }
+    }
+
+  }
+
+  const inserts = atributos.map((atri,index)=> `${atri} = $${index+1}`).join(', ')
+
+  await pool.query(
+    `update empresa_perfil set ${inserts} where cnpj = $${atributos.length+1}`,
+    [...valores, cnpj]
+  )
 
 }
 

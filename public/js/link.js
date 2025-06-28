@@ -11,7 +11,7 @@ async function carregarLinks() {
     }
     else if (tipo === 'empresa') {
         carregarEmpresa();
-        document.querySelector('#fotoPerfil').href = './perfil-empresa.html';
+        document.querySelector('#fotoPerfil').href = './profileCompany.html';
     } else if (tipo === 'visitante') {
         document.querySelector('#loginOuCadas').style.display = '';
         document.querySelector('#logout').style.display = 'none';

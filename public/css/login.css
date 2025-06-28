@@ -16,6 +16,9 @@ input {
     /* Cor de text (titulo, links...)*/
     --text-secondary-color: #0F4C81;
     --bg-caixa-text-color: #222;
+    --erro-color: #ff0000;
+    --erro-sistem-color: #3B1E1D;
+    
     /* Cor principal */
     --primary: #18181B;
     /* Segunda cor de fundo */
@@ -38,9 +41,9 @@ input {
 .problema {
     color: var(--text-color);
 }
-
+/*erro das caixas de texto */
 .erro-mensagem {
-  color: #ff0000;
+  color: var(--erro-color);
   font-size: 12px;
   display: block;
   font-family: Arial, sans-serif;
@@ -55,6 +58,47 @@ input {
   padding: 2px 8px;
   z-index: -3;
 }
+
+/*erro do sistema */
+.erro-mensagem-geral {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+  background: transparent;
+}
+  
+.erro-mensagem-contraste {
+  width: 400px;
+  min-height: 1px; 
+  max-width: 90vw; 
+  background: var(--erro-sistem-color); 
+  color: var(--text-color);
+  margin: 24px auto 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px 0 rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 18px 24px;
+  font-size: 1.1rem;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  word-break: break-word;
+  pointer-events: all;
+  text-shadow:
+    1px 0 2px var(--primary),
+    -1px 0 2px var(--bg-color),
+    0 1px 2px var(--primary),
+    0 -1px 2px var(--bg-color);
+}
+
 /* --------------------------Olho--------------------- */
 
 .eye-icon {
@@ -846,23 +890,17 @@ form.transicao-login {
     width: 180px;
 }
 
-#empresa-cadastro-btn {
-    width: 180px;
-    position: relative;
-    bottom: 340px;
-    right: 65px; 
-}
-
 #title-cadastro-empresa{
     position: relative;
     top: 15px;
 }
 
+#empresa-cadastro-btn {
+    transform: translate(-55px, -360px); 
+}
+
 #empresa-login-btn {
-    width: 150px;
-    position: relative;
-    bottom: 340px;
-    left: 260px;
+    transform: translate(250px, -360px);
 }
 
 h4 {
@@ -870,9 +908,7 @@ h4 {
     font-size: 0.8rem;
     margin-top: 10px;
     font-weight: 500;
-    position: relative;
-    bottom: 311px;
-    left: 110px;
+    transform: translate(100px, -331px);
 }
 
 h5 {
@@ -880,9 +916,7 @@ h5 {
     font-size: 0.8rem;
     margin-top: 10px;
     font-weight: 500;
-    position: relative;
-    bottom: 311px;
-    right: 220px;
+    transform: translate(-210px, -331px);
 }
 
 /* ----------- EMPRESA: TRANSIÇÃO ----------- */
@@ -978,155 +1012,417 @@ form#registerEmpresaForm {
 
 /* ----------- EMPRESA: AJUSTES RESPONSIVOS ----------- */
 @media (max-width: 870px) {
+  .container {
+    min-height: 800px;
+    height: 100vh;
+    padding: 0;
+  }
 
-    .caixa-cnpj,
-    .caixa-razao,
-    .caixa-telefone,
-    .caixa-email-empresa,
-    .caixa-senha-empresa,
-    .caixa-senha-confirm-empresa {
-        max-width: 100%;
-        padding: 0 0.2rem;
-    }
+  .login-cadastro {
+    width: 100%;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    padding: 0;
+  }
 
-    form#loginEmpresaForm,
-    form#registerEmpresaForm {
-        padding: 0 1.5rem;
-    }
+  form,
+  form#loginEmpresaForm,
+  form#registerEmpresaForm {
+    padding: 0 1rem !important;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .title,
+  #title-cadastro,
+  #title-cadastro-empresa {
+    font-size: 1.5rem !important;
+    margin-bottom: 8px;
+    top: 0 !important;
+  }
+
+  .caixa-text,
+  .caixa-email,
+  .caixa-email-empresa,
+  .caixa-telefone,
+  .caixa-razao,
+  .caixa-fantasia,
+  .caixa-cnpj,
+  .caixa-cep,
+  .caixa-rua,
+  .caixa-bairro,
+  .caixa-cidade,
+  .caixa-estado,
+  .caixa-numero,
+  .caixa-complemento,
+  .caixa-senha,
+  .caixa-senha-empresa,
+  .caixa-senha-confirm,
+  .caixa-senha-confirm-empresa,
+  .caixa-nome,
+  .caixa-sobrenome,
+  .caixa-calendario,
+  .caixa-genero {
+    max-width: 100% !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    margin: 8px 0 !important;
+    position: static !important;
+    padding: 0 0.2rem !important;
+  }
+
+  .caixa-text input,
+  .caixa-text input[type="password"],
+  .caixa-text input[type="text"] {
+    font-size: 1rem !important;
+    padding: 0 8px !important;
+  }
+
+  #empresa-cadastro-btn,
+  #empresa-login-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    transform: none !important;
+    margin: 8px 0 !important;
+    font-size: 1rem !important;
+  }
+
+  .btn, .btnE, .btnE.transparent, .btn.transparent {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    font-size: 1rem !important;
+    margin: 8px 0 !important;
+  }
+
+  .panel {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 1rem 2% !important;
+    width: 100% !important;
+  }
+
+  .panel .content {
+    padding: 0.5rem 0 !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .panel h3 {
+    font-size: 1.2rem !important;
+  }
+
+  .panel p {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  h4, h5 {
+    font-size: 1rem !important;
+    margin: 8px 0 !important;
+    transform: none !important;
+    position: static !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+
+  #empresaCNPJ,
+  #empresaCNPJRegister,
+  #empresaRazao,
+  #empresaTelefone,
+  #empresaFantasia,
+  #empresaPassword,
+  #empresaCep,
+  #empresaRua,
+  #empresaBairro,
+  #empresaCidade,
+  #empresaEstado,
+  #empresaNumero,
+  #empresaComplemento,
+  #empresaRegisterPassword,
+  #empresaConfirmPassword,
+  #empresaEmail {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    position: static !important;
+  }
+
+  .erro-mensagem-contraste {
+    width: 95vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    font-size: 1rem !important;
+    padding: 12px 8px !important;
+    margin: 12px auto 0 auto !important;
+  }
 }
 
-/*---------------------------CELULAR---------------------------*/
-
-@media (max-width: 870px) {
-    .container {
-        min-height: 800px;
-        height: 100vh;
-    }
-
-    .login-cadastro {
-        width: 100%;
-        top: 95%;
-        transform: translate(-50%, -100%);
-        transition: 1s 0.8s ease-in-out;
-    }
-
-    .login-cadastro,
-    .container.sign-up-mode .login-cadastro {
-        left: 50%;
-    }
-
-    .circulo-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 2fr 1fr;
-    }
-
-    .panel {
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        padding: 2.5rem 8%;
-        grid-column: 1 / 2;
-    }
-
-    .right-panel {
-        grid-row: 3 / 4;
-    }
-
-    .left-panel {
-        grid-row: 1 / 2;
-    }
-
-    .image {
-        width: 200px;
-        transition: transform 0.9s ease-in-out;
-        transition-delay: 0.6s;
-    }
-
-    .panel .content {
-        padding-right: 15%;
-        transition: transform 0.9s ease-in-out;
-        transition-delay: 0.8s;
-    }
-
-    .panel h3 {
-        font-size: 1.2rem;
-    }
-
-    .panel p {
-        font-size: 0.7rem;
-        padding: 0.5rem 0;
-    }
-
-    .btn.transparent {
-        width: 110px;
-        height: 35px;
-        font-size: 0.7rem;
-    }
-
-    .container:before {
-        width: 1500px;
-        height: 1500px;
-        transform: translateX(-50%);
-        left: 30%;
-        bottom: 68%;
-        right: initial;
-        top: initial;
-        transition: 2s ease-in-out;
-    }
-
-    .container.sign-up-mode:before {
-        transform: translate(-50%, 100%);
-        bottom: 32%;
-        right: initial;
-    }
-
-
-
-    .container.sign-up-mode .left-panel .image,
-    .container.sign-up-mode .left-panel .content {
-        transform: translateY(-300px);
-    }
-
-    .container.sign-up-mode .right-panel .image,
-    .container.sign-up-mode .right-panel .content {
-        transform: translateY(0px);
-    }
-
-    .right-panel .image,
-    .right-panel .content {
-        transform: translateY(300px);
-    }
-
-    .container.sign-up-mode .login-cadastro {
-        top: 5%;
-        transform: translate(-50%, 0);
-    }
-}
-
+/* RESPONSIVIDADE MELHORADA PARA 570px */
 @media (max-width: 570px) {
-    form {
-        padding: 0 1.5rem;
-    }
+  .container {
+    padding: 0 !important;
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+  }
+  .circulo-container,
+  .panel.left-panel,
+  .panel.right-panel {
+    display: none !important;
+  }
+  .login-cadastro {
+    width: 100% !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+    padding: 0 !important;
+    position: static !important;
+  }
+  form,
+  form#loginEmpresaForm,
+  form#registerEmpresaForm {
+    padding: 0 0.2rem !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .title,
+  #title-cadastro,
+  #title-cadastro-empresa {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+    top: 0 !important;
+    text-align: center !important;
+  }
+  .caixa-text,
+  .caixa-email,
+  .caixa-email-empresa,
+  .caixa-telefone,
+  .caixa-razao,
+  .caixa-fantasia,
+  .caixa-cnpj,
+  .caixa-cep,
+  .caixa-rua,
+  .caixa-bairro,
+  .caixa-cidade,
+  .caixa-estado,
+  .caixa-numero,
+  .caixa-complemento,
+  .caixa-senha,
+  .caixa-senha-empresa,
+  .caixa-senha-confirm,
+  .caixa-senha-confirm-empresa,
+  .caixa-nome,
+  .caixa-sobrenome,
+  .caixa-calendario,
+  .caixa-genero {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 6px 0 !important;
+    position: static !important;
+    padding: 0 0.1rem !important;
+  }
+  .caixa-text input,
+  .caixa-text input[type="password"],
+  .caixa-text input[type="text"] {
+    font-size: 0.95rem !important;
+    padding: 0 6px !important;
+  }
+  .btn, .btnE, .btnE.transparent, .btn.transparent,
+  #empresa-cadastro-btn, #empresa-login-btn {
+    width: 100% !important;
+    font-size: 0.95rem !important;
+    margin: 6px 0 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  h4, h5 {
+    font-size: 0.9rem !important;
+    margin: 6px 0 !important;
+    transform: none !important;
+    position: static !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    text-align: center !important;
+  }
+  .erro-mensagem-contraste {
+    width: 98vw !important;
+    font-size: 0.95rem !important;
+    padding: 8px 4px !important;
+    margin: 8px auto 0 auto !important;
+  }
+}
 
-    .image {
-        display: none;
-    }
+@media (max-width: 600px) {
 
-    .panel .content {
-        padding: 0.5rem 1rem;
-    }
+  .container {
+    padding: 0;
+    min-height: 100vh;
+  }
 
-    .container {
-        padding: 1.5rem;
-    }
+  .login-cadastro {
+    width: 100%;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    padding: 0;
+  }
 
-    .container:before {
-        bottom: 72%;
-        left: 50%;
-    }
+  form,
+  form#loginEmpresaForm,
+  form#registerEmpresaForm {
+    padding: 0 0.5rem !important;
+    min-width: 0;
+    width: 100%;
+  }
 
-    .container.sign-up-mode:before {
-        bottom: 28%;
-        left: 50%;
-    }
+  .title,
+  #title-cadastro,
+  #title-cadastro-empresa {
+    font-size: 1.3rem !important;
+    margin-bottom: 8px;
+    top: 0 !important;
+  }
+
+  .caixa-text,
+  .caixa-email,
+  .caixa-email-empresa,
+  .caixa-telefone,
+  .caixa-razao,
+  .caixa-fantasia,
+  .caixa-cnpj,
+  .caixa-cep,
+  .caixa-rua,
+  .caixa-bairro,
+  .caixa-cidade,
+  .caixa-estado,
+  .caixa-numero,
+  .caixa-complemento,
+  .caixa-senha,
+  .caixa-senha-empresa,
+  .caixa-senha-confirm,
+  .caixa-senha-confirm-empresa,
+  .caixa-nome,
+  .caixa-sobrenome,
+  .caixa-calendario,
+  .caixa-genero {
+    max-width: 100% !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    margin: 8px 0 !important;
+    position: static !important;
+    padding: 0 0.2rem !important;
+  }
+
+  .caixa-text input,
+  .caixa-text input[type="password"],
+  .caixa-text input[type="text"] {
+    font-size: 1rem !important;
+    padding: 0 8px !important;
+  }
+
+  /* Botões empresa */
+  #empresa-cadastro-btn,
+  #empresa-login-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    transform: none !important;
+    margin: 8px 0 !important;
+    font-size: 1rem !important;
+  }
+
+  /* Botões gerais */
+  .btn, .btnE, .btnE.transparent, .btn.transparent {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    font-size: 1rem !important;
+    margin: 8px 0 !important;
+  }
+
+  /* Painéis */
+  .panel {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 1rem 2% !important;
+    width: 100% !important;
+  }
+
+  .panel .content {
+    padding: 0.5rem 0 !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .panel h3 {
+    font-size: 1.1rem !important;
+  }
+
+  .panel p {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  /* Títulos e textos */
+  h4, h5 {
+    font-size: 0.9rem !important;
+    margin: 8px 0 !important;
+    transform: none !important;
+    position: static !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+
+  /* Corrige inputs de empresa */
+  #empresaCNPJ,
+  #empresaCNPJRegister,
+  #empresaRazao,
+  #empresaTelefone,
+  #empresaFantasia,
+  #empresaPassword,
+  #empresaCep,
+  #empresaRua,
+  #empresaBairro,
+  #empresaCidade,
+  #empresaEstado,
+  #empresaNumero,
+  #empresaComplemento,
+  #empresaRegisterPassword,
+  #empresaConfirmPassword,
+  #empresaEmail {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    position: static !important;
+  }
+
+  /* Mensagem de erro topo */
+  .erro-mensagem-contraste {
+    width: 95vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    font-size: 1rem !important;
+    padding: 12px 8px !important;
+    margin: 12px auto 0 auto !important;
+  }
 }

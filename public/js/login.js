@@ -363,23 +363,45 @@ function showInputError(input, message) {
   input.parentNode.appendChild(errorDiv);
 }
 
+// ________________________ Erro do Sistema/BDA _______________________
+function mostrarErroTopo(mensagem) {
+  const old = document.querySelector('.erro-mensagem-geral');
+  if (old) old.remove();
+
+  const erroDiv = document.createElement('div');
+  erroDiv.className = 'erro-mensagem-geral';
+
+  const contrasteDiv = document.createElement('div');
+  contrasteDiv.className = 'erro-mensagem-contraste';
+  contrasteDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${mensagem}`;
+
+  erroDiv.appendChild(contrasteDiv);
+  document.body.prepend(erroDiv);
+
+  setTimeout(() => {
+    if (erroDiv.parentNode) erroDiv.remove();
+  }, 5000);
+}
+
 function clearInputError(input) {
   input.classList.remove("erro-input");
   const error = input.parentNode.querySelector(".erro-mensagem");
   if (error) error.remove();
 }
 
-function mostrarErro(input, mensagem) {
-  input.classList.add("erro-input");
-  var erro = input.parentElement.querySelector(".erro-mensagem");
-  if (!erro) {
-    erro = document.createElement("span");
-    erro.className = "erro-mensagem";
-    input.parentElement.appendChild(erro);
-  }
-  erro.textContent = mensagem;
-  erro.style.display = "block";
+
+/**function mostrarErro(input, mensagem) {
+input.classList.add("erro-input");
+var erro = input.parentElement.querySelector(".erro-mensagem");
+if (!erro) {
+ erro = document.createElement("span");
+ erro.className = "erro-mensagem";
+ input.parentElement.appendChild(erro);
 }
+ erro.textContent = mensagem;
+ erro.style.display = "block";
+}
+*/
 
 function removerErros() {
   document
@@ -398,6 +420,7 @@ document.addEventListener(
   true
 );
 
+
 // ________________________ LOGIN/EMPRESA _______________________
 document
   .getElementById("loginEmpresaForm")
@@ -411,14 +434,6 @@ document
 
     const cnpj1 = cnpjInput.value.trim();
     const senha = senhaInput.value.trim();
-
-    if (
-      cnpj1.length !== 18 ||
-      !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)
-    ) {
-      showInputError(cnpjInput, "CNPJ inválido. formato 00.000.000/0000-00.");
-      return;
-    }
 
     if (
       cnpj1.length !== 18 ||
@@ -455,7 +470,7 @@ document
         }
         window.location.href = "./index.html";
       })
-      .catch((err) => alert(err.message));
+      .catch((err) => mostrarErroTopo(err.message));
   });
 
 // ________________________ CADASTRO/EMPRESA _______________________
@@ -581,6 +596,11 @@ function cadastrarEmpresa() {
     return;
   }
 
+  if(document.getElementById("empresaRua").value === ""){
+    showInputError(cepInput, "CEP inválido");
+    return;
+  }
+
   const cnpj = cnpj1.replace(/[^\d]/g, "");
 
   fetch("/empresas", {
@@ -608,36 +628,29 @@ function cadastrarEmpresa() {
         });
       } else {
         const erro = await res.json();
-        throw new Error(erro.error || "Erro ao cadastrar a empresa.");
+        throw { status: res.status, message: erro.error || "Erro ao cadastrar a empresa." };
       }
     })
     .then(async (response) => {
       if (!response.ok) {
         const erro = await response.json();
-        throw new Error(erro.error || "Erro ao fazer login automático.");
+        throw { status: response.status, message: erro.error || "Erro ao fazer login automático." };
       }
       alert("Empresa cadastrada com SUCESSO!");
       window.location.href = "./index.html";
     })
     .catch((erro) => {
-      if (erro.message.includes("CNPJ já cadastrado.")) {
-        showInputError(cnpjInput, "CNPJ já cadastrado.");
-        return;
-      } else if (erro.message.includes("Email já cadastrado.")){
-        showInputError(
-          emailInput,
-          "E-mail já cadastrado."
-        );
-        return;
-      } else if(erro.message.includes('Razão social já cadastrada.')){
-        showInputError(
-          razaoInput,
-          "Razão social já cadastrada."
-        );
+      if (erro.status===400)
+        {
+        mostrarErroTopo("Empresa já cadastrada.");
         return;
       }
-      else {
-        alert(erro.message || "Erro ao cadastrar empresa.");
+      else if(erro.status===500){
+        mostrarErroTopo('Erro ao cadastrar empresa (a culpa não foi sua, tente novamente).');
+        return;
+      }else{
+        mostrarErroTopo(erro.message||'Erro desconhecido, tente novamente.');
+        return;
       }
     });
 }
@@ -658,14 +671,14 @@ function login() {
     body: JSON.stringify({ email, senha }),
     credentials: "include",
   })
-    .then(async (res) => {
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Erro ao fazer login.");
-      }
-      window.location.href = "./index.html";
-    })
-    .catch((err) => alert(err.message));
+  .then(async (res) => {
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Erro ao fazer login.");
+    }
+    window.location.href = "./index.html";
+  })
+  .catch((err) => mostrarErroTopo(err.message));
 }
 
 // ________________________ CADASTRO/US _______________________
@@ -770,38 +783,38 @@ function cadastrar(e) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nome, email, senha, genero, datanasc }),
   })
-    .then(async (res) => {
-      if (res.ok) {
-        return fetch("/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha }),
-          credentials: "include",
-        });
-      } else {
-        const erro = await res.json();
-        throw new Error(erro.error || "Erro ao cadastrar o usuário.");
-      }
-    })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw new Error("Login automático falhou.");
-      }
-    })
-    .then(() => {
-      alert("Cadastro realizado com sucesso!");
-      window.location.href = "./index.html";
-    })
-    .catch((err) => {
-      if (err.message.includes("Email já cadastrado.")) {
-        showInputError(
-          registerEmail,
-          "E-mail já cadastrado. Por favor, use outro e-mail."
-        );
-        return;
-      }
-      alert(`Erro do sistema: ${err.message}`);
-    });
+  .then(async (res) => {
+    if (res.ok) {
+      return fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+        credentials: "include",
+      });
+    } else {
+      const erro = await res.json();
+      throw new Error(erro.error || "Erro ao cadastrar o usuário.");
+    }
+  })
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      throw new Error("Login automático falhou.");
+    }
+  })
+  .then(() => {
+    alert("Cadastro realizado com sucesso!");
+    window.location.href = "./index.html";
+  })
+  .catch((err) => {
+    if (err.message.includes("Email já cadastrado.")) {
+      showInputError(
+        registerEmail,
+        "E-mail já cadastrado. Por favor, use outro e-mail."
+      );
+      return;
+    }
+    mostrarErroTopo(`Erro do sistema: ${err.message}`);
+  });
 }

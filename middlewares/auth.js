@@ -33,7 +33,7 @@ function apenasEmpresa(req,res,next) {
 }
 
 function apenasUsuario(req,res,next) {
-  if(req.user?.tipo==='usuario') return next()
+  if(req.user?.tipo==='candidato') return next()
   return res.status(403).json({ error: 'Acesso apenas para usuários' });
 }
 

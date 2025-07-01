@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function carregarLinks() {
   try {
     const tipo = await pegarTipo();
-    if (tipo === 'usuario'){
+    if (tipo === 'candidato'){
         carregarUsuario();
         document.querySelector('#fotoPerfil').href = './profile.html';
     }

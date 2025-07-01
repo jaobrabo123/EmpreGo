@@ -2,7 +2,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import corsMiddleware  from './middlewares/cors.js';
 import {limiteGeral} from './middlewares/rateLimit.js';
 
 //Routes
@@ -20,7 +19,6 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(corsMiddleware);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

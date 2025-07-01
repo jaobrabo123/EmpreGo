@@ -18,7 +18,7 @@ router.post('/login', limiteLogin, async (req, res) => {
     const usuario = resultado.rows[0];
 
     if(usuario && await bcrypt.compare(senha, usuario.senha)){
-      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'usuario' }, SECRET_KEY, { expiresIn: '1d' });
+      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'candidato' }, SECRET_KEY, { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,
         secure: true,
@@ -31,7 +31,7 @@ router.post('/login', limiteLogin, async (req, res) => {
       res.status(401).json({ error: 'Credenciais inválidas.' });
     }
   } catch (error) {
-    res.status(500).send('Erro ao fazer login: ' + error.message);
+    res.status(500).json({ error: 'Erro ao fazer login: ' + error.message });
   }
 });
 
@@ -55,7 +55,7 @@ router.post('/login-empresa', limiteLogin, async (req, res) =>{
     }
   }
   catch(error){
-    res.status(500).send('Erro ao fazer login: ' + error.message);
+    res.status(500).json({ error: 'Erro ao fazer login: ' + error.message });
   }
 })
 

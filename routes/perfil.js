@@ -13,7 +13,10 @@ const perfilStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'fotos_perfil', //pasta no Cloudinary para as fotos de perfil
-    allowed_formats: ['jpg', 'jpeg', 'png']
+    allowed_formats: ['jpg', 'jpeg', 'png']/*,
+    transformation: [
+      { width: 400, height: 400, crop: 'limit', quality: 'auto:best'} // colocar com uma qualidade melhor depois
+    ]*/
   }
 });
 const uploadPerfil = multer({ storage: perfilStorage });  // upload das fotos de perfil

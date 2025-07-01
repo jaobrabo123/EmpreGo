@@ -464,13 +464,18 @@ document
       credentials: "include",
     })
       .then(async (res) => {
-        const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error || "Erro ao fazer login.");
+          const erro = await res.json();
+          throw { status: res.status, message: erro.error || "Erro ao fazer login."};
         }
         window.location.href = "./index.html";
       })
-      .catch((err) => mostrarErroTopo(err.message));
+      .catch((erro) => {
+        if(erro.status===500){
+          mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)')
+        }
+        else {mostrarErroTopo(erro.message);}
+      });
   });
 
 // ________________________ CADASTRO/EMPRESA _______________________
@@ -631,10 +636,10 @@ function cadastrarEmpresa() {
         throw { status: res.status, message: erro.error || "Erro ao cadastrar a empresa." };
       }
     })
-    .then(async (response) => {
-      if (!response.ok) {
-        const erro = await response.json();
-        throw { status: response.status, message: erro.error || "Erro ao fazer login automático." };
+    .then(async (res) => {
+      if (!res.ok) {
+        const erro = await res.json();
+        throw { status: res.status, message: erro.error || "Erro ao fazer login automático." };
       }
       alert("Empresa cadastrada com SUCESSO!");
       window.location.href = "./index.html";
@@ -646,7 +651,7 @@ function cadastrarEmpresa() {
         return;
       }
       else if(erro.status===500){
-        mostrarErroTopo('Erro ao cadastrar empresa (a culpa não foi sua, tente novamente).');
+        mostrarErroTopo('Erro ao cadastrar empresa (A culpa não foi sua, tente novamente).');
         return;
       }else{
         mostrarErroTopo(erro.message||'Erro desconhecido, tente novamente.');
@@ -672,13 +677,23 @@ function login() {
     credentials: "include",
   })
   .then(async (res) => {
-    const data = await res.json();
+    
     if (!res.ok) {
-      throw new Error(data.error || "Erro ao fazer login.");
+      const erro = await res.json();
+      throw {
+              status: res.status,
+              message: erro.error || "Erro ao fazer login automático."
+            };
     }
     window.location.href = "./index.html";
   })
-  .catch((err) => mostrarErroTopo(err.message));
+  .catch((erro) => {
+    if(erro.status===500){
+      mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)')
+    }else{
+      mostrarErroTopo(erro.message)
+    }
+  });
 }
 
 // ________________________ CADASTRO/US _______________________
@@ -793,28 +808,30 @@ function cadastrar(e) {
       });
     } else {
       const erro = await res.json();
-      throw new Error(erro.error || "Erro ao cadastrar o usuário.");
+      throw { status: erro.status, message: erro.error || "Erro ao cadastrar o usuário." };
     }
   })
   .then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      throw new Error("Login automático falhou.");
+    if (!res.ok) {
+      throw { status: res.status , message: "Login automático falhou."};
     }
   })
   .then(() => {
     alert("Cadastro realizado com sucesso!");
     window.location.href = "./index.html";
   })
-  .catch((err) => {
-    if (err.message.includes("Email já cadastrado.")) {
-      showInputError(
-        registerEmail,
+  .catch((erro) => {
+    if (erro.message.includes("Email já cadastrado.")) {
+      mostrarErroTopo(
         "E-mail já cadastrado. Por favor, use outro e-mail."
       );
       return;
+    }else
+    if(erro.status===500){
+      mostrarErroTopo("Erro ao cadastrar usuário. (A culpa não foi sua, tente novamente)")
     }
-    mostrarErroTopo(`Erro do sistema: ${err.message}`);
+    else{
+      mostrarErroTopo(`Erro do sistema: ${erro.message}`);
+    }
   });
 }

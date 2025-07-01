@@ -13,7 +13,10 @@ const expStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'experiencias', //pasta no Cloudinary para as experiencias
-    allowed_formats: ['jpg', 'jpeg', 'png']
+    allowed_formats: ['jpg', 'jpeg', 'png']/*,
+    transformation: [
+      { width: 300, height: 275, crop: 'limit', quality: 'auto:best'} // colocar com uma qualidade melhor depois
+    ]*/
   }
 });
 const uploadExp = multer({ storage: expStorage }); 

@@ -1,17 +1,17 @@
 //Imports
-import express from 'express';
-import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
-import {limiteGeral} from './middlewares/rateLimit.js';
+const express = require('express');
+const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
+const { limiteGeral } = require('./middlewares/rateLimit.js');
 
 //Routes
-import loginRoutes from './routes/logins.js'
-import perfilRoutes from './routes/perfil.js'
-import usuarioRoutes from './routes/usuarios.js'
-import tagRoutes from './routes/tags.js'
-import experienciaRoutes from './routes/experiencias.js'
-import empresaRoutes from './routes/empresas.js'
-import tiposRoutes from './routes/tipos.js';
+const loginRoutes = require('./routes/logins.js');
+const perfilRoutes = require('./routes/perfil.js');
+const usuarioRoutes = require('./routes/usuarios.js');
+const tagRoutes = require('./routes/tags.js');
+const experienciaRoutes = require('./routes/experiencias.js');
+const empresaRoutes = require('./routes/empresas.js');
+const tiposRoutes = require('./routes/tipos.js');
 
 //Dotenv
 dotenv.config();

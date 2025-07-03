@@ -1,8 +1,7 @@
-import bcrypt from 'bcryptjs';
+const bcrypt = require('bcryptjs');
+const pool = require('./db.js');
 
-import pool from './db.js';
-
-export async function popularTabelaUsuarios(nome, email, senha, genero, datanasc) {
+async function popularTabelaUsuarios(nome, email, senha, genero, datanasc) {
 
   if(senha.length < 8) {
     throw new Error('A senha deve ter pelo menos 8 caracteres');
@@ -44,7 +43,7 @@ export async function popularTabelaUsuarios(nome, email, senha, genero, datanasc
 
 }
 
-export async function criarTabelaUsuariosPerfil(idusuario) {
+async function criarTabelaUsuariosPerfil(idusuario) {
 
   // Verifica se o usuário já tem um perfil
   const existente = await pool.query(`SELECT * FROM usuarios_perfil WHERE id_usuario = $1`, [idusuario]);
@@ -55,7 +54,7 @@ export async function criarTabelaUsuariosPerfil(idusuario) {
 
 }
 
-export async function popularTabelaTags(nome_tag, id_usuario) {
+async function popularTabelaTags(nome_tag, id_usuario) {
 
   if(nome_tag.length > 25) {
     throw new Error('O nome da tag não pode ter mais de 25 caracteres');
@@ -68,7 +67,7 @@ export async function popularTabelaTags(nome_tag, id_usuario) {
 
 }
 
-export async function popularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario) {
+async function popularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario) {
 
   if(titulo_exp.length > 30) {
     throw new Error('O título da experiência não pode ter mais de 30 caracteres'); 
@@ -92,7 +91,7 @@ export async function popularTabelaExperiencias(titulo_exp, descricao_exp, img_e
 
 }
 
-export async function editarPerfil(atributos, valores, id_usuario) {
+async function editarPerfil(atributos, valores, id_usuario) {
 
   const colunasPermitidas = ['foto_perfil','descricao','cpf','estado','cidade','endereco','instagram','github','youtube','twitter','pronomes'];
 
@@ -184,7 +183,7 @@ export async function editarPerfil(atributos, valores, id_usuario) {
 
 }
 
-export async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, cep, complemento, num) {
+async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, cep, complemento, num) {
 
   if(senha.length < 8) {
     throw new Error('A senha deve ter pelo menos 8 caracteres');
@@ -236,7 +235,7 @@ export async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, 
   
 }
 
-export async function criarEmpresasPerfil(cnpj) {
+async function criarEmpresasPerfil(cnpj) {
   // Verifica se a empresa já tem um perfil
   const existente = await pool.query(`SELECT * FROM empresa_perfil WHERE cnpj = $1`, [cnpj]);
   // Se não existir, cria um novo perfil
@@ -246,7 +245,7 @@ export async function criarEmpresasPerfil(cnpj) {
 
 }
 
-export async function editarPerfilEmpresa(atributos, valores, cnpj) {
+async function editarPerfilEmpresa(atributos, valores, cnpj) {
   
   const colunasPermitidas = ['descricaoempre', 'setor','porte','dataempresa','emailcontato','siteempresa','instagramempre','githubempre','youtubeempre','twitterempre','fotoempresa'];
 
@@ -318,7 +317,18 @@ export async function editarPerfilEmpresa(atributos, valores, cnpj) {
 
 }
 
-/*export async function popularTabelaVagas(titulo_vaga, descricao_vaga, salario, beneficios, requisitos, cnpj) {
+module.exports = {
+  popularTabelaUsuarios,
+  criarTabelaUsuariosPerfil,
+  popularTabelaTags,
+  popularTabelaExperiencias,
+  editarPerfil,
+  popularTabelaEmpresas,
+  criarEmpresasPerfil,
+  editarPerfilEmpresa
+}
+
+/*async function popularTabelaVagas(titulo_vaga, descricao_vaga, salario, beneficios, requisitos, cnpj) {
 
   // Insere a vaga na tabela vagas_empresa
   await pool.query(

@@ -1,12 +1,12 @@
 //Imports
-import express from 'express';
-import pool from '../db.js';
-import { popularTabelaExperiencias } from '../app.js';
-import {authenticateToken} from '../middlewares/auth.js';
+const express = require('express');
+const pool = require('../db.js')
+const { popularTabelaExperiencias } = require('../app.js')
+const {authenticateToken} = require('../middlewares/auth.js');
 // Cloudinary + Multer
-import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import cloudinary from '../cloudinary.js';
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../cloudinary.js');
 
 // storage para as imagens das experiencias
 const expStorage = new CloudinaryStorage({
@@ -58,4 +58,4 @@ router.get('/exps', authenticateToken, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

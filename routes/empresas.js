@@ -1,7 +1,7 @@
 //Imports
-import express from 'express';
-import pool from '../db.js';
-import { popularTabelaEmpresas, criarEmpresasPerfil } from '../app.js'
+const express = require('express');
+const pool = require('../db.js');
+const { popularTabelaEmpresas, criarEmpresasPerfil } = require('../app.js');
 
 //Router
 const router = express.Router();
@@ -41,4 +41,4 @@ router.post('/empresas', async (req , res)=>{
     }
 })
 
-export default router;
+module.exports = router;

@@ -19,6 +19,5 @@
     "multer-storage-cloudinary": "^4.0.0",
     "pg": "^8.16.0"
   },
-  "type": "module",
   "description": ""
 }

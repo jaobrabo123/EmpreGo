@@ -1,6 +1,6 @@
 //Imports
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
 //Dotenv
 dotenv.config();
@@ -32,9 +32,13 @@ function apenasEmpresa(req,res,next) {
   return res.status(403).json({ error: 'Acesso apenas para empresas' });
 }
 
-function apenasUsuario(req,res,next) {
+function apenasCandidatos(req,res,next) {
   if(req.user?.tipo==='candidato') return next()
-  return res.status(403).json({ error: 'Acesso apenas para usuários' });
+  return res.status(403).json({ error: 'Acesso apenas para candidatos' });
 }
 
-export {authenticateToken, apenasEmpresa, apenasUsuario};
+module.exports = {
+  authenticateToken,
+  apenasEmpresa,
+  apenasCandidatos
+}

@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit"
+const rateLimit = require('express-rate-limit')
 
 const limiteGeral = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -14,4 +14,7 @@ const limiteLogin = rateLimit({
     statusCode: 429,
 })
 
-export {limiteGeral, limiteLogin}
+module.exports = {
+    limiteGeral,
+    limiteLogin
+}

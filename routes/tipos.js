@@ -1,6 +1,6 @@
 //Imports
-import express from 'express';
-import {authenticateToken} from '../middlewares/auth.js';
+const express = require('express');
+const { authenticateToken } = require('../middlewares/auth.js');
 
 //Router
 const router = express.Router();
@@ -11,4 +11,4 @@ router.get('/get-tipo', authenticateToken, (req, res) => {
   });
 });
 
-export default router;
+module.exports = router;

@@ -1,8 +1,8 @@
 //Conexão com o Cloudinary (nuvem das imagens)
-import { v2 as cloudinary } from 'cloudinary';
+const cloudinary = require('cloudinary').v2
 
-// Importando dotenv
-import dotenv from 'dotenv';
+//Dotenv
+const dotenv = require('dotenv');
 dotenv.config();
 
 cloudinary.config({
@@ -11,4 +11,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-export default cloudinary;
+module.exports = cloudinary;

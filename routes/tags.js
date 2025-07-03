@@ -1,8 +1,8 @@
 //Imports
-import express from 'express';
-import pool from '../db.js';
-import { popularTabelaTags } from '../app.js';
-import {authenticateToken} from '../middlewares/auth.js';
+const express = require('express');
+const pool = require('../db.js');
+const { popularTabelaTags } = require('../app.js');
+const { authenticateToken } = require('../middlewares/auth.js');
 
 //Router
 const router = express.Router();
@@ -42,4 +42,4 @@ router.get('/tags', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

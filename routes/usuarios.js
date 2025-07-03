@@ -1,7 +1,7 @@
 //Imports
-import express from 'express';
-import pool from '../db.js';
-import {popularTabelaUsuarios, criarTabelaUsuariosPerfil} from '../app.js'
+const express = require('express');
+const pool = require('../db.js');
+const { popularTabelaUsuarios, criarTabelaUsuariosPerfil } = require('../app.js');
 
 //router
 const router = express.Router();
@@ -38,4 +38,4 @@ router.get('/usuarios', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

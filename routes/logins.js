@@ -1,11 +1,15 @@
 //Imports
-import express from 'express';
-import pool from '../db.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import {limiteLogin} from '../middlewares/rateLimit.js';
+const express = require('express');
+const pool = require('../db.js');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const { limiteLogin } = require('../middlewares/rateLimit.js');
 //Router
 const router = express.Router();
+
+//Dotenv
+const dotenv = require('dotenv');
+dotenv.config();
 
 //Secret key para o JWT
 const SECRET_KEY = process.env.JWT_SECRET;
@@ -69,4 +73,4 @@ router.post('/logout', (req, res) => {
 });
 
 
-export default router;
+module.exports = router;

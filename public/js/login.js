@@ -519,7 +519,7 @@ function cadastrarEmpresa() {
   const telefone = telefoneInput.value.trim();
   const cep = cepInput.value.trim();
   const num = numeroInput.value.trim();
-  const complemento = complementoInput.value.trim();
+  let complemento = complementoInput.value.trim();
   const nome = empresaFantasiaInput.value.trim();
 
   if (!email) {
@@ -571,10 +571,6 @@ function cadastrarEmpresa() {
   }
   if (!/[a-zA-Z0-9]/.test(num)) {
     showInputError(numeroInput, "use letras ou números.");
-    return;
-  }
-  if (!complemento) {
-    showInputError(complementoInput, "Por favor, preencha o complemento.");
     return;
   }
   if (!senha) {

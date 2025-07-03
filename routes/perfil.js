@@ -1,12 +1,12 @@
 //Imports
-import express from 'express';
-import pool from '../db.js';
-import { editarPerfil, editarPerfilEmpresa } from '../app.js';
-import {authenticateToken, apenasEmpresa, apenasUsuario} from '../middlewares/auth.js';
+const express = require('express');
+const pool = require('../db.js');
+const { editarPerfil, editarPerfilEmpresa } = require('../app.js');
+const { authenticateToken, apenasEmpresa, apenasCandidatos } = require('../middlewares/auth.js');
 // Cloudinary + Multer
-import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import cloudinary from '../cloudinary.js';
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../cloudinary.js');
 
 // storage para as fotos de perfil
 const perfilStorage = new CloudinaryStorage({
@@ -35,7 +35,7 @@ const uploadEmpresaPerfil = multer({ storage: empresaPerfilStorage });  // uploa
 const router = express.Router();
 
 //Rota para pegar o perfil do usuário
-router.get('/perfil', authenticateToken, apenasUsuario, async (req, res) => {
+router.get('/perfil', authenticateToken, apenasCandidatos, async (req, res) => {
   try {
     const id_usuario = req.user.id;
 
@@ -58,7 +58,7 @@ router.get('/perfil', authenticateToken, apenasUsuario, async (req, res) => {
 });
 
 //Rota para editar o perfil do usuário
-router.post('/perfil-edit', authenticateToken, apenasUsuario, uploadPerfil.single('foto_perfil'), async (req, res) =>{
+router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.single('foto_perfil'), async (req, res) =>{
   try {
     const id_usuario = req.user.id;
     const dados = { ...req.body };
@@ -125,4 +125,4 @@ router.get('/perfil-empresa', authenticateToken, apenasEmpresa, async (req, res)
   }
 })
 
-export default router;
+module.exports = router;

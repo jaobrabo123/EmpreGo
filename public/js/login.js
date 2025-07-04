@@ -512,15 +512,15 @@ function cadastrarEmpresa() {
   ].forEach(clearInputError);
 
   const email = emailInput.value.trim();
-  const razao = razaoInput.value.trim();
+  const razao_soci = razaoInput.value.trim();
   const cnpj1 = cnpjInput.value.trim();
   const senha = senhaInput.value.trim();
   const confirmSenha = confirmSenhaInput.value.trim();
   const telefone = telefoneInput.value.trim();
   const cep = cepInput.value.trim();
-  const num = numeroInput.value.trim();
+  const numero = numeroInput.value.trim();
   let complemento = complementoInput.value.trim();
-  const nome = empresaFantasiaInput.value.trim();
+  const nome_fant = empresaFantasiaInput.value.trim();
 
   if (!email) {
     showInputError(emailInput, "preencha o e-mail.");
@@ -538,11 +538,11 @@ function cadastrarEmpresa() {
     showInputError(telefoneInput, "Telefone inválido (use +55 XX XXXXX-XXXX)");
     return;
   }
-  if (!razao) {
+  if (!razao_soci) {
     showInputError(razaoInput, "preencha a razão social.");
     return;
   }
-  if (!nome) {
+  if (!nome_fant) {
     showInputError(empresaFantasiaInput, "preencha o nome fantasia.");
     return;
   }
@@ -565,11 +565,11 @@ function cadastrarEmpresa() {
     showInputError(cepInput, "CEP inválido (use XXXXX-XXX).");
     return;
   }
-  if (!num) {
+  if (!numero) {
     showInputError(numeroInput, "Por favor, preencha o número.");
     return;
   }
-  if (!/[a-zA-Z0-9]/.test(num)) {
+  if (!/[a-zA-Z0-9]/.test(numero)) {
     showInputError(numeroInput, "use letras ou números.");
     return;
   }
@@ -609,14 +609,14 @@ function cadastrarEmpresa() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       cnpj,
-      nome,
+      nome_fant,
       telefone,
       email,
       senha,
-      razao,
+      razao_soci,
       cep,
       complemento,
-      num,
+      numero,
     }),
   })
     .then(async (res) => {
@@ -787,12 +787,12 @@ function cadastrar(e) {
 
   const nome = `${name} ${sobrenome}`;
   const [dia, mes, ano] = dobValue.split("/");
-  const datanasc = `${ano}-${mes}-${dia}`;
+  const data_nasc = `${ano}-${mes}-${dia}`;
 
-  fetch("/usuarios", {
+  fetch("/candidatos", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ nome, email, senha, genero, datanasc }),
+    body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
   })
   .then(async (res) => {
     if (res.ok) {

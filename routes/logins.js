@@ -18,11 +18,11 @@ const SECRET_KEY = process.env.JWT_SECRET;
 router.post('/login', limiteLogin, async (req, res) => {
   const { email, senha } = req.body;
   try {
-    const resultado = await pool.query('SELECT * FROM cadastro_usuarios WHERE email = $1', [email]);
-    const usuario = resultado.rows[0];
+    const resultado = await pool.query('SELECT * FROM candidatos WHERE email = $1', [email]);
+    const candidato = resultado.rows[0];
 
-    if(usuario && await bcrypt.compare(senha, usuario.senha)){
-      const token = jwt.sign({ id: usuario.id_usuario, tipo: 'candidato' }, SECRET_KEY, { expiresIn: '1d' });
+    if(candidato && await bcrypt.compare(senha, candidato.senha)){
+      const token = jwt.sign({ id: candidato.id, tipo: 'candidato' }, SECRET_KEY, { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,
         secure: true,
@@ -42,9 +42,9 @@ router.post('/login', limiteLogin, async (req, res) => {
 router.post('/login-empresa', limiteLogin, async (req, res) =>{
   const { cnpj, senha } = req.body;
   try{
-    const resultado = await pool.query('SELECT * FROM cadastro_empresa WHERE cnpj = $1', [cnpj]);
+    const resultado = await pool.query('SELECT * FROM empresas WHERE cnpj = $1', [cnpj]);
     const empresa = resultado.rows[0];
-    if(empresa && await bcrypt.compare(senha, empresa.senhaempre)){
+    if(empresa && await bcrypt.compare(senha, empresa.senha)){
       const token = jwt.sign({ id: empresa.cnpj, tipo: 'empresa' }, SECRET_KEY, { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,

@@ -24,13 +24,13 @@ const uploadExp = multer({ storage: expStorage });
 //Router
 const router = express.Router();
 
-router.post('/exps', authenticateToken, uploadExp.single('img_exp'), async (req, res) => {
+router.post('/exps', authenticateToken, uploadExp.single('imagem'), async (req, res) => {
   try {
-    const { titulo_exp, descricao_exp } = req.body;
-    const id_usuario = req.user.id;
-    const img_exp = req.file?.path || 'imagem padrão';
+    const { titulo, descricao } = req.body;
+    const id = req.user.id;
+    const imagem = req.file?.path || 'imagem padrão';
 
-    await popularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario);
+    await popularTabelaExperiencias(titulo, descricao, imagem, id);
     res.status(201).json({ message: 'Experiência cadastrada com sucesso!' });
   } catch (error) {
     console.error('Erro ao cadastrar experiência:', error);
@@ -41,20 +41,20 @@ router.post('/exps', authenticateToken, uploadExp.single('img_exp'), async (req,
 //Rota para pegar as experiências do usuário
 router.get('/exps', authenticateToken, async (req, res) => {
   try {
-    const id_usuario = req.user.id;
+    const id = req.user.id;
 
     const resultado = await pool.query(
-      `SELECT e.titulo_exp, e.descricao_exp, e.img_exp
-      FROM experiencia_usuario e
-      JOIN cadastro_usuarios c ON e.id_usuario = c.id_usuario
-      WHERE e.id_usuario = $1
-      ORDER BY e.data_exp DESC`,
-      [id_usuario]
+      `SELECT e.titulo, e.descricao, e.imagem
+      FROM experiencias e
+      JOIN candidatos c ON e.candidato = c.id
+      WHERE e.candidato = $1
+      ORDER BY e.add_em DESC`,
+      [id]
     );
     res.json(resultado.rows);
   } catch (error) {
     console.error('Erro no GET /exps:', error);
-    res.status(500).send('Erro ao buscar experiências: ' + error.message);
+    res.status(500).json({ error: 'Erro ao buscar experiências: ' + error.message });
   }
 });
 

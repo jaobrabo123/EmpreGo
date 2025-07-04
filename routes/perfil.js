@@ -37,14 +37,12 @@ const router = express.Router();
 //Rota para pegar o perfil do usuário
 router.get('/perfil', authenticateToken, apenasCandidatos, async (req, res) => {
   try {
-    const id_usuario = req.user.id;
+    const id = req.user.id;
 
     const usuario = await pool.query(
-      `SELECT c.nome, c.datanasc, c.email, u.descricao, u.foto_perfil, u.cpf 
-       FROM cadastro_usuarios c 
-       JOIN usuarios_perfil u ON c.id_usuario = u.id_usuario
-       WHERE c.id_usuario = $1`,
-      [id_usuario]
+      `SELECT nome, data_nasc, email, descricao, foto, cpf 
+       FROM candidatos where id = $1`,
+      [id]
     );
 
     if (usuario.rows.length === 0) {
@@ -58,13 +56,13 @@ router.get('/perfil', authenticateToken, apenasCandidatos, async (req, res) => {
 });
 
 //Rota para editar o perfil do usuário
-router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.single('foto_perfil'), async (req, res) =>{
+router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.single('foto'), async (req, res) =>{
   try {
-    const id_usuario = req.user.id;
+    const id = req.user.id;
     const dados = { ...req.body };
     
     if (req.file) {
-      dados.foto_perfil = req.file.path;
+      dados.foto = req.file.path;
     }
 
     const atributos = Object.keys(dados);
@@ -74,7 +72,7 @@ router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.si
       return res.status(400).json({ error: 'Nenhum atributo para atualizar.' });
     }
 
-    await editarPerfil(atributos, valores, id_usuario);
+    await editarPerfil(atributos, valores, id);
     res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
   } catch (error) {
     console.error('Erro ao editar perfil:', error);
@@ -83,12 +81,12 @@ router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.si
 })
 
 //Rota para editar o perfil da empresa
-router.post('/perfil-edit-empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('fotoempresa'), async (req, res) => {
+router.post('/perfil-edit-empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), async (req, res) => {
   try {
     const cnpj = req.user.id;
     const dados = { ...req.body };
     if (req.file) {
-      dados.fotoempresa = req.file.path;
+      dados.foto = req.file.path;
     }
     const atributos = Object.keys(dados);
     const valores = Object.values(dados);
@@ -108,10 +106,8 @@ router.get('/perfil-empresa', authenticateToken, apenasEmpresa, async (req, res)
     const cnpj = req.user.id;
 
     const empresa = await pool.query(
-      `SELECT c.nomeempre, c.telefoneempre,c.cep, c.complemento, c.num, e.descricaoempre, e.setor, e.porte, e.dataempresa, e.emailcontato, e.siteempresa, e.instagramempre, e.githubempre, e.youtubeempre, e.twitterempre, e.fotoempresa
-       FROM cadastro_empresa c 
-       JOIN empresa_perfil e ON c.cnpj = e.cnpj
-       WHERE c.cnpj = $1`,
+      `SELECT nome_fant, telefone, cep, complemento, numero, descricao, setor, porte, data_fund, contato, site, instagram, github, youtube, twitter, foto
+       FROM empresas where cnpj = $1`,
       [cnpj]
     );
 

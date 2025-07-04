@@ -5,16 +5,16 @@ function adicionarExp() {
         return;
     }
     liberar = false
-    const titulo_exp = document.querySelector("#inputTitulo").value
-    const img_exp = document.querySelector("#imgPlaceholder").files[0];
-    const descricao_exp = document.querySelector("#caixaText").value
+    const titulo = document.querySelector("#inputTitulo").value
+    const imagem = document.querySelector("#imgPlaceholder").files[0];
+    const descricao = document.querySelector("#caixaText").value
 
     
-    if (titulo_exp && descricao_exp) {
+    if (titulo && descricao) {
         const formData = new FormData();
-        formData.append('titulo_exp', titulo_exp);
-        formData.append('descricao_exp', descricao_exp);
-        formData.append('img_exp', img_exp);
+        formData.append('titulo', titulo);
+        formData.append('descricao', descricao);
+        formData.append('imagem', imagem);
 
         fetch('/exps', {
             method: 'POST',

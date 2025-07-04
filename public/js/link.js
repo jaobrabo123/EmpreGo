@@ -6,7 +6,7 @@ async function carregarLinks() {
   try {
     const tipo = await pegarTipo();
     if (tipo === 'candidato'){
-        carregarUsuario();
+        carregarCandidato();
         document.querySelector('#fotoPerfil').href = './profile.html';
     }
     else if (tipo === 'empresa') {
@@ -41,7 +41,7 @@ async function pegarTipo() {
     return tipo;
 }
 
-async function carregarUsuario() {
+async function carregarCandidato() {
     try {
         const response = await fetch('/perfil', {
             method: 'GET',
@@ -55,7 +55,7 @@ async function carregarUsuario() {
         const data = await response.json();
         document.querySelector('#loginOuCadas').style.display = 'none';
         document.querySelector('#fotoPerfil').style.display = '';
-        document.querySelector('#fotoPerfilImg').src = data.foto_perfil;
+        document.querySelector('#fotoPerfilImg').src = data.foto;
     } catch (error) {
         console.error('Erro ao carregar perfil do usuário:', error);
         document.querySelector('#logout').style.display = 'none';
@@ -76,7 +76,7 @@ async function carregarEmpresa() {
         const data = await response.json();
         document.querySelector('#loginOuCadas').style.display = 'none';
         document.querySelector('#fotoPerfil').style.display = '';
-        document.querySelector('#fotoPerfilImg').src = data.fotoempresa;
+        document.querySelector('#fotoPerfilImg').src = data.foto;
     }
     catch (error){
         console.error('Erro ao carregar perfil da empresa:', error);

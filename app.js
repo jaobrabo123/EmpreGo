@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const pool = require('./db.js');
 
-async function popularTabelaUsuarios(nome, email, senha, genero, datanasc) {
+async function popularTabelaCandidatos(nome, email, senha, genero, data_nasc) {
 
   if(senha.length < 8) {
     throw new Error('A senha deve ter pelo menos 8 caracteres');
@@ -24,7 +24,7 @@ async function popularTabelaUsuarios(nome, email, senha, genero, datanasc) {
   }
 
   const hoje = new Date();
-  const nascimento = new Date(datanasc);
+  const nascimento = new Date(data_nasc);
   const idade = hoje.getFullYear() - nascimento.getFullYear();
   const mes = hoje.getMonth() - nascimento.getMonth();
   const dia = hoje.getDate() - nascimento.getDate();
@@ -37,63 +37,53 @@ async function popularTabelaUsuarios(nome, email, senha, genero, datanasc) {
 
   //insere os dados na tabela cadastro_usuarios
   await pool.query(
-      `INSERT INTO cadastro_usuarios (nome, email, senha, genero, datanasc) VALUES ($1, $2, $3, $4, $5)`,
-      [nome, email, senhaCripitografada, genero, datanasc]
+      `INSERT INTO candidatos (nome, email, senha, genero, data_nasc) VALUES ($1, $2, $3, $4, $5)`,
+      [nome, email, senhaCripitografada, genero, data_nasc]
   );
 
 }
 
-async function criarTabelaUsuariosPerfil(idusuario) {
+async function popularTabelaTags(nome, id) {
 
-  // Verifica se o usuário já tem um perfil
-  const existente = await pool.query(`SELECT * FROM usuarios_perfil WHERE id_usuario = $1`, [idusuario]);
-  // Se não existir, cria um novo perfil
-  if (existente.rows.length === 0) {
-    await pool.query(`INSERT INTO usuarios_perfil (id_usuario) VALUES ($1)`, [idusuario]);
-  }
-
-}
-
-async function popularTabelaTags(nome_tag, id_usuario) {
-
-  if(nome_tag.length > 25) {
+  if(nome.length > 25) {
     throw new Error('O nome da tag não pode ter mais de 25 caracteres');
   }
+
   // Insere a tag na tabela tags_usuario
   await pool.query(
-    `INSERT INTO tags_usuario (nome_tag, id_usuario) VALUES ($1, $2)`,
-    [nome_tag, id_usuario]
+    `INSERT INTO tags (nome, candidato) VALUES ($1, $2)`,
+    [nome, id]
   )
 
 }
 
-async function popularTabelaExperiencias(titulo_exp, descricao_exp, img_exp, id_usuario) {
+async function popularTabelaExperiencias(titulo, descricao, imagem, id) {
 
-  if(titulo_exp.length > 30) {
+  if(titulo.length > 30) {
     throw new Error('O título da experiência não pode ter mais de 30 caracteres'); 
   }
 
-  if(descricao_exp.length > 1500) {
+  if(descricao.length > 1500) {
     throw new Error('A descrição da experiência não pode ter mais de 1500 caracteres');
   }
-  if(img_exp!=='imagem padrão'){
+  if(imagem!=='imagem padrão'){
     const prefix = 'https://res.cloudinary.com/ddbfifdxd/image/upload/';
-    if(img_exp && !img_exp.startsWith(prefix)) {
+    if(imagem && !imagem.startsWith(prefix)) {
       throw new Error('A imagem da experiência não pode ser atualizado diretamente. Use o upload de arquivo.');
     }
   }
 
   // Insere a experiência na tabela experiencia_usuario
   await pool.query(
-    `INSERT INTO experiencia_usuario (titulo_exp, descricao_exp, img_exp, id_usuario) VALUES ($1, $2, $3, $4)`,
-    [titulo_exp, descricao_exp, img_exp, id_usuario]
+    `INSERT INTO experiencias (titulo, descricao, imagem, candidato) VALUES ($1, $2, $3, $4)`,
+    [titulo, descricao, imagem, id]
   )
 
 }
 
-async function editarPerfil(atributos, valores, id_usuario) {
+async function editarPerfil(atributos, valores, id) {
 
-  const colunasPermitidas = ['foto_perfil','descricao','cpf','estado','cidade','endereco','instagram','github','youtube','twitter','pronomes'];
+  const colunasPermitidas = ['foto','descricao','cpf','estado','cidade','endereco','instagram','github','youtube','twitter','pronomes'];
 
   const atributosInvalidos = atributos.filter(col => !colunasPermitidas.includes(col));
   if (atributosInvalidos.length > 0) {
@@ -108,7 +98,7 @@ async function editarPerfil(atributos, valores, id_usuario) {
     const atri = atributos[i];
     const valor = valores[i];
 
-    if (atri === 'foto_perfil') {
+    if (atri === 'foto') {
       const prefix = 'https://res.cloudinary.com/ddbfifdxd/image/upload/';
       if (!valor.startsWith(prefix)) {
         throw new Error(`A foto de perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
@@ -125,14 +115,14 @@ async function editarPerfil(atributos, valores, id_usuario) {
         throw new Error(`Estado inválido. Use uma sigla válida.`);
       }
       if(atributos.findIndex(x => x === 'cidade') === -1){
-        await pool.query('UPDATE usuarios_perfil SET cidade = null WHERE id_usuario = $1', [id_usuario]);
+        await pool.query('UPDATE candidatos SET cidade = null WHERE id = $1', [id]);
       }
     } else
     if (atri === 'cidade') {
       let estado = '';
       const resultado = await pool.query(
-        'SELECT estado FROM usuarios_perfil WHERE id_usuario = $1',
-        [id_usuario]
+        'SELECT estado FROM candidatos WHERE id = $1',
+        [id]
       );
       if(atributos.findIndex(x => x === 'estado') !== -1) {
         const indexEstado = atributos.findIndex(x => x === 'estado');
@@ -161,7 +151,7 @@ async function editarPerfil(atributos, valores, id_usuario) {
     if (atri === 'github' && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error(`URL do GitHub inválida.`);
     } else
-    if (atri === 'youtube' && !/^https?:\/\/(www\.)?youtube\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+    if (atri === 'youtube' && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/) {
       throw new Error(`URL do YouTube inválida.`);
     } else
     if (atri === 'twitter' && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
@@ -175,15 +165,15 @@ async function editarPerfil(atributos, valores, id_usuario) {
   const pedido = atributos.map((coluna, index) => `${coluna} = $${index + 1}`);
   const pedidoForm = pedido.join(', ');
 
-  const query = `UPDATE usuarios_perfil SET ${pedidoForm} WHERE id_usuario = $${atributos.length + 1}`;
+  const query = `UPDATE candidatos SET ${pedidoForm} WHERE id = $${atributos.length + 1}`;
 
-  const valoresComId = [...valores, id_usuario];
+  const valoresComId = [...valores, id];
 
   await pool.query(query, valoresComId);
 
 }
 
-async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, cep, complemento, num) {
+async function popularTabelaEmpresas(cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, num) {
 
   if(senha.length < 8) {
     throw new Error('A senha deve ter pelo menos 8 caracteres');
@@ -195,7 +185,7 @@ async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, 
     throw new Error('CNPJ inválido. Deve conter 14 dígitos numéricos.');
   }
 
-  if (nome.length > 50) {
+  if (nome_fant.length > 50) {
     throw new Error('O nome da empresa não pode ter mais de 50 caracteres');
   }
 
@@ -204,7 +194,7 @@ async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, 
     throw new Error('O e-mail não é válido');
   }
 
-  if (razao.length > 100) {
+  if (razao_soci.length > 100) {
     throw new Error('A razão social não pode ter mais de 100 caracteres');
   }
 
@@ -227,27 +217,17 @@ async function popularTabelaEmpresas(cnpj, nome, telefone, email, senha, razao, 
   }
 
   await pool.query(
-    `INSERT INTO cadastro_empresa 
-     (cnpj, nomeempre, telefoneempre, emailcadas, senhaempre, nomejuridico, cep, complemento, num) 
+    `INSERT INTO empresas 
+     (cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero) 
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-    [cnpj, nome, telefoneLimpo, email, senhaCripitografada, razao, cepLimpo, complemento, num]
+    [cnpj, nome_fant, telefoneLimpo, email, senhaCripitografada, razao_soci, cepLimpo, complemento, num]
   );
   
 }
 
-async function criarEmpresasPerfil(cnpj) {
-  // Verifica se a empresa já tem um perfil
-  const existente = await pool.query(`SELECT * FROM empresa_perfil WHERE cnpj = $1`, [cnpj]);
-  // Se não existir, cria um novo perfil
-  if (existente.rows.length === 0) {
-    await pool.query(`INSERT INTO empresa_perfil (cnpj) VALUES ($1)`, [cnpj]);
-  }
-
-}
-
 async function editarPerfilEmpresa(atributos, valores, cnpj) {
   
-  const colunasPermitidas = ['descricaoempre', 'setor','porte','dataempresa','emailcontato','siteempresa','instagramempre','githubempre','youtubeempre','twitterempre','fotoempresa'];
+  const colunasPermitidas = ['descricao', 'setor','porte','data_fund','contato','site','instagram','github','youtube','twitter','foto'];
 
   const atributosInvalidos = atributos.filter(col => !colunasPermitidas.includes(col));
   if (atributosInvalidos.length > 0) {
@@ -262,7 +242,7 @@ async function editarPerfilEmpresa(atributos, valores, cnpj) {
     const atributo = atributos[i]
     const valor = valores[i]
 
-    if(atributo==='descricaoempre'&&valor.length>2000){
+    if(atributo==='descricao'&&valor.length>2000){
       throw new Error("A descrição da empresa não pode conter mais de 2000 caracteres.");
     }else
     if(atributo==='setor'&&valor.length>70){
@@ -271,31 +251,31 @@ async function editarPerfilEmpresa(atributos, valores, cnpj) {
     if(atributo==='porte'&&valor.length>30){
       throw new Error("O porte da empresa não pode conter mais de 30 caracteres.");
     }else
-    if (atributo === 'emailcontato' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+    if (atributo === 'contato' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
       throw new Error("E-mail de contato inválido.");
     }else
-    if (atributo === 'siteempresa' && !/^https?:\/\/[^\s/$.?#].[^\s]*$/.test(valor)) {
+    if (atributo === 'site' && !/^https?:\/\/[^\s/$.?#].[^\s]*$/.test(valor)) {
       throw new Error("URL do site da empresa inválida.");
     }else
-    if (atributo === 'instagramempre' && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+    if (atributo === 'instagram' && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error("URL do Instagram da empresa inválida.");
     }else
-    if (atributo === 'githubempre' && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+    if (atributo === 'github' && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error("URL do GitHub da empresa inválida.");
     }else
-    if (atributo === 'youtubeempre' && !/^https?:\/\/(www\.)?youtube\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+    if (atributo === 'youtube' && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(valor)) {
       throw new Error("URL do YouTube da empresa inválida.");
     }else
-    if (atributo === 'twitterempre' && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
+    if (atributo === 'twitter' && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
       throw new Error("URL do Twitter da empresa inválida.");
     }else
-    if (atributo === 'fotoempresa') {
+    if (atributo === 'foto') {
       const prefix = 'https://res.cloudinary.com/ddbfifdxd/image/upload/';
       if (!valor.startsWith(prefix)) {
         throw new Error("A foto da empresa não pode ser atualizada diretamente. Use o upload de arquivo.");
       }
     }else
-    if (atributo === 'dataempresa') {
+    if (atributo === 'data_fund') {
       const data = new Date(valor);
       if (isNaN(data.getTime())) {
         throw new Error("Data de fundação da empresa inválida.");
@@ -311,20 +291,18 @@ async function editarPerfilEmpresa(atributos, valores, cnpj) {
   const inserts = atributos.map((atri,index)=> `${atri} = $${index+1}`).join(', ')
 
   await pool.query(
-    `update empresa_perfil set ${inserts} where cnpj = $${atributos.length+1}`,
+    `update empresas set ${inserts} where cnpj = $${atributos.length+1}`,
     [...valores, cnpj]
   )
 
 }
 
 module.exports = {
-  popularTabelaUsuarios,
-  criarTabelaUsuariosPerfil,
+  popularTabelaCandidatos,
   popularTabelaTags,
   popularTabelaExperiencias,
   editarPerfil,
   popularTabelaEmpresas,
-  criarEmpresasPerfil,
   editarPerfilEmpresa
 }
 

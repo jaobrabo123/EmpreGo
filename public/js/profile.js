@@ -15,14 +15,14 @@ fetch('/perfil', {
 .then(data => {
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
-    document.querySelector('#fotoPerfilImg').src = data.foto_perfil;
+    document.querySelector('#fotoPerfilImg').src = data.foto;
     document.querySelector('#descUsuario').textContent = data.descricao
     document.querySelector('#nomUsuario').textContent = data.nome;
     document.querySelector('#emailUsuario').textContent = data.email;
-    document.querySelector('#fotoUsuario').src = data.foto_perfil;
+    document.querySelector('#fotoUsuario').src = data.foto;
     document.querySelector("#cpfUsuario").textContent = data.cpf;
 
-    const dataNasc = new Date(data.datanasc);
+    const dataNasc = new Date(data.data_nasc);
     const dia = String(dataNasc.getDate()).padStart(2, '0');
     const mes = String(dataNasc.getMonth() + 1).padStart(2, '0');
     const ano = dataNasc.getFullYear();
@@ -60,7 +60,7 @@ fetch('/exps', {
 
         const novoH1 = document.createElement("h1");
         novoH1.className = 'titExemplo';
-        novoH1.textContent = `${expe.titulo_exp}`;
+        novoH1.textContent = `${expe.titulo}`;
         novaDiv.appendChild(novoH1);
 
         const boxExemplo = document.createElement("div");
@@ -69,12 +69,12 @@ fetch('/exps', {
 
         const imgExemplo = document.createElement("img");
         imgExemplo.className = 'imgExemplo';
-        imgExemplo.src = `${expe.img_exp}`;
+        imgExemplo.src = `${expe.imagem}`;
         boxExemplo.appendChild(imgExemplo);
 
         const textExemplo = document.createElement("a");
         textExemplo.className = 'textExemplo';
-        textExemplo.textContent = `${expe.descricao_exp}`;
+        textExemplo.textContent = `${expe.descricao}`;
         boxExemplo.appendChild(textExemplo);
     });
 })
@@ -93,7 +93,7 @@ function adicionarTag() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nome_tag: tagUsuario })
+            body: JSON.stringify({ nome: tagUsuario })
         })
         .then(response => response.json())
         .then(data => {

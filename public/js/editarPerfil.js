@@ -22,7 +22,7 @@ document.getElementById("formEditarPerfil").addEventListener("submit", function(
 function enviarEdicao() {
   limparErro();
 
-  const fotoPerfil = document.getElementById("inputFotoPerfil").files[0];
+  const foto = document.getElementById("inputFotoPerfil").files[0];
   const descricao = document.getElementById("inputDescricao").value;
   const cpf = document.getElementById("inputCpf").value;
   const estado = document.getElementById("selectEstado").value;
@@ -40,7 +40,7 @@ function enviarEdicao() {
   }
 
   const formData = new FormData();
-  if (fotoPerfil) formData.append("foto_perfil", fotoPerfil);
+  if (foto) formData.append("foto", foto);
   if (descricao) formData.append("descricao", descricao);
   if (cpf) formData.append("cpf", cpf);
   if (estado && estado !== "NM") formData.append("estado", estado);

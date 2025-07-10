@@ -24,7 +24,7 @@
     </style>
 </head>
 <body>
-    <h1>Usuários Cadastrados</h1>
+    <h1>Candidatos Cadastrados</h1>
     <table id="tabela-usuarios">
         <thead>
             <tr>
@@ -41,7 +41,7 @@
     <script>
         async function carregarUsuarios() {
             try {
-                const resposta = await fetch('/usuarios');
+                const resposta = await fetch('/candidatos');
                 if (!resposta.ok) throw new Error('Erro ao buscar usuários');
 
                 const usuarios = await resposta.json();
@@ -51,11 +51,11 @@
                 usuarios.forEach(usuario => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${usuario.id_usuario}</td>
+                        <td>${usuario.id}</td>
                         <td>${usuario.nome}</td>
                         <td>${usuario.email}</td>
                         <td>${usuario.genero}</td>
-                        <td>${new Date(usuario.datanasc).toLocaleDateString('pt-BR')}</td>
+                        <td>${new Date(usuario.data_nasc).toLocaleDateString('pt-BR')}</td>
                     `;
                     tbody.appendChild(tr);
                 });

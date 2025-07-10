@@ -1,7 +1,8 @@
 //Imports
 const express = require('express');
-const pool = require('../db.js');
-const { popularTabelaCandidatos } = require('../app.js');
+const pool = require('../config/db.js');
+const { popularTabelaCandidatos } = require('../services/candidatoServices.js');
+const ErroDeValidacao = require('../utils/erroValidacao.js')
 
 //router
 const router = express.Router();
@@ -10,16 +11,22 @@ const router = express.Router();
 router.post('/candidatos', async (req, res) => {
   try {
     const { nome, email, senha, genero, data_nasc } = req.body;
+
+    if(!nome||!email||!senha||!genero||!data_nasc) return res.status(400).json({ error: 'Informações faltando para o cadastro!' })
+
     const { rows } = await pool.query('SELECT 1 FROM candidatos WHERE email = $1', [email]);
 
     if (rows.length > 0) {
-      return res.status(400).json({ error: 'Email já cadastrado.' });
+      return res.status(409).json({ error: 'Email já cadastrado.' });
     }
 
     await popularTabelaCandidatos(nome, email, senha, genero, data_nasc);
 
     res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
   } catch (error) {
+    if (error instanceof ErroDeValidacao) {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Erro ao cadastrar usuário: ' + error.message });
   }
 });

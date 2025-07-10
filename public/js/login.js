@@ -641,7 +641,7 @@ function cadastrarEmpresa() {
       window.location.href = "./index.html";
     })
     .catch((erro) => {
-      if (erro.status===400)
+      if (erro.status===409)
         {
         mostrarErroTopo("Empresa já cadastrada.");
         return;

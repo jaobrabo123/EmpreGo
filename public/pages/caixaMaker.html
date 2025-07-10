@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/caixaMakerStyles.css">
-    <script src="../js/caixaMaker.js" defer></script>
-    <script src="../js/link.js" defer></script>
+    <script type="module" src="../js/caixaMaker.js" defer></script>
+    <script type="module" src="../js/link.js" defer></script>
 
     <title>Nova Caixa</title>
 </head>
@@ -30,7 +30,7 @@
             <a class="headerlink" href="./suporte.html" target="_self">Suporte</a>
             <a class="headerlink" href="./login.html" target="_self" id="loginOuCadas">Login / Cadastrar</a>
             <a class="headerlink" href="./profile.html" target="_self" style="display: none;" id="fotoPerfil"><img src="../assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
-            <a href="#" onclick="logout()" id="logout">Sair</a>
+            <a href="#" id="logout">Sair</a>
         </nav>
     </header>
     <!-- A parte da caixa que você faz-->
@@ -49,7 +49,7 @@
         </div>
 
         <div id="btns">
-            <button class="btn" id="btnSalvar" onclick="adicionarExp()">Salvar</button>
+            <button class="btn" id="btnSalvar">Salvar</button>
             <a href="./profile.html">
                 <button class="btn" id="btnVoltar">Retornar</button>
             </a>

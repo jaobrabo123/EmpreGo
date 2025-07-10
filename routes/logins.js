@@ -1,6 +1,6 @@
 //Imports
 const express = require('express');
-const pool = require('../db.js');
+const pool = require('../config/db.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { limiteLogin } = require('../middlewares/rateLimit.js');
@@ -16,8 +16,10 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 //Rota de login
 router.post('/login', limiteLogin, async (req, res) => {
-  const { email, senha } = req.body;
   try {
+    const { email, senha } = req.body;
+    if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+
     const resultado = await pool.query('SELECT * FROM candidatos WHERE email = $1', [email]);
     const candidato = resultado.rows[0];
 
@@ -40,8 +42,10 @@ router.post('/login', limiteLogin, async (req, res) => {
 });
 
 router.post('/login-empresa', limiteLogin, async (req, res) =>{
-  const { cnpj, senha } = req.body;
   try{
+    const { cnpj, senha } = req.body;
+    if (!cnpj || !senha) return res.status(400).json({ error: 'CNPJ e senha são obrigatórios' });
+
     const resultado = await pool.query('SELECT * FROM empresas WHERE cnpj = $1', [cnpj]);
     const empresa = resultado.rows[0];
     if(empresa && await bcrypt.compare(senha, empresa.senha)){

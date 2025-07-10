@@ -1,8 +1,9 @@
 //Imports
 const express = require('express');
-const pool = require('../db.js');
-const { popularTabelaTags } = require('../app.js');
+const pool = require('../config/db.js');
+const { popularTabelaTags } = require('../services/tagServices.js');
 const { authenticateToken } = require('../middlewares/auth.js');
+const ErroDeValidacao = require('../utils/erroValidacao.js')
 
 //Router
 const router = express.Router();
@@ -26,7 +27,9 @@ router.post('/tags', authenticateToken, async (req, res) => {
     await popularTabelaTags(nome, id);
     res.status(201).json({ message: 'Tag cadastrada com sucesso!' });
   } catch (error) {
-    console.error('Erro ao cadastrar tag:', error);
+    if (error instanceof ErroDeValidacao) {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Erro ao cadastrar tag: ' + error.message });
   }
 });
@@ -38,7 +41,7 @@ router.get('/tags', async (req, res) => {
     res.json(resultado.rows);
   } catch (error) {
     console.error('Erro no GET /tags:', error);
-    res.status(500).send('Erro ao buscar tags: ' + error.message);
+    res.status(500).json({error: 'Erro ao buscar tags: ' + error.message});
   }
 });
 

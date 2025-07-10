@@ -12,6 +12,7 @@ const tagRoutes = require('./routes/tags.js');
 const experienciaRoutes = require('./routes/experiencias.js');
 const empresaRoutes = require('./routes/empresas.js');
 const tiposRoutes = require('./routes/tipos.js');
+const chatRoutes = require('./routes/chats.js')
 
 //Dotenv
 dotenv.config();
@@ -33,6 +34,7 @@ app.use(tagRoutes);
 app.use(experienciaRoutes);
 app.use(empresaRoutes);
 app.use(tiposRoutes);
+app.use(chatRoutes);
 
 //Porta do servidor
 app.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

@@ -1,4 +1,8 @@
+import { mostrarErroTopo } from './globalFunctions.js'
+
 var liberar = true
+
+document.querySelector('#btnSalvar').addEventListener('click', adicionarExp)
 
 function adicionarExp() {
     if(!liberar){
@@ -21,23 +25,29 @@ function adicionarExp() {
             credentials: 'include',
             body: formData
         })
-        .then(async (response) => {
-            const data = await response.json();
+        .then(async (res) => {
+            const data = await res.json();
 
-            if (!response.ok) {
-                throw new Error(data.error || 'Erro ao adicionar experiência');
+            if (!res.ok) {
+                throw ({ status: res.status, message: data.error || 'Erro ao adicionar experiência'});
             }
 
             alert('Experiência adicionada com sucesso!');
             window.location.href = './profile.html';
         })
-        .catch(error => {
-            console.error('Erro ao adicionar experiência:', error);
-            alert(error.message);
+        .catch(erro => {
+            console.error('Erro ao adicionar experiência:', erro.message);
+            if(erro.status === 500){
+                mostrarErroTopo('Erro ao adicionar experiência, a culpa não foi sua. Tente novamente.')
+                liberar = true;
+                return;
+            }
+            mostrarErroTopo(erro.message);
             liberar = true;
         });
     } else {
-        alert("A experiencia deve ter um título e uma descrição.");
+        mostrarErroTopo("A experiencia deve ter um título e uma descrição.");
+        liberar = true;
     }
 
 

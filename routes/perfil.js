@@ -1,12 +1,15 @@
 //Imports
 const express = require('express');
-const pool = require('../db.js');
-const { editarPerfil, editarPerfilEmpresa } = require('../app.js');
+const pool = require('../config/db.js');
+const { editarPerfil } = require('../services/candidatoServices.js');
+const { editarPerfilEmpresa } = require('../services/empresaServices.js')
 const { authenticateToken, apenasEmpresa, apenasCandidatos } = require('../middlewares/auth.js');
+const ErroDeValidacao = require('../utils/erroValidacao.js')
+
 // Cloudinary + Multer
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('../cloudinary.js');
+const cloudinary = require('../config/cloudinary.js');
 
 // storage para as fotos de perfil
 const perfilStorage = new CloudinaryStorage({
@@ -75,7 +78,9 @@ router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.si
     await editarPerfil(atributos, valores, id);
     res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
   } catch (error) {
-    console.error('Erro ao editar perfil:', error);
+    if (error instanceof ErroDeValidacao) {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Erro ao editar perfil: ' + error.message });
   }
 })
@@ -96,7 +101,9 @@ router.post('/perfil-edit-empresa', authenticateToken, apenasEmpresa , uploadEmp
     await editarPerfilEmpresa(atributos, valores, cnpj);
     res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
   } catch (error) {
-    console.error('Erro ao editar perfil da empresa:', error);
+    if (error instanceof ErroDeValidacao) {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Erro ao editar perfil da empresa: ' + error.message });
   }
 });

@@ -6,7 +6,7 @@ const { authenticateToken } = require('../middlewares/auth.js');
 const router = express.Router();
 
 router.get('/get-tipo', authenticateToken, (req, res) => {
-  res.json({
+  res.status(200).json({
     tipo: req.user.tipo,
   });
 });

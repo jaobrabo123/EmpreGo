@@ -1,12 +1,14 @@
 //Imports
 const express = require('express');
-const pool = require('../db.js')
-const { popularTabelaExperiencias } = require('../app.js')
-const {authenticateToken} = require('../middlewares/auth.js');
+const pool = require('../config/db.js')
+const { popularTabelaExperiencias } = require('../services/experienciaService.js')
+const { authenticateToken } = require('../middlewares/auth.js');
+const ErroDeValidacao = require('../utils/erroValidacao.js')
+
 // Cloudinary + Multer
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('../cloudinary.js');
+const cloudinary = require('../config/cloudinary.js');
 
 // storage para as imagens das experiencias
 const expStorage = new CloudinaryStorage({
@@ -33,7 +35,9 @@ router.post('/exps', authenticateToken, uploadExp.single('imagem'), async (req, 
     await popularTabelaExperiencias(titulo, descricao, imagem, id);
     res.status(201).json({ message: 'Experiência cadastrada com sucesso!' });
   } catch (error) {
-    console.error('Erro ao cadastrar experiência:', error);
+    if (error instanceof ErroDeValidacao) {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Erro ao cadastrar experiência: ' + error.message });
   }
 });

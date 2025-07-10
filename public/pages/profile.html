@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/icons/ajunet.ico" type="image/x-icon">
-    <script src="../js/profile.js" defer></script>
+    <script type="module" src="../js/profile.js" defer></script>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/profileStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -27,7 +27,7 @@
             <a class="headerlink" href="./suporte.html" target="_self">Suporte</a>
             <a class="headerlink" href="./login.html" target="_self" id="loginOuCadas">Login / Cadastrar</a>
             <a class="headerlink" href="./profile.html" target="_self" style="display: none;" id="fotoPerfil"><img src="../assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
-            <a href="#" onclick="logout()" id="logout">Sair</a>
+            <a href="#" id="logout">Sair</a>
         </nav>
     </header>
 
@@ -50,7 +50,7 @@
         
         <div id="bodyTags">
             <input id="tagUsuario" placeholder="Insira uma tag sua aqui">
-            <button onclick="adicionarTag()">Adicionar</button>
+            <button id="buttonAddTag">Adicionar</button>
         </div>
 
         <div id="bodyTextArea">

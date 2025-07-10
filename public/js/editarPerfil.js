@@ -10,16 +10,42 @@ function limparErro() {
   erroDiv.style.display = "none";
 }
 
-function validarCPF(cpf) {
-  return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
-}
-
 document.getElementById("formEditarPerfil").addEventListener("submit", function(e) {
   e.preventDefault();
   enviarEdicao();
 });
 
-function enviarEdicao() {
+function validarCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, ''); // Remove pontos e traços
+
+  if (cpf.length !== 11) {
+    return 1;
+  }else
+  if(/^(\d)\1{10}$/.test(cpf)){
+    return 2;
+  }
+
+  let soma = 0;
+  for (let i = 0; i < 9; i++) {
+    soma += parseInt(cpf.charAt(i)) * (10 - i);
+  }
+  let digito1 = 11 - (soma % 11);
+  if (digito1 > 9) digito1 = 0;
+  if (digito1 != parseInt(cpf.charAt(9))) return 2;
+
+  soma = 0;
+  for (let i = 0; i < 10; i++) {
+    soma += parseInt(cpf.charAt(i)) * (11 - i);
+  }
+  let digito2 = 11 - (soma % 11);
+  if (digito2 > 9) digito2 = 0;
+  if (digito2 != parseInt(cpf.charAt(10))) return 2;
+
+  return true;
+}
+
+
+async function enviarEdicao() {
   limparErro();
 
   const foto = document.getElementById("inputFotoPerfil").files[0];
@@ -27,15 +53,50 @@ function enviarEdicao() {
   const cpf = document.getElementById("inputCpf").value;
   const estado = document.getElementById("selectEstado").value;
   const cidade = document.getElementById("inputCidade").value;
-  const endereco = document.getElementById("inputEndereco").value;
   const instagram = document.getElementById("inputInstagram").value;
   const github = document.getElementById("inputGithub").value;
   const youtube = document.getElementById("inputYoutube").value;
   const twitter = document.getElementById("inputTwitter").value;
   const pronomes = document.getElementById("inputPronomes").value;
 
-  if (cpf && !validarCPF(cpf)) {
+  if (cpf && validarCPF(cpf)===1) {
     mostrarErro("CPF inválido. Formato correto: 123.456.789-10");
+    return;
+  }
+
+  if (cpf && validarCPF(cpf)===2){
+    mostrarErro("CPF inválido. Confira se não digitou algo errado.");
+    return;
+  }
+
+  if (cidade && estado!=='NM'){
+    const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`);
+    const cidades = await response.json()
+    const nomes = cidades.map(ci=>ci.nome.toLowerCase())
+    console.log(nomes)
+    if(!nomes.includes(cidade.toLowerCase())){
+      mostrarErro(`Cidade inválida pro estado selecionado: ${estado}`);
+      return;
+    }
+  }
+
+  if (instagram && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(instagram)) {
+    mostrarErro("URL do Instagram inválida.");
+    return;
+  }
+
+  if (github && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(github)) {
+    mostrarErro("URL do GitHub inválida.");
+    return;
+  }
+
+  if (youtube && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(youtube)){
+    mostrarErro("URL do Youtube inválida.");
+    return;
+  }
+
+  if (twitter && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(twitter)){
+    mostrarErro("URL do Twitter/X inválida.");
     return;
   }
 
@@ -45,7 +106,6 @@ function enviarEdicao() {
   if (cpf) formData.append("cpf", cpf);
   if (estado && estado !== "NM") formData.append("estado", estado);
   if (cidade) formData.append("cidade", cidade);
-  if (endereco) formData.append("endereco", endereco);
   if (instagram) formData.append("instagram", instagram);
   if (github) formData.append("github", github);
   if (youtube) formData.append("youtube", youtube);
@@ -60,13 +120,20 @@ function enviarEdicao() {
     .then(async (response) => {
       const data = await response.json();
       if (!response.ok) {
-        mostrarErro(data.error || "Erro ao editar perfil");
-        throw new Error(data.error || "Erro ao editar perfil");
+        throw ({ status: response.status , message: data.error || "Erro ao editar perfil"});
       }
       window.location.href = "./profile.html";
     })
-    .catch((error) => {
-      console.error("Erro ao editar perfil:", error);
+    .catch((erro) => {
+      if(erro.message.includes('Cidade inválida para o estado')){
+        mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
+      }else
+      if(erro.status===500){
+        mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
+        console.error("Erro ao editar perfil: ", erro.error);
+        return;
+      }
+      console.error("Erro ao editar perfil: ", erro.error);
     });
 }
 

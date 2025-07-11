@@ -3,7 +3,10 @@ const express = require('express');
 const pool = require('../config/db.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { limiteLogin } = require('../middlewares/rateLimit.js');
+//Reativar depois dos testes
+//const { limiteLogin } = require('../middlewares/rateLimit.js');
+const { ehAdmin } = require('../utils/admins.js')
+
 //Router
 const router = express.Router();
 
@@ -15,16 +18,17 @@ dotenv.config();
 const SECRET_KEY = process.env.JWT_SECRET;
 
 //Rota de login
-router.post('/login', limiteLogin, async (req, res) => {
+router.post('/login'/*, limiteLogin*/, async (req, res) => {
   try {
     const { email, senha } = req.body;
     if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
-
     const resultado = await pool.query('SELECT * FROM candidatos WHERE email = $1', [email]);
     const candidato = resultado.rows[0];
 
     if(candidato && await bcrypt.compare(senha, candidato.senha)){
-      const token = jwt.sign({ id: candidato.id, tipo: 'candidato' }, SECRET_KEY, { expiresIn: '1d' });
+      const tipo = ehAdmin(email) ? 'admin' : 'candidato';
+
+      const token = jwt.sign({ id: candidato.id, tipo: tipo }, SECRET_KEY, { expiresIn: '1d' });
       res.cookie('token', token, {
         httpOnly: true,
         secure: true,
@@ -41,7 +45,7 @@ router.post('/login', limiteLogin, async (req, res) => {
   }
 });
 
-router.post('/login-empresa', limiteLogin, async (req, res) =>{
+router.post('/login-empresa'/*, limiteLogin*/, async (req, res) =>{
   try{
     const { cnpj, senha } = req.body;
     if (!cnpj || !senha) return res.status(400).json({ error: 'CNPJ e senha são obrigatórios' });

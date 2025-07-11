@@ -25,7 +25,7 @@ export async function carregarLinks() {
     document.querySelector('#logout').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = 'none';
   }else
-  if (infos.tipo==='candidato'){
+  if (infos.tipo==='candidato'||infos.tipo==='admin'){
     document.querySelector('#fotoPerfil').href = './profile.html';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
@@ -58,7 +58,7 @@ export async function carregarInfo() {
 
       let data = null;
 
-      if(tipo==='candidato'){
+      if(tipo==='candidato'||tipo==='admin'){
         const res = await fetch('/perfil', {
             method: 'GET',
             credentials: 'include'

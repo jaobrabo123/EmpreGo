@@ -2,7 +2,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
-const { limiteGeral } = require('./middlewares/rateLimit.js');
+//Reativar depois dos testes
+//const { limiteGeral } = require('./middlewares/rateLimit.js');
 
 //Routes
 const loginRoutes = require('./routes/logins.js');
@@ -20,11 +21,14 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.set('trust proxy', 1);
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.use(limiteGeral);
+//Reativar depois dos testes
+//app.use(limiteGeral);
 
 //Rotas
 app.use(loginRoutes);

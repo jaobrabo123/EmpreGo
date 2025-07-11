@@ -27,7 +27,7 @@ async function carregarChats() {
     .then(data=>{
         console.log(data)
         let tipo = 0
-        if(data.tipo==='candidato'){
+        if(data.tipo==='candidato'||data.tipo==='admin'){
             tipo = 1
         }else
         if(data.tipo==='empresa'){
@@ -194,8 +194,8 @@ async function enviarMensagem(mensagem, chat, idDivChat, idDivMensagens) {
 
         const mensagemEnviada = document.createElement('p')
         mensagemEnviada.innerHTML = `${mensagem}`
-        mensagemEnviada.className = resposta.tipo === 'candidato' ? 'candidato' : 'empresa'
-         mensagemEnviada.id = novoId;
+        mensagemEnviada.className = resposta.tipo === 'empresa' ? 'empresa' : 'candidato'
+        mensagemEnviada.id = novoId;
         document.querySelector(`#${idDivMensagens}`).appendChild(mensagemEnviada)
     })
     .catch(erro=>{

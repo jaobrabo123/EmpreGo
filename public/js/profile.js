@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const data = await carregarInfo() //Pega a resposta do carregarInfo
 
     if(data.tipo && (data.tipo ==='candidato'||data.tipo==='admin')){ //Se a resposta for do tipo candidato carrega o perfil do candidato e ajusta a navbar
-        alert(data.tipo)
         document.querySelector('#loginOuCadas').style.display = 'none';
         document.querySelector('#fotoPerfil').style.display = '';
         document.querySelector('#fotoPerfilImg').src = data.info.foto;

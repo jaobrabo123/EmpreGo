@@ -37,8 +37,14 @@ function apenasCandidatos(req,res,next) {
   return res.status(403).json({ error: 'Acesso apenas para candidatos' });
 }
 
+function apenasAdmins(req, res, next) {
+  if(req.user?.tipo==='admin') return next()
+  return res.status(403).json({ error: 'Acesso apenas para ADMINS' });
+}
+
 module.exports = {
   authenticateToken,
   apenasEmpresa,
-  apenasCandidatos
+  apenasCandidatos,
+  apenasAdmins
 }

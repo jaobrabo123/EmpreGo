@@ -2,7 +2,8 @@
 const express = require('express');
 const pool = require('../config/db.js');
 const { popularTabelaEmpresas } = require('../services/empresaServices.js');
-const ErroDeValidacao = require('../utils/erroValidacao.js')
+const ErroDeValidacao = require('../utils/erroValidacao.js');
+const { authenticateToken, apenasAdmins } = require('../middlewares/auth.js');
 
 //Router
 const router = express.Router();
@@ -42,6 +43,16 @@ router.post('/empresas', async (req , res)=>{
             return res.status(400).json({ error: error.message });
         }
         return res.status(500).json({ error: 'Erro ao cadastrar empresa: ' + error.message})
+    }
+})
+
+router.get('/empresas', authenticateToken, apenasAdmins, async(req,res)=>{
+    try{
+        const resultado = await pool.query('SELECT cnpj, nome_fant, telefone, email, razao_soci, cep, complemento, numero FROM empresas');
+        res.json(resultado.rows);
+    }
+    catch(erro){
+        res.status(500).json({error: `Erro ao buscar empresas: ${erro?.message||'erro desconhecido'}` })
     }
 })
 

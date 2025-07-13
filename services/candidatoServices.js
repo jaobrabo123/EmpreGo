@@ -6,6 +6,7 @@ const ErroDeValidacao = require('../utils/erroValidacao.js');
 
 async function popularTabelaCandidatos(nome, email, senha, genero, data_nasc) {
 
+
   if(senha.length < 8) {
     throw new ErroDeValidacao('A senha deve ter pelo menos 8 caracteres');
   }
@@ -49,6 +50,10 @@ async function popularTabelaCandidatos(nome, email, senha, genero, data_nasc) {
 
 
 async function editarPerfil(atributos, valores, id) {
+
+  if(!atributos||!valores||!id){
+    throw new ErroDeValidacao('Os atributos, valores e ID do candidato devem ser fornecidos.')
+  }
 
   const colunasPermitidas = ['foto','descricao','cpf','estado','cidade','endereco','instagram','github','youtube','twitter','pronomes'];
 

@@ -55,6 +55,10 @@ async function popularTabelaEmpresas(cnpj, nome_fant, telefone, email, senha, ra
 
 async function editarPerfilEmpresa(atributos, valores, cnpj) {
   
+  if(!atributos||!valores||!cnpj){
+    throw new ErroDeValidacao('Os atributos, valores e CNPJ da empresa devem ser fornecidos.')
+  }
+
   const colunasPermitidas = ['descricao', 'setor','porte','data_fund','contato','site','instagram','github','youtube','twitter','foto'];
 
   const atributosInvalidos = atributos.filter(col => !colunasPermitidas.includes(col));

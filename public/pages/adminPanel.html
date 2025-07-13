@@ -1,11 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Vizualização</title>
+    <link rel="shortcut icon" href="../assets/icons/ajunet.ico" type="image/x-icon">
+    <script type="module" src="../js/link.js" defer></script>
+    <script type="module" src="../js/adminPanel.js" defer></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/adminPanel.css">
+    <title>Painel-ADM</title>
 </head>
+
 <body>
-    <h1>Em breve...</h1>
+    <header>
+        <div id="logo">
+            <a href="./index.html" target="_self">
+                <img src="../assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg">
+            </a>
+            <a href="./index.html" target="_self" id="nomedosite">Empre<span>Go</span></a>
+
+        </div>
+        <nav class="links">
+            <a href="./index.html">Inicio</a>
+            <a class="headerlink" href="./sobre.html" target="_self">Sobre</a>
+            <a class="headerlink" href="./suporte.html" target="_self">Suporte</a>
+            <a class="headerlink" href="./login.html" target="_self" id="loginOuCadas">Login / Cadastrar</a>
+            <a class="headerlink" href="./profile.html" target="_self" style="display: none;" id="fotoPerfil"><img src="../assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
+            <a href="#" id="logout">Sair</a>
+        </nav>
+    </header>
+
+    <div id="main">
+        <h1>PAINEL</h1>
+        <div id="content">
+            <label for="selectTabelas">Selecione uma tabela</label>
+            <select id="selectTabelas">
+                <option value="Candidatos" selected>Candidatos</option>
+                <option value="Empresas">Empresas</option>
+                <option value="Experiencias">Experiências</option>
+            </select>
+            <h2>Candidatos</h2>
+            <div id="tabela">
+                <p id="carregando">Carregando...</p>
+                <table>
+                    <thead id="tabelaHead">
+                        <tr>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaBody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>&copy; EmpreGo</footer>
 </body>
+
 </html>

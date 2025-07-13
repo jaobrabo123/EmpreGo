@@ -71,10 +71,6 @@ router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.si
     const atributos = Object.keys(dados);
     const valores = Object.values(dados);
 
-    if (atributos.length === 0) {
-      return res.status(400).json({ error: 'Nenhum atributo para atualizar.' });
-    }
-
     await editarPerfil(atributos, valores, id);
     res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
   } catch (error) {
@@ -95,9 +91,7 @@ router.post('/perfil-edit-empresa', authenticateToken, apenasEmpresa , uploadEmp
     }
     const atributos = Object.keys(dados);
     const valores = Object.values(dados);
-    if (atributos.length === 0) {
-      return res.status(400).json({ error: 'Nenhum atributo para atualizar.' });
-    }
+    
     await editarPerfilEmpresa(atributos, valores, cnpj);
     res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
   } catch (error) {

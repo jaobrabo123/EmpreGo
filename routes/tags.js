@@ -2,7 +2,7 @@
 const express = require('express');
 const pool = require('../config/db.js');
 const { popularTabelaTags } = require('../services/tagServices.js');
-const { authenticateToken } = require('../middlewares/auth.js');
+const { authenticateToken, apenasAdmins } = require('../middlewares/auth.js');
 const ErroDeValidacao = require('../utils/erroValidacao.js')
 
 //Router
@@ -34,7 +34,7 @@ router.post('/tags', authenticateToken, async (req, res) => {
   }
 });
 
-//Rota para pegar todas as tags
+//Rota para pegar  as tags
 router.get('/tags', async (req, res) => {
   try {
     const resultado = await pool.query('SELECT * FROM tags');
@@ -44,5 +44,15 @@ router.get('/tags', async (req, res) => {
     res.status(500).json({error: 'Erro ao buscar tags: ' + error.message});
   }
 });
+
+router.get('/tags-all', authenticateToken, apenasAdmins, async (req,res)=>{
+  try{
+    const tags = await pool.query(`select t.id, t.nome, c.email as email_candidato, t.data_criacao from tags t join candidatos c on t.candidato = c.id`)
+    res.status(200).json(tags.rows)
+  }
+  catch(erro){
+    res.status(500).json({ error: `Erro ao buscar tags: ${erro?.message||'erro desconhecido'}` });
+  }
+})
 
 module.exports = router;

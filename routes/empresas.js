@@ -48,7 +48,7 @@ router.post('/empresas', async (req , res)=>{
 
 router.get('/empresas', authenticateToken, apenasAdmins, async(req,res)=>{
     try{
-        const resultado = await pool.query('SELECT cnpj, nome_fant, telefone, email, razao_soci, cep, complemento, numero FROM empresas');
+        const resultado = await pool.query('SELECT cnpj, nome_fant, telefone, email, razao_soci, cep, complemento, numero, data_criacao FROM empresas');
         res.json(resultado.rows);
     }
     catch(erro){

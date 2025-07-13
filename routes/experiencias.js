@@ -65,7 +65,7 @@ router.get('/exps', authenticateToken, async (req, res) => {
 router.get('/exps-all', authenticateToken, apenasAdmins, async (req, res) =>{
   try{
     const experiencias = await pool.query(`
-      select e.id, e.titulo, e.descricao, c.email as email_candidato
+      select e.id, e.titulo, e.descricao, c.email as email_candidato, e.data_criacao
       from experiencias e join candidatos c 
       on e.candidato = c.id
     `)

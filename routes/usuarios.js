@@ -35,7 +35,7 @@ router.post('/candidatos', async (req, res) => {
 //Rota para pegar todos os usuários
 router.get('/candidatos', authenticateToken, apenasAdmins, async (req, res) => {
   try {
-    const resultado = await pool.query('SELECT id, nome, email, genero, data_nasc FROM candidatos');
+    const resultado = await pool.query('SELECT id, nome, email, genero, data_nasc, data_criacao FROM candidatos');
     res.json(resultado.rows);
   } catch (error) {
     res.status(500).json({ error: `Erro ao buscar usuários: ${error?.message||'erro desconhecido'}` });

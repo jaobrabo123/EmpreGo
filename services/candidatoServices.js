@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const pool = require("../config/db.js");
-const  {ErroDeValidacao } = require("../utils/erroClasses.js");
+const  { ErroDeValidacao } = require("../utils/erroClasses.js");
 
 async function popularTabelaCandidatos(nome, email, senha, genero, data_nasc) {
 
@@ -167,7 +167,11 @@ async function editarPerfil(atributos, valores, id) {
 
 }
 
-async function removerCandidato(id) {
+async function removerCandidato(id,idAdmin) {
+
+  if(id===idAdmin){
+    throw new ErroDeValidacao('Você não pode se remover kkkkkkkk')
+  }
 
   const chatsCandidato = await pool.query(
     `select id from chats where candidato = $1`,

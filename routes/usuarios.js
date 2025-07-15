@@ -55,11 +55,15 @@ router.get('/candidatos', authenticateToken, apenasAdmins, async (req, res) => {
 router.delete('/candidatos/:id', authenticateToken, apenasAdmins, async (req, res) => {
   try {
     const { id } = req.params;
+    const idAdmin = req.user.id;
 
-    await removerCandidato(id);
+    await removerCandidato(id, idAdmin);
 
     res.status(200).json({ message: "Candidato removido com sucesso" });
   } catch (erro) {
+    if (erro instanceof ErroDeValidacao) {
+      return res.status(400).json({ error: erro.message });
+    }
     res.status(500).json({ error: erro.message });
   }
 });

@@ -22,7 +22,7 @@ router.post('/login'/*, limiteLogin*/, async (req, res) => {
   try {
     const { email, senha } = req.body;
     if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
-    const resultado = await pool.query('SELECT * FROM candidatos WHERE email = $1', [email]);
+    const resultado = await pool.query('SELECT id, senha FROM candidatos WHERE email = $1', [email]);
     const candidato = resultado.rows[0];
 
     if(candidato && await bcrypt.compare(senha, candidato.senha)){
@@ -33,7 +33,7 @@ router.post('/login'/*, limiteLogin*/, async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
-        maxAge: 86400000
+        maxAge: 7*24*60*60*1000
       });
       res.status(200).json({ message: 'Logado com sucesso!' });
     }

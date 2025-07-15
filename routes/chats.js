@@ -3,7 +3,7 @@ const express = require('express');
 const pool = require('../config/db.js');
 const { enviarMensagem, criarChat } = require('../services/chatServices.js')
 const { authenticateToken } = require('../middlewares/auth.js');
-const ErroDeValidacao = require('../utils/erroValidacao.js')
+const {ErroDeValidacao} = require('../utils/erroClasses.js')
 
 //Router
 const router = express.Router();
@@ -27,18 +27,20 @@ router.get('/chats', authenticateToken, async (req, res)=>{
         const id = req.user.id
 
         if(tipo==='candidato'||tipo==='admin'){
-            const chats = await pool.query(`select c.id, c.empresa, c.candidato, e.nome_fant 
+            const chats = await pool.query(`
+                select c.id, c.empresa, c.candidato, e.nome_fant 
                 from chats c join empresas e
                 on c.empresa = e.cnpj
-                where candidato = $1 order by c.criado_em desc
+                where candidato = $1 order by c.data_criacao desc
             `, [id])
             return res.status(200).json({ chats: chats.rows, tipo: tipo });
         }else
         if(tipo==='empresa'){
-            const chats = await pool.query(`select c.id, c.empresa, c.candidato, e.nome 
+            const chats = await pool.query(`
+                select c.id, c.empresa, c.candidato, e.nome 
                 from chats c join candidatos e
                 on c.candidato = e.id
-                where empresa = $1 order by c.criado_em desc
+                where empresa = $1 order by c.data_criacao desc
             `, [id])
             return res.status(200).json({ chats: chats.rows, tipo: tipo });
         }else{

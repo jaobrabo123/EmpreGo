@@ -12,7 +12,7 @@
     <title>Painel-ADM</title>
 </head>
 
-<body>
+<body style="display: none;">
     <header>
         <div id="logo">
             <a href="./index.html" target="_self">
@@ -44,11 +44,13 @@
             <div id="radios">
                 <input type="checkbox" id="dataCriacao" name="dataCriacao">
                 <label for="dataCriacao">Data de criação</label>
+                <input type="checkbox" id="todosDados" name="todosDados">
+                <label for="todosDados">Todos os dados</label>
             </div>
-            <h2>Candidatos</h2>
+            <h2 id="titleTable">Candidatos</h2>
             <div id="tabela">
                 <p id="carregando">Carregando...</p>
-                <table>
+                <table id="tabelaContent">
                     <thead id="tabelaHead">
                         <tr>
                             
@@ -58,6 +60,14 @@
 
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div id="modalConfirmacao" class="modal">
+            <div class="modal-content">
+                <p id="textoConfirmacao">Tem certeza que deseja remover este item?</p>
+                <p id="textoDetalhes">Observações</p>
+                <button id="btnConfirmar">Confirmar</button>
+                <button id="btnCancelar">Cancelar</button>
             </div>
         </div>
     </div>

@@ -69,7 +69,7 @@ export async function carregarInfo() {
         }
       }else
       if(tipo==='empresa'){
-        const res = await fetch('/perfil-empresa', {
+        const res = await fetch('/perfil/empresa', {
             method: 'GET',
             credentials: 'include'
         });
@@ -88,11 +88,11 @@ export async function carregarInfo() {
 
 //Função pra deslogar
 export function logout(){
-    fetch('/logout', {
-        method: 'POST',
-        credentials: 'include'
-    }).then(() => {
-        alert('Você foi desconectado.');
-        window.location.href = './index.html';
-    });
+  fetch('/logout', {
+    method: 'POST',
+    credentials: 'include'
+  }).then(() => {
+    alert('Você foi desconectado.');
+    window.location.href = './index.html';
+  });
 }

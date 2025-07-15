@@ -12,16 +12,23 @@ const SECRET_KEY = process.env.JWT_SECRET;
 function authenticateToken(req, res, next) {
   const token = req.cookies.token;
 
-  if (!token) return res.status(401).json({ error: 'Token não fornecido' });
+  if (!token) return res.status(401).json({ error: 'Você não está logado.' });
 
   jwt.verify(token, SECRET_KEY, (err, user) => {
-    if (err && err.name === 'TokenExpiredError') {
-      return res.status(403).json({ error: 'Token expirado' });
-    }
-
     if (err) {
-      return res.status(403).json({ error: 'Token inválido' });
+      res.clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict'
+      });
+
+      if (err.name === 'TokenExpiredError') {
+        return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' });
+      }
+
+      return res.status(403).json({ error: 'Token inválido.' });
     }
+    
     req.user = user;
     next();
   });

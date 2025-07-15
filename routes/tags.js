@@ -1,9 +1,9 @@
 //Imports
 const express = require('express');
 const pool = require('../config/db.js');
-const { popularTabelaTags } = require('../services/tagServices.js');
-const { authenticateToken, apenasAdmins } = require('../middlewares/auth.js');
-const ErroDeValidacao = require('../utils/erroValidacao.js')
+const { popularTabelaTags, removerTag } = require('../services/tagServices.js');
+const { authenticateToken, apenasAdmins, apenasCandidatos } = require('../middlewares/auth.js');
+const {ErroDeValidacao} = require('../utils/erroClasses.js')
 
 //Router
 const router = express.Router();
@@ -45,7 +45,7 @@ router.get('/tags', async (req, res) => {
   }
 });
 
-router.get('/tags-all', authenticateToken, apenasAdmins, async (req,res)=>{
+router.get('/tags/all', authenticateToken, apenasAdmins, async (req,res)=>{
   try{
     const tags = await pool.query(`select t.id, t.nome, c.email as email_candidato, t.data_criacao from tags t join candidatos c on t.candidato = c.id`)
     res.status(200).json(tags.rows)
@@ -55,4 +55,25 @@ router.get('/tags-all', authenticateToken, apenasAdmins, async (req,res)=>{
   }
 })
 
-module.exports = router;
+router.delete('/tags/:id', authenticateToken, apenasCandidatos, async (req, res) =>{
+  try{
+    const { id } = req.params;
+    const idCandidato = req.user.id;
+    const tipo = req.user.tipo;
+
+    await removerTag(id, idCandidato, tipo);
+
+    res.status(200).json({ message: "Tag removida com sucesso." });
+  }
+  catch{
+    if (erro instanceof ErroDeAutorizacao) {
+      return res.status(403).json({ error: erro.message });
+    }else
+    if (erro instanceof ErroDeValidacao){
+      return res.status(400).json({ error: erro.message })
+    }
+    res.status(500).json({ error: "Erro ao remover tag: " + erro.message })
+  }
+})
+
+module.exports = router

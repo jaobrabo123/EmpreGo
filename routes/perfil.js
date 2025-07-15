@@ -4,7 +4,7 @@ const pool = require('../config/db.js');
 const { editarPerfil } = require('../services/candidatoServices.js');
 const { editarPerfilEmpresa } = require('../services/empresaServices.js')
 const { authenticateToken, apenasEmpresa, apenasCandidatos } = require('../middlewares/auth.js');
-const ErroDeValidacao = require('../utils/erroValidacao.js')
+const {ErroDeValidacao} = require('../utils/erroClasses.js')
 
 // Cloudinary + Multer
 const multer = require('multer');
@@ -59,7 +59,7 @@ router.get('/perfil', authenticateToken, apenasCandidatos, async (req, res) => {
 });
 
 //Rota para editar o perfil do usuário
-router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.single('foto'), async (req, res) =>{
+router.post('/perfil/edit', authenticateToken, apenasCandidatos, uploadPerfil.single('foto'), async (req, res) =>{
   try {
     const id = req.user.id;
     const dados = { ...req.body };
@@ -82,7 +82,7 @@ router.post('/perfil-edit', authenticateToken, apenasCandidatos, uploadPerfil.si
 })
 
 //Rota para editar o perfil da empresa
-router.post('/perfil-edit-empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), async (req, res) => {
+router.post('/perfil/empresa/edit', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), async (req, res) => {
   try {
     const cnpj = req.user.id;
     const dados = { ...req.body };
@@ -102,7 +102,7 @@ router.post('/perfil-edit-empresa', authenticateToken, apenasEmpresa , uploadEmp
   }
 });
 
-router.get('/perfil-empresa', authenticateToken, apenasEmpresa, async (req, res) => {
+router.get('/perfil/empresa', authenticateToken, apenasEmpresa, async (req, res) => {
   try{
     const cnpj = req.user.id;
 

@@ -112,7 +112,7 @@ async function enviarEdicao() {
   if (twitter) formData.append("twitter", twitter);
   if (pronomes) formData.append("pronomes", pronomes);
 
-  fetch("/perfil-edit", {
+  fetch("/perfil/edit", {
     method: "POST",
     credentials: 'include',
     body: formData,

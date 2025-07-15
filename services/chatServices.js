@@ -1,5 +1,5 @@
 const pool = require('../config/db.js');
-const ErroDeValidacao = require('../utils/erroValidacao.js')
+const { ErroDeValidacao } = require('../utils/erroClasses.js')
 
 async function criarChat(empresa, candidato) {
   
@@ -18,6 +18,6 @@ async function enviarMensagem(mensagem, de, para, chat){
 }
 
 module.exports = {
-    criarChat,
-    enviarMensagem
+  criarChat,
+  enviarMensagem
 }

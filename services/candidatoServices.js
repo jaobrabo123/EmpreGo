@@ -167,9 +167,9 @@ async function editarPerfil(atributos, valores, id) {
 
 }
 
-async function removerCandidato(id,idAdmin) {
+async function removerCandidato(cd,id) {
 
-  if(id===idAdmin){
+  if(String(cd)==String(id)){
     throw new ErroDeValidacao('Você não pode se remover kkkkkkkk')
   }
 

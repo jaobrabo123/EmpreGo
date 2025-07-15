@@ -52,12 +52,12 @@ router.get('/candidatos', authenticateToken, apenasAdmins, async (req, res) => {
   }
 });
 
-router.delete('/candidatos/:id', authenticateToken, apenasAdmins, async (req, res) => {
+router.delete('/candidatos/:cd', authenticateToken, apenasAdmins, async (req, res) => {
   try {
-    const { id } = req.params;
-    const idAdmin = req.user.id;
+    const { cd } = req.params;
+    const id = req.user.id;
 
-    await removerCandidato(id, idAdmin);
+    await removerCandidato(cd, id);
 
     res.status(200).json({ message: "Candidato removido com sucesso" });
   } catch (erro) {

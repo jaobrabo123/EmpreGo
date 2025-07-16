@@ -26,7 +26,7 @@ router.get('/chats', authenticateToken, async (req, res)=>{
         const tipo = req.user.tipo
         const id = req.user.id
 
-        if(tipo==='candidato'||tipo==='admin'){
+        if(tipo==='candidato'){
             const chats = await pool.query(`
                 select c.id, c.empresa, c.candidato, e.nome_fant 
                 from chats c join empresas e
@@ -61,7 +61,7 @@ router.post('/mensagens', authenticateToken, async (req, res)=>{
         let de = ''
         let para = ''
 
-        if(tipo==='candidato'||tipo==='admin'){
+        if(tipo==='candidato'){
             de = 'candidato'
             para = 'empresa'
         }else if(tipo==='empresa'){

@@ -10,11 +10,11 @@ async function popularTabelaTags(nome, id) {
 
 }
 
-async function removerTag(id, idCandidato, tipo) {
+async function removerTag(tg, id, nivel) {
   
-  if (!id) throw new ErroDeValidacao("O id da tag precisa ser fornecido.");
+  if (!tg) throw new ErroDeValidacao("O id da tag precisa ser fornecido.");
 
-  const resposta = await pool.query(`select candidato from tags where id = $1`, [id]);
+  const resposta = await pool.query(`select candidato from tags where id = $1`, [tg]);
 
   const tag = resposta.rows[0];
 
@@ -22,11 +22,11 @@ async function removerTag(id, idCandidato, tipo) {
     throw new ErroDeValidacao("Tag não encontrada.");
   }
 
-  if (tipo !== "admin" && idCandidato !== tag.candidato) {
+  if (nivel !== "admin" && id !== tag.candidato) {
     throw new ErroDeAutorizacao("A tag só pode ser removida pelo dono dela.");
   }
 
-  await pool.query(`delete from tags where id = $1`, [id]);
+  await pool.query(`delete from tags where id = $1`, [tg]);
 
 }
 

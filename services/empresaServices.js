@@ -160,6 +160,7 @@ async function removerEmpresa(cnpj) {
 
   }
 
+  await pool.query(`delete from tokens where empresa_cnpj = $1`, [cnpj])
   await pool.query(`delete from chats where empresa = $1`, [cnpj]);
   await pool.query(`delete from empresas where cnpj = $1`, [cnpj]);
 

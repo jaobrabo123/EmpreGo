@@ -27,7 +27,7 @@ async function carregarChats() {
     .then(data=>{
         console.log(data)
         let tipo = 0
-        if(data.tipo==='candidato'||data.tipo==='admin'){
+        if(data.tipo==='candidato'){
             tipo = 1
         }else
         if(data.tipo==='empresa'){

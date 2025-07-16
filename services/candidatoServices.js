@@ -175,7 +175,7 @@ async function removerCandidato(cd,id) {
 
   const chatsCandidato = await pool.query(
     `select id from chats where candidato = $1`,
-    [id]
+    [cd]
   );
 
   for (let i = 0; i < chatsCandidato.rows.length; i++) {
@@ -186,10 +186,11 @@ async function removerCandidato(cd,id) {
 
   }
 
-  await pool.query(`delete from chats where candidato = $1`, [id]);
-  await pool.query(`delete from tags where candidato = $1`, [id]);
-  await pool.query(`delete from experiencias where candidato = $1`, [id]);
-  await pool.query(`delete from candidatos where id = $1`, [id]);
+  await pool.query(`delete from tokens where candidato_id = $1`, [cd])
+  await pool.query(`delete from chats where candidato = $1`, [cd]);
+  await pool.query(`delete from tags where candidato = $1`, [cd]);
+  await pool.query(`delete from experiencias where candidato = $1`, [cd]);
+  await pool.query(`delete from candidatos where id = $1`, [cd]);
 
 }
 

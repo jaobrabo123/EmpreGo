@@ -25,11 +25,11 @@ async function popularTabelaExperiencias(titulo, descricao, imagem, id) {
 
 }
 
-async function removerExperiencia(id, idCandidato, tipo) {
+async function removerExperiencia(xp, id, nivel) {
 
-  if (!id) throw new ErroDeValidacao("O id da experiência precisa ser fornecido.");
+  if (!xp) throw new ErroDeValidacao("O id da experiência precisa ser fornecido.");
 
-  const resposta = await pool.query(`select candidato from experiencias where id = $1`, [id]);
+  const resposta = await pool.query(`select candidato from experiencias where id = $1`, [xp]);
 
   const experiencia = resposta.rows[0];
 
@@ -37,11 +37,11 @@ async function removerExperiencia(id, idCandidato, tipo) {
     throw new ErroDeValidacao("Experiência não encontrada.");
   }
 
-  if (tipo !== "admin" && idCandidato !== experiencia.candidato) {
+  if (nivel !== "admin" && id !== experiencia.candidato) {
     throw new ErroDeAutorizacao("A experiência só pode ser removida pelo dono dela.");
   }
 
-  await pool.query(`delete from experiencias where id = $1`, [id]);
+  await pool.query(`delete from experiencias where id = $1`, [xp]);
 
 }
 

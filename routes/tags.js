@@ -55,13 +55,13 @@ router.get('/tags/all', authenticateToken, apenasAdmins, async (req,res)=>{
   }
 })
 
-router.delete('/tags/:id', authenticateToken, apenasCandidatos, async (req, res) =>{
+router.delete('/tags/:tg', authenticateToken, apenasCandidatos, async (req, res) =>{
   try{
-    const { id } = req.params;
-    const idCandidato = req.user.id;
-    const tipo = req.user.tipo;
+    const { tg } = req.params;
+    const id = req.user.id;
+    const nivel = req.user.nivel;
 
-    await removerTag(id, idCandidato, tipo);
+    await removerTag(tg, id, nivel);
 
     res.status(200).json({ message: "Tag removida com sucesso." });
   }

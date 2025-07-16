@@ -62,13 +62,13 @@ router.get("/exps", authenticateToken, async (req, res) => {
   }
 });
 
-router.delete('/exps/:id', authenticateToken, apenasCandidatos, async (req, res) => {
+router.delete('/exps/:xp', authenticateToken, apenasCandidatos, async (req, res) => {
   try {
-    const { id } = req.params;
-    const idCandidato = req.user.id;
-    const tipo = req.user.tipo;
+    const { xp } = req.params;
+    const id = req.user.id;
+    const nivel = req.user.nivel;
 
-    await removerExperiencia(id, idCandidato, tipo);
+    await removerExperiencia(xp, id, nivel);
 
     res.status(200).json({ message: "Experiência removida com sucesso." });
 

@@ -2,8 +2,8 @@
 const express = require("express");
 const pool = require("../config/db.js");
 const { popularTabelaCandidatos, removerCandidato } = require("../services/candidatoServices.js");
-const {ErroDeValidacao} = require("../utils/erroClasses.js");
-const { authenticateToken, apenasAdmins } = require("../middlewares/auth.js");
+const { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
+const { authenticateToken, apenasAdmins, apenasCandidatos } = require("../middlewares/auth.js");
 
 //router
 const router = express.Router();
@@ -40,7 +40,7 @@ router.get('/candidatos', authenticateToken, apenasAdmins, async (req, res) => {
     const resultado = await pool.query(`SELECT 
       id, nome, email, genero, data_nasc, 
       descricao, cpf, estado, cidade, instagram,
-      github, youtube, twitter, pronomes, 
+      github, youtube, twitter, pronomes, nivel,
       data_criacao 
       FROM candidatos`
     );
@@ -52,17 +52,20 @@ router.get('/candidatos', authenticateToken, apenasAdmins, async (req, res) => {
   }
 });
 
-router.delete('/candidatos/:cd', authenticateToken, apenasAdmins, async (req, res) => {
+router.delete('/candidatos/:cd', authenticateToken, apenasCandidatos, async (req, res) => {
   try {
     const { cd } = req.params;
-    const id = req.user.id;
+    const { id, nivel } = req.user;
 
-    await removerCandidato(cd, id);
+    await removerCandidato(cd, id, nivel);
 
     res.status(200).json({ message: "Candidato removido com sucesso" });
   } catch (erro) {
-    if (erro instanceof ErroDeValidacao) {
-      return res.status(400).json({ error: erro.message });
+    if (erro instanceof ErroDeAutorizacao) {
+      return res.status(403).json({ error: erro.message });
+    }else
+    if (erro instanceof ErroDeValidacao){
+      return res.status(400).json({ error: erro.message })
     }
     res.status(500).json({ error: erro.message });
   }

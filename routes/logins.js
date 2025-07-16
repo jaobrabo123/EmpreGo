@@ -52,6 +52,9 @@ router.post('/login'/*, limiteLogin*/, async (req, res) => {
       res.status(401).json({ error: 'Credenciais inválidas.' });
     }
   } catch (error) {
+    if (error instanceof ErroDeValidacao){
+      return res.status(400).json({ error: error.message })
+    }
     res.status(500).json({ error: 'Erro ao fazer login: ' + error.message });
   }
 });
@@ -61,10 +64,10 @@ router.post('/login-empresa'/*, limiteLogin*/, async (req, res) =>{
     const { cnpj, senha } = req.body;
     if (!cnpj || !senha) return res.status(400).json({ error: 'CNPJ e senha são obrigatórios' });
 
-    const resultado = await pool.query('SELECT * FROM empresas WHERE cnpj = $1', [cnpj]);
+    const resultado = await pool.query('SELECT senha, cnpj FROM empresas WHERE cnpj = $1', [cnpj]);
     const empresa = resultado.rows[0];
     if(empresa && await bcrypt.compare(senha, empresa.senha)){
-      const token = jwt.sign({ id: empresa.cnpj, tipo: 'empresa' }, SECRET_KEY, { expiresIn: '1d' });
+      const token = jwt.sign({ id: empresa.cnpj, tipo: 'empresa', nivel: 'comum' }, SECRET_KEY, { expiresIn: '1d' });
       
       res.cookie('token', token, {
         httpOnly: true,

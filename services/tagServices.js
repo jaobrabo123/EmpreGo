@@ -14,6 +14,8 @@ async function removerTag(tg, id, nivel) {
   
   if (!tg) throw new ErroDeValidacao("O id da tag precisa ser fornecido.");
 
+  tg = Number(tg);
+
   const resposta = await pool.query(`select candidato from tags where id = $1`, [tg]);
 
   const tag = resposta.rows[0];

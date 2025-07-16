@@ -24,7 +24,7 @@ const titleTable = document.querySelector('#titleTable')
 const infoExtra = [
     'descricao','cpf','estado','cidade','instagram',
     'github','youtube','twitter','pronomes','setor',
-    'porte','data_fund','contato','site'
+    'porte','data_fund','contato','site','nivel'
 ]
 
 async function carregarTabela(tabela) {
@@ -283,8 +283,14 @@ async function removerTupla(tabela, id) {
         carregarTabela(tabela)
     }
     catch(erro){
-        console.error('Erro ao remover tupla:', erro.message);
-        alert('Erro ao remover tupla: ' + erro.message);
+        if(erro.status===401||erro.status===403){
+            alert(erro.message);
+            window.location.href = './index.html'
+        }
+        else{
+            console.error('Erro ao remover tupla:', erro.message);
+            alert('Erro ao remover tupla: ' + erro.message);
+        }
     }
 }
 

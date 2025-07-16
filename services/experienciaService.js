@@ -29,6 +29,8 @@ async function removerExperiencia(xp, id, nivel) {
 
   if (!xp) throw new ErroDeValidacao("O id da experiência precisa ser fornecido.");
 
+  xp = Number(xp);
+
   const resposta = await pool.query(`select candidato from experiencias where id = $1`, [xp]);
 
   const experiencia = resposta.rows[0];

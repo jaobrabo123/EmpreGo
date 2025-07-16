@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const pool = require('../config/db.js');
-const {ErroDeValidacao} = require('../utils/erroClasses.js');
+const { ErroDeValidacao, ErroDeAutorizacao } = require('../utils/erroClasses.js');
 
 async function popularTabelaEmpresas(cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, num) {
 
@@ -150,9 +150,19 @@ async function editarPerfilEmpresa(atributos, valores, cnpj) {
 
 }
 
-async function removerEmpresa(cnpj) {
+async function removerEmpresa(em, id, nivel) {
 
-  const chatsEmpresa = await pool.query(`select id from chats where empresa = $1`, [cnpj]);
+  if(!em || !id || !nivel){
+    throw new ErroDeValidacao('Campos faltando para a remoção.')
+  }
+
+  em = Number(em);
+
+  if(nivel!=='admin'&& em!==id){
+    throw new ErroDeAutorizacao("Apenas a própria empresa pode se remover.");
+  }
+
+  const chatsEmpresa = await pool.query(`select id from chats where empresa = $1`, [em]);
 
   for (let i = 0; i < chatsEmpresa.rows.length; i++) {
 
@@ -160,9 +170,9 @@ async function removerEmpresa(cnpj) {
 
   }
 
-  await pool.query(`delete from tokens where empresa_cnpj = $1`, [cnpj])
-  await pool.query(`delete from chats where empresa = $1`, [cnpj]);
-  await pool.query(`delete from empresas where cnpj = $1`, [cnpj]);
+  await pool.query(`delete from tokens where empresa_cnpj = $1`, [em])
+  await pool.query(`delete from chats where empresa = $1`, [em]);
+  await pool.query(`delete from empresas where cnpj = $1`, [em]);
 
 }
 

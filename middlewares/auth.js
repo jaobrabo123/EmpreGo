@@ -53,7 +53,7 @@ async function authenticateToken(req, res, next) {
 }
 
 function apenasEmpresa(req,res,next) {
-  if(req.user?.tipo==='empresa') return next()
+  if(req.user?.tipo==='empresa'||req.user.nivel==='admin') return next()
   return res.status(403).json({ error: 'Acesso apenas para empresas' });
 }
 

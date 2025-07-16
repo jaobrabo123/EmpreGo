@@ -3,7 +3,7 @@ const express = require("express");
 const pool = require("../config/db.js");
 const { popularTabelaEmpresas, removerEmpresa } = require("../services/empresaServices.js");
 const {ErroDeValidacao} = require("../utils/erroClasses.js");
-const { authenticateToken, apenasAdmins } = require("../middlewares/auth.js");
+const { authenticateToken, apenasAdmins, apenasEmpresa } = require("../middlewares/auth.js");
 
 //Router
 const router = express.Router();
@@ -77,14 +77,21 @@ router.get('/empresas', authenticateToken, apenasAdmins, async (req, res) => {
   }
 });
 
-router.delete('/empresas/:cnpj', authenticateToken, apenasAdmins,async (req, res) => {
+router.delete('/empresas/:em', authenticateToken, apenasEmpresa,async (req, res) => {
   try {
-    const { cnpj } = req.params;
+    const { em } = req.params;
+    const { id, nivel } = req.user;
 
-    await removerEmpresa(cnpj);
+    await removerEmpresa(em, id, nivel);
 
     res.status(200).json({ message: "Empresa removida com sucesso" });
   } catch (erro) {
+    if (erro instanceof ErroDeAutorizacao) {
+      return res.status(403).json({ error: erro.message });
+    }else
+    if (erro instanceof ErroDeValidacao){
+      return res.status(400).json({ error: erro.message })
+    }
     res.status(500).json({ error: erro.message });
   }
 });

@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const pool = require("../config/db.js");
-const  { ErroDeValidacao } = require("../utils/erroClasses.js");
+const  { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
 
 async function popularTabelaCandidatos(nome, email, senha, genero, data_nasc) {
 
@@ -167,10 +167,27 @@ async function editarPerfil(atributos, valores, id) {
 
 }
 
-async function removerCandidato(cd,id) {
+async function removerCandidato(cd, id, nivel) {
 
-  if(String(cd)==String(id)){
-    throw new ErroDeValidacao('Você não pode se remover kkkkkkkk')
+  if(!cd || !id || !nivel){
+    throw new ErroDeValidacao('Informações faltando para a remoção.')
+  }
+
+  cd = Number(cd);
+
+  if(nivel!=='admin'&& cd!==id){
+    throw new ErroDeAutorizacao("Apenas o próprio candidato pode se remover.");
+  }
+
+  if(nivel==='admin'){
+    if(cd===id){
+      throw new ErroDeAutorizacao('Você não pode se remover kkkkkkkk')
+    }else{
+      const resultado = await pool.query('select nivel from candidatos where id = $1',[cd])
+      const niv = resultado.rows[0].nivel;
+      if (niv === 'admin') throw new ErroDeAutorizacao('Você não pode remover outro admin.');
+    }
+    
   }
 
   const chatsCandidato = await pool.query(

@@ -30,6 +30,10 @@ app.use(express.static('public'));
 //Reativar depois dos testes
 //app.use(limiteGeral);
 
+//tasks
+require('./tasks/cronLimpezaMensagens.js')
+require('./tasks/cronLimpezaTokens.js')
+
 //Rotas
 app.use(loginRoutes);
 app.use(perfilRoutes);

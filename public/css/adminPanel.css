@@ -1,5 +1,3 @@
-/* adminPanel.css */
-
 #main {
     width: 100%;
     margin: 3rem auto;
@@ -103,6 +101,7 @@
 
 .modal-content {
     background-color: #fff;
+    color: #2c3e50;
     padding: 2rem;
     border-radius: 10px;
     max-width: 400px;

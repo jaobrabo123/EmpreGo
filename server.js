@@ -13,7 +13,7 @@ const tagRoutes = require('./routes/tags.js');
 const experienciaRoutes = require('./routes/experiencias.js');
 const empresaRoutes = require('./routes/empresas.js');
 const tiposRoutes = require('./routes/tipos.js');
-const chatRoutes = require('./routes/chats.js')
+const chatRoutes = require('./routes/chats.js');
 
 //Dotenv
 dotenv.config();

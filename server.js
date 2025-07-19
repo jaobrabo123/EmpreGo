@@ -23,15 +23,35 @@ const port = process.env.PORT || 3001;
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-let messages = [];
+let roomMessages = {};
 io.on('connection', socket =>{
     console.log(`Socket conectado: ${socket.id}`)
 
-    socket.emit('previousMessages', messages);
+    socket.on('joinRoom', (roomId) =>{
+        socket.join(roomId)
+        console.log(`Socket ${socket.id} entrou na sala ${roomId}`)
+
+        if (!roomMessages[roomId]) {
+            roomMessages[roomId] = [];
+        }
+        socket.emit('previousMessages', roomMessages[roomId]);
+    });
+
 
     socket.on('sendMessage', data =>{
-        messages.push(data);
-        socket.broadcast.emit('receivedMessage', data);
+        const roomId = data.room;
+
+        if (!roomMessages[roomId]) {
+            roomMessages[roomId] = [];
+        }
+
+        roomMessages[roomId].push(data);
+        
+        io.to(roomId).emit('receivedMessage', data)
+    });
+
+    socket.on('leaveRoom', (roomId) => {
+        socket.leave(roomId);
     });
 })
 

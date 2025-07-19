@@ -9,10 +9,22 @@
     background-color: aqua;
 }
 
-.message.direita{
+/* Oculta todos os elementos com apenas a classe .message */
+.message {
+    display: none;
+}
+
+/* Mostra apenas os elementos que têm .message + .direita ou .message + .esquerda */
+.message.direita,
+.message.esquerda {
+    display: block;
+}
+
+/* Estilos de alinhamento (opcional) */
+.direita {
     text-align: right;
 }
 
-.message.esquerda{
+.esquerda {
     text-align: left;
 }

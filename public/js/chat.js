@@ -1,4 +1,14 @@
-var socket = io('http://localhost:3001')
+var socket = io('http://localhost:3001');
+socket.on('connect', () => {
+    socket.emit('joinRoom', 'teste', (response) => {
+        if (response.error) {
+            console.error('Erro ao entrar na sala:', response.error);
+        } else {
+            console.log('Entrou na sala "teste" com sucesso!');
+        }
+    });
+});
+
 let chatsBack
 
 async function carregarChatsBack() {
@@ -10,6 +20,19 @@ async function carregarChatsBack() {
         const data = await res.json();
         if(!res.ok) throw ({ status: res.status, message: data.error });
         console.log(data);
+
+        const messages = document.querySelectorAll('.message')
+        if(data.tipo==='candidato'){
+            messages.forEach(msg => {
+                msg.classList.add(msg.classList.contains('empresa') ? 'esquerda' : 'direita');
+            });
+        }
+        else{
+            messages.forEach(msg => {
+                msg.classList.add(msg.classList.contains('candidato') ? 'esquerda' : 'direita');
+            });
+        }
+        
         chatsBack = data;
     }
     catch(erro){
@@ -20,7 +43,27 @@ async function carregarChatsBack() {
     }
 }
 
-carregarChatsBack()
+function exibirChatsFront() {
+    chatsBack.chats.forEach(data=>{
+        const chat = document.createElement('div');
+        chat.className = 'chat';
+
+        const nomeRemetente = document.createElement('p');
+        nomeRemetente.className = 'nomeRemetente';
+        const nomeRemetenteConteudo = chatsBack.tipo === 'candidato' ? data.nome_fant : data.nome;
+        nomeRemetente.textContent = nomeRemetenteConteudo;
+
+        chat.appendChild(nomeRemetente);
+
+        document.querySelector('#chats').appendChild(chat);
+    })
+}
+
+document.addEventListener('DOMContentLoaded', async ()=>{
+    await carregarChatsBack();
+    exibirChatsFront();
+})
+
 
 const messages = document.querySelectorAll('.messages')
 function renderMessage(message) {
@@ -30,12 +73,16 @@ function renderMessage(message) {
 
     const mensagemEAutor = document.createElement('p');
     mensagemEAutor.classList.add('message');
-    if(chatsBack.tipo==='candidato'){
-        mensagemEAutor.classList.add(type === 'empresa' ? 'esquerda' : 'direita');
+    mensagemEAutor.classList.add(type);
+    if(chatsBack?.tipo){
+        if(chatsBack.tipo==='candidato'){
+            mensagemEAutor.classList.add(type === 'empresa' ? 'esquerda' : 'direita');
+        }
+        else{
+            mensagemEAutor.classList.add(type === 'candidato' ? 'esquerda' : 'direita');
+        }
     }
-    else{
-        mensagemEAutor.classList.add(type === 'candidato' ? 'esquerda' : 'direita');
-    }
+
     mensagemEAutor.textContent = `${autor}: ${texto}`;
     messages[0].appendChild(mensagemEAutor);
 };
@@ -63,10 +110,11 @@ send.addEventListener('click', ()=>{
         var messageObject = {
             author: author,
             message: message,
+            room: 'teste',
             type: chatsBack.tipo,
         };
 
-        renderMessage(messageObject);
+        //renderMessage(messageObject);
 
         socket.emit('sendMessage', messageObject);
     }

@@ -20,6 +20,20 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+let messages = [];
+io.on('connection', socket =>{
+    console.log(`Socket conectado: ${socket.id}`)
+
+    socket.emit('previousMessages', messages);
+
+    socket.on('sendMessage', data =>{
+        messages.push(data);
+        socket.broadcast.emit('receivedMessage', data);
+    });
+})
 
 app.set('trust proxy', 1);
 
@@ -45,4 +59,4 @@ app.use(tiposRoutes);
 app.use(chatRoutes);
 
 //Porta do servidor
-app.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));
+server.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

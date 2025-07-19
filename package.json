@@ -18,7 +18,8 @@
     "multer": "^2.0.1",
     "multer-storage-cloudinary": "^4.0.0",
     "node-cron": "^4.2.1",
-    "pg": "^8.16.0"
+    "pg": "^8.16.0",
+    "socket.io": "^4.8.1"
   },
   "description": ""
 }

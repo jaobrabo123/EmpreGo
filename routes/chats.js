@@ -28,18 +28,20 @@ router.get('/chats', authenticateToken, async (req, res)=>{
 
         if(tipo==='candidato'){
             const chats = await pool.query(`
-                select c.id, c.empresa, c.candidato, e.nome_fant 
+                select c.id, c.empresa, c.candidato, e.nome_fant, can.nome 
                 from chats c join empresas e
                 on c.empresa = e.cnpj
+                join candidatos can on c.candidato = can.id
                 where candidato = $1 order by c.data_criacao desc
             `, [id])
             return res.status(200).json({ chats: chats.rows, tipo: tipo });
         }else
         if(tipo==='empresa'){
             const chats = await pool.query(`
-                select c.id, c.empresa, c.candidato, e.nome 
-                from chats c join candidatos e
-                on c.candidato = e.id
+                select c.id, c.empresa, c.candidato, can.nome, e.nome_fant 
+                from chats c join candidatos can
+                on c.candidato = can.id
+                join empresas e on c.empresa = e.cnpj
                 where empresa = $1 order by c.data_criacao desc
             `, [id])
             return res.status(200).json({ chats: chats.rows, tipo: tipo });

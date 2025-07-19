@@ -1,0 +1,18 @@
+.chat{
+    display: flex;
+    flex-direction: column;
+    background-color: gray;
+    max-width: 500px;
+}
+
+.messages{
+    background-color: aqua;
+}
+
+.message.direita{
+    text-align: right;
+}
+
+.message.esquerda{
+    text-align: left;
+}

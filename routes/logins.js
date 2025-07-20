@@ -4,7 +4,8 @@ const pool = require('../config/db.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { adicionarToken, removerToken } = require('../services/tokenService.js')
-const { limparCookieToken } = require('../utils/cookieUtils.js')
+const { limparCookieToken } = require('../utils/cookieUtils.js');
+const { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
 //Reativar depois dos testes
 //const { limiteLogin } = require('../middlewares/rateLimit.js');
 

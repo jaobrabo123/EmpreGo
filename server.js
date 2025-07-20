@@ -15,11 +15,18 @@ const empresaRoutes = require('./routes/empresas.js');
 const tiposRoutes = require('./routes/tipos.js');
 const chatRoutes = require('./routes/chats.js');
 
+//Sockets
+const setupChat = require('./sockets/chatSocket.js');
+
 //Dotenv
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+setupChat(io)
 
 app.set('trust proxy', 1);
 
@@ -45,4 +52,4 @@ app.use(tiposRoutes);
 app.use(chatRoutes);
 
 //Porta do servidor
-app.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));
+server.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

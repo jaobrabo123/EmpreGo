@@ -28,18 +28,20 @@ router.get('/chats', authenticateToken, async (req, res)=>{
 
         if(tipo==='candidato'){
             const chats = await pool.query(`
-                select c.id, c.empresa, c.candidato, e.nome_fant 
+                select c.id, c.empresa, c.candidato, e.nome_fant, can.nome 
                 from chats c join empresas e
                 on c.empresa = e.cnpj
+                join candidatos can on c.candidato = can.id
                 where candidato = $1 order by c.data_criacao desc
             `, [id])
             return res.status(200).json({ chats: chats.rows, tipo: tipo });
         }else
         if(tipo==='empresa'){
             const chats = await pool.query(`
-                select c.id, c.empresa, c.candidato, e.nome 
-                from chats c join candidatos e
-                on c.candidato = e.id
+                select c.id, c.empresa, c.candidato, can.nome, e.nome_fant 
+                from chats c join candidatos can
+                on c.candidato = can.id
+                join empresas e on c.empresa = e.cnpj
                 where empresa = $1 order by c.data_criacao desc
             `, [id])
             return res.status(200).json({ chats: chats.rows, tipo: tipo });
@@ -55,23 +57,14 @@ router.get('/chats', authenticateToken, async (req, res)=>{
 
 router.post('/mensagens', authenticateToken, async (req, res)=>{
     try{
-        const { mensagem, chat } = req.body;
+        const { autor, mensagem, chat, de } = req.body;
         const tipo = req.user.tipo
-
-        let de = ''
-        let para = ''
-
-        if(tipo==='candidato'){
-            de = 'candidato'
-            para = 'empresa'
-        }else if(tipo==='empresa'){
-            de = 'empresa'
-            para = 'candidato'
-        }else{
-            return res.status(401).json({ error: 'Tipo de usuário não reconhecido.'})
+        
+        if(de!==tipo){
+            return res.status(401).json({ error: 'Tipo enviado e tipo do token não coincidem!' });
         }
 
-        await enviarMensagem(mensagem, de, para, chat)
+        await enviarMensagem(autor, mensagem, de, chat)
 
         return res.status(201).json({ message: 'Mensagem enviada com sucesso!', tipo: tipo });
     }

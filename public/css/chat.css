@@ -28,3 +28,9 @@
 .esquerda {
     text-align: left;
 }
+
+.nomeEMinimize{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

@@ -48,12 +48,28 @@ function exibirChatsFront() {
         const chat = document.createElement('div');
         chat.className = 'chat';
 
+        const nomeEMinimize = document.createElement('div');
+        nomeEMinimize.className = 'nomeEMinimize';
+
         const nomeRemetente = document.createElement('p');
         nomeRemetente.className = 'nomeRemetente';
         const nomeRemetenteConteudo = chatsBack.tipo === 'candidato' ? data.nome_fant : data.nome;
         nomeRemetente.textContent = nomeRemetenteConteudo;
 
-        chat.appendChild(nomeRemetente);
+        const minimize = document.createElement('button')
+        minimize.className = 'minimize';
+        minimize.textContent = '➡️';
+
+        nomeEMinimize.appendChild(nomeRemetente);
+        nomeEMinimize.appendChild(minimize);
+
+        const msgsEEnviar = document.createElement('div');
+        msgsEEnviar.className = 'msgsEEnviar';
+
+        const messages = document.createElement('div');
+        
+
+        chat.appendChild(nomeEMinimize);
 
         document.querySelector('#chats').appendChild(chat);
     })

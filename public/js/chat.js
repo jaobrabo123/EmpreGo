@@ -38,8 +38,9 @@ async function carregarChatsBack() {
     catch(erro){
         if(erro.status===500){
             chatsBack = 'Erro de conexão com o Banco de Dados.'
-        }
-        chatsBack = `Erro ao pegar chats: ${erro.message}`;
+        }else{
+            chatsBack = `Erro ao pegar chats: ${erro.message}`;
+        } 
     }
 }
 
@@ -82,37 +83,10 @@ function exibirChatsFront() {
         send.className = 'send';
         send.id = `sendBack${data.id}`;
         send.textContent = 'Enviar';
-
-        msgsEEnviar.appendChild(messages);
-        msgsEEnviar.appendChild(messageInput);
-        msgsEEnviar.appendChild(send);
-
-        chat.appendChild(nomeEMinimize);
-        chat.appendChild(msgsEEnviar);
-
-        minimize.addEventListener('click', async ()=>{
-            await minimizeELoadMessages(msgsEEnviar, minimize, data.id, send)
-        })
-
-        document.querySelector('#chats').appendChild(chat);
-    })
-}
-
-async function minimizeELoadMessages(msgsEEnviar, minimize, chatIdBack, send){
-    console.log('click')
-    let display
-    if(msgsEEnviar.classList.contains('minimizado')){
-        socket.emit('joinRoom', chatIdBack, (response) => {
-            if (response.status==='error') {
-                alert('Erro ao entrar na sala:', response.message);
-            } else {
-                console.log(`Entrou na sala ${chatIdBack} com sucesso!`);
-            }
-        });
         send.addEventListener('click', async ()=>{
             var author = chatsBack.tipo === 'candidato' ? chatsBack.chats[0].nome : chatsBack.chats[0].nome_fant;
-            var message = document.querySelector(`#inputBack${chatIdBack}`).value;
-            document.querySelector(`#inputBack${chatIdBack}`).value = ''
+            var message = document.querySelector(`#inputBack${data.id}`).value;
+            document.querySelector(`#inputBack${data.id}`).value = ''
 
             console.log(chatsBack.tipo)
             
@@ -120,7 +94,7 @@ async function minimizeELoadMessages(msgsEEnviar, minimize, chatIdBack, send){
                 var messageObject = {
                     author: author,
                     message: message,
-                    room: chatIdBack,
+                    room: data.id,
                     type: chatsBack.tipo,
                 };
                 fetch('/mensagens',{
@@ -130,7 +104,7 @@ async function minimizeELoadMessages(msgsEEnviar, minimize, chatIdBack, send){
                     body: JSON.stringify({
                         autor: author,
                         mensagem: message,
-                        chat: chatIdBack,
+                        chat: data.id,
                         de: chatsBack.tipo,
                     })
                 })
@@ -153,12 +127,41 @@ async function minimizeELoadMessages(msgsEEnviar, minimize, chatIdBack, send){
                 
             }
         })
+
+        msgsEEnviar.appendChild(messages);
+        msgsEEnviar.appendChild(messageInput);
+        msgsEEnviar.appendChild(send);
+
+        chat.appendChild(nomeEMinimize);
+        chat.appendChild(msgsEEnviar);
+
+        minimize.addEventListener('click', async ()=>{
+            await minimizeELoadMessages(messages, msgsEEnviar, minimize, data.id)
+        })
+
+        document.querySelector('#chats').appendChild(chat);
+    })
+}
+
+async function minimizeELoadMessages(messages, msgsEEnviar, minimize, chatIdBack){
+    console.log('click')
+    let display
+    if(msgsEEnviar.classList.contains('minimizado')){
+        socket.emit('joinRoom', chatIdBack, (response) => {
+            if (response.status==='error') {
+                alert('Erro ao entrar na sala:', response.message);
+            } else {
+                console.log(`Entrou na sala ${chatIdBack} com sucesso!`);
+            }
+        });
+        
         display = 'block'
         minimize.textContent = '⬇️'
         msgsEEnviar.classList.remove('minimizado')
     }else{
         display = 'none'
         minimize.textContent = '➡️'
+        messages.innerHTML = '';
         msgsEEnviar.classList.add('minimizado')
     }
     msgsEEnviar.style.display = display;

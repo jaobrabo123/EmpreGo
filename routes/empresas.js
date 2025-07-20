@@ -13,7 +13,7 @@ router.post('/empresas', async (req, res) => {
   try {
     const { cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero } = req.body;
 
-    if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !complemento || !numero ) return res.status(400).json({ error: "Informações faltando para o cadastro!" });
+    if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !numero ) return res.status(400).json({ error: "Informações faltando para o cadastro!" });
 
     const pesquisaCnpj = await pool.query(
       "SELECT 1 FROM empresas WHERE cnpj = $1",

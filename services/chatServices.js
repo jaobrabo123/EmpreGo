@@ -9,10 +9,10 @@ async function criarChat(empresa, candidato) {
 
 }
 
-async function enviarMensagem(mensagem, de, para, chat){
+async function enviarMensagem(autor, mensagem, de, chat){
 
-  await pool.query(`insert into mensagens (mensagem, de, para, chat) values ($1, $2, $3, $4)`,
-    [mensagem, de, para, chat]
+  await pool.query(`insert into mensagens (mensagem, de, chat, autor) values ($1, $2, $3, $4)`,
+    [mensagem, de, chat, autor]
   )
 
 }

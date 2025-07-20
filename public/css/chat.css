@@ -34,3 +34,11 @@
     flex-direction: row;
     gap: 10px;
 }
+
+.msgsEEnviar{
+    display: none;
+}
+
+.msgsEEnviar.expandido{
+    display: block;
+}

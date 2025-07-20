@@ -1,5 +1,5 @@
-var socket = io('http://localhost:3001');
-socket.on('connect', () => {
+var socket = io('https://tcc-vjhk.onrender.com');
+/*socket.on('connect', () => {
     socket.emit('joinRoom', 'teste', (response) => {
         if (response.error) {
             console.error('Erro ao entrar na sala:', response.error);
@@ -7,7 +7,7 @@ socket.on('connect', () => {
             console.log('Entrou na sala "teste" com sucesso!');
         }
     });
-});
+});*/
 
 let chatsBack
 
@@ -65,14 +65,103 @@ function exibirChatsFront() {
 
         const msgsEEnviar = document.createElement('div');
         msgsEEnviar.className = 'msgsEEnviar';
+        msgsEEnviar.classList.add('minimizado');
+        msgsEEnviar.style.display = 'none';
 
         const messages = document.createElement('div');
-        
+        messages.className = 'messages';
+        messages.id = `idChatBack${data.id}`;
+
+        const messageInput = document.createElement('input');
+        messageInput.type = 'text';
+        messageInput.className = 'messageInput';
+        messageInput.id = `inputBack${data.id}`;
+        messageInput.placeholder = 'Digite aqui sua mensagem';
+
+        const send = document.createElement('button');
+        send.className = 'send';
+        send.id = `sendBack${data.id}`;
+        send.textContent = 'Enviar';
+
+        msgsEEnviar.appendChild(messages);
+        msgsEEnviar.appendChild(messageInput);
+        msgsEEnviar.appendChild(send);
 
         chat.appendChild(nomeEMinimize);
+        chat.appendChild(msgsEEnviar);
+
+        minimize.addEventListener('click', async ()=>{
+            await minimizeELoadMessages(msgsEEnviar, minimize, data.id, send)
+        })
 
         document.querySelector('#chats').appendChild(chat);
     })
+}
+
+async function minimizeELoadMessages(msgsEEnviar, minimize, chatIdBack, send){
+    console.log('click')
+    let display
+    if(msgsEEnviar.classList.contains('minimizado')){
+        socket.emit('joinRoom', chatIdBack, (response) => {
+            if (response.status==='error') {
+                alert('Erro ao entrar na sala:', response.message);
+            } else {
+                console.log(`Entrou na sala ${chatIdBack} com sucesso!`);
+            }
+        });
+        send.addEventListener('click', async ()=>{
+            var author = chatsBack.tipo === 'candidato' ? chatsBack.chats[0].nome : chatsBack.chats[0].nome_fant;
+            var message = document.querySelector(`#inputBack${chatIdBack}`).value;
+            document.querySelector(`#inputBack${chatIdBack}`).value = ''
+
+            console.log(chatsBack.tipo)
+            
+            if(author.length > 0 && message.length > 0){
+                var messageObject = {
+                    author: author,
+                    message: message,
+                    room: chatIdBack,
+                    type: chatsBack.tipo,
+                };
+                fetch('/mensagens',{
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        autor: author,
+                        mensagem: message,
+                        chat: chatIdBack,
+                        de: chatsBack.tipo,
+                    })
+                })
+                .then(async res=>{
+                    const data = res.json();
+                    if(!res.ok) throw ({status: res.status, message: data.error});
+
+                    socket.emit('sendMessage', messageObject);
+                })
+                .catch(erro=>{
+                    if(erro.status===500){
+                        alert(`Erro ao enviar a mensagem (A culpa não foi sua, tente novamente).`)
+                    }
+                    else{
+                        alert(`${erro.message}: ${erro.status}`)
+                    }
+                })
+
+                //renderMessage(messageObject);
+                
+            }
+        })
+        display = 'block'
+        minimize.textContent = '⬇️'
+        msgsEEnviar.classList.remove('minimizado')
+    }else{
+        display = 'none'
+        minimize.textContent = '➡️'
+        msgsEEnviar.classList.add('minimizado')
+    }
+    msgsEEnviar.style.display = display;
 }
 
 document.addEventListener('DOMContentLoaded', async ()=>{
@@ -86,6 +175,7 @@ function renderMessage(message) {
     const texto = message.message;
     const autor = message.author;
     const type = message.type;
+    const room = message.room;
 
     const mensagemEAutor = document.createElement('p');
     mensagemEAutor.classList.add('message');
@@ -100,7 +190,7 @@ function renderMessage(message) {
     }
 
     mensagemEAutor.textContent = `${autor}: ${texto}`;
-    messages[0].appendChild(mensagemEAutor);
+    document.querySelector(`#idChatBack${room}`).appendChild(mensagemEAutor);
 };
 
 socket.on('previousMessages', function(messages){
@@ -113,9 +203,9 @@ socket.on('receivedMessage', function(message){
     renderMessage(message)
 })
 
-const send = document.querySelector('#send')
+/*const send1 = document.querySelector('#send')
 
-send.addEventListener('click', ()=>{
+send1.addEventListener('click', ()=>{
     var author = chatsBack.tipo === 'candidato' ? chatsBack.chats[0].nome : chatsBack.chats[0].nome_fant;
     var message = document.querySelector('#message').value;
     document.querySelector('#message').value = ''
@@ -134,4 +224,4 @@ send.addEventListener('click', ()=>{
 
         socket.emit('sendMessage', messageObject);
     }
-})
+})*/

@@ -15,6 +15,9 @@ const empresaRoutes = require('./routes/empresas.js');
 const tiposRoutes = require('./routes/tipos.js');
 const chatRoutes = require('./routes/chats.js');
 
+//Sockets
+const setupChat = require('./sockets/chatSocket.js');
+
 //Dotenv
 dotenv.config();
 
@@ -23,37 +26,7 @@ const port = process.env.PORT || 3001;
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-let roomMessages = {};
-io.on('connection', socket =>{
-    console.log(`Socket conectado: ${socket.id}`)
-
-    socket.on('joinRoom', (roomId) =>{
-        socket.join(roomId)
-        console.log(`Socket ${socket.id} entrou na sala ${roomId}`)
-
-        if (!roomMessages[roomId]) {
-            roomMessages[roomId] = [];
-        }
-        socket.emit('previousMessages', roomMessages[roomId]);
-    });
-
-
-    socket.on('sendMessage', data =>{
-        const roomId = data.room;
-
-        if (!roomMessages[roomId]) {
-            roomMessages[roomId] = [];
-        }
-
-        roomMessages[roomId].push(data);
-        
-        io.to(roomId).emit('receivedMessage', data)
-    });
-
-    socket.on('leaveRoom', (roomId) => {
-        socket.leave(roomId);
-    });
-})
+setupChat(io)
 
 app.set('trust proxy', 1);
 

@@ -1,0 +1,1133 @@
+/* Reset & base */
+* {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  line-height: 1.5;
+  scroll-behavior: smooth;
+  /* Remover estas linhas:
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px;
+  */
+}
+
+:root {
+  /* Sistema de cores moderno */
+  --text-color: #ffffff;
+  --text-secondary-color: #94a3b8;
+  --text-muted: #64748b;
+  
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #60a5fa;
+  
+  --bg-color: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-light: #334155;
+  
+  --accent: #f97316;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  
+  /* Elementos de UI */
+  --card-bg: #1e293b;
+  --border-color: #334155;
+  --btn-primary: #3b82f6;
+  --btn-hover: #2563eb;
+  
+  /* Espaçamento */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Arredondamento */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+}
+
+.container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --------------------------Header--------------------- */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  z-index: 150;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+header > .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+#menu-toggle {
+  display: flex !important;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  margin-right: auto;
+}
+
+#menu-back {
+  display: flex !important;
+  position: absolute;
+  top: 15px;
+  left: 24px;
+  z-index: 201;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+#menu-toggle:hover,
+#menu-back:hover {
+  background: #ffffff5e;
+}
+
+/* --------------------------LOGO HEADER--------------------- */
+#logoimg {
+  width: auto;
+  height: 42px;
+}
+
+#nomedosite {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 2s ease;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-size: 1.7em !important;
+  text-shadow: 0 0 25px var(--accent);
+  position: relative;
+  right: 20px;
+}
+
+#logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color);
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-right: auto;
+  position: relative;
+  right: 20px;
+}
+
+/* --------------------------BARRA DE PESQUISA--------------------- */
+.search-bar {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 700px;
+  min-width: 250px;
+  background: var(--bg-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 0 var(--spacing-md);
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.search-bar:focus-within {
+  box-shadow: 0 0 0 2px var(--primary-light);
+  border-color: var(--primary);
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.search-bar input::placeholder {
+  color: var(--text-secondary-color);
+}
+
+.search-bar button {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin: 4px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.search-bar button:hover {
+  background: var(--primary-dark);
+}
+
+/* --------------------------FILTROS--------------------- */
+.filters {
+  position: relative;
+  right: 40px;
+  margin-left: auto;
+  margin-right: var(--spacing-md);
+}
+
+.filter-dropdown-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.filter-dropdown-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filter-label {
+  color: #e0e0e0;
+  user-select: none;
+}
+
+.filter-chips-container {
+  display: none;
+  position: absolute;
+  top: 51px;
+  right: 0;
+  background: #222;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  min-width: 320px;
+  z-index: 500;
+}
+
+.filter-chips-container.open {
+  display: block;
+}
+
+.filter-group {
+  margin-bottom: 10px;
+  border: none;
+  padding: 0;
+}
+
+.filter-group legend {
+  color: #ccc;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-chip {
+  background: #333;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, transform 0.1s;
+  user-select: none;
+}
+
+.filter-chip:hover {
+  background: #007BFF;
+}
+
+.filter-chip:active {
+  transform: scale(0.96);
+}
+
+.filter-chip[aria-pressed="true"] {
+  background: #007BFF;
+  color: #fff;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.filter-actions button {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.filter-confirm {
+  background: #007BFF;
+  color: #fff;
+}
+
+.filter-confirm:hover {
+  background: #0069d9;
+}
+
+.filter-clear {
+  background: #555;
+  color: #fff;
+}
+
+.filter-clear:hover {
+  background: #444;
+}
+
+/* --------------------------FILTROS/EMPRESA--------------------- */
+
+/* Estilos para os chips clicáveis */
+.tag-chip {
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  position: relative;
+}
+
+.tag-chip:hover {
+  background: var(--primary) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.tag-chip:active {
+  transform: translateY(0);
+}
+
+/* Efeito de feedback visual ao clicar */
+.tag-chip.clicked {
+  animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Estilo específico para o chip de localização */
+.location-chip {
+  background: var(--primary-dark) !important;
+  color: white;
+  font-weight: 500;
+}
+
+/* Remover qualquer estilo de imagem que possa existir */
+.tag-chip img {
+  display: none !important;
+}
+
+/* -----------------Perfil no header--------------------*/
+.header-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: transparent;
+  padding: 0 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: auto;
+}
+
+.header-profile:hover {
+  background: #23272f;
+}
+
+.header-profile .user-avatar {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.profile-dropdown {
+  display: none;
+  position: fixed;
+  top: 64px;
+  right: var(--spacing-md);
+  background: #282828;
+  color: white;
+  width: 250px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 9999;
+  animation: dropdown-fade-in 0.18s;
+}
+
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-dropdown.show {
+  display: flex;
+}
+
+.profile-dropdown .profile-info {
+  padding: 8px 16px;
+}
+
+.profile-dropdown .profile-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile-dropdown .profile-username {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #aaa;
+}
+
+.profile-dropdown a {
+  font-size: 0.9rem;
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.profile-dropdown hr {
+  border: none;
+  border-top: 1px solid #444;
+  margin: 4px 0;
+}
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+  background: #3e3e3e;
+}
+
+/* --------------------------Main Content--------------------- */
+main {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 70px auto 0;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* --------------------------Slider--------------------- */
+/* Estilos personalizados para o slider com Swiper */
+.recomendacoes-swiper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  position: relative;
+  border-radius: 18px;
+}
+
+
+
+/* Estilo dos slides */
+.swiper-slide {
+  background-color: #000;
+  color: #fff;
+  padding: 3rem 2rem;
+  box-sizing: border-box;
+  height: auto;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+/* Slide ativo */
+.swiper-slide-active {
+  opacity: 1;
+}
+
+/* Conteúdo dentro do slide */
+.slide-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Nome da empresa */
+.slide-empresa {
+  display: block;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+}
+
+/* Título do depoimento */
+.slide-titulo {
+  font-size: 2rem;
+  margin: 0 0 1.5rem;
+  color: #fff;
+  line-height: 1.2;
+}
+
+/* Texto do depoimento */
+.slide-texto {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+  padding: 0;
+  font-style: italic;
+  position: relative;
+}
+
+/* Metadados (autor e data) */
+.slide-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* Estilo personalizado para as setas de navegação com sombras cinzas */
+.swiper-button-next{
+  position: absolute;
+  transform: translate(50%, -50%);
+  z-index: 10;
+}
+
+.swiper-button-prev {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.swiper-button-next:hover{
+ position: absolute;
+  width: 250px; 
+  height: 750px;
+  background-color: rgba(255, 255, 255, 0); 
+  box-shadow: inset -120px 0 100px rgba(255, 255, 255, 0.8);
+
+}
+
+.swiper-button-prev:hover {
+  position: absolute;
+  width: 250px; 
+  height: 750px;
+  background-color: rgba(255, 255, 255, 0); 
+  box-shadow: inset 120px 0 100px rgba(255, 255, 255, 0.8);
+}
+
+/* Ícones das setas */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  position: absolute;
+  width: 250px; 
+  height: 750px;
+}
+
+
+/* Estilo personalizado para a paginação (dots) */
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: red;
+  border: 2px solid white;
+  opacity: 1;
+  transition: transform 0.3s ease-in-out;
+}
+
+.swiper-pagination-bullet-active {
+  transform: scale(1.2); 
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+}
+
+.swiper-pagination-bullet::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: rgb(255, 255, 255);
+  border-radius: 50%;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .slide-titulo {
+    font-size: 1.5rem;
+  }
+  
+  .slide-texto {
+    font-size: 1rem;
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .swiper-slide {
+    padding: 2rem 1.5rem;
+  }
+  
+  .slide-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 1rem;
+  }
+}
+
+/* -------------------------- Cartões de Empresas ---------------------- */
+.empresas-section {
+  padding: 25px 0;
+  margin-top: var(--spacing-xl);
+  width: 100%;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xl);
+  color: var(--text-color);
+  text-align: center;
+  position: relative;
+  padding-bottom: var(--spacing-sm);
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: var(--radius-full);
+}
+
+.empresas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.empresa-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid var(--border-color);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.empresa-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-light);
+}
+
+.card-header {
+  position: relative;
+  height: 130px;
+  background-color: var(--bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--primary-dark), transparent);
+  opacity: 0.3;
+}
+
+.empresa-logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--bg-secondary);
+  background-color: white;
+  box-shadow: var(--shadow-md);
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.empresa-card:hover .empresa-logo {
+  transform: scale(1.05);
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ccc;
+  transition: all 0.3s ease;
+  z-index: 2;
+  backdrop-filter: blur(2px);
+}
+
+.favorite-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+  transform: scale(1.1);
+}
+
+.favorite-btn.active {
+  color: var(--warning);
+}
+
+.card-body {
+  padding: var(--spacing-lg);
+  flex: 1;
+}
+
+.empresa-nome {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-color);
+}
+
+.empresa-descricao {
+  font-size: 0.95rem;
+  color: var(--text-secondary-color);
+  margin-bottom: var(--spacing-md);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Estilos de bandeira e localização substituídos pelos tag-chips */
+
+.ver-mais-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ver-mais-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.ver-todas {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+   width: 100%;
+}
+
+.ver-todas-btn {
+  display: inline-block;
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-full);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.ver-todas-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* --------------------------Sidebar--------------------- */
+aside {
+  width: 280px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform: translateX(-100%);
+  z-index: 300;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  box-shadow: var(--shadow-lg);
+  padding-top: var(--spacing-lg);
+}
+
+aside.open {
+  transform: translateX(0);
+}
+
+.sidebar-right {
+  padding: 0.50rem 1.5rem 1rem 1.5rem;
+}
+
+#logo_side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: auto;
+  user-select: none;
+  position: relative;
+  bottom: 1.2rem;
+  left: 49px;
+}
+
+#logo_img {
+  width: 40px;
+  height: auto;
+  margin-right: -7px;
+}
+
+.logo_side_name {
+  font-weight: 900;
+  font-size: 1.7rem;
+  color: #ffffff;
+}
+
+nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+nav li {
+  margin-bottom: 0.4rem;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.72rem 1rem;
+  font-size: 0.95rem;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 6px;
+  user-select: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+nav a svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  stroke: #475569;
+  stroke-width: 1.5;
+}
+
+nav a.active,
+nav a:hover {
+  background-color: #e0e7ff;
+  color: #2563eb;
+}
+
+nav a.active svg,
+nav a:hover svg {
+  stroke: #2563eb;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .empresas-container {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  
+  main {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 992px) {
+  header {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .search-bar {
+    max-width: 400px;
+  }
+  
+  .filter-label {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .empresas-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+  }
+  
+  .search-bar {
+    max-width: 300px;
+  }
+  
+  .slider {
+    height: 180px;
+  }
+}
+
+@media (max-width: 576px) {
+  header {
+    height: 60px;
+    padding: 0 var(--spacing-sm);
+  }
+  
+  #logoimg {
+    height: 32px;
+  }
+  
+  #nomedosite {
+    font-size: 1.3em !important;
+  }
+  
+  .search-bar {
+    min-width: 180px;
+  }
+  
+  .empresas-container {
+    grid-template-columns: 1fr;
+  }
+  
+  main {
+    margin-top: 60px;
+    padding: var(--spacing-sm);
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+}
+/* Estilos para os chips/tags nas empresas */
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-chip {
+  background: var(--bg-light);
+  color: var(--text-color);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.location_chip {
+  background: var(--primary-dark);
+  color: white;
+}
+
+.tag-chip img {
+  width: 16px;
+  height: 11px;
+  border-radius: 2px;
+  object-fit: cover;
+  margin-right: 2px;
+}
+
+/* Ajuste no card-footer para melhor acomodar os chips */
+.card-footer {
+  padding: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.card-meta {
+  flex: 1;
+  min-width: 150px;
+}

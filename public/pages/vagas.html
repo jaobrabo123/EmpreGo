@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="EmpreGo - Encontre as melhores vagas de emprego">
+  <link rel="stylesheet" href="../css/vagas.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <script defer src="../js/vagas.js"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>EmpreGo - Encontre sua vaga ideal</title>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <!-- menu -->
+      <button class='bx bx-menu' id="menu-toggle" aria-label="abrir menu"></button>
+      <!-- Nossa logo 1  -->
+      <div id="logo">
+        <a href="index.html">
+          <img src="../assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" id="logoimg">
+        </a>
+        <a href="index.html" id="nomedosite">Empre<span>Go</span></a>
+      </div>
+      <!-- Barra de pesquisa -->
+      <div class="search-bar">
+        <input type="text" placeholder="Pesquisar vagas..." />
+        <button>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg" width="24px" fill="#fff">
+            <path
+              d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+          </svg>
+        </button>
+      </div>
+      <!-- filtragem -->
+      <div class="filters">
+        <button class="filter-dropdown-toggle" id="filter-toggle" aria-label="Abrir filtros" aria-expanded="false"
+          aria-controls="filter-chips-container">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000">
+            <path d="M710-150q-63 0-106.5-43.5T560-300q0-63 43.5-106.5T710-450q63 0 106.5 43.5T860-300q0 63-43.5 106.5T710-150Zm0-80q29 0 49.5-20.5T780-300q0-29-20.5-49.5T710-370q-29 0-49.5 20.5T640-300q0 29 20.5 49.5T710-230Zm-550-30v-80h320v80H160Zm90-250q-63 0-106.5-43.5T100-660q0-63 43.5-106.5T250-810q63 0 106.5 43.5T400-660q0 63-43.5 106.5T250-510Zm0-80q29 0 49.5-20.5T320-660q0-29-20.5-49.5T250-730q-29 0-49.5 20.5T180-660q0 29 20.5 49.5T250-590Zm230-30v-80h320v80H480Zm230 320ZM250-660Z"/>
+          </svg>
+          <span class="filter-label">Filtragem</span>
+        </button>
+
+        <div class="filter-chips-container" id="filter-chips-container">
+
+          <!-- Grupo: Nível -->
+          <fieldset class="filter-group">
+            <legend>Nível</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="junior" aria-pressed="false"
+                title="Nível Júnior">Júnior</button>
+              <button type="button" class="filter-chip" data-value="pleno" aria-pressed="false">Pleno</button>
+              <button type="button" class="filter-chip" data-value="senior" aria-pressed="false">Sênior</button>
+              <button type="button" class="filter-chip" data-value="estagiario" aria-pressed="false">Estagiário</button>
+              <button type="button" class="filter-chip" data-value="trainee" aria-pressed="false">Trainee</button>
+              <button type="button" class="filter-chip" data-value="tecnico" aria-pressed="false">Técnico</button>
+            </div>
+          </fieldset>
+          <hr>
+
+          <!-- Grupo: Tipo -->
+          <fieldset class="filter-group">
+            <legend>Tipo</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="clt" aria-pressed="false"
+                title="CLT: Contrato de trabalho tradicional">CLT</button>
+              <button type="button" class="filter-chip" data-value="pj" aria-pressed="false">PJ</button>
+              <button type="button" class="filter-chip" data-value="freelancer" aria-pressed="false">Freelancer</button>
+              <button type="button" class="filter-chip" data-value="temporario" aria-pressed="false">Temporário</button>
+            </div>
+          </fieldset>
+
+          <hr>
+
+          <!-- Grupo: Jornada -->
+          <fieldset class="filter-group">
+            <legend>Jornada</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="meio-periodo" aria-pressed="false">Meio
+                período</button>
+              <button type="button" class="filter-chip" data-value="integral" aria-pressed="false">Integral</button>
+              <button type="button" class="filter-chip" data-value="flexivel" aria-pressed="false">Flexível</button>
+            </div>
+          </fieldset>
+
+          <hr>
+
+          <!-- Grupo: Salário -->
+          <fieldset class="filter-group">
+            <legend>Salário</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="0-500" aria-pressed="false">R$ 0-500</button>
+              <button type="button" class="filter-chip" data-value="500-1500" aria-pressed="false">R$ 500-1500</button>
+              <button type="button" class="filter-chip" data-value="1500-3000" aria-pressed="false">R$
+                1500-3000</button>
+              <button type="button" class="filter-chip" data-value="3000-5000" aria-pressed="false">R$
+                3000-5000</button>
+              <button type="button" class="filter-chip" data-value="5000+" aria-pressed="false">R$ 5000+</button>
+            </div>
+          </fieldset>
+
+          <hr>
+
+          <!-- Grupo: Área -->
+          <fieldset class="filter-group">
+            <legend>Área</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="ti" aria-pressed="false">TI</button>
+              <button type="button" class="filter-chip" data-value="pintura" aria-pressed="false">Pintura</button>
+              <button type="button" class="filter-chip" data-value="vendas" aria-pressed="false">Vendas</button>
+              <button type="button" class="filter-chip" data-value="rh" aria-pressed="false">RH</button>
+              <button type="button" class="filter-chip" data-value="administrativo"
+                aria-pressed="false">Administrativo</button>
+            </div>
+          </fieldset>
+
+          <div class="filter-actions">
+            <button type="button" class="filter-confirm" aria-label="Aplicar filtros selecionados">Confirmar filtros</button>
+            <button type="button" class="filter-clear" aria-label="Limpar todos os filtros">Limpar filtros</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Perfil no header -->
+      <div class="header-profile" id="profile-toggle">
+        <div class="user-avatar">A</div>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <div class="profile-info">
+            <p class="profile-name">nome VISIVEL</p>
+            <p class="profile-username">nome do perfil</p>
+            <a href="#">Acessar perfil</a>
+          </div>
+          <hr>
+          <button>Editar perfil</button>
+          <button>Sair</button>
+          <hr>
+          <button>Notificações</button>
+          <button>Chats</button>
+          <hr>
+          <button>Configurações</button>
+          <button>Modo: claro</button>
+          <button>Ajuda</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside>
+    <div class="sidebar-right">
+      <!-- menu -->
+      <i class='bx bx-menu' id="menu-back" aria-label="fechar menu"></i>
+      <div id="logo_side">
+        <!-- nossa logo 2 -->
+        <a href="../pages/vagas.html">
+          <img src="../assets/imgs/BIGSlogo.png" alt="Logo" id="logo_img">
+        </a>
+        <div class="logo_side_name">EmpreGo</div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#" class="active">Eventos</a></li>
+          <hr>
+          <li><a href="#">Favoritos</a></li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <main>
+  <!-- Slider de Recomendações com Swiper -->
+<section class="recomendacoes-swiper swiper" aria-label="Recomendações de clientes">
+  <div class="swiper-wrapper">
+    
+    <!-- Slide 1 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">TechSolutions Inc.</span>
+        <h3 class="slide-titulo">Parceria Excepcional</h3>
+        <blockquote class="slide-texto">
+          "Trabalhar com esta equipe foi uma experiência transformadora para nosso negócio. A qualidade do serviço superou todas as expectativas e os resultados foram visíveis já no primeiro mês de colaboração."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Carlos Mendes</span>
+          <span class="slide-data">15 de Março, 2023</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slide 2 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">Global Innovations</span>
+        <h3 class="slide-titulo">Profissionalismo Notável</h3>
+        <blockquote class="slide-texto">
+          "Recomendo fortemente os serviços prestados. A equipe demonstrou um nível de profissionalismo raro no mercado, com atenção aos detalhes e prazos rigorosamente cumpridos. Uma parceria que certamente continuaremos no futuro."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Ana Beatriz Silva</span>
+          <span class="slide-data">2 de Abril, 2023</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slide 3 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">Digital Ventures</span>
+        <h3 class="slide-titulo">Resultados Exponenciais</h3>
+        <blockquote class="slide-texto">
+          "Em menos de 6 meses, nossa presença online cresceu 300% graças ao trabalho meticuloso desta equipe. A abordagem estratégica e a capacidade de adaptação às necessidades do nosso setor foram impressionantes."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Ricardo Almeida</span>
+          <span class="slide-data">22 de Maio, 2023</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slide 4 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">Future Labs</span>
+        <h3 class="slide-titulo">Inovação Contínua</h3>
+        <blockquote class="slide-texto">
+          "O que mais impressiona é a capacidade de inovar constantemente, trazendo soluções que não apenas resolvem problemas imediatos, mas preparam nossa empresa para os desafios futuros. Uma relação de confiança construída ao longo de anos."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Fernanda Oliveira</span>
+          <span class="slide-data">10 de Junho, 2023</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navegação -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+  
+  <!-- Paginação (dots) -->
+  <div class="swiper-pagination"></div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const swiper = new Swiper('.recomendacoes-swiper', {
+    loop: true,
+    effect: 'fade',
+    fadeEffect: {
+      crossFade: true
+    },
+    
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    
+    // Configurações de acessibilidade
+    a11y: {
+      prevSlideMessage: 'Slide anterior',
+      nextSlideMessage: 'Próximo slide',
+      paginationBulletMessage: 'Ir para slide {{index}}',
+    },
+    
+    // Eventos
+    on: {
+      // Pausa o autoplay quando o mouse está sobre o slider
+      mouseenter: function() {
+        swiper.autoplay.stop();
+      },
+      // Retoma o autoplay quando o mouse sai do slider
+      mouseleave: function() {
+        swiper.autoplay.start();
+      },
+    }
+  });
+});
+  </script>
+
+    <section class="empresas-section">
+      <h2 class="section-title">Empresas em Destaque</h2>
+      <div class="empresas-container">
+        <!-- Cartão 1 -->
+        <article class="empresa-card">
+          <div class="card-header">
+            <img src="../assets/imgs/BIGSlogo.png" alt="Logo Tech Solutions" class="empresa-logo">
+            <button class="favorite-btn" aria-label="Marcar como favorito">
+              <i class='bx bx-star'></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <h3 class="empresa-nome">Tech Solutions Inc.</h3>
+            <p class="empresa-descricao">Empresa líder em desenvolvimento de software com foco em soluções inovadoras
+              para o mercado financeiro. Atuamos globalmente com mais de 15 anos de experiência.</p>
+          </div>
+          <div class="card-footer">
+            <div class="card-meta">
+              <div class="tag-chips">
+                <span class="tag-chip">Remoto</span>
+                <span class="tag-chip">CLT</span>
+                <span class="tag-chip">TI</span>
+              </div>
+            </div>
+            <button class="ver-mais-btn">Ver mais</button>
+          </div>
+        </article>
+
+        <!-- Cartão 2 -->
+        <article class="empresa-card">
+          <div class="card-header">
+            <img src="../assets/imgs/BIGSlogo.png" alt="Logo DesignHub" class="empresa-logo">
+            <button class="favorite-btn active" aria-label="Desmarcar favorito">
+              <i class='bx bxs-star'></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <h3 class="empresa-nome">DesignHub</h3>
+            <p class="empresa-descricao">Agência de design especializada em identidade visual e experiência do usuário.
+              Nossa equipe criativa transforma ideias em realidade visual.</p>
+          </div>
+          <div class="card-footer">
+            <div class="card-meta">
+              <div class="tag-chips">
+                <span class="tag-chip">Presencial</span>
+                <span class="tag-chip">PJ</span>
+                <span class="tag-chip">Design</span>
+              </div>
+            </div>
+            <button class="ver-mais-btn">Ver mais</button>
+          </div>
+        </article>
+
+        <!-- Cartão 3 -->
+        <article class="empresa-card">
+          <div class="card-header">
+            <img src="../assets/imgs/BIGSlogo.png" alt="Logo GreenEnergy" class="empresa-logo">
+            <button class="favorite-btn" aria-label="Marcar como favorito">
+              <i class='bx bx-star'></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <h3 class="empresa-nome">GreenEnergy</h3>
+            <p class="empresa-descricao">Pioneira em soluções de energia renovável na Europa. Desenvolvemos tecnologias
+              sustentáveis para um futuro mais verde e eficiente.</p>
+          </div>
+          <div class="card-footer">
+            <div class="card-meta">
+              <div class="tag-chips">
+                <span class="tag-chip">Híbrido</span>
+                <span class="tag-chip">Estágio</span>
+                <span class="tag-chip">Engenharia</span>
+              </div>
+            </div>
+            <button class="ver-mais-btn">Ver mais</button>
+          </div>
+        </article>
+      </div>
+      <div class="ver-todas">
+        <a href="#" class="ver-todas-btn">Ver todas as empresas</a>
+      </div>
+    </section>
+  </main>
+
+</body>
+
+</html>

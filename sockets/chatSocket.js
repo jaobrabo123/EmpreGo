@@ -37,6 +37,7 @@ module.exports = (io) => {
 
         socket.on('leaveRoom', (roomId) => {
             socket.leave(roomId);
+            console.log(`${socket.id} saiu da sala ${roomId}`)
         });
     })
-    }
+}

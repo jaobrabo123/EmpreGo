@@ -1,4 +1,4 @@
-var socket = io('https://tcc-vjhk.onrender.com');
+var socket = io('http://localhost:3001');
 /*socket.on('connect', () => {
     socket.emit('joinRoom', 'teste', (response) => {
         if (response.error) {
@@ -8,6 +8,7 @@ var socket = io('https://tcc-vjhk.onrender.com');
         }
     });
 });*/
+const salasEntradas = new Set();
 
 let chatsBack
 
@@ -109,7 +110,7 @@ function exibirChatsFront() {
                     })
                 })
                 .then(async res=>{
-                    const data = res.json();
+                    const data = await res.json();
                     if(!res.ok) throw ({status: res.status, message: data.error});
 
                     socket.emit('sendMessage', messageObject);
@@ -147,22 +148,26 @@ async function minimizeELoadMessages(messages, msgsEEnviar, minimize, chatIdBack
     console.log('click')
     let display
     if(msgsEEnviar.classList.contains('minimizado')){
-        socket.emit('joinRoom', chatIdBack, (response) => {
-            if (response.status==='error') {
-                alert('Erro ao entrar na sala:', response.message);
-            } else {
-                console.log(`Entrou na sala ${chatIdBack} com sucesso!`);
-            }
-        });
-        
+        if (!salasEntradas.has(chatIdBack)){
+            socket.emit('joinRoom', chatIdBack, (response) => {
+                if (response.status==='error') {
+                    alert('Erro ao entrar na sala:' + response.message);
+                } else {
+                    console.log(`Entrou na sala ${chatIdBack} com sucesso!`);
+                    salasEntradas.add(chatIdBack)
+                }
+            });  
+        }
         display = 'block'
         minimize.textContent = '⬇️'
         msgsEEnviar.classList.remove('minimizado')
     }else{
         display = 'none'
         minimize.textContent = '➡️'
-        messages.innerHTML = '';
         msgsEEnviar.classList.add('minimizado')
+        /*messages.innerHTML = '';
+        socket.emit('leaveRoom', chatIdBack)
+        salasEntradas.delete(chatIdBack);*/
     }
     msgsEEnviar.style.display = display;
 }

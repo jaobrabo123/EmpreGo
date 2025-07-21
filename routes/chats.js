@@ -76,7 +76,7 @@ router.post('/mensagens', authenticateToken, async (req, res)=>{
     }
 });
 
-router.get('/mensagens', async (req, res)=>{
+/*router.get('/mensagens', async (req, res)=>{
     try{
         const { chat } = req.query
         const mensagens = await pool.query(`select mensagem, de, para from mensagens where chat = $1`,[chat])
@@ -85,6 +85,6 @@ router.get('/mensagens', async (req, res)=>{
     catch(erro){
         return res.status(500).json({ error: 'Erro ao pegar mensagens: ' + erro.message})
     }
-});
+});*/
 
 module.exports = router

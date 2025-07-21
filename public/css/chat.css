@@ -42,3 +42,7 @@
 .msgsEEnviar.expandido{
     display: block;
 }
+
+.messages{
+    min-height: 200px;
+}

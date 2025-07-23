@@ -7,5 +7,5 @@ function limparCookieToken(res) {
 }
 
 module.exports = {
-    limparCookieToken
+  limparCookieToken
 };

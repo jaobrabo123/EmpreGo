@@ -164,14 +164,17 @@ async function removerEmpresa(em, id, nivel) {
 
   const chatsEmpresa = await pool.query(`select id from chats where empresa = $1`, [em]);
 
-  for (let i = 0; i < chatsEmpresa.rows.length; i++) {
+  await Promise.all(
+    chatsEmpresa.rows.map(chat => 
+      pool.query(`delete from mensagens where chat = $1`, [chat.id,])
+    )
+  )
 
-    await pool.query(`DELETE FROM mensagens WHERE chat = $1`, [chatsEmpresa.rows[i].id,]);
+  await Promise.all([
+    pool.query(`delete from tokens where empresa_cnpj = $1`, [em]),
+    pool.query(`delete from chats where empresa = $1`, [em])
+  ])
 
-  }
-
-  await pool.query(`delete from tokens where empresa_cnpj = $1`, [em])
-  await pool.query(`delete from chats where empresa = $1`, [em]);
   await pool.query(`delete from empresas where cnpj = $1`, [em]);
 
 }

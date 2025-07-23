@@ -48,7 +48,7 @@ router.post('/empresas', async (req, res) => {
   }
 });
 
-router.get('/empresas', authenticateToken, apenasAdmins, async (req, res) => {
+router.get('/empresas/all', authenticateToken, apenasAdmins, async (req, res) => {
   try {
     const resultado = await pool.query(`SELECT 
       cnpj, nome_fant, telefone, email, razao_soci, cep, 

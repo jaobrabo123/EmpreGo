@@ -20,20 +20,24 @@ export function mostrarErroTopo(mensagem) {
 export async function carregarLinks() {
   const infos = await carregarInfo();
   console.log(infos)
-  if(infos === 'visitante' || infos.tipo==='visitante'){
+  if(infos === 'visitante' || infos.tipo==='visitante' || infos.tipo==='expirado'){
     document.querySelector('#loginOuCadas').style.display = '';
     document.querySelector('#logout').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = 'none';
+    if(infos.tipo==='expirado'){
+      alert('Sua sessão expirou faça login novamente.')
+      window.location.href = '/login'
+    }
   }else
   if (infos.tipo==='candidato'){
-    document.querySelector('#fotoPerfil').href = './profile.html';
+    document.querySelector('#fotoPerfil').href = '/perfil/candidato';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
     document.querySelector('#fotoPerfilImg').src = infos.info.foto;
   }
   else
   if (infos.tipo==='empresa') {
-    document.querySelector('#fotoPerfil').href = './profileCompany.html';
+    document.querySelector('#fotoPerfil').href = '/perfil/empresa';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
     document.querySelector('#fotoPerfilImg').src = infos.info.foto;
@@ -52,14 +56,18 @@ export async function carregarInfo() {
         const { tipo } = data;
         return tipo;
       })
-      .catch(()=>{
-        return 'visitante';
+      .catch((erro)=>{
+        if(erro.status===403 && erro.message.includes('Sessão expirada')){
+          return 'expirado'
+        }else{
+          return 'visitante';
+        }
       })
 
       let data = null;
 
       if(tipo==='candidato'){
-        const res = await fetch('/perfil', {
+        const res = await fetch('/perfil/candidato/info', {
             method: 'GET',
             credentials: 'include'
         });
@@ -69,7 +77,7 @@ export async function carregarInfo() {
         }
       }else
       if(tipo==='empresa'){
-        const res = await fetch('/perfil/empresa', {
+        const res = await fetch('/perfil/empresa/info', {
             method: 'GET',
             credentials: 'include'
         });
@@ -93,6 +101,6 @@ export function logout(){
     credentials: 'include'
   }).then(() => {
     alert('Você foi desconectado.');
-    window.location.href = './index.html';
+    window.location.href = '/';
   });
 }

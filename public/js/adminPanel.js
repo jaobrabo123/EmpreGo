@@ -42,7 +42,7 @@ async function carregarTabela(tabela) {
         }else{
             console.log('Pegando candidatos')
             
-            candidatos = await fetch('/candidatos',{
+            candidatos = await fetch('/candidatos/all',{
                 method: 'GET',
                 credentials: 'include',
             })
@@ -59,7 +59,7 @@ async function carregarTabela(tabela) {
             conteudo = empresas
         }else{
             console.log('Pegando empresas')
-            empresas = await fetch('/empresas',{
+            empresas = await fetch('/empresas/all',{
                 method: 'GET',
                 credentials: 'include',
             })
@@ -76,7 +76,7 @@ async function carregarTabela(tabela) {
             conteudo = experiencias
         }else{
             console.log('Pegando experiências')
-            experiencias = await fetch('/exps/all',{
+            experiencias = await fetch('/experiencias/all',{
                 method: 'GET',
                 credentials: 'include',
             })
@@ -109,11 +109,11 @@ async function carregarTabela(tabela) {
     if(conteudo.error) {
         if(conteudo.status===500){
             alert('Erro de conexão com o Banco de Dados (a culpa não foi sua, tente acessar a página novamente).')
-            window.location.href = './index.html';
+            window.location.href = '/';
         }
         else{
-            alert(conteudo.error)
-            window.location.href = './index.html';
+            alert(conteudo.error);
+            window.location.href = '/';
         }
     }
     document.querySelector('body').style.display = ''
@@ -249,7 +249,7 @@ async function removerTupla(tabela, id) {
             empresas = null;
         }else
         if(tabela==='Experiencias'){
-            const res = await fetch(`/exps/${id}`,{
+            const res = await fetch(`/experiencias/${id}`,{
                 method: 'DELETE',
                 credentials: 'include',
             })
@@ -285,7 +285,7 @@ async function removerTupla(tabela, id) {
     catch(erro){
         if(erro.status===401||erro.status===403){
             alert(erro.message);
-            window.location.href = './index.html'
+            window.location.href = '/'
         }
         else{
             console.error('Erro ao remover tupla:', erro.message);

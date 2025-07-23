@@ -20,7 +20,7 @@ function adicionarExp() {
         formData.append('descricao', descricao);
         formData.append('imagem', imagem);
 
-        fetch('/exps', {
+        fetch('/experiencias', {
             method: 'POST',
             credentials: 'include',
             body: formData
@@ -33,7 +33,7 @@ function adicionarExp() {
             }
 
             alert('Experiência adicionada com sucesso!');
-            window.location.href = './profile.html';
+            window.location.href = '/perfil/candidato';
         })
         .catch(erro => {
             console.error('Erro ao adicionar experiência:', erro.message);

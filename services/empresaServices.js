@@ -166,7 +166,7 @@ async function removerEmpresa(em, id, nivel) {
 
   await Promise.all(
     chatsEmpresa.rows.map(chat => 
-      pool.query(`delete from mensagens where chat = $1`, [chat.id,])
+      pool.query(`delete from mensagens where chat = $1`, [chat.id])
     )
   )
 

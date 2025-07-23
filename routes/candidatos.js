@@ -34,7 +34,7 @@ router.post('/candidatos', async (req, res) => {
 });
 
 //Rota para pegar todos os usuários
-router.get('/candidatos', authenticateToken, apenasAdmins, async (req, res) => {
+router.get('/candidatos/all', authenticateToken, apenasAdmins, async (req, res) => {
   try {
 
     const resultado = await pool.query(`SELECT 

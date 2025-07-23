@@ -112,7 +112,7 @@ async function enviarEdicao() {
   if (twitter) formData.append("twitter", twitter);
   if (pronomes) formData.append("pronomes", pronomes);
 
-  fetch("/perfil/edit", {
+  fetch("/perfil/candidato", {
     method: "POST",
     credentials: 'include',
     body: formData,
@@ -122,7 +122,7 @@ async function enviarEdicao() {
       if (!response.ok) {
         throw ({ status: response.status , message: data.error || "Erro ao editar perfil"});
       }
-      window.location.href = "./profile.html";
+      window.location.href = "/perfil/candidato";
     })
     .catch((erro) => {
       if(erro.message.includes('Cidade inválida para o estado')){

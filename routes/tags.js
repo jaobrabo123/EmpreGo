@@ -35,7 +35,7 @@ router.post('/tags', authenticateToken, async (req, res) => {
 });
 
 //Rota para pegar  as tags
-router.get('/tags', async (req, res) => {
+router.get('/tags/info', async (req, res) => {
   try {
     const resultado = await pool.query('SELECT * FROM tags');
     res.json(resultado.rows);

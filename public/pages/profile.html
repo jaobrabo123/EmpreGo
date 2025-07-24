@@ -31,53 +31,77 @@
         </nav>
     </header>
 
-    <div id="main">
-        <div id="impInfo">
-            <img id="fotoUsuario" src="/assets/imgs/genPfp.png" alt="genPfp">
+     <div id="main">
+        <div id="bodyLeft">
+            <div id="impInfo">
+                <img id="fotoUsuario" src="../assets/imgs/genPfp.png" alt="genPfp">   
+                <h1 id="nascUsuario">18/03/2017</h1>
+                <h1 id="cpfUsuario">123-456-789.01</h1> 
+                <h1 id="cpfUsuario1">123-456-789.01</h1> 
+                <h1 id="pronUsuario">Ele/Dele</h1>
+                <button id="btnEditarPerfil" onclick="window.location.href='./editarPerfil.html'" class="btn-editar-perfil">
+                    Editar Perfil
+                </button>
+            </div>
 
-            <h1 id="nomUsuario">Skibidi</h1>
-            
-            <a id="emailUsuario"> EmailGenerico@gmail.com</a>
-            <button id="btnEditarPerfil" onclick="window.location.href='/perfil/candidato/editar'" class="btn-editar-perfil">
-                Editar Perfil
-            </button>
+            <div id="bodyMid">
+                <h1 id="nomUsuario">Skibidi</h1>
+                <a id="emailUsuario"> EmailGenerico@gmail.com</a>
+                <p id="descUsuario"></p>
+                <div id="conexoes">
+                    <img src="../assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
+                    <a id="instUsuario" href="https://youtu.be/ua_DSJAD7gc?si=O3y6hQHb0lpgrBmo" class="nomeRedeSoc" target="_blank">
+                        Instahhgram
+                    </a>
+                    <img src="../assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
+                    <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc" target="_blank">
+                        GitBrabo123
+                    </a>
+
+                    <img src="../assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
+                    <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc" target="_blank"> 
+                        YtExemplo24
+                    </a>
+
+                    <img src="../assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
+                    <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc" target="_blank">
+                        JohnDoeMarch18
+                    </a>
+                </div>  
+                
+                <div id="enderecoInfo">
+                <img id="houseIcon" src="../assets/imgs/House.png" alt="HouseIcon">
+                    <div id="alignEndereco">
+                    <h1 id="enderecoUsuario">Av. Adelia Franco 2288</h1>
+                        <div id="cidadeEstado">
+                            <h1 id="cidadeUsuario">Aracaju</h1>
+                            <h1 id="estadoUsuario">(SE)</h1>
+                        </div>
+                    </div>
+                </div>
+            </div> 
         </div>
 
-        <div id="bodyTop">
-            <h1 id="nascUsuario">18/03/2017</h1>
-            <h1 id="cpfUsuario">123.456.789-10</h1>
+        <div id="bodyTags">
+            <h1 id="tituloTags">Tags</h1>
+            <div id="boxTags">
+                <input type="image" id="btnAddTags" src="../assets/imgs/miniPlusBtn.png">
+                <div class="Tags">
+                    <button id="tagLing">C#</button> <!--Separar tags de diferentest tipos por cores (por exemplo, linguagens de programação são roxas, horas de trabalho branco, etc.)-->
+                    <button id="tagHorario">Manhã</button>
+                </div>
+            </div>
         </div>
         
-        <div id="bodyTags">
-            <input id="tagUsuario" placeholder="Insira uma tag sua aqui">
-            <button id="buttonAddTag">Adicionar</button>
-        </div>
-
-        <div id="bodyTextArea">
-            <p id="descUsuario">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis et nam facere deserunt voluptas rem quam, aut nihil culpa voluptatum velit saepe unde obcaecati</p>
-            <textarea id="editDesc" style="display: none;"></textarea>
-        </div>
-
-        <div id="bodyMid">
-            <img src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
-            <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc" target="_blank">
-                GitBrabo123</a>
-            <img src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
-            <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc" target="_blank"> YtExemplo24</a>
-            <img src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
-            <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc" target="_blank">
-                JohnDoeMarch18</a>
-        </div>
+        <h1 id="tituloExperiencias">Experiências</h1> 
+        <div id="bodyBottom">         
         <div id="boxCriar">
-            <a href="/experiencias/criar">
-                <input type="image" id="fotoCriarBtn" src="/assets/imgs/plusBtn.png" alt="plusBtn">
+            <a href="./caixaMaker.html">
+                <input type="image" id="fotoCriarBtn" src="../assets/imgs/plusBtn.png" alt="plusBtn">
             </a>
-            <a id="textCriar">Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado
-                seu!</a>
+            <a id="textCriar">Crie uma caixa de texto, detalhando sua experiência com alguma empresa/projeto passado seu!</a>
         </div>
-        <div id="bodyBottom">
         </div>
-        <footer>&copy;Emprego</footer>
 </body>
 
 </html>

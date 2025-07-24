@@ -30,7 +30,7 @@ const uploadExp = multer({ storage: expStorage });
 //Router
 const router = express.Router();
 
-router.post('/exps', authenticateToken, apenasCandidatos, uploadExp.single("imagem"), async (req, res) => {
+router.post('/experiencias', authenticateToken, apenasCandidatos, uploadExp.single("imagem"), async (req, res) => {
   try {
     const { titulo, descricao } = req.body;
     const id = req.user.id;
@@ -47,7 +47,7 @@ router.post('/exps', authenticateToken, apenasCandidatos, uploadExp.single("imag
 });
 
 //Rota para pegar as experiências do usuário
-router.get("/exps", authenticateToken, async (req, res) => {
+router.get('/experiencias/info', authenticateToken, async (req, res) => {
   try {
     const id = req.user.id;
 
@@ -66,7 +66,7 @@ router.get("/exps", authenticateToken, async (req, res) => {
   }
 });
 
-router.delete('/exps/:xp', authenticateToken, apenasCandidatos, async (req, res) => {
+router.delete('/experiencias/:xp', authenticateToken, apenasCandidatos, async (req, res) => {
   try {
     const { xp } = req.params;
     const id = req.user.id;
@@ -87,7 +87,7 @@ router.delete('/exps/:xp', authenticateToken, apenasCandidatos, async (req, res)
   }
 });
 
-router.get('/exps/all', authenticateToken, apenasAdmins, async (req, res) => {
+router.get('/experiencias/all', authenticateToken, apenasAdmins, async (req, res) => {
   try {
     const experiencias = await pool.query(`
       select e.id, e.titulo, e.descricao, c.email as email_candidato, e.data_criacao

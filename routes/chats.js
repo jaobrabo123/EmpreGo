@@ -21,7 +21,7 @@ router.post('/chats', authenticateToken, async (req, res)=>{
     }
 });
 
-router.get('/chats', authenticateToken, async (req, res)=>{
+router.get('/chats/info', authenticateToken, async (req, res)=>{
     try{
         const tipo = req.user.tipo
         const id = req.user.id

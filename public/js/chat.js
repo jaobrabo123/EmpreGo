@@ -14,7 +14,7 @@ let chatsBack
 
 async function carregarChatsBack() {
     try{
-        const res = await fetch('/chats', {
+        const res = await fetch('/chats/info', {
             method: 'GET',
             credentials: 'include'
         });

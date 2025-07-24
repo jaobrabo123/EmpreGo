@@ -2,13 +2,15 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 //Reativar depois dos testes
 //const { limiteGeral } = require('./middlewares/rateLimit.js');
 
 //Routes
+const staticRoutes = require('./routes/static.js')
 const loginRoutes = require('./routes/logins.js');
 const perfilRoutes = require('./routes/perfil.js');
-const usuarioRoutes = require('./routes/usuarios.js');
+const usuarioRoutes = require('./routes/candidatos.js');
 const tagRoutes = require('./routes/tags.js');
 const experienciaRoutes = require('./routes/experiencias.js');
 const empresaRoutes = require('./routes/empresas.js');
@@ -33,15 +35,17 @@ app.set('trust proxy', 1);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 //Reativar depois dos testes
 //app.use(limiteGeral);
+
 
 //tasks
 require('./tasks/cronLimpezaMensagens.js')
 require('./tasks/cronLimpezaTokens.js')
 
 //Rotas
+app.use(staticRoutes)
 app.use(loginRoutes);
 app.use(perfilRoutes);
 app.use(usuarioRoutes);

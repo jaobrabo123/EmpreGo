@@ -13,32 +13,17 @@ router.post('/empresas', async (req, res) => {
   try {
     const { cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero } = req.body;
 
-    if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !numero ) return res.status(400).json({ error: "Informações faltando para o cadastro!" });
-
-    const pesquisaCnpj = await pool.query(
-      "SELECT 1 FROM empresas WHERE cnpj = $1",
-      [cnpj]
-    );
-    const cnpjOk = pesquisaCnpj.rows;
-    if (cnpjOk.length > 0) {
-      return res.status(409).json({ error: "Empresa ja cadastrada." });
+    if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !numero ) {
+      return res.status(400).json({ error: "Informações faltando para o cadastro!" });
     }
 
-    const pesquisaEmail = await pool.query(
-      "SELECT 1 FROM empresas WHERE email = $1",
-      [email]
-    );
-    const emailOk = pesquisaEmail.rows;
-    if (emailOk.length > 0) {
-      return res.status(409).json({ error: "Empresa ja cadastrada." });
-    }
+    const [pesquisaCnpj, pesquisaEmail, pesquisaRazao] = await Promise.all([
+      pool.query('select 1 from empresas where cnpj = $1',[cnpj]),
+      pool.query('select 1 from empresas where email = $1', [email]),
+      pool.query('select 1 from empresas where razao_soci = $1', [razao_soci])
+    ]);
 
-    const pesquisaRazao = await pool.query(
-      "SELECT 1 FROM empresas WHERE razao_soci = $1",
-      [razao_soci]
-    );
-    const razaoOk = pesquisaRazao.rows;
-    if (razaoOk.length > 0) {
+    if(pesquisaCnpj.rowCount > 0 || pesquisaEmail.rowCount > 0 || pesquisaRazao.rowCount > 0){
       return res.status(409).json({ error: "Empresa ja cadastrada." });
     }
 
@@ -63,7 +48,7 @@ router.post('/empresas', async (req, res) => {
   }
 });
 
-router.get('/empresas', authenticateToken, apenasAdmins, async (req, res) => {
+router.get('/empresas/all', authenticateToken, apenasAdmins, async (req, res) => {
   try {
     const resultado = await pool.query(`SELECT 
       cnpj, nome_fant, telefone, email, razao_soci, cep, 

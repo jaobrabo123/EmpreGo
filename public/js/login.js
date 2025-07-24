@@ -53,8 +53,8 @@ function handlePasswordToggle(inputId, eyeIconId, toggleBtnId) {
       passwordInput.type === "password" ? "text" : "password";
     eyeIcon.src =
       passwordInput.type === "password"
-        ? "../assets/imgs/escondido.png"
-        : "../assets/imgs/olho.png";
+        ? "/assets/imgs/escondido.png"
+        : "/assets/imgs/olho.png";
   });
 }
 
@@ -468,7 +468,7 @@ document
           const erro = await res.json();
           throw { status: res.status, message: erro.error || "Erro ao fazer login."};
         }
-        window.location.href = "./index.html";
+        window.location.href = "/";
       })
       .catch((erro) => {
         if(erro.status===500){
@@ -638,7 +638,7 @@ function cadastrarEmpresa() {
         throw { status: res.status, message: erro.error || "Erro ao fazer login automático." };
       }
       alert("Empresa cadastrada com SUCESSO!");
-      window.location.href = "./index.html";
+      window.location.href = "/";
     })
     .catch((erro) => {
       console.log(erro.message)
@@ -682,7 +682,7 @@ function login() {
               message: erro.error || "Erro ao fazer login automático."
             };
     }
-    window.location.href = "./index.html";
+    window.location.href = "/";
   })
   .catch((erro) => {
     if(erro.status===500){
@@ -815,7 +815,7 @@ function cadastrar(e) {
   })
   .then(() => {
     alert("Cadastro realizado com sucesso!");
-    window.location.href = "./index.html";
+    window.location.href = "/";
   })
   .catch((erro) => {
     if (erro.message.includes("Email já cadastrado.")) {

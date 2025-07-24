@@ -14,16 +14,6 @@ router.post('/tags', authenticateToken, async (req, res) => {
     const { nome } = req.body;
     const id = req.user.id;
 
-    /*if (!nome_tag || nome_tag.trim().length === 0) {
-      return res.status(400).json({ error: 'Nome da tag não pode estar vazio.' });
-    }
-
-    if (nome_tag.trim().length > 20) {
-      return res.status(400).json({ error: 'O nome da tag deve ter no máximo 20 caracteres.' });
-    }
-
-    nome_tag = nome.trim()*/
-
     await popularTabelaTags(nome, id);
     res.status(201).json({ message: 'Tag cadastrada com sucesso!' });
   } catch (error) {
@@ -35,7 +25,7 @@ router.post('/tags', authenticateToken, async (req, res) => {
 });
 
 //Rota para pegar  as tags
-router.get('/tags', async (req, res) => {
+router.get('/tags/info', async (req, res) => {
   try {
     const resultado = await pool.query('SELECT * FROM tags');
     res.json(resultado.rows);

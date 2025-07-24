@@ -42,7 +42,7 @@ const uploadEmpresaPerfil = multer({ storage: empresaPerfilStorage });  // uploa
 const router = express.Router();
 
 //Rota para pegar o perfil do usuário
-router.get('/perfil', authenticateToken, apenasCandidatos, async (req, res) => {
+router.get('/perfil/candidato/info', authenticateToken, apenasCandidatos, async (req, res) => {
   try {
     const id = req.user.id;
 
@@ -63,7 +63,7 @@ router.get('/perfil', authenticateToken, apenasCandidatos, async (req, res) => {
 });
 
 //Rota para editar o perfil do usuário
-router.post('/perfil/edit', authenticateToken, apenasCandidatos, uploadPerfil.single('foto'), async (req, res) =>{
+router.post('/perfil/candidato', authenticateToken, apenasCandidatos, uploadPerfil.single('foto'), async (req, res) =>{
   try {
     const id = req.user.id;
     const dados = { ...req.body };
@@ -86,7 +86,7 @@ router.post('/perfil/edit', authenticateToken, apenasCandidatos, uploadPerfil.si
 })
 
 //Rota para editar o perfil da empresa
-router.post('/perfil/empresa/edit', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), async (req, res) => {
+router.post('/perfil/empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), async (req, res) => {
   try {
     const cnpj = req.user.id;
     const dados = { ...req.body };
@@ -106,7 +106,7 @@ router.post('/perfil/empresa/edit', authenticateToken, apenasEmpresa , uploadEmp
   }
 });
 
-router.get('/perfil/empresa', authenticateToken, apenasEmpresa, async (req, res) => {
+router.get('/perfil/empresa/info', authenticateToken, apenasEmpresa, async (req, res) => {
   try{
     const cnpj = req.user.id;
 

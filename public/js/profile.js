@@ -27,15 +27,20 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         experiencias()
     } else{
         //Se não for candidato, redireciona para a página inicial e mostra um alerta
-        alert('Acesso apenas para candidatos cadastrados e logados.')
-        window.location.href = './index.html'
+        if(data.tipo==='expirado'){
+            alert('Sua sessão expirou faça login novamente.');
+            window.location.href = '/login';
+        }else{
+            alert('Acesso apenas para candidatos cadastrados e logados.');
+            window.location.href = '/';
+        }    
     }
 })
 
 const bodyBottom = document.getElementById('bodyBottom')
 
 function experiencias(){
-    fetch('/exps', {
+    fetch('/experiencias/info', {
         method: 'GET',
         credentials: 'include'
     })

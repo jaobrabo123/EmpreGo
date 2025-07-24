@@ -195,18 +195,19 @@ async function removerCandidato(cd, id, nivel) {
     [cd]
   );
 
-  for (let i = 0; i < chatsCandidato.rows.length; i++) {
-
-    await pool.query(`DELETE FROM mensagens WHERE chat = $1`, 
-      [chatsCandidato.rows[i].id]
+  await Promise.all(
+    chatsCandidato.rows.map(chat =>
+      pool.query('delete from mensagens where chat = $1', [chat.id])
     )
+  )
 
-  }
+  await Promise.all([
+    pool.query(`delete from tokens where candidato_id = $1`, [cd]),
+    pool.query(`delete from chats where candidato = $1`, [cd]),
+    pool.query(`delete from tags where candidato = $1`, [cd]),
+    pool.query(`delete from experiencias where candidato = $1`, [cd])
+  ])
 
-  await pool.query(`delete from tokens where candidato_id = $1`, [cd])
-  await pool.query(`delete from chats where candidato = $1`, [cd]);
-  await pool.query(`delete from tags where candidato = $1`, [cd]);
-  await pool.query(`delete from experiencias where candidato = $1`, [cd]);
   await pool.query(`delete from candidatos where id = $1`, [cd]);
 
 }

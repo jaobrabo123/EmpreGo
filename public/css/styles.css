@@ -1,8 +1,16 @@
+
+/* ====================================== */
+/*            VARIÁVEIS GLOBAIS           */
+/* ====================================== */
+
 /*
 # = ID
 . = Class
 */
 
+/* ====================================== */
+/*        RESET E CONFIGURAÇÕES BASE      */
+/* ====================================== */
 
 /* Definição de cores */
 :root {
@@ -13,7 +21,6 @@
     --accent: #635985;
 }
 
-/* Reset e configurações globais */
 * {
     margin: 0;
     padding: 0;
@@ -39,45 +46,55 @@ body {
     min-height: 100vh;
 }
 
+/* ====================================== */
+/*               HEADER                   */
+/* ====================================== */
+
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    top: 0; /* Posiciona o cabeçalho no topo da tela */
-    left: 0; /* Posiciona o cabeçalho à esquerda */
-    width: 100%; /* O cabeçalho ocupa toda a largura da tela */
-    backdrop-filter: blur(10px); /* Aplica um desfoque ao fundo do cabeçalho */
-    padding: 1rem 2%; /* Define o padding interno, com 4rem de altura e 12% de largura */
-    z-index: 1000; /* Garante que o cabeçalho apareça acima de outros elementos */
-    background-color: rgba(39, 30, 53, 0.5); /* 50% de transparência */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    padding: 0 2%;
+    z-index: 1000;
+    background-color: rgba(39, 30, 53, 0.95);
+    backdrop-filter: blur(10px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* ====================================== */
+/*        LINKS DE NAVEGAÇÃO (MENU)       */
+/* ====================================== */
 
-/*Classe Links do Header*/
-.links a{
+.links {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.links a { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--text);
-    text-decoration: none;
-    transition: 0.3s ease; /* Transição suave ao passar o mouse sobre os links */
+    transition: 0.3s ease;
     padding: 5px 15px;
     border-radius: 5px;
-    border-bottom: 3px solid transparent; /* Borda inferior invisível inicialmente */
-    font-size: 1.8rem; /* Tamanho do texto dos links */
-    margin-left: 4rem; /* Espaço à esquerda de cada link */
-    font-weight: 500; /* Peso da fonte */ 
-}
-
-span {
-    color: var(--accent); /* Define a cor do span como a cor principal (BIGS) */
+    border-bottom: 3px solid transparent;
+    font-size: 1.8rem;
+    margin-left: 4rem;
+    font-weight: 500;
 }
 
 
-/*Efeito-hover links do Header*/
-.links a:hover,
-.links a.active {
-    color: var(--accent); /* Muda a cor do link para a cor principal */
-    border-bottom: 3px solid var(--accent); /* Aplica a borda inferior com a cor principal */
-}
+
+/* ====================================== */
+/*           LOGO E NOME DO SITE          */
+/* ====================================== */
 
 #nomedosite{
     color: var(--text);
@@ -87,6 +104,10 @@ span {
     border-radius: 5px;
     font-size: 1.7em !important; 
     text-shadow: 0 0 25px var(--accent); /* Aplica um efeito de sombra ao texto do logo */
+}
+
+span {
+    color: var(--accent); /* Define a cor do span como a cor principal ("Go em EmpreGo") */
 }
 
 #logoimg {
@@ -102,14 +123,17 @@ span {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 2rem; /* Tamanho do texto do logo */
-    color: var(--text-color); /* Cor do logo */
-    font-weight: 900; /* Deixa o texto do logo bem forte */
-    cursor: pointer; /* Altera o cursor para uma mãozinha quando passa sobre o logo */
-    transition: 0.3s ease; /* Adiciona uma transição suave ao logo */
-    
+    font-size: 2rem;
+    color: var(--text-color);
+    font-weight: 900;
+    cursor: pointer;
+    transition: 0.3s ease;
+    height: 100%;
 }
 
+/* ====================================== */
+/*                FOOTER                  */
+/* ====================================== */
 
 footer{
     bottom: 0;
@@ -187,6 +211,10 @@ footer{
     color: white;
 }
 
+/* ====================================== */
+/*             CONTEÚDO MAIN              */
+/* ====================================== */
+
 #main {
     display: flex;
     flex: 1;
@@ -204,16 +232,28 @@ footer{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+
+/* ====================================== */
+/*     ESTILIZAÇÃO DA FOTO DE PERFIL      */
+/* ====================================== */
+
 #fotoPerfilImg{
     width: 40px;
     height: 40px;
     border-radius: 100%;
+    object-fit: cover;
+    border: 2px solid black;
 }
 
-#fotoPerfil{
-    width: min-content;
-    height: min-content;
+#fotoPerfil {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    height: 100%;
 }
+
+/* ====================================== */
+/*     MENSAGEM DE ERRO FLUTUANTE         */
+/* ====================================== */
 
 .erro-mensagem-geral {
   position: fixed;

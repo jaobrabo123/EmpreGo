@@ -64,6 +64,8 @@ router.post('/candidatos/reenviar', limiteNodemailer, async (req, res)=>{
       [email]
     );
 
+    if(!candidato.rows[0]) return res.status(404).json({ error: 'Email fornecido não está aguardando confirmação.'});
+
     const uuid = candidato.rows[0].uuid;
 
     const emailOptions = {

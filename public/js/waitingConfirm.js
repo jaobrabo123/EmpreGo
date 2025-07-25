@@ -8,9 +8,11 @@ document.querySelector('#confirm').addEventListener('click', ()=>{
     window.location.href = '/login'
 })
 
+let podeReenviar = true;
 document.querySelector('#reenvio').addEventListener('click', async ()=>{
     try{
-        if(!email) return;
+        if(!email || !podeReenviar) return;
+        podeReenviar = false;
         const res = await fetch('/candidatos/reenviar',{
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -22,11 +24,17 @@ document.querySelector('#reenvio').addEventListener('click', async ()=>{
         if(!res.ok) throw { status: res.status, message: data.error };
 
         mensagem.textContent = `${data.message}`
+        podeReenviar = true;
     }
     catch(erro){
-        if(erro.status === 429){
-            return mensagem.textContent = `Aguarde 15 segundos para reenviar um novo email.`
-        }
         mensagem.textContent = erro.message;
+        podeReenviar = true;
+        if(erro.status === 404){
+            podeReenviar = false;
+            mensagem.textContent += ' Redirecionando...'
+            setTimeout(() => {
+                window.location.href = '/'
+            }, 3000);
+        }
     }
 })

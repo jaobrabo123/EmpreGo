@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const pool = require("../config/db.js");
 const  { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
 
-async function popularTabelaCandidatos(nome, email, senha, genero, data_nasc) {
+async function popularTabelaCandidatosPendentes(nome, email, senha, genero, data_nasc, uuid) {
 
   if (senha.length < 8) {
     throw new ErroDeValidacao("A senha deve ter pelo menos 8 caracteres");
@@ -34,12 +34,32 @@ async function popularTabelaCandidatos(nome, email, senha, genero, data_nasc) {
   }
 
   //criptografa a senha
-  const senhaCripitografada = await bcrypt.hash(senha, 10);
+  const senhaCriptografada = await bcrypt.hash(senha, 10);
 
   await pool.query(
-    `INSERT INTO candidatos (nome, email, senha, genero, data_nasc) VALUES ($1, $2, $3, $4, $5)`,
-    [nome, email, senhaCripitografada, genero, data_nasc]
+    `INSERT INTO candidatos_pend (nome, email, senha, genero, data_nasc, uuid) VALUES ($1, $2, $3, $4, $5, $6)`,
+    [nome, email, senhaCriptografada, genero, data_nasc, uuid]
   );
+
+}
+
+async function popularTabelaCandidatos(candidato, uuid){
+
+  if (!candidato||!uuid) {
+    throw new ErroDeValidacao("UUID inválido ou candidato não encontrado.");
+  }
+
+  if(!candidato.nome || !candidato.email || !candidato.senha || !candidato.genero || !candidato.data_nasc){
+    throw new ErroDeValidacao("Dados faltando.");
+  }
+
+  await pool.query(`insert into candidatos (nome, email, senha, genero, data_nasc) values ($1, $2, $3, $4, $5)`,
+    [candidato.nome, candidato.email, candidato.senha, candidato.genero, candidato.data_nasc]
+  )
+
+  await pool.query(`delete from candidatos_pend where uuid = $1`,
+    [uuid]
+  )
 
 }
 
@@ -214,6 +234,7 @@ async function removerCandidato(cd, id, nivel) {
 
 module.exports = {
   popularTabelaCandidatos,
+  popularTabelaCandidatosPendentes,
   editarPerfil,
   removerCandidato
 }

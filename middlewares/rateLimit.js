@@ -14,7 +14,15 @@ const limiteLogin = rateLimit({
     statusCode: 429,
 })
 
+const limiteNodemailer = rateLimit({
+    windowMs: 15 * 1000,
+    max: 1,
+    message: ()=>{return {error: 'Aguarde 15 segundos para enviar um novo email.'}},
+    statusCode: 429,
+})
+
 module.exports = {
     limiteGeral,
-    limiteLogin
+    limiteLogin,
+    limiteNodemailer
 }

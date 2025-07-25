@@ -3,8 +3,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-//Reativar depois dos testes
-//const { limiteGeral } = require('./middlewares/rateLimit.js');
+const { limiteGeral } = require('./middlewares/rateLimit.js');
 
 //Routes
 const staticRoutes = require('./routes/static.js')
@@ -36,8 +35,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-//Reativar depois dos testes
-//app.use(limiteGeral);
+app.use(limiteGeral);
 
 
 //tasks

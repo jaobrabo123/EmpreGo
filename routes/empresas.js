@@ -17,14 +17,13 @@ router.post('/empresas', async (req, res) => {
       return res.status(400).json({ error: "Informações faltando para o cadastro!" });
     }
 
-    const [pesquisaCnpj, pesquisaEmail, pesquisaRazao] = await Promise.all([
-      pool.query('select 1 from empresas where cnpj = $1',[cnpj]),
-      pool.query('select 1 from empresas where email = $1', [email]),
-      pool.query('select 1 from empresas where razao_soci = $1', [razao_soci])
-    ]);
+    const empresaExistente = await pool.query(
+      'SELECT 1 FROM empresas WHERE cnpj = $1 OR email = $2 OR razao_soci = $3',
+      [cnpj, email, razao_soci]
+    );
 
-    if(pesquisaCnpj.rowCount > 0 || pesquisaEmail.rowCount > 0 || pesquisaRazao.rowCount > 0){
-      return res.status(409).json({ error: "Empresa ja cadastrada." });
+    if (empresaExistente.rowCount > 0) {
+      return res.status(409).json({ error: "Empresa já cadastrada." });
     }
 
     await popularTabelaEmpresas(

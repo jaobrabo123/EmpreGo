@@ -41,6 +41,7 @@ app.use(limiteGeral);
 //tasks
 require('./tasks/cronLimpezaMensagens.js')
 require('./tasks/cronLimpezaTokens.js')
+require('./tasks/cronLimpezaCandidatosPendentes.js')
 
 //Rotas
 app.use(staticRoutes)

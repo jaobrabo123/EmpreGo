@@ -21,8 +21,16 @@ const limiteNodemailer = rateLimit({
     statusCode: 429,
 })
 
+const limiteValidarCodigo = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 10,
+    message: ()=>{return {error: 'Muitas tentativas de validar código, tente novamente mais tarde.'}},
+    statusCode: 429,
+})
+
 module.exports = {
     limiteGeral,
     limiteLogin,
-    limiteNodemailer
+    limiteNodemailer,
+    limiteValidarCodigo
 }

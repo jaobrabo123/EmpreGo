@@ -4,8 +4,28 @@ document.querySelector('#email').textContent = email
 
 const mensagem = document.querySelector('#mensagem')
 
-document.querySelector('#confirm').addEventListener('click', ()=>{
-    window.location.href = '/login'
+const input = document.querySelector('#inputCodigo');
+
+input.addEventListener('input', (event)=>{
+    const codigo = event.target.value;
+    if(codigo.length < 4) return;
+    input.disabled = true;
+
+    fetch(`/candidatos/confirmar`,{
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ codigo })
+    })
+    .then(async (res) =>{
+        const data = await res.json();
+        if(!res.ok) throw {status: res.status, message: data.error};
+        window.location.href = '/'
+    })
+    .catch(erro=>{
+        event.target.value = ''
+        input.disabled = false;
+        mensagem.textContent = erro.message;
+    })
 })
 
 let podeReenviar = true;

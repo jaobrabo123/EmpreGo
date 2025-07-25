@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const pool = require("../config/db.js");
 const  { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
 
-async function popularTabelaCandidatosPendentes(nome, email, senha, genero, data_nasc, uuid) {
+async function popularTabelaCandidatosPendentes(nome, email, senha, genero, data_nasc, codigo, expira_em) {
 
   if (senha.length < 8) {
     throw new ErroDeValidacao("A senha deve ter pelo menos 8 caracteres");
@@ -37,29 +37,31 @@ async function popularTabelaCandidatosPendentes(nome, email, senha, genero, data
   const senhaCriptografada = await bcrypt.hash(senha, 10);
 
   await pool.query(
-    `INSERT INTO candidatos_pend (nome, email, senha, genero, data_nasc, uuid) VALUES ($1, $2, $3, $4, $5, $6)`,
-    [nome, email, senhaCriptografada, genero, data_nasc, uuid]
+    `INSERT INTO candidatos_pend (nome, email, senha, genero, data_nasc, codigo, expira_em) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+    [nome, email, senhaCriptografada, genero, data_nasc, codigo, expira_em]
   );
 
 }
 
-async function popularTabelaCandidatos(candidato, uuid){
+async function popularTabelaCandidatos(candidato, codigo){
 
-  if (!candidato||!uuid) {
-    throw new ErroDeValidacao("UUID inválido ou candidato não encontrado.");
+  if (!candidato||!codigo) {
+    throw new ErroDeValidacao("Codigo inválido ou candidato não encontrado.");
   }
 
   if(!candidato.nome || !candidato.email || !candidato.senha || !candidato.genero || !candidato.data_nasc){
     throw new ErroDeValidacao("Dados faltando.");
   }
 
-  await pool.query(`insert into candidatos (nome, email, senha, genero, data_nasc) values ($1, $2, $3, $4, $5)`,
+  const result = await pool.query(`insert into candidatos (nome, email, senha, genero, data_nasc) values ($1, $2, $3, $4, $5) returning id`,
     [candidato.nome, candidato.email, candidato.senha, candidato.genero, candidato.data_nasc]
   )
 
-  await pool.query(`delete from candidatos_pend where uuid = $1`,
-    [uuid]
+  await pool.query(`delete from candidatos_pend where codigo = $1`,
+    [codigo]
   )
+
+  return result.rows[0].id;
 
 }
 

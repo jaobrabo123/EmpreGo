@@ -1,16 +1,19 @@
 //Imports
 const express = require("express");
 const pool = require("../config/db.js");
-const { v4: uuidv4 } = require('uuid');
-const path = require('path');
+const jwt = require('jsonwebtoken');
 const { popularTabelaCandidatos, removerCandidato, popularTabelaCandidatosPendentes } = require("../services/candidatoServices.js");
 const { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
+const { adicionarToken, removerToken } = require('../services/tokenService.js');
 const { authenticateToken, apenasAdmins, apenasCandidatos } = require("../middlewares/auth.js");
-const { limiteNodemailer } = require('../middlewares/rateLimit.js')
+const { limiteNodemailer, limiteValidarCodigo } = require('../middlewares/rateLimit.js')
 
 const transporter = require('../config/nodemailer.js');
 const dotenv = require('dotenv');
 dotenv.config();
+
+const SECRET_KEY = process.env.JWT_SECRET;
+const EMAIL_SERVER = process.env.EMAIL;
 
 //router
 const router = express.Router();
@@ -32,20 +35,21 @@ router.post('/candidatos', async (req, res) => {
       return res.status(409).json({ error: "Email aguardando confirmação." });
     }
 
-    const uuid = uuidv4();
+    const codigo = Math.floor(Math.random() * 9000) + 1000;
+    const expira_em = new Date(Date.now() + 15 * 60 * 1000);
 
-    await popularTabelaCandidatosPendentes(nome, email, senha, genero, data_nasc, uuid);
+    await popularTabelaCandidatosPendentes(nome, email, senha, genero, data_nasc, codigo, expira_em);
 
     const emailOptions = {
-      from: process.env.EMAIL,
+      from: EMAIL_SERVER,
       to: email,
-      subject: 'Para validar o seu email clique no link abaixo.',
-      text: `http://localhost:3001/candidatos/confirmar/${uuid}`
+      subject: 'Código de verificação EmpreGo',
+      text: `Seu código de verificação é: ${codigo}`
     }
 
     transporter.sendMail(emailOptions);
 
-    res.status(201).json({ message: "Pré-cadastro concluído.", uuid });
+    res.status(201).json({ message: "Pré-cadastro concluído." });
 
   } catch (error) {
     if (error instanceof ErroDeValidacao) {
@@ -58,21 +62,21 @@ router.post('/candidatos', async (req, res) => {
 router.post('/candidatos/reenviar', limiteNodemailer, async (req, res)=>{
   try{
     const { email } = req.body;
-    if(!email) res.status(400).json({ error: 'Email precisa ser fornecido.' });
+    if(!email) return res.status(400).json({ error: 'Email precisa ser fornecido.' });
 
-    const candidato = await pool.query('select uuid from candidatos_pend where email = $1',
+    const candidato = await pool.query('select codigo from candidatos_pend where email = $1 and expira_em > now()',
       [email]
     );
 
     if(!candidato.rows[0]) return res.status(404).json({ error: 'Email fornecido não está aguardando confirmação.'});
 
-    const uuid = candidato.rows[0].uuid;
+    const codigo = candidato.rows[0].codigo;
 
     const emailOptions = {
-      from: process.env.EMAIL,
+      from: EMAIL_SERVER,
       to: email,
-      subject: 'Para validar o seu email clique no link abaixo (reenvio).',
-      text: `http://localhost:3001/candidatos/confirmar/${uuid}`
+      subject: 'Código de verificação EmpreGo (reenvio).',
+      text: `Seu código de verificação é: ${codigo}`
     }
 
     await transporter.sendMail(emailOptions);
@@ -84,23 +88,45 @@ router.post('/candidatos/reenviar', limiteNodemailer, async (req, res)=>{
   }
 })
 
-router.get('/candidatos/confirmar/:uuid', async (req, res)=>{
+router.post('/candidatos/confirmar', limiteValidarCodigo, async (req, res)=>{
   try{
-    const { uuid } = req.params;
+    const { codigo } = req.body;
 
-    if(!uuid) return res.status(400).send("Erro ao confirmar email, tente novamente mais tarde.");
+    if(!codigo) return res.status(400).json({ error: "Codigo de verificação precisa ser fornecido."});
 
-    const response = await pool.query(`select nome, email, senha, genero, data_nasc from candidatos_pend where uuid = $1`, [uuid]);
+    const response = await pool.query(`select nome, email, senha, genero, data_nasc from candidatos_pend where codigo = $1 and expira_em > now()`, [codigo]);
+
+    if (response.rowCount === 0) {
+      return res.status(400).json({ error: "Código inválido ou expirado." });
+    }
 
     const candidato = response.rows[0];
 
-    await popularTabelaCandidatos(candidato, uuid);
+    const novoId = await popularTabelaCandidatos(candidato, codigo);
 
-    res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'confirm.html'));
+    const tkn = req.cookies.token;
+
+    if (tkn) {
+      await removerToken(tkn);
+    }
+
+    const token = jwt.sign({ id: novoId, tipo: 'candidato', nivel: 'comum' }, SECRET_KEY, { expiresIn: '1d' });
+    
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 7*24*60*60*1000
+    });
+
+    const expira_em = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    await adicionarToken(novoId, 'candidato', token, expira_em)
+
+    res.status(201).json({ message: 'Email confirmado com sucesso.'});
   }
   catch(erro){
     console.error("Erro ao confirmar candidato:", erro);
-    res.status(500).send("Erro ao confirmar email, tente novamente mais tarde.");
+    res.status(500).json({ error: "Código expirado ou email já confirmado." });
   }
 })
 

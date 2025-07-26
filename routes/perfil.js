@@ -47,8 +47,9 @@ router.get('/perfil/candidato/info', authenticateToken, apenasCandidatos, async 
     const id = req.user.id;
 
     const usuario = await pool.query(
-      `SELECT nome, data_nasc, email, descricao, foto, cpf 
-       FROM candidatos where id = $1`,
+      `SELECT nome, data_nasc, email, descricao, foto, cpf, 
+      estado, cidade, instagram, github, youtube, twitter, pronomes
+      FROM candidatos where id = $1`,
       [id]
     );
 

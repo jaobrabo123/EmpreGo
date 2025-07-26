@@ -130,10 +130,10 @@ async function enviarEdicao() {
       }else
       if(erro.status===500){
         mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
-        console.error("Erro ao editar perfil: ", erro.error);
+        console.error("Erro ao editar perfil: ", erro.message);
         return;
       }
-      console.error("Erro ao editar perfil: ", erro.error);
+      console.error("Erro ao editar perfil: ", erro.message);
     });
 }
 

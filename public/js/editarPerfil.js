@@ -100,14 +100,10 @@ async function enviarEdicao() {
     return;
   }
 
-  if(cpf){
-    const cpfSemCaracteres = cpf.replace(/[^\d]+/g, '');
-  }
-
   const formData = new FormData();
   if (foto) formData.append("foto", foto);
   if (descricao) formData.append("descricao", descricao);
-  if (cpf) formData.append("cpf", cpfSemCaracteres);
+  if (cpf) formData.append("cpf", cpf);
   if (estado && estado !== "NM") formData.append("estado", estado);
   if (cidade) formData.append("cidade", cidade);
   if (instagram) formData.append("instagram", instagram);

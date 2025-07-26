@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector('#emailUsuario').textContent = data.info.email;
         document.querySelector('#fotoUsuario').src = data.info.foto;
         document.querySelector("#cpfUsuario").textContent = data.info.cpf;
+        document.querySelector("#instUsuario").href = data.info.instagram;
+        document.querySelector("#gitUsuario").href = data.info.github;
+        document.querySelector("#ytUsuario").href = data.info.youtube;
+        document.querySelector("#twtUsuario").href = data.info.twitter;
 
         // Formata a data de nascimento
         const dataNasc = new Date(data.info.data_nasc);

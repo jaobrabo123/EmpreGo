@@ -1,6 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+}
+
+html, body {
+  width: 100%; 
+  overflow-x: hidden; 
+}
+
 #main {
     display: flex;
     flex-direction: column;
+    padding-top: 120px;
 }
 
 a {
@@ -26,15 +38,15 @@ a {
     text-align: center;
 }
 
-#nascUsuario{
+#nascUsuario {
     margin-top: 5px;
 }
 
-#cpfUsuario{
+#cpfUsuario {
     margin-top: 5px;
 }
 
-#pronUsuario{
+#pronUsuario {
     margin-top: 5px;
 }
 
@@ -51,27 +63,27 @@ a {
     margin-bottom: 50px;
 }
 
-#enderecoInfo{
+#enderecoInfo {
     align-items: center;
     display: flex;
     flex-direction: row;
 }
 
-#alignEndereco{
+#alignEndereco {
     align-items: center;
     display: flex;
     flex-direction: column;
     margin-right: 70px;
 }
 
-#houseIcon{
+#houseIcon {
     width: 50px;
     height: 50px;
     margin-right: 20px;
     margin-top: 15px;
 }
 
-#enderecoUsuario{
+#enderecoUsuario {
     margin-top: 10px;
 }
 
@@ -81,22 +93,22 @@ a {
     flex-direction: row;
 }
 
-#cidadeUsuario{
+#cidadeUsuario {
     margin-right: 10px;
 }
 
-#tituloTags{
+#tituloTags {
     margin-top: 20px;
     font-size: 50px;
 }
 
-#bodyTags{
+#bodyTags {
     align-items: center;
     display: flex;
     flex-direction: column;
 }
 
-#boxTags{
+#boxTags {
     background-color: #393053;
     width: 1000px;
     height: 70px;
@@ -116,17 +128,17 @@ a {
     margin-top: 20px;
 }
 
-#btnAddTags{
+#btnAddTags {
     width: 50px;
     height: 50px;
     margin-right: 20px;
 }
 
-#btnAddTags:hover{
+#btnAddTags:hover {
     opacity: 80%;
 }
 
-.Tags button{
+.Tags button {
     color: White;
     font-weight: bold;
     height: 50px;
@@ -142,16 +154,16 @@ a {
     background-color: #18122b;
 }
 
-.Tags button:hover{
+.Tags button:hover {
     cursor: pointer;
     opacity: 80%;
 }
 
-#tagLing{
+#tagLing {
     border-color: #692785;
 }
 
-#tagHorario{
+#tagHorario {
     border-color: white;
 }
 
@@ -168,8 +180,8 @@ a {
 
 #descUsuario {
     margin-top: 20px;
-    width: 1000px;
-    height: 400px;
+    width: 800px;
+    height: 200px;
     resize: none;
     background-color: #393053;
     color: white;
@@ -230,7 +242,7 @@ a {
     text-decoration-line: underline;
 }
 
-#tituloExperiencias{
+#tituloExperiencias {
     margin-bottom: 20px;
     font-size: 50px;
 }
@@ -300,11 +312,11 @@ a {
 }
 
 #fotoUsuario {
-    width: 400px;
-    height: 400px;
+    width: 250px;
+    height:250px;
     border-radius: 100%;
     border-style: solid;
-    border-color: white;
+    border-color: #635985;
     border-width: 5px;
 }
 
@@ -319,18 +331,19 @@ a {
 }
 
 .btn-editar-perfil {
-  margin: 20px auto 0 auto;
-  display: block;
-  background: #635985;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 28px;
-  font-size: 1.4rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
+    margin: 20px auto 0 auto;
+    display: block;
+    background: #635985;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
 }
+
 .btn-editar-perfil:hover {
-  background: #443C68;
+    background: #443C68;
 }

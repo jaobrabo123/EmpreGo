@@ -64,7 +64,6 @@ header {
     background-color: rgba(39, 30, 53, 0.95);
     backdrop-filter: blur(10px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    
 }
 
 /* ====================================== */
@@ -94,7 +93,7 @@ header {
 
 
 /* ====================================== */
-/*           LOGO E NOME DO SITE          */ /*se leu é gay
+/*           LOGO E NOME DO SITE          */ 
 /* ====================================== */
 
 #nomedosite{

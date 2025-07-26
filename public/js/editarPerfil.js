@@ -100,10 +100,14 @@ async function enviarEdicao() {
     return;
   }
 
+  if(cpf){
+    const cpfSemCaracteres = cpf.replace(/[^\d]+/g, '');
+  }
+
   const formData = new FormData();
   if (foto) formData.append("foto", foto);
   if (descricao) formData.append("descricao", descricao);
-  if (cpf) formData.append("cpf", cpf);
+  if (cpf) formData.append("cpf", cpfSemCaracteres);
   if (estado && estado !== "NM") formData.append("estado", estado);
   if (cidade) formData.append("cidade", cidade);
   if (instagram) formData.append("instagram", instagram);
@@ -130,10 +134,10 @@ async function enviarEdicao() {
       }else
       if(erro.status===500){
         mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
-        console.error("Erro ao editar perfil: ", erro.error);
+        console.error("Erro ao editar perfil: ", erro.message);
         return;
       }
-      console.error("Erro ao editar perfil: ", erro.error);
+      console.error("Erro ao editar perfil: ", erro.message);
     });
 }
 

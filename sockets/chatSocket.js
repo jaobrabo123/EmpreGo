@@ -13,7 +13,6 @@ module.exports = (io) => {
                     order by data_criacao asc`,
                     [roomId]
                 );
-                //console.log(response.rows)
 
                 socket.emit('previousMessages', response.rows);
 

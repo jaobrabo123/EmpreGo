@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/profileStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>Profile</title>
+    <title>Perfil</title>
 </head>
 
 <body>
@@ -37,7 +37,7 @@
             <div id="impInfo">
                 <img id="fotoUsuario" src="../assets/imgs/genPfp.png" alt="genPfp">
                 <h1 id="nascUsuario">18/03/2017</h1>
-                <h1 id="cpfUsuario">123-456-789.01</h1>
+                <h1 id="cpfUsuario">Edite o perfil para exibir CPF</h1>
                 <h1 id="pronUsuario">Ele/Dele</h1>
                 <button id="btnEditarPerfil" onclick="window.location.href='/perfil/candidato/editar'"
                     class="btn-editar-perfil">
@@ -50,24 +50,24 @@
                 <a id="emailUsuario"> EmailGenerico@gmail.com</a>
                 <p id="descUsuario"></p>
                 <div id="conexoes">
-                    <img src="../assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
+                    <img id="LogoInst" src="../assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
                     <a id="instUsuario" href="https://youtu.be/ua_DSJAD7gc?si=O3y6hQHb0lpgrBmo" class="nomeRedeSoc"
                         target="_blank">
                         Instagram
                     </a>
-                    <img src="../assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
+                    <img id="LogoGit"src="../assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
                     <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc"
                         target="_blank">
                         GitHub
                     </a>
 
-                    <img src="../assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
+                    <img id="LogoYt" src="../assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
                     <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc"
                         target="_blank">
                         Youtube
                     </a>
 
-                    <img src="../assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
+                    <img id="LogoTwt" src="../assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
                     <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc"
                         target="_blank">
                         Twitter/X
@@ -77,10 +77,12 @@
                 <div id="enderecoInfo">
                     <img id="houseIcon" src="../assets/imgs/House.png" alt="HouseIcon">
                     <div id="alignEndereco">
-                        <h1 id="enderecoUsuario">Av. Adelia Franco 2288</h1>
+                        <h1 id="enderecoUsuario">Endereço: (Nenhum)</h1> <!--Não existe método de cadastro de endereço ainda-->
                         <div id="cidadeEstado">
-                            <h1 id="cidadeUsuario">Aracaju</h1>
-                            <h1 id="estadoUsuario">(SE)</h1>
+                            <h1 id="cidadeUsuario">Cidade: (Nenhuma)</h1>
+                            <h1>(</h1>
+                            <h1 id="estadoUsuario">Estado: (XX)</h1>
+                            <h1>)</h1>
                         </div>
                     </div>
                 </div>

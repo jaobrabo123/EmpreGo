@@ -76,7 +76,6 @@ class CandidatoService{
       "cpf",
       "estado",
       "cidade",
-      "endereco",
       "instagram",
       "github",
       "youtube",
@@ -120,9 +119,8 @@ class CandidatoService{
         if (atributos.findIndex((x) => x === "cidade") === -1) {
           await pool.query("UPDATE candidatos SET cidade = null WHERE id = $1", [id]);
         }
-      } else 
-        
-      if (atri === "cidade") {
+      } 
+      else if (atri === "cidade") {
         let estado = "";
 
         const resultado = await pool.query("SELECT estado FROM candidatos WHERE id = $1",[id]);
@@ -145,10 +143,7 @@ class CandidatoService{
         }
 
       } else 
-        
-      if (atri === "endereco" && valor.length > 200) {
-        throw new Erros.ErroDeValidacao(`Endereço não pode exceder 200 caracteres.`);
-      } else 
+         
         
       if (atri === "descricao" && valor.length > 2000) {
         throw new Erros.ErroDeValidacao(`Descrição não pode exceder 2000 caracteres.`);

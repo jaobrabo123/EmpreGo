@@ -9,7 +9,7 @@ const { limiteGeral } = require('./middlewares/rateLimit.js');
 const staticRoutes = require('./routes/static.js')
 const loginRoutes = require('./routes/logins.js');
 const perfilRoutes = require('./routes/perfil.js');
-const usuarioRoutes = require('./routes/candidatos.js');
+const candidatoRoutes = require('./routes/candidatos.js');
 const tagRoutes = require('./routes/tags.js');
 const experienciaRoutes = require('./routes/experiencias.js');
 const empresaRoutes = require('./routes/empresas.js');
@@ -47,7 +47,7 @@ require('./tasks/cronLimpezaCandidatosPendentes.js')
 app.use(staticRoutes)
 app.use(loginRoutes);
 app.use(perfilRoutes);
-app.use(usuarioRoutes);
+app.use(candidatoRoutes);
 app.use(tagRoutes);
 app.use(experienciaRoutes);
 app.use(empresaRoutes);

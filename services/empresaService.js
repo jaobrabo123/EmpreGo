@@ -152,7 +152,7 @@ class EmpresaService{
     }
 
     const empresaExistente = await EmpresaModel.verificarCnpjExistente(em);
-    if(!empresaExistente) throw new Erros.ErroDeNaoEncontrado('Empresa fornecida não existe.')
+    if(!empresaExistente) throw new Erros.ErroDeNaoEncontrado('Empresa fornecida não pode ser removida pois não existe.')
 
     const chatsEmpresa = await EmpresaModel.buscarChatsPorCnpj(em);
     await Promise.all(

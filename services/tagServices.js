@@ -1,38 +1,36 @@
 const pool = require("../config/db.js");
+const TagModel = require("../models/tagModel.js");
 const { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
+const ValidarCampos = require('../utils/validarCampos.js');
 
-async function popularTabelaTags(nome, id) {
-  if (nome.length > 25) {
-    throw new ErroDeValidacao("O nome da tag não pode ter mais de 25 caracteres");
+class TagService {
+
+  static async popularTabelaTags(nome, id) {
+
+    ValidarCampos.validarTamanhoMax(nome, 25, 'Tag');
+    nome = nome.trim();
+
+    await pool.query(`INSERT INTO tags (nome, candidato) VALUES ($1, $2)`, [ nome, id, ]);
   }
 
-  await pool.query(`INSERT INTO tags (nome, candidato) VALUES ($1, $2)`, [ nome, id, ]);
+  static async removerTag(tg, id, nivel) {
+    if (!tg) throw new ErroDeValidacao("O id da tag precisa ser fornecido.");
+
+    tg = Number(tg);
+
+    const tag = await TagModel.buscarCandidatoPorTagId(tg);
+
+    if (!tag) {
+      throw new ErroDeNaoEncontrado("Tag não encontrada.");
+    }
+
+    if (nivel !== "admin" && id !== tag) {
+      throw new ErroDeAutorizacao("A tag só pode ser removida pelo dono dela.");
+    }
+
+    await pool.query(`delete from tags where id = $1`, [tg]);
+  }
 
 }
 
-async function removerTag(tg, id, nivel) {
-  
-  if (!tg) throw new ErroDeValidacao("O id da tag precisa ser fornecido.");
-
-  tg = Number(tg);
-
-  const resposta = await pool.query(`select candidato from tags where id = $1`, [tg]);
-
-  const tag = resposta.rows[0];
-
-  if (!tag) {
-    throw new ErroDeValidacao("Tag não encontrada.");
-  }
-
-  if (nivel !== "admin" && id !== tag.candidato) {
-    throw new ErroDeAutorizacao("A tag só pode ser removida pelo dono dela.");
-  }
-
-  await pool.query(`delete from tags where id = $1`, [tg]);
-
-}
-
-module.exports = {
-  popularTabelaTags,
-  removerTag
-}
+module.exports = TagService;

@@ -11,6 +11,7 @@ dotenv.config();
 const EMAIL_SERVER = process.env.EMAIL;
 
 class CandidatoController {
+
     static async cadastrar(req, res) {
         try{
             const { nome, email, senha, genero, data_nasc } = req.body;
@@ -46,6 +47,7 @@ class CandidatoController {
             res.status(500).json({ error: "Erro ao fazer pré-cadastro: " + erro.message });
         }
     }
+
     static async confirmarCadastro(req, res) {
         try{
             const { codigo } = req.body;
@@ -75,6 +77,7 @@ class CandidatoController {
             res.status(500).json({ error: "Erro ao confirmar cadastro." });
         }
     }
+
     static async enviarNovoCodigo(req, res){
         try{
             const { email } = req.body;
@@ -102,6 +105,7 @@ class CandidatoController {
             res.status(500).json({ error: `Erro ao reenviar email: ${erro.message}`})
         }
     }
+
     static async listarTodos(req, res){
          try {
             const candidatos = await CandidatoModel.buscarTodosCandidatos();
@@ -111,6 +115,7 @@ class CandidatoController {
             res.status(500).json({ error: `Erro ao buscar usuários: ${erro?.message || "erro desconhecido"}` });
         }
     }
+
     static async remover(req, res){
         try {
             const { cd } = req.params;
@@ -132,6 +137,7 @@ class CandidatoController {
             res.status(500).json({ error: erro.message });
         }
     }
+    
 }
 
 module.exports = CandidatoController;

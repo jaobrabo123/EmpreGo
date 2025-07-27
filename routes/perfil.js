@@ -2,7 +2,7 @@
 const express = require('express');
 const pool = require('../config/db.js');
 const { editarPerfil } = require('../services/candidatoService.js');
-const { editarPerfilEmpresa } = require('../services/empresaServices.js')
+const { editarPerfilEmpresa } = require('../services/empresaService.js')
 const { authenticateToken, apenasEmpresa, apenasCandidatos } = require('../middlewares/auth.js');
 const {ErroDeValidacao} = require('../utils/erroClasses.js')
 

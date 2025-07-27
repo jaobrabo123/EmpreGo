@@ -1,27 +1,29 @@
-const jwt = require('jsonwebtoken');
 const CandidatoModel = require('../models/candidatoModel.js');
 const CandidatoService = require("../services/candidatoService.js");
-const { ErroDeValidacao, ErroDeAutorizacao, ErroDeConflito } = require("../utils/erroClasses.js");
-const { adicionarToken, removerToken } = require('../services/tokenService.js');
+const Erros = require("../utils/erroClasses.js");
+const TokenService = require('../services/tokenService.js');
+const { salvarCookieToken } = require('../utils/cookieUtils.js');
 
 const transporter = require('../config/nodemailer.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const SECRET_KEY = process.env.JWT_SECRET;
 const EMAIL_SERVER = process.env.EMAIL;
 
 class CandidatoController {
     static async cadastrar(req, res) {
         try{
             const { nome, email, senha, genero, data_nasc } = req.body;
-
-            if (!nome || !email || !senha || !genero || !data_nasc) return res.status(400).json({ error: "Todas as informações devem ser fornecidas para o cadastro!" });
+            if (!nome || !email || !senha || !genero || !data_nasc) {
+                return res.status(400).json({ error: "Todas as informações devem ser fornecidas para o cadastro!" });
+            }
 
             const codigo = Math.floor(Math.random() * 9000) + 1000;
             const expira_em = new Date(Date.now() + 15 * 60 * 1000);
 
-            await CandidatoService.popularTabelaCandidatosPendentes(nome, email, senha, genero, data_nasc, codigo, expira_em);
+            await CandidatoService.popularTabelaCandidatosPendentes(
+                nome, email, senha, genero, data_nasc, codigo, expira_em
+            );
 
             const emailOptions = {
                 from: EMAIL_SERVER,
@@ -35,10 +37,10 @@ class CandidatoController {
             res.status(201).json({ message: "Pré-cadastro concluído." });
         }
         catch(erro){
-            if (erro instanceof ErroDeValidacao) {
+            if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
-            if(erro instanceof ErroDeConflito) {
+            if(erro instanceof Erros.ErroDeConflito) {
                 return res.status(409).json({ error: erro.message });
             }
             res.status(500).json({ error: "Erro ao fazer pré-cadastro: " + erro.message });
@@ -54,26 +56,21 @@ class CandidatoController {
 
             const tkn = req.cookies.token;
             if (tkn) {
-                await removerToken(tkn);
+                await TokenService.removerToken(tkn);
             }
 
-            const token = jwt.sign({ id: novoId, tipo: 'candidato', nivel: 'comum' }, SECRET_KEY, { expiresIn: '1d' });
-            
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-                maxAge: 7*24*60*60*1000
-            });
-
+            const token = salvarCookieToken(res, novoId, 'candidato', 'comum');
             const expira_em = new Date(Date.now() + 24 * 60 * 60 * 1000);
-            await adicionarToken(novoId, 'candidato', token, expira_em)
+            await TokenService.adicionarToken(novoId, 'candidato', token, expira_em)
 
             res.status(201).json({ message: 'Email confirmado com sucesso.'});
         }
         catch(erro){
-            if(erro instanceof ErroDeNaoEncontrado){
+            if(erro instanceof Erros.ErroDeNaoEncontrado){
                 return res.status(404).json({ error: erro.message });
+            }
+            if (erro instanceof Erros.ErroDeValidacao) {
+                return res.status(400).json({ error: erro.message });
             }
             res.status(500).json({ error: "Erro ao confirmar cadastro." });
         }
@@ -99,7 +96,7 @@ class CandidatoController {
             res.status(200).json({ message: 'Reenvio realizado com sucesso.'})
         }
         catch(erro){
-            if (erro instanceof ErroDeValidacao) {
+            if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
             res.status(500).json({ error: `Erro ao reenviar email: ${erro.message}`})
@@ -123,11 +120,14 @@ class CandidatoController {
 
             res.status(200).json({ message: "Candidato removido com sucesso" });
         } catch (erro) {
-            if (erro instanceof ErroDeAutorizacao) {
+            if (erro instanceof Erros.ErroDeAutorizacao) {
                 return res.status(403).json({ error: erro.message });
-            }else
-            if (erro instanceof ErroDeValidacao){
+            }
+            if (erro instanceof Erros.ErroDeValidacao){
                 return res.status(400).json({ error: erro.message })
+            }
+            if(erro instanceof Erros.ErroDeNaoEncontrado){
+                return res.status(404).json({ error: erro.message });
             }
             res.status(500).json({ error: erro.message });
         }

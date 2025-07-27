@@ -1,6 +1,7 @@
 const { ErroDeValidacao } = require('./erroClasses.js');
 
 class ValidarCampos{
+
     static validarTamanhoMax(valor, maximo, nome){
         if (typeof valor !== 'string') {
             throw new ErroDeValidacao(`O campo ${nome} precisa ser uma string.`);
@@ -13,6 +14,7 @@ class ValidarCampos{
             throw new ErroDeValidacao(`O campo ${nome} não pode ter mais de ${maximo} caracteres.`)
         }
     }
+
     static validarTamanhoMin(valor, minimo, nome){
         if (typeof valor !== 'string') {
             throw new ErroDeValidacao(`O campo ${nome} precisa ser uma string.`);
@@ -25,6 +27,7 @@ class ValidarCampos{
             throw new ErroDeValidacao(`O campo ${nome} não pode ter menos de ${minimo} caracteres.`)
         }
     }
+
     static validarEmail(email){
         if (typeof email !== 'string') {
             throw new ErroDeValidacao(`O email precisa ser uma string.`);
@@ -38,6 +41,7 @@ class ValidarCampos{
             throw new ErroDeValidacao(`O email fornecido não é válido.`)
         }
     }
+
     static validarIdade(data, minimo, maximo, nome){
         const nascimento = new Date(data);
         if (isNaN(nascimento)) {
@@ -61,6 +65,7 @@ class ValidarCampos{
             throw new ErroDeValidacao(`${nome} não pode ter mais de ${minimo} anos.`);
         }
     }
+
     static validarCpf(cpf) {
         if (typeof cpf !== 'string') {
             throw new ErroDeValidacao('O CPF precisa ser uma string.');
@@ -100,6 +105,60 @@ class ValidarCampos{
             throw new ErroDeValidacao('O CPF fornecido é inválido.');
         }
     }
+
+    static validarCnpj(cnpj){
+        if (typeof cnpj !== 'string') {
+            throw new ErroDeValidacao('O CNPJ precisa ser uma string.');
+        }
+
+        // Remove pontos e traços
+        const cnpjLimpo = cnpj.replace(/[^\d]/g, '').trim();
+
+        if (!cnpjLimpo) {
+            throw new ErroDeValidacao('O CNPJ precisa ser fornecido.');
+        }
+
+        if (!/^\d{14}$/.test(cnpjLimpo)) {
+            throw new ErroDeValidacao('O CNPJ deve conter exatamente 14 dígitos numéricos.');
+        }
+    }
+
+    static validarCep(cep){
+        if (typeof cep !== 'string') {
+            throw new ErroDeValidacao('O CEP precisa ser uma string.');
+        }
+
+        // Remove pontos e traços
+        const cepLimpo = cep.replace(/[^\d]/g, '').trim();
+
+        if (!cepLimpo) {
+            throw new ErroDeValidacao('O CEP precisa ser fornecido.');
+        }
+
+        if (!/^\d{8}$/.test(cepLimpo)) {
+            throw new ErroDeValidacao('O CEP deve conter exatamente 8 dígitos numéricos.');
+        }
+    }
+
+    static validarTelefone(telefone){
+
+        if (typeof telefone !== 'string') {
+            throw new ErroDeValidacao('O Telefone precisa ser uma string.');
+        }
+
+        // Remove pontos e traços
+        const telefoneLimpo = telefone.replace(/[^\d]/g, '').trim();
+
+        if (!telefoneLimpo) {
+            throw new ErroDeValidacao('O Telefone precisa ser fornecido.');
+        }
+
+        if (!/^\d{13}$/.test(telefoneLimpo)) {
+            throw new ErroDeValidacao('O Telefone deve conter exatamente 13 dígitos numéricos.');
+        }
+
+    }
+
 }
 
 module.exports = ValidarCampos;

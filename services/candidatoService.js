@@ -2,26 +2,27 @@ const bcrypt = require("bcryptjs");
 const pool = require("../config/db.js");
 const CandidatoModel = require('../models/candidatoModel.js');
 const ValidarCampos = require('../utils/validarCampos.js');
-const  { ErroDeValidacao, ErroDeAutorizacao, ErroDeConflito, ErroDeNaoEncontrado } = require("../utils/erroClasses.js");
+const Erros = require("../utils/erroClasses.js");
 
 class CandidatoService{
+  
   static async popularTabelaCandidatosPendentes(nome, email, senha, genero, data_nasc, codigo, expira_em){
-
-    const emailExistente = await CandidatoModel.verificarEmailExistente(email);
-    if (emailExistente) {
-      throw new ErroDeConflito('Email já cadastrado.');
-    }
-
-    const emailPendente = await CandidatoModel.verificarEmailPendente(email);
-    if (emailPendente) {
-      throw new ErroDeConflito("Email aguardando confirmação.");;
-    }
 
     ValidarCampos.validarTamanhoMin(senha, 8, 'Senha');
     ValidarCampos.validarTamanhoMax(nome, 100, 'Nome');
     ValidarCampos.validarTamanhoMax(genero, 30, 'Gênero');
     ValidarCampos.validarEmail(email);
     ValidarCampos.validarIdade(data_nasc, 14, 120, 'Data de Nascimento');
+    nome = nome.trim();
+    email = email.trim();
+    senha = senha.trim();
+    genero = genero.trim();
+
+    const emailExistente = await CandidatoModel.verificarEmailExistente(email);
+    if (emailExistente) throw new Erros.ErroDeConflito('Email já cadastrado.');
+
+    const emailPendente = await CandidatoModel.verificarEmailPendente(email);
+    if (emailPendente) throw new Erros.ErroDeConflito("Email aguardando confirmação.");
 
     //criptografa a senha
     const senhaCriptografada = await bcrypt.hash(senha, 10);
@@ -32,10 +33,11 @@ class CandidatoService{
     );
 
   }
+
   static async popularTabelaCandidatos(codigo){
     const candidato = await CandidatoModel.buscarCandidatoPendentePorCodigo(codigo);
 
-    if(!candidato) throw new ErroDeNaoEncontrado("Código inválido ou expirado.");
+    if(!candidato) throw new Erros.ErroDeNaoEncontrado("Código inválido ou expirado.");
 
     const result = await pool.query(`insert into candidatos (nome, email, senha, genero, data_nasc) values ($1, $2, $3, $4, $5) returning id`,
       [candidato.nome, candidato.email, candidato.senha, candidato.genero, candidato.data_nasc]
@@ -47,6 +49,7 @@ class CandidatoService{
 
     return result.rows[0].id;
   }
+
   static async gerarNovoCodigoPendente(email){
     ValidarCampos.validarEmail(email);
 
@@ -61,9 +64,10 @@ class CandidatoService{
 
     return codigo;
   }
+
   static async editarPerfil(atributos, valores, id){
     if (!atributos || !valores || !id) {
-      throw new ErroDeValidacao("Os atributos, valores e ID do candidato devem ser fornecidos.");
+      throw new Erros.ErroDeValidacao("Os atributos, valores e ID do candidato devem ser fornecidos.");
     }
 
     const colunasPermitidas = [
@@ -83,11 +87,11 @@ class CandidatoService{
     const atributosInvalidos = atributos.filter((col) => !colunasPermitidas.includes(col));
 
     if (atributosInvalidos.length > 0) {
-      throw new ErroDeValidacao(`Atributos inválidos detectados: ${atributosInvalidos.join(", ")}`);
+      throw new Erros.ErroDeValidacao(`Atributos inválidos detectados: ${atributosInvalidos.join(", ")}`);
     }
 
     if (atributos.length !== valores.length) {
-      throw new ErroDeValidacao("Números de atributos e valores não coincidem.");
+      throw new Erros.ErroDeValidacao("Números de atributos e valores não coincidem.");
     }
 
     for (let i = 0; i < atributos.length; i++) {
@@ -98,7 +102,7 @@ class CandidatoService{
       if (atri === "foto") {
         const prefix = "https://res.cloudinary.com/ddbfifdxd/image/upload/";
         if (!valor.startsWith(prefix)) {
-          throw new ErroDeValidacao(`A foto de perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
+          throw new Erros.ErroDeValidacao(`A foto de perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
         }
       }
       else if (atri === "cpf") {
@@ -111,7 +115,7 @@ class CandidatoService{
         const siglas = estados.map((e) => e.sigla.toUpperCase());
 
         if (!siglas.includes(valor.toUpperCase())) {
-          throw new ErroDeValidacao(`Estado inválido. Use uma sigla válida.`);
+          throw new Erros.ErroDeValidacao(`Estado inválido. Use uma sigla válida.`);
         }
         if (atributos.findIndex((x) => x === "cidade") === -1) {
           await pool.query("UPDATE candidatos SET cidade = null WHERE id = $1", [id]);
@@ -129,7 +133,7 @@ class CandidatoService{
         } else if (resultado.rows.length > 0 && resultado.rows[0].estado) {
           estado = resultado.rows[0].estado;
         } else {
-          throw new ErroDeValidacao(`Você deve fornecer o estado antes de atualizar a cidade.`);
+          throw new Erros.ErroDeValidacao(`Você deve fornecer o estado antes de atualizar a cidade.`);
         }
 
         const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`);
@@ -137,37 +141,37 @@ class CandidatoService{
         const nomesCidades = cidades.map((c) => c.nome.toLowerCase());
 
         if (!nomesCidades.includes(valor.toLowerCase())) {
-          throw new ErroDeValidacao(`Cidade inválida para o estado ${estado}.`);
+          throw new Erros.ErroDeValidacao(`Cidade inválida para o estado ${estado}.`);
         }
 
       } else 
         
       if (atri === "endereco" && valor.length > 200) {
-        throw new ErroDeValidacao(`Endereço não pode exceder 200 caracteres.`);
+        throw new Erros.ErroDeValidacao(`Endereço não pode exceder 200 caracteres.`);
       } else 
         
       if (atri === "descricao" && valor.length > 2000) {
-        throw new ErroDeValidacao(`Descrição não pode exceder 2000 caracteres.`);
+        throw new Erros.ErroDeValidacao(`Descrição não pode exceder 2000 caracteres.`);
       } else 
         
       if (atri === "instagram" && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new ErroDeValidacao(`URL do Instagram inválida.`);
+        throw new Erros.ErroDeValidacao(`URL do Instagram inválida.`);
       } else 
         
       if (atri === "github" && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new ErroDeValidacao(`URL do GitHub inválida.`);
+        throw new Erros.ErroDeValidacao(`URL do GitHub inválida.`);
       } else 
         
       if (atri === "youtube" && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(valor)) {
-        throw new ErroDeValidacao(`URL do YouTube inválida.`);
+        throw new Erros.ErroDeValidacao(`URL do YouTube inválida.`);
       } else 
         
       if (atri === "twitter" && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new ErroDeValidacao(`URL do Twitter inválida.`);
+        throw new Erros.ErroDeValidacao(`URL do Twitter inválida.`);
       } else
         
       if (atri === "pronomes" && valor.length > 20) {
-        throw new ErroDeValidacao(`Pronomes não podem exceder 20 caracteres.`);
+        throw new Erros.ErroDeValidacao(`Pronomes não podem exceder 20 caracteres.`);
       }
 
     }
@@ -181,35 +185,35 @@ class CandidatoService{
 
     await pool.query(query, valoresComId);
   }
+
   static async removerCandidato(cd, id, nivel){
     if(!cd || !id || !nivel){
-      throw new ErroDeValidacao('Informações faltando para a remoção.')
+      throw new Erros.ErroDeValidacao('Informações faltando para a remoção.')
     }
 
     cd = Number(cd);
 
     if(nivel!=='admin'&& cd!==id){
-      throw new ErroDeAutorizacao("Apenas o próprio candidato pode se remover.");
+      throw new Erros.ErroDeAutorizacao("Apenas o próprio candidato pode se remover.");
     }
+
+    const candidatoExistente = await CandidatoModel.verificarIdExistente(cd);
+    if(!candidatoExistente) throw new Erros.ErroDeNaoEncontrado('Candidato fornecido não existe.')
 
     if(nivel==='admin'){
       if(cd===id){
-        throw new ErroDeAutorizacao('Você não pode se remover kkkkkkkk')
+        throw new Erros.ErroDeAutorizacao('Você não pode se remover kkkkkkkk')
       }else{
-        const resultado = await pool.query('select nivel from candidatos where id = $1',[cd])
-        const niv = resultado.rows[0].nivel;
-        if (niv === 'admin') throw new ErroDeAutorizacao('Você não pode remover outro admin.');
+        const candidatoNivel = await CandidatoModel.buscarNivelPorId(cd);
+        if (candidatoNivel === 'admin') throw new Erros.ErroDeAutorizacao('Você não pode remover outro admin.');
       }
       
     }
 
-    const chatsCandidato = await pool.query(
-      `select id from chats where candidato = $1`,
-      [cd]
-    );
+    const chatsCandidato = await CandidatoModel.buscarChatsPorId(cd);
 
     await Promise.all(
-      chatsCandidato.rows.map(chat =>
+      chatsCandidato.map(chat =>
         pool.query('delete from mensagens where chat = $1', [chat.id])
       )
     )
@@ -223,6 +227,7 @@ class CandidatoService{
 
     await pool.query(`delete from candidatos where id = $1`, [cd]);
   }
+
 }
 
 module.exports = CandidatoService;

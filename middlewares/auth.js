@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const { limparCookieToken } = require('../utils/cookieUtils.js');
-const pool = require('../config/db.js');
+const TokenModel = require('../models/tokenModel.js');
 
 //Dotenv
 dotenv.config();
@@ -28,17 +28,14 @@ async function authenticateToken(req, res, next) {
     }
 
     try {
-      const resultado = await pool.query(
-        'SELECT expira_em FROM tokens WHERE token = $1',
-        [token]
-      );
+      const resultado = await TokenModel.verificarTokenExistente(token);
 
-      if(!resultado.rows[0]) {
+      if(!resultado) {
         limparCookieToken(res)
         return res.status(403).json({ error: 'Token inválido.' });
       }
 
-      if (resultado.rows[0].expira_em <= new Date()) {
+      if (resultado <= new Date()) {
         limparCookieToken(res)
         return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' });
       }

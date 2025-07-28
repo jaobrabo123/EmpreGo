@@ -34,13 +34,6 @@ class EmpresaModel {
         return resultado.rows[0];
     }
 
-    static async buscarChatsPorCnpj(cnpj){
-        const resultado = await pool.query(`
-            select id from chats where empresa = $1
-        `, [cnpj]);
-        return resultado.rows;
-    }
-
 }
 
 module.exports = EmpresaModel;

@@ -2,6 +2,7 @@ const pool = require('../config/db.js');
 const { ErroDeValidacao } = require('../utils/erroClasses.js');
 
 class TokenService{
+
     static async adicionarToken(iden, tipo, token, expira_em){
         if(!iden||!tipo||!token||!expira_em) throw new ErroDeValidacao('Todos os campos devem ser fornecidos.');
 
@@ -14,6 +15,7 @@ class TokenService{
             [iden, tipo, token, expira_em]
         )
     }
+    
     static async removerToken(tkn){
         if(!tkn) throw new Error('Token não fornecido.');
 

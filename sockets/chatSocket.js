@@ -1,4 +1,4 @@
-const pool = require('../config/db.js')
+const MensagemModel = require('../models/mensagemModel.js');
 
 module.exports = (io) => {
     io.on('connection', socket =>{
@@ -8,13 +8,9 @@ module.exports = (io) => {
             try{
                 socket.join(roomId)
                 console.log(`Socket ${socket.id} entrou na sala ${roomId}`)
-                const response = await pool.query(`select autor as author, mensagem as message, chat as room, de as type from mensagens 
-                    where chat = $1
-                    order by data_criacao asc`,
-                    [roomId]
-                );
+                const mensagens = await MensagemModel.buscarMensagensPorChat(roomId);
 
-                socket.emit('previousMessages', response.rows);
+                socket.emit('previousMessages', mensagens);
 
                 if (callback) callback({ status: 'success' });
             }

@@ -15,6 +15,7 @@ const experienciaRoutes = require('./routes/experiencias.js');
 const empresaRoutes = require('./routes/empresas.js');
 const tiposRoutes = require('./routes/tipos.js');
 const chatRoutes = require('./routes/chats.js');
+const mensagensRoutes = require('./routes/mensagensRoutes.js');
 
 //Sockets
 const setupChat = require('./sockets/chatSocket.js');
@@ -53,6 +54,7 @@ app.use(experienciaRoutes);
 app.use(empresaRoutes);
 app.use(tiposRoutes);
 app.use(chatRoutes);
+app.use(mensagensRoutes);
 
 //Porta do servidor
 server.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

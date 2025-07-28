@@ -1,4 +1,5 @@
 const { ErroDeValidacao } = require('./erroClasses.js');
+const isUrl = require('is-url');
 
 class ValidarCampos{
 
@@ -157,6 +158,65 @@ class ValidarCampos{
             throw new ErroDeValidacao('O Telefone deve conter exatamente 13 dígitos numéricos.');
         }
 
+    }
+
+    static validarImagemNoCloudinary(imagem){
+        const prefix = "https://res.cloudinary.com/ddbfifdxd/image/upload/";
+        if (imagem && !imagem.startsWith(prefix)) {
+            throw new ErroDeValidacao("A imagem não pode ser enviada diretamente. Use o upload de arquivo.");
+        }
+    }
+
+    static validarLink(link, tipo){
+        switch (tipo) {
+            case 'i':
+                const instagramRegex = /^(https?:\/\/)?(www\.)?instagram\.com\/[a-zA-Z0-9._]+\/?$/i;
+                if(!instagramRegex.test(link.trim())){
+                    throw new ErroDeValidacao("URL do Instagram inválida.");
+                }
+                break;
+            case 'g':
+                const githubRegex = /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/i;
+                if(!githubRegex.test(link.trim())){
+                    throw new ErroDeValidacao("URL do GitHub inválida.");
+                }
+                break;
+            case 'y':
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?youtube\.com\/(channel\/|user\/|watch\?v=)[a-zA-Z0-9_-]+/i;
+                if(!youtubeRegex.test(link.trim())){
+                    throw new ErroDeValidacao("URL do YouTube inválida.");
+                }
+                break;
+            case 'x':
+                const twitterRegex = /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/[a-zA-Z0-9_]{1,15}\/?$/i;
+                if(!twitterRegex.test(link.trim())){
+                    throw new ErroDeValidacao("URL do Twitter/X inválida.");
+                }
+                break;
+            default:
+                if(!isUrl(link.trim())){
+                    throw new ErroDeValidacao("URL inválida.");
+                }
+                break;
+        }
+    }
+
+    static async validarEstadoSigla(estado){
+        const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
+        const estados = await response.json();
+        const siglas = estados.map((e) => e.sigla.toUpperCase());
+        if (!siglas.includes(estado.toUpperCase())) {
+            throw new ErroDeValidacao(`Estado inválido. Use uma sigla válida.`);
+        }
+    }
+
+    static async validarCidadePorEstadoSigla(cidade, estado){
+        const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`);
+        const cidades = await response.json();
+        const nomesCidades = cidades.map((c) => c.nome.toLowerCase());
+        if (!nomesCidades.includes(cidade.trim().toLowerCase())) {
+            throw new ErroDeValidacao(`${cidade} não existe em: ${estado}.`);
+        }
     }
 
 }

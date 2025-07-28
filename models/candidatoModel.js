@@ -59,11 +59,20 @@ class CandidatoModel{
         return resultado.rows[0].nivel;
     }
 
-    static async buscarChatsPorId(id){
+    static async buscarPerfilInfoPorId(id){
         const resultado = await pool.query(`
-            select id from chats where candidato = $1 
+            SELECT nome, data_nasc, email, descricao, foto, cpf, 
+            estado, cidade, instagram, github, youtube, twitter, pronomes
+            FROM candidatos where id = $1
         `, [id]);
-        return resultado.rows;
+        return resultado.rows[0];
+    }
+
+    static async buscarEstadoPorId(id){
+        const resultado = await pool.query(`
+            SELECT estado FROM candidatos WHERE id = $1
+        `,[id]);
+        return resultado.rows[0].estado;
     }
 
 }

@@ -1,5 +1,5 @@
 const { ErroDeValidacao, ErroDeAutorizacao, ErroDeNaoEncontrado } = require('../utils/erroClasses.js');
-const TagService = require('../services/tagServices.js');
+const TagService = require('../services/tagService.js');
 const TagModel = require('../models/tagModel.js')
 
 class TagController {

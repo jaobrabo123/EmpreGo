@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const pool = require("../config/db.js");
 const CandidatoModel = require('../models/candidatoModel.js');
+const ChatModel = require('../models/chatModel.js');
 const ValidarCampos = require('../utils/validarCampos.js');
 const Erros = require("../utils/erroClasses.js");
 
@@ -67,7 +68,7 @@ class CandidatoService{
 
   static async editarPerfil(atributos, valores, id){
     if (!atributos || !valores || !id) {
-      throw new Erros.ErroDeValidacao("Os atributos, valores e ID do candidato devem ser fornecidos.");
+      throw new Erros.ErroDeValidacao("Os atributos, valores e id do candidato devem ser fornecidos.");
     }
 
     const colunasPermitidas = [
@@ -99,76 +100,58 @@ class CandidatoService{
       const valor = valores[i];
 
       if (atri === "foto") {
-        const prefix = "https://res.cloudinary.com/ddbfifdxd/image/upload/";
-        if (!valor.startsWith(prefix)) {
-          throw new Erros.ErroDeValidacao(`A foto de perfil não pode ser atualizado diretamente. Use o upload de arquivo.`);
-        }
+        ValidarCampos.validarImagemNoCloudinary(valor);
       }
       else if (atri === "cpf") {
         ValidarCampos.validarCpf(valor);
+        valor = valor.replace(/[^\d]/g, '').trim();
       }
-
       else if (atri === "estado" && valor !== "NM") {
-        const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
-        const estados = await response.json();
-        const siglas = estados.map((e) => e.sigla.toUpperCase());
-
-        if (!siglas.includes(valor.toUpperCase())) {
-          throw new Erros.ErroDeValidacao(`Estado inválido. Use uma sigla válida.`);
-        }
+        await ValidarCampos.validarEstadoSigla(valor);
+        valor = valor.toUpperCase();
         if (atributos.findIndex((x) => x === "cidade") === -1) {
           await pool.query("UPDATE candidatos SET cidade = null WHERE id = $1", [id]);
         }
       } 
       else if (atri === "cidade") {
         let estado = "";
-
-        const resultado = await pool.query("SELECT estado FROM candidatos WHERE id = $1",[id]);
-
         if (atributos.findIndex(x => x === "estado") !== -1) {
           const indexEstado = atributos.findIndex((x) => x === "estado");
-          estado = valores[indexEstado];
-        } else if (resultado.rows.length > 0 && resultado.rows[0].estado) {
-          estado = resultado.rows[0].estado;
-        } else {
-          throw new Erros.ErroDeValidacao(`Você deve fornecer o estado antes de atualizar a cidade.`);
+          estado = valores[indexEstado].toUpperCase();
+        } 
+        else {
+          const resultado = await CandidatoModel.buscarEstadoPorId(id);
+          if (!resultado) {
+            throw new Erros.ErroDeValidacao(`Você deve fornecer o estado antes de atualizar a cidade.`);
+          }
+          estado = resultado;
         }
-
-        const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`);
-        const cidades = await response.json();
-        const nomesCidades = cidades.map((c) => c.nome.toLowerCase());
-
-        if (!nomesCidades.includes(valor.toLowerCase())) {
-          throw new Erros.ErroDeValidacao(`Cidade inválida para o estado ${estado}.`);
-        }
-
-      } else 
-         
-        
-      if (atri === "descricao" && valor.length > 2000) {
-        throw new Erros.ErroDeValidacao(`Descrição não pode exceder 2000 caracteres.`);
-      } else 
-        
-      if (atri === "instagram" && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao(`URL do Instagram inválida.`);
-      } else 
-        
-      if (atri === "github" && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao(`URL do GitHub inválida.`);
-      } else 
-        
-      if (atri === "youtube" && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao(`URL do YouTube inválida.`);
-      } else 
-        
-      if (atri === "twitter" && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao(`URL do Twitter inválida.`);
-      } else
-        
-      if (atri === "pronomes" && valor.length > 20) {
-        throw new Erros.ErroDeValidacao(`Pronomes não podem exceder 20 caracteres.`);
+        await ValidarCampos.validarCidadePorEstadoSigla(valor, estado);
+        valor = valor.trim();
       }
-
+      else if (atri === "descricao") {
+        ValidarCampos.validarTamanhoMax(valor, 2000, 'Descrição');
+        valor = valor.trim();
+      } 
+      else if (atri === "instagram") {
+        ValidarCampos.validarLink(valor, 'i');
+        valor = valor.trim();
+      } 
+      else if (atri === "github") {
+        ValidarCampos.validarLink(valor, 'g');
+        valor = valor.trim();
+      } 
+      else if (atri === "youtube") {
+        ValidarCampos.validarLink(valor, 'y');
+        valor = valor.trim();
+      } 
+      else if (atri === "twitter") {
+        ValidarCampos.validarLink(valor, 'x');
+        valor = valor.trim();
+      } 
+      else if (atri === "pronomes") {
+        ValidarCampos.validarTamanhoMax(valor, 20, 'Pronomes');
+      }
     }
 
     const pedido = atributos.map((coluna, index) => `${coluna} = $${index + 1}`);
@@ -205,7 +188,7 @@ class CandidatoService{
       
     }
 
-    const chatsCandidato = await CandidatoModel.buscarChatsPorId(cd);
+    const chatsCandidato = await ChatModel.buscarChatsPorCandidato(cd);
 
     await Promise.all(
       chatsCandidato.map(chat =>

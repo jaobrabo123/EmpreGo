@@ -3,6 +3,7 @@ const pool = require('../config/db.js');
 const Erros = require('../utils/erroClasses.js');
 const ValidarCampos = require('../utils/validarCampos.js');
 const EmpresaModel = require("../models/empresaModel.js");
+const ChatModel = require('../models/chatModel.js');
 
 class EmpresaService{
 
@@ -154,7 +155,7 @@ class EmpresaService{
     const empresaExistente = await EmpresaModel.verificarCnpjExistente(em);
     if(!empresaExistente) throw new Erros.ErroDeNaoEncontrado('Empresa fornecida não pode ser removida pois não existe.')
 
-    const chatsEmpresa = await EmpresaModel.buscarChatsPorCnpj(em);
+    const chatsEmpresa = await ChatModel.buscarChatsPorEmpresa(em);
     await Promise.all(
       chatsEmpresa.map(chat => 
         pool.query(`delete from mensagens where chat = $1`, [chat.id])

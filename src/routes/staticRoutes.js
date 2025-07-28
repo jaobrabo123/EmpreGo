@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const router = express.Router();
 
-const pages = path.join(__dirname, '..', 'public', 'pages');
+const pages = path.join(__dirname, '..', '..', 'public', 'pages');
 
 //Página Inicial
 router.get('/', (req, res) => {

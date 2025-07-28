@@ -27,8 +27,10 @@
   },
   "_moduleAliases": {
     "@root": ".",
-    "@routes": "routes",
-    "@tasks": "tasks"
+    "@middlewares": "src/middlewares",
+    "@routes": "src/routes",
+    "@sockets": "src/sockets",
+    "@tasks": "src/tasks"
   },
   "description": ""
 }

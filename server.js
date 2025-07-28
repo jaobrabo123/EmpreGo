@@ -4,22 +4,22 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const { limiteGeral } = require('./middlewares/rateLimit.js');
+const { limiteGeral } = require('@middlewares/rateLimit.js');
 
 //Routes
-const staticRoutes = require('@routes/static.js')
-const loginRoutes = require('@routes/logins.js');
-const perfilRoutes = require('@routes/perfil.js');
-const candidatoRoutes = require('@routes/candidatos.js');
-const tagRoutes = require('@routes/tags.js');
-const experienciaRoutes = require('@routes/experiencias.js');
-const empresaRoutes = require('@routes/empresas.js');
-const tiposRoutes = require('@routes/tipos.js');
-const chatRoutes = require('@routes/chats.js');
+const staticRoutes = require('@routes/staticRoutes.js')
+const loginRoutes = require('@routes/loginRoutes.js');
+const perfilRoutes = require('@routes/perfilRoutes.js');
+const candidatosRoutes = require('@routes/candidatosRoutes.js');
+const tagsRoutes = require('@routes/tagsRoutes.js');
+const experienciasRoutes = require('@routes/experienciasRoutes.js');
+const empresasRoutes = require('@routes/empresasRoutes.js');
+const tipoRoutes = require('@routes/tipoRoutes.js');
+const chatsRoutes = require('@routes/chatsRoutes.js');
 const mensagensRoutes = require('@routes/mensagensRoutes.js');
 
 //Sockets
-const setupChat = require('./sockets/chatSocket.js');
+const setupChat = require('@sockets/chatSocket.js');
 
 //Dotenv
 dotenv.config();
@@ -49,12 +49,12 @@ require('@tasks/cronLimpezaCandidatosPendentes.js')
 app.use(staticRoutes)
 app.use(loginRoutes);
 app.use(perfilRoutes);
-app.use(candidatoRoutes);
-app.use(tagRoutes);
-app.use(experienciaRoutes);
-app.use(empresaRoutes);
-app.use(tiposRoutes);
-app.use(chatRoutes);
+app.use(candidatosRoutes);
+app.use(tagsRoutes);
+app.use(experienciasRoutes);
+app.use(empresasRoutes);
+app.use(tipoRoutes);
+app.use(chatsRoutes);
 app.use(mensagensRoutes);
 
 //Porta do servidor

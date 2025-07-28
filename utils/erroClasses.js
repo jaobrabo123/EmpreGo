@@ -12,7 +12,23 @@ class ErroDeAutorizacao extends Error {
   }
 }
 
+class ErroDeNaoEncontrado extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ErroDeNaoEncontrado';
+  }
+}
+
+class ErroDeConflito extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ErroDeConflito';
+  }
+}
+
 module.exports = {
   ErroDeValidacao,
-  ErroDeAutorizacao
+  ErroDeAutorizacao,
+  ErroDeNaoEncontrado,
+  ErroDeConflito
 }

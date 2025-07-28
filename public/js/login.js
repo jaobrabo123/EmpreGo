@@ -677,10 +677,7 @@ function login() {
     
     if (!res.ok) {
       const erro = await res.json();
-      throw {
-              status: res.status,
-              message: erro.error || "Erro ao fazer login automático."
-            };
+      throw { status: res.status, message: erro.error || "Erro ao fazer login."};
     }
     window.location.href = "/";
   })
@@ -796,31 +793,15 @@ function cadastrar(e) {
     body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
   })
   .then(async (res) => {
-    if (res.ok) {
-      return fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha }),
-        credentials: "include",
-      });
-    } else {
-      const erro = await res.json();
-      throw { status: erro.status, message: erro.error || "Erro ao cadastrar o usuário." };
-    }
-  })
-  .then((res) => {
-    if (!res.ok) {
-      throw { status: res.status , message: "Login automático falhou."};
-    }
-  })
-  .then(() => {
-    alert("Cadastro realizado com sucesso!");
-    window.location.href = "/";
+    const data = await res.json()
+    if (!res.ok) throw { status: res.status, message: data.error || "Erro ao cadastrar o usuário." };
+    window.location.href = `./pages/waitingConfirm.html?email=${email}`;
   })
   .catch((erro) => {
-    if (erro.message.includes("Email já cadastrado.")) {
+    console.log(erro.message)
+    if (erro.status===409) {
       mostrarErroTopo(
-        "E-mail já cadastrado. Por favor, use outro e-mail."
+        erro.message
       );
       return;
     }else

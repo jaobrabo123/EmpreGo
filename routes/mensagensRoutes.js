@@ -1,11 +1,12 @@
 //Imports
 const express = require('express');
 const { authenticateToken } = require('../middlewares/auth.js');
-const TipoController = require('../controllers/tipoController.js')
+const MensagemController = require('../controllers/mensagemController.js');
 
 //Router
 const router = express.Router();
 
-router.get('/get-tipo', authenticateToken, TipoController.pegarTipo);
+//Rotas
+router.post('/mensagens', authenticateToken, MensagemController.criar);
 
 module.exports = router;

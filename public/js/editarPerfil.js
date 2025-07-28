@@ -165,14 +165,11 @@ async function enviarEdicao() {
       window.location.href = "/perfil/candidato";
     })
     .catch((erro) => {
-      if (erro.message.includes("Cidade inválida para o estado")) {
-        mostrarErro(
-          "A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida."
-        );
-      } else if (erro.status === 500) {
-        mostrarErro(
-          "Erro ao editar perfil. (A culpa não foi sua, tente novamente)"
-        );
+      if(erro.message.includes('Cidade inválida para o estado')){
+        mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
+      }else
+      if(erro.status===500){
+        mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
         console.error("Erro ao editar perfil: ", erro.message);
         return;
       }

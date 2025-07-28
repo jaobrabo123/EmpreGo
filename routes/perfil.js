@@ -1,10 +1,7 @@
 //Imports
 const express = require('express');
-const pool = require('../config/db.js');
-const { editarPerfil } = require('../services/candidatoServices.js');
-const { editarPerfilEmpresa } = require('../services/empresaServices.js')
 const { authenticateToken, apenasEmpresa, apenasCandidatos } = require('../middlewares/auth.js');
-const {ErroDeValidacao} = require('../utils/erroClasses.js')
+const PerfilController = require('../controllers/perfilController.js');
 
 // Cloudinary + Multer
 const multer = require('multer');
@@ -41,90 +38,10 @@ const uploadEmpresaPerfil = multer({ storage: empresaPerfilStorage });  // uploa
 //Router
 const router = express.Router();
 
-//Rota para pegar o perfil do usuário
-router.get('/perfil/candidato/info', authenticateToken, apenasCandidatos, async (req, res) => {
-  try {
-    const id = req.user.id;
-
-    const usuario = await pool.query(
-      `SELECT nome, data_nasc, email, descricao, foto, cpf, 
-      estado, cidade, instagram, github, youtube, twitter, pronomes
-      FROM candidatos where id = $1`,
-      [id]
-    );
-
-    if (usuario.rows.length === 0) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
-    }
-
-    res.json(usuario.rows[0]);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar perfil: ' + error.message });
-  }
-});
-
-//Rota para editar o perfil do usuário
-router.post('/perfil/candidato', authenticateToken, apenasCandidatos, uploadPerfil.single('foto'), async (req, res) =>{
-  try {
-    const id = req.user.id;
-    const dados = { ...req.body };
-    
-    if (req.file) {
-      dados.foto = req.file.path;
-    }
-
-    const atributos = Object.keys(dados);
-    const valores = Object.values(dados);
-
-    await editarPerfil(atributos, valores, id);
-    res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
-  } catch (error) {
-    if (error instanceof ErroDeValidacao) {
-      return res.status(400).json({ error: error.message });
-    }
-    res.status(500).json({ error: 'Erro ao editar perfil: ' + error.message });
-  }
-})
-
-//Rota para editar o perfil da empresa
-router.post('/perfil/empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), async (req, res) => {
-  try {
-    const cnpj = req.user.id;
-    const dados = { ...req.body };
-    if (req.file) {
-      dados.foto = req.file.path;
-    }
-    const atributos = Object.keys(dados);
-    const valores = Object.values(dados);
-    
-    await editarPerfilEmpresa(atributos, valores, cnpj);
-    res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
-  } catch (error) {
-    if (error instanceof ErroDeValidacao) {
-      return res.status(400).json({ error: error.message });
-    }
-    res.status(500).json({ error: 'Erro ao editar perfil da empresa: ' + error.message });
-  }
-});
-
-router.get('/perfil/empresa/info', authenticateToken, apenasEmpresa, async (req, res) => {
-  try{
-    const cnpj = req.user.id;
-
-    const empresa = await pool.query(
-      `SELECT nome_fant, telefone, cep, complemento, numero, descricao, setor, porte, data_fund, contato, site, instagram, github, youtube, twitter, foto
-       FROM empresas where cnpj = $1`,
-      [cnpj]
-    );
-
-    if (empresa.rows.length === 0) {
-      return res.status(404).json({ error: 'Empresa não encontrada' });
-    }
-
-    res.json(empresa.rows[0]);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar perfil da empresa: ' + error.message });
-  }
-})
+//Rotas
+router.get('/perfil/candidato/info', authenticateToken, apenasCandidatos, PerfilController.buscarCandidato);
+router.post('/perfil/candidato', authenticateToken, apenasCandidatos, uploadPerfil.single('foto'), PerfilController.editarCandidato);
+router.get('/perfil/empresa/info', authenticateToken, apenasEmpresa, PerfilController.buscarEmpresa);
+router.post('/perfil/empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), PerfilController.editarEmpresa);
 
 module.exports = router;

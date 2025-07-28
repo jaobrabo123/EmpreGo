@@ -1,8 +1,12 @@
 const params = new URLSearchParams(window.location.search);
 const email = params.get('email');
+if(!email){
+    window.location.href = '/';
+}
+
 document.querySelector('#email').textContent = email
 
-const mensagem = document.querySelector('#mensagem')
+const mensagem = document.querySelector('#mensagem');
 
 const input = document.querySelector('#inputCodigo');
 

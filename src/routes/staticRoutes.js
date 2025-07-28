@@ -75,4 +75,9 @@ router.get('/empresas', (req,res)=>{
   res.sendFile(path.join(pages, '?.html'))
 })*/
 
+//Página de esperando confirmar a conta
+router.get('/confirmar', (req, res)=>{
+  res.sendFile(path.join(pages, 'waitingConfirm.html'))
+})
+
 module.exports = router;

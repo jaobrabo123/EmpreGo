@@ -795,7 +795,7 @@ function cadastrar(e) {
   .then(async (res) => {
     const data = await res.json()
     if (!res.ok) throw { status: res.status, message: data.error || "Erro ao cadastrar o usuário." };
-    window.location.href = `./pages/waitingConfirm.html?email=${email}`;
+    window.location.href = `/confirmar?email=${email}`;
   })
   .catch((erro) => {
     console.log(erro.message)

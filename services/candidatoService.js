@@ -97,7 +97,7 @@ class CandidatoService{
     for (let i = 0; i < atributos.length; i++) {
       
       const atri = atributos[i];
-      const valor = valores[i];
+      let valor = valores[i];
 
       if (atri === "foto") {
         ValidarCampos.validarImagemNoCloudinary(valor);

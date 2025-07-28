@@ -78,67 +78,55 @@ class EmpresaService{
 
     for (let i = 0; i < atributos.length; i++) {
       const atributo = atributos[i];
-      const valor = valores[i];
+      let valor = valores[i];
 
-      if (atributo === "descricao" && valor.length > 2000) {
-        throw new Erros.ErroDeValidacao("A descrição da empresa não pode conter mais de 2000 caracteres.");
-      } else
-
-      if (atributo === "setor" && valor.length > 70) {
-        throw new Erros.ErroDeValidacao("O setor da empresa não pode conter mais de 70 caracteres.");
-      } else
-
-      if (atributo === "porte" && valor.length > 30) {
-        throw new Erros.ErroDeValidacao("O porte da empresa não pode conter mais de 30 caracteres.");
-      } else
-
-      if (atributo === "contato" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
-        throw new Erros.ErroDeValidacao("E-mail de contato inválido.");
-      } else
-
-      if (atributo === "site" && !/^https?:\/\/[^\s/$.?#].[^\s]*$/.test(valor)) {
-        throw new Erros.ErroDeValidacao("URL do site da empresa inválida.");
-      } else
-
-      if (atributo === "instagram" && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao("URL do Instagram da empresa inválida.");
-      } else
-
-      if (atributo === "github" && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao("URL do GitHub da empresa inválida.");
-      } else
-
-      if (atributo === "youtube" && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao("URL do YouTube da empresa inválida.");
-      } else
-
-      if (atributo === "twitter" && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(valor)) {
-        throw new Erros.ErroDeValidacao("URL do Twitter da empresa inválida.");
-      } else 
-      
-      if (atributo === "foto") {
-        const prefix = "https://res.cloudinary.com/ddbfifdxd/image/upload/";
-        if (!valor.startsWith(prefix)) {
-          throw new Erros.ErroDeValidacao("A foto da empresa não pode ser atualizada diretamente. Use o upload de arquivo.");
-        }
-      } else
-
-      if (atributo === "data_fund") {
-        const data = new Date(valor);
-        if (isNaN(data.getTime())) {
-          throw new Erros.ErroDeValidacao("Data de fundação da empresa inválida.");
-        }
-        const hoje = new Date();
-        if (data > hoje) {
-          throw new Erros.ErroDeValidacao("A data de fundação da empresa não pode ser no futuro.");
-        }
+      if (atributo === "descricao") {
+        ValidarCampos.validarTamanhoMax(valor, 2000, "Descrição");
+        valor = valor.trim();
+      } 
+      else if (atributo === "setor") {
+        ValidarCampos.validarTamanhoMax(valor, 70, "Setor");
+        valor = valor.trim();
+      } 
+      else if (atributo === "porte") {
+        ValidarCampos.validarTamanhoMax(valor, 30, "Porte");
+        valor = valor.trim();
+      } 
+      else if (atributo === "contato") {
+        ValidarCampos.validarEmail(valor);
+        valor = valor.trim();
+      } 
+      else if (atributo === "site") {
+        ValidarCampos.validarLink(valor, 'non');
+        valor = valor.trim();
+      } 
+      else if (atributo === "instagram") {
+        ValidarCampos.validarLink(valor, 'i');
+        valor = valor.trim();
+      } 
+      else if (atributo === "github") {
+        ValidarCampos.validarLink(valor, 'g');
+        valor = valor.trim();
+      } 
+      else if (atributo === "youtube") {
+        ValidarCampos.validarLink(valor, 'y');
+        valor = valor.trim();
       }
-
+      else if (atributo === "twitter") {
+        ValidarCampos.validarLink(valor, 'x');
+        valor = valor.trim();
+      } 
+      else if (atributo === "foto") {
+        ValidarCampos.validarImagemNoCloudinary(valor);
+      } 
+      else if (atributo === "data_fund") {
+        ValidarCampos.validarIdade(valor, 0, 9999, 'Data de Fundação');
+      }
     }
 
     const inserts = atributos.map((atri, index) => `${atri} = $${index + 1}`).join(", ");
 
-  await pool.query(`update empresas set ${inserts} where cnpj = $${atributos.length + 1}`, [...valores, cnpj]);
+    await pool.query(`update empresas set ${inserts} where cnpj = $${atributos.length + 1}`, [...valores, cnpj]);
   }
 
   static async removerEmpresa(em, id, nivel){

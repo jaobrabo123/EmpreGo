@@ -34,6 +34,14 @@ class EmpresaModel {
         return resultado.rows[0];
     }
 
+    static async buscarPerfilInfoPorCnpj(cnpj){
+        const resultado = await pool.query(`
+            SELECT nome_fant, telefone, cep, complemento, numero, descricao, setor, porte, data_fund, contato, site, instagram, github, youtube, twitter, foto
+            FROM empresas where cnpj = $1
+        `,[cnpj]);
+        return resultado.rows[0];
+    }
+
 }
 
 module.exports = EmpresaModel;

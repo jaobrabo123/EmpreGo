@@ -677,10 +677,7 @@ function login() {
     
     if (!res.ok) {
       const erro = await res.json();
-      throw {
-              status: res.status,
-              message: erro.error || "Erro ao fazer login automático."
-            };
+      throw { status: res.status, message: erro.error || "Erro ao fazer login."};
     }
     window.location.href = "/";
   })

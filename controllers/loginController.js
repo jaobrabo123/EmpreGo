@@ -17,7 +17,7 @@ class LoginController {
                 await TokenService.removerToken(tkn);
             }
 
-            const candidato = CandidatoModel.buscarInfoDoTokenPorEmail(email);
+            const candidato = await CandidatoModel.buscarInfoDoTokenPorEmail(email);
 
             if(candidato && await bcrypt.compare(senha, candidato.senha)){
                 const token = salvarCookieToken(res, candidato.id, 'candidato', candidato.nivel)

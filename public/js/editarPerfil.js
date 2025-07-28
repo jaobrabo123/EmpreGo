@@ -10,18 +10,19 @@ function limparErro() {
   erroDiv.style.display = "none";
 }
 
-document.getElementById("formEditarPerfil").addEventListener("submit", function(e) {
-  e.preventDefault();
-  enviarEdicao();
-});
+document
+  .getElementById("formEditarPerfil")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    enviarEdicao();
+  });
 
 function validarCPF(cpf) {
-  cpf = cpf.replace(/[^\d]+/g, ''); // Remove pontos e traços
+  cpf = cpf.replace(/[^\d]+/g, ""); // Remove pontos e traços
 
   if (cpf.length !== 11) {
     return 1;
-  }else
-  if(/^(\d)\1{10}$/.test(cpf)){
+  } else if (/^(\d)\1{10}$/.test(cpf)) {
     return 2;
   }
 
@@ -44,6 +45,15 @@ function validarCPF(cpf) {
   return true;
 }
 
+function handlePronounChange() {
+  const select = document.getElementById("selectPronomes");
+  const outroPronomeInput = document.getElementById("outroPronomeInput").parentElement;
+  if (select.value === "Outro") {
+    outroPronomeInput.style.display = "flex";
+  } else {
+    outroPronomeInput.style.display = "none";
+  }
+}
 
 async function enviarEdicao() {
   limparErro();
@@ -57,45 +67,72 @@ async function enviarEdicao() {
   const github = document.getElementById("inputGithub").value;
   const youtube = document.getElementById("inputYoutube").value;
   const twitter = document.getElementById("inputTwitter").value;
-  const pronomes = document.getElementById("inputPronomes").value;
 
-  if (cpf && validarCPF(cpf)===1) {
+  // Obtem os pronomes corretamente, considerando "Outro"
+  let pronomes = document.getElementById("selectPronomes").value;
+  if (pronomes === "Outro") {
+    const outroPronome = document
+      .getElementById("outroPronomeInput")
+      .value.trim();
+    if (!outroPronome) {
+      mostrarErro("Por favor, preencha o campo de pronomes personalizados.");
+      return;
+    }
+    pronomes = outroPronome;
+  }
+
+  if (cpf && validarCPF(cpf) === 1) {
     mostrarErro("CPF inválido. Formato correto: 123.456.789-10");
     return;
   }
 
-  if (cpf && validarCPF(cpf)===2){
+  if (cpf && validarCPF(cpf) === 2) {
     mostrarErro("CPF inválido. Confira se não digitou algo errado.");
     return;
   }
 
-  if (cidade && estado!=='NM'){
-    const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`);
-    const cidades = await response.json()
-    const nomes = cidades.map(ci=>ci.nome.toLowerCase())
-    console.log(nomes)
-    if(!nomes.includes(cidade.toLowerCase())){
+  if (cidade && estado !== "NM") {
+    const response = await fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
+    );
+    const cidades = await response.json();
+    const nomes = cidades.map((ci) => ci.nome.toLowerCase());
+    if (!nomes.includes(cidade.toLowerCase())) {
       mostrarErro(`Cidade inválida pro estado selecionado: ${estado}`);
       return;
     }
   }
 
-  if (instagram && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(instagram)) {
+  if (
+    instagram &&
+    !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(instagram)
+  ) {
     mostrarErro("URL do Instagram inválida.");
     return;
   }
 
-  if (github && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(github)) {
+  if (
+    github &&
+    !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(github)
+  ) {
     mostrarErro("URL do GitHub inválida.");
     return;
   }
 
-  if (youtube && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(youtube)){
+  if (
+    youtube &&
+    !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(
+      youtube
+    )
+  ) {
     mostrarErro("URL do Youtube inválida.");
     return;
   }
 
-  if (twitter && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(twitter)){
+  if (
+    twitter &&
+    !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(twitter)
+  ) {
     mostrarErro("URL do Twitter/X inválida.");
     return;
   }
@@ -114,13 +151,16 @@ async function enviarEdicao() {
 
   fetch("/perfil/candidato", {
     method: "POST",
-    credentials: 'include',
+    credentials: "include",
     body: formData,
   })
     .then(async (response) => {
       const data = await response.json();
       if (!response.ok) {
-        throw ({ status: response.status , message: data.error || "Erro ao editar perfil"});
+        throw {
+          status: response.status,
+          message: data.error || "Erro ao editar perfil",
+        };
       }
       window.location.href = "/perfil/candidato";
     })
@@ -137,8 +177,10 @@ async function enviarEdicao() {
     });
 }
 
+
+
 // Formata o campo CPF enquanto o usuário digita
-document.getElementById("inputCpf").addEventListener("input", function(e) {
+document.getElementById("inputCpf").addEventListener("input", function (e) {
   let value = e.target.value.replace(/\D/g, "");
   if (value.length > 11) value = value.slice(0, 11);
   value = value.replace(/(\d{3})(\d)/, "$1.$2");

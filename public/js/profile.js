@@ -5,15 +5,47 @@ import { carregarInfo, mostrarErroTopo, logout } from './globalFunctions.js'
 document.addEventListener('DOMContentLoaded', async ()=>{
     const data = await carregarInfo() //Pega a resposta do carregarInfo
 
+    // Carregar informações
     if(data.tipo && (data.tipo ==='candidato')){ //Se a resposta for do tipo candidato carrega o perfil do candidato e ajusta a navbar
+        //Tags Formais
         document.querySelector('#loginOuCadas').style.display = 'none';
         document.querySelector('#fotoPerfil').style.display = '';
         document.querySelector('#fotoPerfilImg').src = data.info.foto;
         document.querySelector('#descUsuario').textContent = data.info.descricao;
         document.querySelector('#nomUsuario').textContent = data.info.nome;
         document.querySelector('#emailUsuario').textContent = data.info.email;
+        document.querySelector('#cidadeUsuario').textContent = data.info.cidade;
+        document.querySelector('#estadoUsuario').textContent = data.info.estado;
         document.querySelector('#fotoUsuario').src = data.info.foto;
         document.querySelector("#cpfUsuario").textContent = data.info.cpf;
+        document.querySelector("#pronUsuario").textContent = data.info.pronomes;
+
+        //Tags Sociais
+        document.querySelector("#instUsuario").href = data.info.instagram;
+        document.querySelector("#gitUsuario").href = data.info.github;
+        document.querySelector("#ytUsuario").href = data.info.youtube;
+        document.querySelector("#twtUsuario").href = data.info.twitter;
+        console.log(data.info)
+
+        // Validação Tags Sociais
+        if(!data.info.instagram) {
+            document.querySelector("#instUsuario").style.display="none"
+            document.querySelector("#LogoInst").style.display="none"
+        }
+        if(!data.info.github) {
+            document.querySelector("#gitUsuario").style.display="none"
+            document.querySelector("#LogoGit").style.display="none"
+        }
+
+        if(!data.info.youtube) {
+            document.querySelector("#ytUsuario").style.display="none"
+            document.querySelector("#LogoYt").style.display="none"
+        }
+
+        if(!data.info.twitter) {
+            document.querySelector("#twtUsuario").style.display="none"
+            document.querySelector("#LogoTwt").style.display="none"
+        }
 
         // Formata a data de nascimento
         const dataNasc = new Date(data.info.data_nasc);
@@ -80,7 +112,7 @@ function experiencias(){
     });
 }
 
-document.querySelector('#buttonAddTag').addEventListener('click', adicionarTag)
+document.querySelector('#btnAddTags').addEventListener('click', adicionarTag)
 
 function adicionarTag() {
     const tagUsuario = document.querySelector("#tagUsuario").value

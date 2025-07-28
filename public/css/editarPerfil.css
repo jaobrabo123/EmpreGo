@@ -124,3 +124,7 @@
   background: var(--accent);
   color: #fff;
 }
+
+#outroPronome {
+    display: none;
+}

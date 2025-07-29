@@ -4,6 +4,10 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+
+dotenv.config();
+
+//Limites de requisições HTTP
 const { limiteGeral } = require('@middlewares/rateLimit.js');
 
 //Routes
@@ -20,9 +24,6 @@ const mensagensRoutes = require('@routes/mensagensRoutes.js');
 
 //Sockets
 const setupChat = require('@sockets/chatSocket.js');
-
-//Dotenv
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;

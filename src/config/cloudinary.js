@@ -1,10 +1,6 @@
 //Conexão com o Cloudinary (nuvem das imagens)
 const cloudinary = require('cloudinary').v2
 
-//Dotenv
-const dotenv = require('dotenv');
-dotenv.config();
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

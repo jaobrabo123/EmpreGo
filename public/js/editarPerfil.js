@@ -10,12 +10,10 @@ function limparErro() {
   erroDiv.style.display = "none";
 }
 
-document
-  .getElementById("formEditarPerfil")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
-    enviarEdicao();
-  });
+document.getElementById("formEditarPerfil").addEventListener("submit", function (e) {
+  e.preventDefault();
+  enviarEdicao();
+});
 
 function validarCPF(cpf) {
   cpf = cpf.replace(/[^\d]+/g, ""); // Remove pontos e traços
@@ -167,11 +165,11 @@ async function enviarEdicao() {
     .catch((erro) => {
       if(erro.message.includes('Cidade inválida para o estado')){
         mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
-      }else
-      if(erro.status===500){
+      }
+      else if(erro.status===500){
         mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
-        console.error("Erro ao editar perfil: ", erro.message);
-        return;
+      } else{
+        mostrarErro(`Erro ao editar perfil: ${erro.message}`);
       }
       console.error("Erro ao editar perfil: ", erro.message);
     });

@@ -23,6 +23,13 @@ class CandidatoModel{
         return resultado.rowCount > 0;
     }
 
+    static async verificarCpfExistente(cpf){
+        const resultado = await pool.query(`
+            select 1 from candidatos where cpf = $1
+        `, [cpf]);
+        return resultado.rowCount > 0;
+    }
+
     static async buscarCodigoPendentePorEmail(email){
         const resultado = await pool.query(`
             select codigo from candidatos_pend where email = $1 and expira_em > now()

@@ -5,8 +5,6 @@ const TokenService = require('../services/tokenService.js');
 const { salvarCookieToken } = require('../utils/cookieUtils.js');
 
 const transporter = require('../config/nodemailer.js');
-const dotenv = require('dotenv');
-dotenv.config();
 
 const EMAIL_SERVER = process.env.EMAIL;
 

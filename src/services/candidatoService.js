@@ -152,6 +152,7 @@ class CandidatoService{
       else if (atri === "pronomes") {
         ValidarCampos.validarTamanhoMax(valor, 20, 'Pronomes');
       }
+      valores[i] = valor;
     }
 
     const pedido = atributos.map((coluna, index) => `${coluna} = $${index + 1}`);

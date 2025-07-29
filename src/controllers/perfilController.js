@@ -2,7 +2,7 @@ const CandidatoModel = require("../models/candidatoModel");
 const EmpresaModel = require("../models/empresaModel");
 const CandidatoService = require("../services/candidatoService");
 const EmpresaService = require("../services/empresaService");
-const { ErroDeValidacao } = require('../utils/erroClasses.js');
+const { ErroDeValidacao, ErroDeConflito } = require('../utils/erroClasses.js');
 
 class PerfilController {
 
@@ -40,9 +40,11 @@ class PerfilController {
 
             res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
         } catch (error) {
-            console.error(error)
             if (error instanceof ErroDeValidacao) {
                 return res.status(400).json({ error: error.message });
+            }
+            if (error.code === '23505') {
+                return res.status(409).json({ error: "CPF fornecido já cadastrado." });
             }
             res.status(500).json({ error: 'Erro ao editar perfil: ' + error.message });
         }

@@ -1,10 +1,6 @@
 //Conexão com o banco de dados
 const { Pool } = require('pg');
 
-//Dotenv
-const dotenv = require('dotenv');
-dotenv.config();
-
 const pool = new Pool({
   user: process.env.DATABASE_USER,
   host: process.env.DATABASE_HOST,

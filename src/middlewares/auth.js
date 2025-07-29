@@ -1,11 +1,7 @@
 //Imports
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 const { limparCookieToken } = require('../utils/cookieUtils.js');
 const TokenModel = require('../models/tokenModel.js');
-
-//Dotenv
-dotenv.config();
 
 // Chave secreta para o JWT
 const SECRET_KEY = process.env.JWT_SECRET;

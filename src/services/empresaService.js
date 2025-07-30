@@ -15,7 +15,7 @@ class EmpresaService{
     ValidarCampos.validarEmail(email);
     ValidarCampos.validarTamanhoMax(razao_soci, 100, 'Razão Social');
     ValidarCampos.validarCep(cep);
-    ValidarCampos.validarTamanhoMax(complemento, 100, 'Complemento');
+    if (complemento!== '') ValidarCampos.validarTamanhoMax(complemento, 100, 'Complemento');
     ValidarCampos.validarTamanhoMin(num, 1, 'Número do Endereço');
     ValidarCampos.validarTamanhoMax(num, 10, 'Número do Endereço');
     ValidarCampos.validarTelefone(telefone);

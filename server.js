@@ -30,7 +30,7 @@ const port = process.env.PORT || 3001;
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-setupChat(io)
+setupChat(io);
 
 app.set('trust proxy', 1);
 
@@ -39,7 +39,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(limiteGeral);
-
 
 //tasks
 require('@tasks/cronLimpezaMensagens.js')

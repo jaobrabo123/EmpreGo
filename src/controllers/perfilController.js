@@ -60,9 +60,10 @@ class PerfilController {
               return res.status(404).json({ error: 'Empresa não encontrada' });
             }
         
-            res.json(empresa);
+            res.status(200).json(empresa);
         }
         catch (erro) {
+            console.error(erro)
             res.status(500).json({ error: 'Erro ao buscar perfil da empresa: ' + erro.message });
         }
     }

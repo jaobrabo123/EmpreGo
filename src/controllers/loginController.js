@@ -48,9 +48,9 @@ class LoginController {
                 await TokenService.removerToken(tkn);
             }
 
-            const empresa = EmpresaModel.buscarInfoDoTokenPorCnpj;
+            const empresa = await EmpresaModel.buscarInfoDoTokenPorCnpj(cnpj);
             if(empresa && await bcrypt.compare(senha, empresa.senha)){
-                const token = salvarCookieToken(res, empresa.id, 'empresa', 'comum')
+                const token = salvarCookieToken(res, empresa.cnpj, 'empresa', 'comum')
 
                 const expira_em = new Date(Date.now() + 24 * 60 * 60 * 1000);
                 await TokenService.adicionarToken(empresa.cnpj, 'empresa', token, expira_em);
@@ -62,6 +62,7 @@ class LoginController {
             }
         }
         catch(error){
+            console.error(error);
             if (error instanceof Erros.ErroDeValidacao){
                 return res.status(400).json({ error: error.message })
             }

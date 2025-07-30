@@ -105,7 +105,7 @@ class CandidatoController {
     }
 
     static async listarTodos(req, res){
-         try {
+        try {
             const candidatos = await CandidatoModel.buscarTodosCandidatos();
 
             res.status(200).json(candidatos);

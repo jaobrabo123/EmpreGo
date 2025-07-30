@@ -196,7 +196,6 @@ async function botaoLixeira(nome,tabela,id) {
     }
 
     const confirmar = async function () {
-        modal.style.display = 'none'
         btnConfirmar.removeEventListener('click', confirmar)
         btnCancelar.removeEventListener('click', cancelar)
         await removerTupla(tabela, id)
@@ -226,7 +225,7 @@ async function removerTupla(tabela, id) {
             if(!res.ok) {
                 throw ({status: res.status, message: data.error})
             }
-
+            modal.style.display = 'none'
             alert(data.message);
 
             candidatos = null;
@@ -244,6 +243,7 @@ async function removerTupla(tabela, id) {
                 throw ({status: res.status, message: data.error})
             }
 
+            modal.style.display = 'none'
             alert(data.message);
 
             empresas = null;
@@ -260,6 +260,7 @@ async function removerTupla(tabela, id) {
                 throw ({status: res.status, message: data.error})
             }
 
+            modal.style.display = 'none'
             alert(data.message);
 
             experiencias = null;
@@ -276,6 +277,7 @@ async function removerTupla(tabela, id) {
                 throw ({status: res.status, message: data.error})
             }
 
+            modal.style.display = 'none'
             alert(data.message);
 
             tags = null;

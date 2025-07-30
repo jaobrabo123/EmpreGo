@@ -181,7 +181,7 @@ class CandidatoService{
 
     if(nivel==='admin'){
       if(cd===id){
-        throw new Erros.ErroDeAutorizacao('Você não pode se remover kkkkkkkk')
+        throw new Erros.ErroDeAutorizacao('Você não pode se remover kkkkkkkk');
       }else{
         const candidatoNivel = await CandidatoModel.buscarNivelPorId(cd);
         if (candidatoNivel === 'admin') throw new Erros.ErroDeAutorizacao('Você não pode remover outro admin.');

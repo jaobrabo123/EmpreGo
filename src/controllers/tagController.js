@@ -49,7 +49,8 @@ class TagController {
 
             res.status(200).json({ message: "Tag removida com sucesso." });
         }
-        catch{
+        catch(erro){
+            console.error(erro)
             if (erro instanceof ErroDeAutorizacao) {
                 return res.status(403).json({ error: erro.message });
             }

@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector('#nascUsuario').textContent = dataFormatada;
 
         //Puxa a função que carrega as experiências do candidato
-        experiencias()
+        experiencias();
+        await tags();
     } else{
         //Se não for candidato, redireciona para a página inicial e mostra um alerta
         if(data.tipo==='expirado'){
@@ -139,6 +140,48 @@ function adicionarTag() {
     } else {
         alert("Você precisa digitar uma tag.");
     }
+}
+
+async function tags() {
+    try{
+        const res = await fetch('/tags', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        const data = await res.json();
+        console.log(data)
+        if(!res.ok) throw { status: res.status, message: data.error };
+        const divTags = document.querySelector("#Tags");
+        data.forEach(tag=>{
+            const nome = tag.nome;
+            const remover = async function(id) {
+                buttonTag.removeEventListener('click', remover)
+                buttonTag.remove()
+                try {
+                    const res = await fetch(`/tags/${id}`, {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    })
+                    const data = await res.json()
+                    if(!res.ok) throw { status: res.status, message: data.error };
+                    alert(data.message)
+                } 
+                catch (erro) {
+                    alert(erro.message)
+                }
+            }
+            const buttonTag = document.createElement("button");
+            buttonTag.classList.add("tags");
+            buttonTag.textContent = nome;
+            buttonTag.addEventListener('click', ()=>remover(tag.id))
+
+            divTags.appendChild(buttonTag)
+        })
+    }
+    catch(erro){
+
+    }
+     
 }
 
 

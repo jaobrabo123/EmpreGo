@@ -4,7 +4,7 @@ class TagModel{
 
     static async buscarTagPorIdCandidato(id){
         const resultado = await pool.query(`
-            SELECT nome FROM tags where candidato = $1
+            SELECT nome, id FROM tags where candidato = $1
         `, [id]);
         return resultado.rows;
     }

@@ -1,4 +1,4 @@
-var socket = io('https://tcc-vjhk.onrender.com');
+var socket = io('http://localhost:3001');
 /*socket.on('connect', () => {
     socket.emit('joinRoom', 'teste', (response) => {
         if (response.error) {

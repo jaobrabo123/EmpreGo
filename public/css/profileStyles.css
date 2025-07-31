@@ -138,7 +138,7 @@ a {
     opacity: 80%;
 }
 
-.Tags button {
+#Tags button {
     color: White;
     font-weight: bold;
     height: 50px;
@@ -154,16 +154,16 @@ a {
     background-color: #18122b;
 }
 
-.Tags button:hover {
+#Tags button:hover {
     cursor: pointer;
     opacity: 80%;
 }
 
-#tagLing {
+.tagLing {
     border-color: #692785;
 }
 
-#tagHorario {
+.tagHorario {
     border-color: white;
 }
 

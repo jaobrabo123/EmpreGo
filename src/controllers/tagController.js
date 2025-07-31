@@ -22,7 +22,10 @@ class TagController {
     static async listar(req, res){
         try {
             const { id } = req.user;
-            const tags = await TagModel.buscarTagPorIdCandidato(id);
+            const limit = req.query.limit ? parseInt(req.query.limit) : null;
+            const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+
+            const tags = await TagModel.buscarTagsPorIdCandidatoLO(id, limit, offset);
             res.status(200).json(tags);
         } catch (error) {
             res.status(500).json({error: 'Erro ao buscar tags: ' + error.message});

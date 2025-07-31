@@ -145,7 +145,8 @@ async function enviarEdicao() {
   if (github) formData.append("github", github);
   if (youtube) formData.append("youtube", youtube);
   if (twitter) formData.append("twitter", twitter);
-  if (pronomes) formData.append("pronomes", pronomes);
+  if (pronomes && pronomes!=="NM") formData.append("pronomes", pronomes);
+  if (!foto && !descricao && !cpf && estado==="NM" && !cidade && !instagram && !github && !youtube && !twitter && pronomes==="NM") return mostrarErro("Pelo menos um campo deve ser fornecido para editar o perfil.");
 
   fetch("/perfil/candidato", {
     method: "POST",

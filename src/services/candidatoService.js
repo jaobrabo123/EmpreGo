@@ -67,7 +67,7 @@ class CandidatoService{
   }
 
   static async editarPerfil(atributos, valores, id){
-    if (!atributos || !valores || !id) {
+    if (atributos.length === 0 || valores.length === 0 || !id) {
       throw new Erros.ErroDeValidacao("Os atributos, valores e id do candidato devem ser fornecidos.");
     }
 

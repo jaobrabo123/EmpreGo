@@ -182,7 +182,7 @@ class ValidarCampos{
                 }
                 break;
             case 'y':
-                const youtubeRegex = /^(https?:\/\/)?(www\.)?youtube\.com\/(channel\/|user\/|watch\?v=)[a-zA-Z0-9_-]+/i;
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i;
                 if(!youtubeRegex.test(link.trim())){
                     throw new ErroDeValidacao("URL do YouTube inválida.");
                 }

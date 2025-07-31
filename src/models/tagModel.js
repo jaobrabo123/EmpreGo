@@ -2,10 +2,11 @@ const pool = require('../config/db.js')
 
 class TagModel{
 
-    static async buscarTagPorIdCandidato(id){
+    static async buscarTagsPorIdCandidatoLO(id, limit, offset){
         const resultado = await pool.query(`
             SELECT nome, id FROM tags where candidato = $1
-        `, [id]);
+            order by data_criacao desc limit $2 offset $3
+        `, [id, limit, offset]);
         return resultado.rows;
     }
 

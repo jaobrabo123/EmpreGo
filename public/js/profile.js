@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
         //Puxa a função que carrega as experiências do candidato
         experiencias();
-        await tags();
+        await tags(5, 0);
     } else{
         //Se não for candidato, redireciona para a página inicial e mostra um alerta
         if(data.tipo==='expirado'){
@@ -142,9 +142,9 @@ function adicionarTag() {
     }
 }
 
-async function tags() {
+async function tags(limit, offset) {
     try{
-        const res = await fetch('/tags', {
+        const res = await fetch(`/tags?limit=${limit}&offset=${offset}`, {
             method: 'GET',
             credentials: 'include'
         });

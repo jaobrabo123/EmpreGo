@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
         //Puxa a função que carrega as experiências do candidato
         experiencias();
-        await tags(5, 0);
+        await tags(6, 0);
     } else{
         //Se não for candidato, redireciona para a página inicial e mostra um alerta
         if(data.tipo==='expirado'){
@@ -142,6 +142,15 @@ function adicionarTag() {
     }
 }
 
+
+const maisTags = document.querySelector("#maisTags");
+maisTags.addEventListener("click", async function() {
+    maisTags.style.color = "#f05959";
+    maisTags.textContent = 'Carregando...';
+    await tags(99999999, 6);
+    maisTags.remove();
+}, { once: true });
+
 async function tags(limit, offset) {
     try{
         const res = await fetch(`/tags?limit=${limit}&offset=${offset}`, {
@@ -149,40 +158,39 @@ async function tags(limit, offset) {
             credentials: 'include'
         });
         const data = await res.json();
-        console.log(data)
+        console.log(data);
         if(!res.ok) throw { status: res.status, message: data.error };
         const divTags = document.querySelector("#Tags");
         data.forEach(tag=>{
             const nome = tag.nome;
+            const buttonTag = document.createElement("button");
+            buttonTag.classList.add("tags");
+            buttonTag.textContent = nome;
             const remover = async function(id) {
-                buttonTag.removeEventListener('click', remover)
-                buttonTag.remove()
                 try {
                     const res = await fetch(`/tags/${id}`, {
                         method: 'DELETE',
                         credentials: 'include'
-                    })
-                    const data = await res.json()
+                    });
+                    const data = await res.json();
                     if(!res.ok) throw { status: res.status, message: data.error };
-                    alert(data.message)
-                } 
-                catch (erro) {
-                    alert(erro.message)
+                    buttonTag.remove();
                 }
+                catch (erro) {
+                    buttonTag.addEventListener('click', () => remover(id), { once: true });
+                    alert(erro.message);
+                };
             }
-            const buttonTag = document.createElement("button");
-            buttonTag.classList.add("tags");
-            buttonTag.textContent = nome;
-            buttonTag.addEventListener('click', ()=>remover(tag.id))
-
-            divTags.appendChild(buttonTag)
+            buttonTag.addEventListener('click', () => remover(tag.id), { once: true });
+            
+            divTags.insertBefore(buttonTag, maisTags);
         })
     }
     catch(erro){
-
-    }
+        alert(erro.message);
+    };
      
 }
 
 
-document.querySelector('#logout').addEventListener('click', logout)
+document.querySelector('#logout').addEventListener('click', logout);

@@ -830,7 +830,7 @@ main {
 }
 
 .favorite-btn:hover {
-  background: rgba(0, 0, 0, 0.61);
+  background: rgba(0, 0, 0, 0.6);
   transform: scale(1.1);
 }
 

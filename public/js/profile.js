@@ -17,11 +17,13 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector('#cidadeUsuario').textContent = data.info.cidade;
         document.querySelector('#estadoUsuario').textContent = data.info.estado;
         document.querySelector('#fotoUsuario').src = data.info.foto;
-        const cpfFormat = data.info.cpf.replace(
-            /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
-            "$1.$2.$3-$4"
-        );
-        document.querySelector("#cpfUsuario").textContent = cpfFormat;
+        if(data.info.cpf){
+            const cpfFormat = data.info.cpf.replace(
+                /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+                "$1.$2.$3-$4"
+            );
+            document.querySelector("#cpfUsuario").textContent = cpfFormat;
+        }
         document.querySelector("#pronUsuario").textContent = data.info.pronomes;
 
         //Tags Sociais

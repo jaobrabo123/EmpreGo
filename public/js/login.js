@@ -619,42 +619,42 @@ function cadastrarEmpresa() {
       numero,
     }),
   })
-    .then(async (res) => {
-      if (res.ok) {
-        return fetch("/login-empresa", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cnpj, senha }),
-          credentials: "include",
-        });
-      } else {
-        const erro = await res.json();
-        throw { status: res.status, message: erro.error || "Erro ao cadastrar a empresa." };
-      }
-    })
-    .then(async (res) => {
-      if (!res.ok) {
-        const erro = await res.json();
-        throw { status: res.status, message: erro.error || "Erro ao fazer login automático." };
-      }
-      alert("Empresa cadastrada com SUCESSO!");
-      window.location.href = "/";
-    })
-    .catch((erro) => {
-      console.log(erro.message)
-      if (erro.status===409)
-        {
-        mostrarErroTopo("Empresa já cadastrada.");
-        return;
-      }
-      else if(erro.status===500){
-        mostrarErroTopo('Erro ao cadastrar empresa (A culpa não foi sua, tente novamente).');
-        return;
-      }else{
-        mostrarErroTopo(erro.message||'Erro desconhecido, tente novamente.');
-        return;
-      }
-    });
+  .then(async (res) => {
+    if (res.ok) {
+      return fetch("/login-empresa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cnpj, senha }),
+        credentials: "include",
+      });
+    } else {
+      const erro = await res.json();
+      throw { status: res.status, message: erro.error || "Erro ao cadastrar a empresa." };
+    }
+  })
+  .then(async (res) => {
+    if (!res.ok) {
+      const erro = await res.json();
+      throw { status: res.status, message: erro.error || "Erro ao fazer login automático." };
+    }
+    alert("Empresa cadastrada com SUCESSO!");
+    window.location.href = "/";
+  })
+  .catch((erro) => {
+    console.log(erro.message)
+    if (erro.status===409)
+      {
+      mostrarErroTopo("Empresa já cadastrada.");
+      return;
+    }
+    else if(erro.status===500){
+      mostrarErroTopo('Erro ao cadastrar empresa (A culpa não foi sua, tente novamente).');
+      return;
+    }else{
+      mostrarErroTopo(erro.message||'Erro desconhecido, tente novamente.');
+      return;
+    }
+  });
 }
 
 // ________________________ LOGIN/US _______________________

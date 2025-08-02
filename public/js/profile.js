@@ -17,7 +17,13 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector('#cidadeUsuario').textContent = data.info.cidade;
         document.querySelector('#estadoUsuario').textContent = data.info.estado;
         document.querySelector('#fotoUsuario').src = data.info.foto;
-        document.querySelector("#cpfUsuario").textContent = data.info.cpf;
+        if(data.info.cpf){
+            const cpfFormat = data.info.cpf.replace(
+                /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+                "$1.$2.$3-$4"
+            );
+            document.querySelector("#cpfUsuario").textContent = cpfFormat;
+        }
         document.querySelector("#pronUsuario").textContent = data.info.pronomes;
 
         //Tags Sociais
@@ -56,7 +62,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector('#nascUsuario').textContent = dataFormatada;
 
         //Puxa a função que carrega as experiências do candidato
-        experiencias()
+        experiencias();
+        await tags(6, 0);
     } else{
         //Se não for candidato, redireciona para a página inicial e mostra um alerta
         if(data.tipo==='expirado'){
@@ -112,12 +119,42 @@ function experiencias(){
     });
 }
 
-document.querySelector('#btnAddTags').addEventListener('click', adicionarTag)
+document.querySelector('#btnAddTags').addEventListener('click', mostrarModalTag);
+const modalInputTag = document.querySelector('#modalInput');
+const inputTag = document.querySelector('#inputTag')
+const btnConfirmar = document.querySelector('#btnConfirmar')
+const btnCancelar = document.querySelector('#btnCancelar')
 
-function adicionarTag() {
-    const tagUsuario = document.querySelector("#tagUsuario").value
+function mostrarModalTag() {
+    modalInputTag.style.display = 'flex';
+
+    const confirmar = async function () {
+        btnConfirmar.removeEventListener('click', confirmar);
+        btnCancelar.removeEventListener('click', cancelar);
+        await adicionarTag();
+    };
+
+    const cancelar = async function () {
+        modalInputTag.style.display = 'none';
+        btnConfirmar.removeEventListener('click', confirmar);
+        btnCancelar.removeEventListener('click', cancelar);
+    };
+
+    btnCancelar.addEventListener('click', cancelar);
+    btnConfirmar.addEventListener('click', confirmar);
+}
+
+async function adicionarTag() {
+    const tagUsuario = inputTag.value;
+    inputTag.value = '';
 
     if (tagUsuario) {
+        if(document.querySelector("#maisTags")){
+            maisTags.style.color = "#f05959";
+            maisTags.textContent = 'Carregando...';
+            await tags(99999999, 6);
+            maisTags.remove();
+        }
         fetch('/tags', {
             method: 'POST',
             credentials: 'include',
@@ -127,10 +164,33 @@ function adicionarTag() {
             body: JSON.stringify({ nome: tagUsuario })
         })
         .then(async res => {
-            document.querySelector("#tagUsuario").value = ''
             const data = await res.json()
             if(!res.ok) throw ({status: res.status, message: data.error})
+            modalInputTag.style.display = 'none';
             alert(data.message || 'Tag adicionada com sucesso!');
+
+            const buttonTag = document.createElement("button");
+            buttonTag.classList.add("tags");
+            buttonTag.textContent = tagUsuario;
+            const remover = async function(id) {
+                try {
+                    const res = await fetch(`/tags/${id}`, {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
+                    const data = await res.json();
+                    if(!res.ok) throw { status: res.status, message: data.error };
+                    buttonTag.remove();
+                }
+                catch (erro) {
+                    buttonTag.addEventListener('click', () => remover(id), { once: true });
+                    alert(erro.message);
+                };
+            }
+            buttonTag.addEventListener('click', () => remover(data.id), { once: true });
+            
+            document.querySelector("#Tags").prepend(buttonTag);
+
         })
         .catch(error => {
             console.error('Erro ao adicionar tag:', error);
@@ -142,4 +202,61 @@ function adicionarTag() {
 }
 
 
-document.querySelector('#logout').addEventListener('click', logout)
+const maisTags = document.querySelector("#maisTags");
+maisTags.addEventListener("click", async function() {
+    maisTags.style.color = "#f05959";
+    maisTags.textContent = 'Carregando...';
+    await tags(99999999, 6);
+    maisTags.remove();
+}, { once: true });
+
+async function tags(limit, offset) {
+    try{
+        const res = await fetch(`/tags?limit=${limit}&offset=${offset}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+        const data = await res.json();
+        if(!res.ok) throw { status: res.status, message: data.error };
+        if(data.length===0){
+            maisTags.remove();
+            return
+        }
+        const divTags = document.querySelector("#Tags");
+        data.forEach(tag=>{
+            const nome = tag.nome;
+            const buttonTag = document.createElement("button");
+            buttonTag.classList.add("tags");
+            buttonTag.textContent = nome;
+            const remover = async function(id) {
+                try {
+                    if(document.querySelector("#maisTags")){
+                        maisTags.style.color = "#f05959";
+                        maisTags.textContent = 'Carregando...';
+                        await tags(99999999, 6);
+                        maisTags.remove();
+                    }
+                    const res = await fetch(`/tags/${id}`, {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
+                    const data = await res.json();
+                    if(!res.ok) throw { status: res.status, message: data.error };
+                    buttonTag.remove();
+                }
+                catch (erro) {
+                    buttonTag.addEventListener('click', () => remover(id), { once: true });
+                    alert(erro.message);
+                };
+            }
+            buttonTag.addEventListener('click', () => remover(tag.id), { once: true });
+            
+            divTags.insertBefore(buttonTag, maisTags);
+        })
+    }
+    catch(erro){
+        alert(erro.message);
+    };
+}
+
+document.querySelector('#logout').addEventListener('click', logout);

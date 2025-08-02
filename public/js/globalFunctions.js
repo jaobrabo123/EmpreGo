@@ -25,18 +25,17 @@ export async function carregarLinks() {
     document.querySelector('#logout').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = 'none';
     if(infos.tipo==='expirado'){
-      alert('Sua sessão expirou faça login novamente.')
-      window.location.href = '/login'
+      alert('Sua sessão expirou faça login novamente.');
+      window.location.href = '/login';
     }
-  }else
-  if (infos.tipo==='candidato'){
+  }
+  else if (infos.tipo==='candidato'){
     document.querySelector('#fotoPerfil').href = '/perfil/candidato';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
     document.querySelector('#fotoPerfilImg').src = infos.info.foto;
   }
-  else
-  if (infos.tipo==='empresa') {
+  else if (infos.tipo==='empresa') {
     document.querySelector('#fotoPerfil').href = '/perfil/empresa';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
@@ -45,53 +44,54 @@ export async function carregarLinks() {
 }
 
 export async function carregarInfo() {
-    try{
-      const tipo = await fetch('/get-tipo', {
+  try{
+    const tipo = await fetch('/get-tipo', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then(async res=>{
+      const data = await res.json()
+      if(!res.ok) throw ({status: res.status, message: data.error})
+      const { tipo } = data;
+      return tipo;
+    })
+    .catch((erro)=>{
+      if(erro.status===403 && erro.message.includes('Sessão expirada')){
+        return 'expirado'
+      }
+      else{
+        return 'visitante';
+      }
+    })
+
+    let data = null;
+
+    if(tipo==='candidato'){
+      const res = await fetch('/perfil/candidato/info', {
         method: 'GET',
         credentials: 'include'
-      })
-      .then(async res=>{
-        const data = await res.json()
-        if(!res.ok) throw ({status: res.status, message: data.error})
-        const { tipo } = data;
-        return tipo;
-      })
-      .catch((erro)=>{
-        if(erro.status===403 && erro.message.includes('Sessão expirada')){
-          return 'expirado'
-        }else{
-          return 'visitante';
-        }
-      })
-
-      let data = null;
-
-      if(tipo==='candidato'){
-        const res = await fetch('/perfil/candidato/info', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        data = await res.json()
-        if (!res.ok) {
-          throw ({status: data.status, message: data.error});
-        }
-      }else
-      if(tipo==='empresa'){
-        const res = await fetch('/perfil/empresa/info', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        data = await res.json()
-        if (!res.ok){
-          throw ({status: data.status, message: data.error});
-        }
+      });
+      data = await res.json()
+      if (!res.ok) {
+        throw ({status: data.status, message: data.error});
       }
-      return {info: data, tipo: tipo};
     }
-    catch(erro){
-      console.log(erro.message)
-      return 'visitante'
+    else if(tipo==='empresa'){
+      const res = await fetch('/perfil/empresa/info', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      data = await res.json()
+      if (!res.ok){
+        throw ({status: data.status, message: data.error});
+      }
     }
+    return {info: data, tipo: tipo};
+  }
+  catch(erro){
+    console.log(erro.message)
+    return 'visitante'
+  }
 }
 
 //Função pra deslogar

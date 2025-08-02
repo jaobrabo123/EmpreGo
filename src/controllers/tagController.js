@@ -9,8 +9,8 @@ class TagController {
             const { nome } = req.body;
             const id = req.user.id;
 
-            await TagService.popularTabelaTags(nome, id);
-            res.status(201).json({ message: 'Tag cadastrada com sucesso!' });
+            const idTag = await TagService.popularTabelaTags(nome, id);
+            res.status(201).json({ message: 'Tag cadastrada com sucesso!', id: idTag });
         } catch (error) {
             if (error instanceof ErroDeValidacao) {
                 return res.status(400).json({ error: error.message });
@@ -22,7 +22,10 @@ class TagController {
     static async listar(req, res){
         try {
             const { id } = req.user;
-            const tags = await TagModel.buscarTagPorIdCandidato(id);
+            const limit = req.query.limit ? parseInt(req.query.limit) : null;
+            const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+
+            const tags = await TagModel.buscarTagsPorIdCandidatoLO(id, limit, offset);
             res.status(200).json(tags);
         } catch (error) {
             res.status(500).json({error: 'Erro ao buscar tags: ' + error.message});
@@ -49,7 +52,8 @@ class TagController {
 
             res.status(200).json({ message: "Tag removida com sucesso." });
         }
-        catch{
+        catch(erro){
+            console.error(erro)
             if (erro instanceof ErroDeAutorizacao) {
                 return res.status(403).json({ error: erro.message });
             }

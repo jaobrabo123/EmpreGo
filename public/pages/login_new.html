@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../assets/icons/ajunet.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/login_new.css">
+  <title>Login</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="login-card">
+      <!-- Abas de navegação -->
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="user-login">
+          <i class="fas fa-user"></i> Usuário
+        </button>
+        <button class="tab-btn" data-tab="company-login">
+          <i class="fas fa-building"></i> Empresa
+        </button>
+      </div>
+
+      <div class="form-container">
+        <!-- Login de Usuário -->
+        <div class="form-content active" id="user-login">
+          <h2 class="title">Entrar como usuário</h2>
+
+          <form id="loginForm" action="#" onsubmit="return false;">
+            <div class="input-group">
+              <label for="username" class="input-label">Email</label>
+              <input type="email" id="username" class="input-field" placeholder="seu@email.com" required>
+            </div>
+
+            <div class="input-group">
+              <label for="password" class="input-label">Senha</label>
+              <div class="password-container">
+                <input type="password" id="password" class="input-field" placeholder="Digite sua senha" required>
+                <button type="button" id="togglePassword" class="password-toggle">
+                  <i class="fas fa-eye" id="eyeIcon"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" id="loginBtn" class="submit-btn">Entrar</button>
+          </form>
+
+          <div class="form-footer">
+            <a href="#" class="form-link" onclick="showUserRegister()">Não tem uma conta? Cadastre-se</a>
+          </div>
+        </div>
+
+        <!-- Cadastro de Usuário -->
+        <div class="form-content" id="user-register">
+          <h2 class="title">Cadastre-se como usuário</h2>
+
+          <form id="registerForm" action="#" onsubmit="return false;">
+            <div class="input-group">
+              <label for="regUsername" class="input-label">Nome</label>
+              <input type="text" id="regUsername" class="input-field" placeholder="Seu nome" required>
+            </div>
+
+            <div class="input-group">
+              <label for="regUsernameSobre" class="input-label">Sobrenome</label>
+              <input type="text" id="regUsernameSobre" class="input-field" placeholder="Seu sobrenome" required>
+            </div>
+
+            <div class="input-group">
+              <label for="email" class="input-label">Email</label>
+              <input type="email" id="email" class="input-field" placeholder="seu@email.com" required>
+            </div>
+
+            <div class="input-group">
+              <label for="registerPassword" class="input-label">Senha</label>
+              <div class="password-container">
+                <input type="password" id="registerPassword" class="input-field" placeholder="Crie uma senha forte"
+                  required>
+                <button type="button" id="toggleRegisterPassword" class="password-toggle">
+                  <i class="fas fa-eye" id="eyeIconRegister"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="confirmPassword" class="input-label">Confirmar senha</label>
+              <div class="password-container">
+                <input type="password" id="confirmPassword" class="input-field" placeholder="Confirme sua senha"
+                  required>
+                <button type="button" id="toggleConfirmPassword" class="password-toggle">
+                  <i class="fas fa-eye" id="eyeIconConfirm"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="dob" class="input-label">Data de nascimento</label>
+              <input type="text" id="dob" class="input-field" placeholder="DD/MM/AAAA" maxlength="10" required>
+            </div>
+
+            <div class="input-group">
+              <label for="genderSelect" class="input-label">Gênero</label>
+              <select id="genderSelect" class="input-field" required>
+                <option value="" selected disabled>Selecione</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Não-binário">Não-binário</option>
+                <option value="Outro">Outro</option>
+                <option value="Prefiro não dizer">Prefiro não dizer</option>
+              </select>
+              <div class="other-gender-input-container">
+                <input type="text" id="outroGeneroInput" class="input-field" placeholder="Especifique seu gênero">
+              </div>
+            </div>
+
+            <button type="submit" id="registerBtn" class="submit-btn">Cadastrar</button>
+          </form>
+
+          <div class="form-footer">
+            <a href="#" class="form-link" onclick="showUserLogin()">Já tem uma conta? Faça login</a>
+          </div>
+        </div>
+
+        <!-- Login de Empresa -->
+        <div class="form-content" id="company-login">
+          <h2 class="title">Entrar como empresa</h2>
+
+          <form id="loginEmpresaForm" action="#" onsubmit="return false;">
+            <div class="input-group">
+              <label for="empresaCNPJ" class="input-label">CNPJ</label>
+              <input type="text" id="empresaCNPJ" class="input-field" placeholder="00.000.000/0000-00" required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaSenha" class="input-label">Senha</label>
+              <div class="password-container">
+                <input type="password" id="empresaSenha" class="input-field" placeholder="Digite sua senha" required>
+                <button type="button" id="toggleEmpresaPassword" class="password-toggle">
+                  <i class="fas fa-eye" id="eyeIconEmpresa"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" id="empresaLoginBtn" class="submit-btn">Entrar</button>
+          </form>
+
+          <div class="form-footer">
+            <a href="#" class="form-link" onclick="showCompanyRegister()">Não tem uma conta? Cadastre-se</a>
+          </div>
+        </div>
+
+        <!-- Cadastro de Empresa -->
+        <div class="form-content" id="company-register">
+          <h2 class="title">Cadastre-se como empresa</h2>
+
+          <form id="registerEmpresaForm" action="#" onsubmit="return false;">
+            <div class="input-group">
+              <label for="empresaEmail" class="input-label">Email</label>
+              <input type="email" id="empresaEmail" class="input-field" placeholder="empresa@email.com" required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaRazao" class="input-label">Razão Social</label>
+              <input type="text" id="empresaRazao" class="input-field" placeholder="Nome legal da empresa" required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaFantasia" class="input-label">Nome Fantasia</label>
+              <input type="text" id="empresaFantasia" class="input-field" placeholder="Nome comercial da empresa"
+                required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaCNPJRegister" class="input-label">CNPJ</label>
+              <input type="text" id="empresaCNPJRegister" class="input-field" placeholder="00.000.000/0000-00" required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaTelefone" class="input-label">Telefone</label>
+              <input type="tel" id="empresaTelefone" class="input-field" placeholder="+55 11 12345-6789" required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaRegisterPassword" class="input-label">Senha</label>
+              <div class="password-container">
+                <input type="password" id="empresaRegisterPassword" class="input-field"
+                  placeholder="Crie uma senha forte" required>
+                <button type="button" id="toggleEmpresaRegisterPassword" class="password-toggle">
+                  <i class="fas fa-eye" id="eyeIconEmpresaRegister"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaConfirmPassword" class="input-label">Confirmar senha</label>
+              <div class="password-container">
+                <input type="password" id="empresaConfirmPassword" class="input-field" placeholder="Confirme sua senha"
+                  required>
+                <button type="button" id="toggleEmpresaConfirmPassword" class="password-toggle">
+                  <i class="fas fa-eye" id="eyeIconEmpresaConfirm"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaCep" class="input-label">CEP</label>
+              <input type="text" id="empresaCep" class="input-field" placeholder="00000-000" required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaRua" class="input-label">Rua</label>
+              <input type="text" id="empresaRua" class="input-field" placeholder="Nome da rua" readonly>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaBairro" class="input-label">Bairro</label>
+              <input type="text" id="empresaBairro" class="input-field" placeholder="Nome do bairro" readonly>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaCidade" class="input-label">Cidade</label>
+              <input type="text" id="empresaCidade" class="input-field" placeholder="Nome da cidade" readonly>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaEstado" class="input-label">Estado</label>
+              <input type="text" id="empresaEstado" class="input-field" placeholder="UF" readonly>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaNumero" class="input-label">Número</label>
+              <input type="text" id="empresaNumero" class="input-field" placeholder="Número ou S/N" required>
+            </div>
+
+            <div class="input-group">
+              <label for="empresaComplemento" class="input-label">Complemento</label>
+              <input type="text" id="empresaComplemento" class="input-field" placeholder="Complemento (opcional)">
+            </div>
+
+            <button type="submit" id="empresaRegisterBtn" class="submit-btn">Cadastrar Empresa</button>
+          </form>
+
+          <div class="form-footer">
+            <a href="#" class="form-link" onclick="showCompanyLogin()">Já tem uma conta? Faça login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/login_new.js"></script>
+</body>
+
+</html>

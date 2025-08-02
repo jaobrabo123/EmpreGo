@@ -17,7 +17,11 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector('#cidadeUsuario').textContent = data.info.cidade;
         document.querySelector('#estadoUsuario').textContent = data.info.estado;
         document.querySelector('#fotoUsuario').src = data.info.foto;
-        document.querySelector("#cpfUsuario").textContent = data.info.cpf;
+        const cpfFormat = data.info.cpf.replace(
+            /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+            "$1.$2.$3-$4"
+        );
+        document.querySelector("#cpfUsuario").textContent = cpfFormat;
         document.querySelector("#pronUsuario").textContent = data.info.pronomes;
 
         //Tags Sociais
@@ -143,6 +147,12 @@ async function adicionarTag() {
     inputTag.value = '';
 
     if (tagUsuario) {
+        if(document.querySelector("#maisTags")){
+            maisTags.style.color = "#f05959";
+            maisTags.textContent = 'Carregando...';
+            await tags(99999999, 6);
+            maisTags.remove();
+        }
         fetch('/tags', {
             method: 'POST',
             credentials: 'include',
@@ -176,7 +186,6 @@ async function adicionarTag() {
                 };
             }
             buttonTag.addEventListener('click', () => remover(data.id), { once: true });
-            console.log(data.id)
             
             document.querySelector("#Tags").prepend(buttonTag);
 
@@ -219,6 +228,12 @@ async function tags(limit, offset) {
             buttonTag.textContent = nome;
             const remover = async function(id) {
                 try {
+                    if(document.querySelector("#maisTags")){
+                        maisTags.style.color = "#f05959";
+                        maisTags.textContent = 'Carregando...';
+                        await tags(99999999, 6);
+                        maisTags.remove();
+                    }
                     const res = await fetch(`/tags/${id}`, {
                         method: 'DELETE',
                         credentials: 'include'
@@ -240,8 +255,6 @@ async function tags(limit, offset) {
     catch(erro){
         alert(erro.message);
     };
-     
 }
-
 
 document.querySelector('#logout').addEventListener('click', logout);

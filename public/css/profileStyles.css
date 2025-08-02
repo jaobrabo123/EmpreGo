@@ -111,7 +111,7 @@ a {
 #boxTags {
     background-color: #393053;
     width: 1000px;
-    height: 70px;
+    min-height: 70px;
     align-items: center;
     display: flex;
     flex-direction: row;

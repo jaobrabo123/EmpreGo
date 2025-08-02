@@ -105,6 +105,7 @@
       <div class="info">
         <label for="inputPronomes" class="labelsEditar">Pronomes</label>
         <select placeholder="Selecione seus pronomes." id="selectPronomes" onchange="handlePronounChange()" required>
+          <option value="NM" selected>Seus pronomes</option>
           <option value="Ela/Dela">Ela/Dela</option>
           <option value="Ela/Elu">Ela/Elu</option>
           <option value="Ela/Ele">Ela/Ele</option>
@@ -123,7 +124,6 @@
           <option value="Pronome Nulo">Pronome Nulo</option>
           <option value="Qualquer Pronome">Qualquer Pronome</option>
           <option value="Outro">Outro (Especificar)</option>
-          <option value="Prefiro não informar">Prefiro não informar</option>
         </select>
         <div class="info" id="outroPronome" style="display: none;">
           <input type="text" id="outroPronomeInput" class="labelsEditar" placeholder="Informe seus pronomes." />

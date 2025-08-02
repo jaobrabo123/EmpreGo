@@ -189,25 +189,28 @@ const btnCancelar = document.querySelector('#btnCancelar')
 
 async function botaoLixeira(nome,tabela,id) {
     modal.style.display = 'flex';
-    textoConfirmacao.textContent = `Tem certeza que deseja remover ${nome} (Identificador: ${id}) da tabela ${tabela}?`
+    textoConfirmacao.textContent = `Tem certeza que deseja remover ${nome} (Identificador: ${id}) da tabela ${tabela}?`;
     if(tabela==='Candidatos'){
-        textoDetalhes.style.display = 'flex'
-        textoDetalhes.textContent = `Esta ação também removerá todas as informações relacionadas ao candidato (ex: experiencias, tags, etc)`
+        textoDetalhes.style.display = 'flex';
+        textoDetalhes.textContent = `Esta ação também removerá todas as informações relacionadas ao candidato (ex: experiencias, tags, etc)`;
     }
+    else{
+        textoDetalhes.style.display = 'none';
+    };
 
     const confirmar = async function () {
         btnConfirmar.removeEventListener('click', confirmar)
         btnCancelar.removeEventListener('click', cancelar)
         await removerTupla(tabela, id)
-    }
+    };
 
     const cancelar = async function () {
         modal.style.display = 'none'
         btnConfirmar.removeEventListener('click', confirmar)
         btnCancelar.removeEventListener('click', cancelar)
-    }
+    };
 
-    btnCancelar.addEventListener('click', cancelar)
+    btnCancelar.addEventListener('click', cancelar);
     btnConfirmar.addEventListener('click', confirmar);
 }
 

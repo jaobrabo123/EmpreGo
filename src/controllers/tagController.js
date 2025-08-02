@@ -9,8 +9,8 @@ class TagController {
             const { nome } = req.body;
             const id = req.user.id;
 
-            await TagService.popularTabelaTags(nome, id);
-            res.status(201).json({ message: 'Tag cadastrada com sucesso!' });
+            const idTag = await TagService.popularTabelaTags(nome, id);
+            res.status(201).json({ message: 'Tag cadastrada com sucesso!', id: idTag });
         } catch (error) {
             if (error instanceof ErroDeValidacao) {
                 return res.status(400).json({ error: error.message });

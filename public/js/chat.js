@@ -39,7 +39,8 @@ async function carregarChatsBack() {
     catch(erro){
         if(erro.status===500){
             chatsBack = 'Erro de conexão com o Banco de Dados.'
-        }else{
+        }
+        else{
             chatsBack = `Erro ao pegar chats: ${erro.message}`;
         } 
     }

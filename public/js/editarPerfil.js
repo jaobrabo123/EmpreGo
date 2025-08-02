@@ -48,7 +48,8 @@ function handlePronounChange() {
   const outroPronomeInput = document.getElementById("outroPronomeInput").parentElement;
   if (select.value === "Outro") {
     outroPronomeInput.style.display = "flex";
-  } else {
+  }
+  else {
     outroPronomeInput.style.display = "none";
   }
 }
@@ -69,9 +70,7 @@ async function enviarEdicao() {
   // Obtem os pronomes corretamente, considerando "Outro"
   let pronomes = document.getElementById("selectPronomes").value;
   if (pronomes === "Outro") {
-    const outroPronome = document
-      .getElementById("outroPronomeInput")
-      .value.trim();
+    const outroPronome = document.getElementById("outroPronomeInput").value.trim();
     if (!outroPronome) {
       mostrarErro("Por favor, preencha o campo de pronomes personalizados.");
       return;
@@ -153,27 +152,23 @@ async function enviarEdicao() {
     credentials: "include",
     body: formData,
   })
-    .then(async (response) => {
-      const data = await response.json();
-      if (!response.ok) {
-        throw {
-          status: response.status,
-          message: data.error || "Erro ao editar perfil",
-        };
-      }
-      window.location.href = "/perfil/candidato";
-    })
-    .catch((erro) => {
-      if(erro.message.includes('Cidade inválida para o estado')){
-        mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
-      }
-      else if(erro.status===500){
-        mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
-      } else{
-        mostrarErro(`Erro ao editar perfil: ${erro.message}`);
-      }
-      console.error("Erro ao editar perfil: ", erro.message);
-    });
+  .then(async (response) => {
+    const data = await response.json();
+    if (!response.ok) throw { status: response.status, message: data.error || "Erro ao editar perfil" };
+    window.location.href = "/perfil/candidato";
+  })
+  .catch((erro) => {
+    if(erro.message.includes('Cidade inválida para o estado')){
+      mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
+    }
+    else if(erro.status===500){
+      mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
+    }
+    else{
+      mostrarErro(`Erro ao editar perfil: ${erro.message}`);
+    }
+    console.error("Erro ao editar perfil: ", erro.message);
+  });
 }
 
 

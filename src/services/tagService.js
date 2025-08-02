@@ -10,7 +10,8 @@ class TagService {
     ValidarCampos.validarTamanhoMax(nome, 25, 'Tag');
     nome = nome.trim();
 
-    await pool.query(`INSERT INTO tags (nome, candidato) VALUES ($1, $2)`, [ nome, id, ]);
+    const idTag = await pool.query(`INSERT INTO tags (nome, candidato) VALUES ($1, $2) returning id`, [ nome, id, ]);
+    return idTag.rows[0].id;
   }
 
   static async removerTag(tg, id, nivel) {

@@ -113,10 +113,34 @@ function experiencias(){
     });
 }
 
-document.querySelector('#btnAddTags').addEventListener('click', adicionarTag)
+document.querySelector('#btnAddTags').addEventListener('click', mostrarModalTag);
+const modalInputTag = document.querySelector('#modalInput');
+const inputTag = document.querySelector('#inputTag')
+const btnConfirmar = document.querySelector('#btnConfirmar')
+const btnCancelar = document.querySelector('#btnCancelar')
 
-function adicionarTag() {
-    const tagUsuario = document.querySelector("#tagUsuario").value
+function mostrarModalTag() {
+    modalInputTag.style.display = 'flex';
+
+    const confirmar = async function () {
+        btnConfirmar.removeEventListener('click', confirmar);
+        btnCancelar.removeEventListener('click', cancelar);
+        await adicionarTag();
+    };
+
+    const cancelar = async function () {
+        modalInputTag.style.display = 'none';
+        btnConfirmar.removeEventListener('click', confirmar);
+        btnCancelar.removeEventListener('click', cancelar);
+    };
+
+    btnCancelar.addEventListener('click', cancelar);
+    btnConfirmar.addEventListener('click', confirmar);
+}
+
+async function adicionarTag() {
+    const tagUsuario = inputTag.value;
+    inputTag.value = '';
 
     if (tagUsuario) {
         fetch('/tags', {
@@ -128,10 +152,34 @@ function adicionarTag() {
             body: JSON.stringify({ nome: tagUsuario })
         })
         .then(async res => {
-            document.querySelector("#tagUsuario").value = ''
             const data = await res.json()
             if(!res.ok) throw ({status: res.status, message: data.error})
+            modalInputTag.style.display = 'none';
             alert(data.message || 'Tag adicionada com sucesso!');
+
+            const buttonTag = document.createElement("button");
+            buttonTag.classList.add("tags");
+            buttonTag.textContent = tagUsuario;
+            const remover = async function(id) {
+                try {
+                    const res = await fetch(`/tags/${id}`, {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
+                    const data = await res.json();
+                    if(!res.ok) throw { status: res.status, message: data.error };
+                    buttonTag.remove();
+                }
+                catch (erro) {
+                    buttonTag.addEventListener('click', () => remover(id), { once: true });
+                    alert(erro.message);
+                };
+            }
+            buttonTag.addEventListener('click', () => remover(data.id), { once: true });
+            console.log(data.id)
+            
+            document.querySelector("#Tags").prepend(buttonTag);
+
         })
         .catch(error => {
             console.error('Erro ao adicionar tag:', error);
@@ -158,8 +206,11 @@ async function tags(limit, offset) {
             credentials: 'include'
         });
         const data = await res.json();
-        console.log(data);
         if(!res.ok) throw { status: res.status, message: data.error };
+        if(data.length===0){
+            maisTags.remove();
+            return
+        }
         const divTags = document.querySelector("#Tags");
         data.forEach(tag=>{
             const nome = tag.nome;

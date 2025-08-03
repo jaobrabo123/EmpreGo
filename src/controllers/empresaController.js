@@ -7,9 +7,9 @@ class EmpresaController{
 
     static async cadastrar(req, res){
         try {
-            const { cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero } = req.body;
+            const { cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero, estado, cidade } = req.body;
 
-            if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !numero ) {
+            if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !numero || !estado || !cidade ) {
                 return res.status(400).json({ error: "Informações faltando para o cadastro!" });
             }
 
@@ -22,7 +22,9 @@ class EmpresaController{
                 razao_soci,
                 cep,
                 complemento,
-                numero
+                numero,
+                estado,
+                cidade
             );
 
             res.status(201).json({ message: "Empresa cadastrada com sucesso!" });

@@ -180,7 +180,7 @@ class FormManager {
         }
       });
 
-      empresaCepInput.addEventListener("blur", () => this.preencherEnderecoPorCep());
+      empresaCepInput.addEventListener("input", () => this.preencherEnderecoPorCep());
     }
 
     // Phone number mask for company
@@ -426,19 +426,19 @@ class FormManager {
     }
 
     try {
-      const response = await fetch("/login", {
+      const res = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),
         credentials: "include",
       });
 
-      if (!response.ok) {
-        const erro = await response.json();
-        throw { status: response.status, message: erro.error || "Erro ao fazer login." };
+      if (!res.ok) {
+        const erro = await res.json();
+        throw { status: res.status, message: erro.error };
       }
 
-      window.location.href = "./index.html";
+      window.location.href = "/";
     } catch (erro) {
       if (erro.status === 500) {
         this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
@@ -559,40 +559,31 @@ class FormManager {
     const [dia, mes, ano] = dobValue.split("/");
     const data_nasc = `${ano}-${mes}-${dia}`;
 
-    try {
-      const response = await fetch("/candidatos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
-      });
+    const btnAdd = document.querySelector("#registerBtn")
+    btnAdd.disabled = true;
+    btnAdd.textContent = "Cadastrando...";
 
-      if (response.ok) {
-        const loginResponse = await fetch("/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha }),
-          credentials: "include",
-        });
-
-        if (!loginResponse.ok) {
-          throw { status: loginResponse.status, message: "Login automático falhou." };
-        }
-
-        alert("Cadastro realizado com sucesso!");
-        window.location.href = "./index.html";
-      } else {
-        const erro = await response.json();
-        throw { status: response.status, message: erro.error || "Erro ao cadastrar o usuário." };
-      }
-    } catch (erro) {
-      if (erro.message.includes("Email já cadastrado.")) {
+    fetch("/candidatos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
+    })
+    .then(async (res) => {
+      const data = await res.json()
+      if (!res.ok) throw { status: res.status, message: data.error || "Erro ao cadastrar o usuário." };
+      window.location.href = `/confirmar?email=${email}`;
+    })
+    .catch (erro => {
+      btnAdd.disabled = false;
+      btnAdd.textContent = "Cadastrar";
+      if (erro.status===409) {
         this.mostrarErroTopo("E-mail já cadastrado. Por favor, use outro e-mail.");
       } else if (erro.status === 500) {
         this.mostrarErroTopo("Erro ao cadastrar usuário. (A culpa não foi sua, tente novamente)");
       } else {
         this.mostrarErroTopo(`Erro do sistema: ${erro.message}`);
       }
-    }
+    })
   }
 
   async handleCompanyLogin() {
@@ -628,19 +619,19 @@ class FormManager {
     const cnpj = cnpj1.replace(/[^\d]/g, "");
 
     try {
-      const response = await fetch("/login-empresa", {
+      const res = await fetch("/login-empresa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cnpj, senha }),
-        credentials: "include",
+        credentials: "include"
       });
 
-      if (!response.ok) {
-        const erro = await response.json();
-        throw { status: response.status, message: erro.error || "Erro ao fazer login." };
+      if (!res.ok) {
+        const erro = await res.json();
+        throw { status: res.status, message: erro.error };
       }
 
-      window.location.href = "./index.html";
+      window.location.href = "/";
     } catch (erro) {
       if (erro.status === 500) {
         this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
@@ -783,7 +774,14 @@ class FormManager {
       return;
     }
 
+    const estado = document.querySelector("#empresaEstado").value;
+    const cidade = document.querySelector("#empresaCidade").value;
+
     const cnpj = cnpj1.replace(/[^\d]/g, "");
+
+    const btnAdd = document.querySelector("#empresaRegisterBtn");
+    btnAdd.disabled = true
+    btnAdd.textContent = "Cadastrando...";
 
     try {
       const response = await fetch("/empresas", {
@@ -799,7 +797,9 @@ class FormManager {
           cep,
           complemento,
           numero,
-        }),
+          estado,
+          cidade
+        })
       });
 
       if (response.ok) {
@@ -816,12 +816,13 @@ class FormManager {
         }
 
         alert("Empresa cadastrada com SUCESSO!");
-        window.location.href = "./index.html";
+        window.location.href = "/";
       } else {
         const erro = await response.json();
         throw { status: response.status, message: erro.error || "Erro ao cadastrar a empresa." };
       }
     } catch (erro) {
+      btnAdd.disabled = false;btnAdd.textContent = "Cadastrar Empresa";
       if (erro.status === 409) {
         this.mostrarErroTopo("Empresa já cadastrada.");
       } else if (erro.status === 500) {
@@ -844,9 +845,11 @@ class FormManager {
   }
 }
 
+let formManager;
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  const formManager = new FormManager();
+  formManager = new FormManager();
   
   // Add global click handler to clear errors
   document.addEventListener('click', (e) => {
@@ -860,21 +863,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Navigation functions for HTML links
 function showUserLogin() {
-  const formManager = new FormManager();
-  formManager.showForm('user-login');
+  formManager?.showForm('user-login');
 }
 
 function showUserRegister() {
-  const formManager = new FormManager();
-  formManager.showForm('user-register');
+  formManager?.showForm('user-register');
 }
 
 function showCompanyLogin() {
-  const formManager = new FormManager();
-  formManager.showForm('company-login');
+  formManager?.showForm('company-login');
 }
 
 function showCompanyRegister() {
-  const formManager = new FormManager();
-  formManager.showForm('company-register');
+  formManager?.showForm('company-register');
 }

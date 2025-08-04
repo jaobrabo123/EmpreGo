@@ -402,7 +402,8 @@ class FormManager {
   async handleUserLogin() {
     const form = document.getElementById('loginForm');
     const email = form.querySelector('input[type="email"]').value.trim();
-    const senha = form.querySelector('input[type="password"]').value.trim();
+    const senhaInput = form.querySelector('#password');
+    const senha = senhaInput.value.trim();
 
     // Validate inputs
     if (!email) {
@@ -416,12 +417,7 @@ class FormManager {
     }
 
     if (!senha) {
-      this.showInputError(form.querySelector('input[type="password"]'), 'Por favor, preencha a senha.');
-      return;
-    }
-
-    if (senha.length < 8) {
-      this.showInputError(form.querySelector('input[type="password"]'), 'A senha deve ter pelo menos 8 caracteres.');
+      this.showInputError(senhaInput, 'Por favor, preencha a senha.');
       return;
     }
 
@@ -586,7 +582,7 @@ class FormManager {
     })
   }
 
-  async handleCompanyLogin() {
+    async handleCompanyLogin() {
     const form = document.getElementById('loginEmpresaForm');
     const cnpjInput = form.querySelector('input[type="text"]');
     const senhaInput = form.querySelector('input[type="password"]');
@@ -616,9 +612,8 @@ class FormManager {
       return;
     }
 
-    const cnpj = cnpj1.replace(/[^\d]/g, "");
-
-    try {
+    const cnpj = cnpj1.replace(/[^\d]/g, ""); 
+    try { 
       const res = await fetch("/login-empresa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

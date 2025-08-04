@@ -119,8 +119,9 @@ body, input {
     color: rgba(255, 255, 255, 0.5);
 }
 
-.password-container {
-    position: relative;
+.password-container .erro-mensagem {
+  position: absolute;          
+  margin-top: -20px;
 }
 
 .password-toggle {
@@ -291,6 +292,7 @@ body, input {
     align-items: center;
     gap: 0.5rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    
 }
 
 .erro-mensagem-contraste i {
@@ -358,20 +360,91 @@ body, input {
 
 /* Melhorias para o password toggle */
 .password-toggle {
+    position: relative;
+    left: 350px;
+    transform: translateY(-140%);
     background: rgba(0, 0, 0, 0.3);
+    border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+    padding: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 50%;
+    padding: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+.password-toggle:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.5);
+}
+.password-toggle i {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.3s ease;
+}
+.password-toggle i:hover {
+    color: white;
+}
+.password-toggle:focus i {
+    color: white;
+}
+.password-toggle:active {
+    transform: scale(0.95);
+}
+.password-toggle:active i {
+    transform: scale(0.9);
+}
+.password-toggle:hover i {
+    color: white;
+}
+.password-toggle:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+.password-toggle:focus:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+.password-toggle:active {
+    background: rgba(0, 0, 0, 0.6);
+}
+.password-toggle:active i {
+    color: white;
+    transform: scale(0.9);
+}
+.password-toggle:focus i {
+    color: white;
+}
+.password-toggle:focus:hover i {
+    color: white;
+}
+.password-toggle:active i {
+    color: white;
+}
+.password-toggle:active:hover i {
+    color: white;
+}
+.password-toggle:active:focus i {
+    color: white;
+}
+.password-toggle:focus:active i {
+    color: white;
+}
+*/
 .password-toggle:hover {
     background: rgba(0, 0, 0, 0.5);
     color: white;
 }
+
+
 
 /* Ajustes para telas pequenas */
 @media (max-width: 480px) {

@@ -101,38 +101,39 @@ input {
 
 /* --------------------------Olho--------------------- */
 
-.eye-icon {
+/* Ícone de olho padrão */
+.eye-icon,
+#eyeIconConfirm {
+    display: block;
     width: 22px;
     height: 22px;
-    display: block;
 }
 
+/* Ícone de confirmação pode ter tamanho diferente, se necessário */
+#eyeIconConfirm {
+    width: 20px;
+    height: 20px;
+}
 
+/* Esconde ícones de "mostrar senha" dos navegadores */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-webkit-credentials-auto-fill-button {
     display: none;
 }
 
+/* Remove estilo padrão de campos de senha */
 input[type="password"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
 
-#eyeIconConfirm {
-    width: 20px;
-    height: 20px;
-}
-
+/* Botão de toggle da confirmação de senha */
 #toggleConfirmPassword {
     display: none;
+    position: fixed;
 }
 
-
-input[type="password"]::-ms-reveal,
-input[type="password"]::-webkit-credentials-auto-fill-button {
-    display: none;
-}
 
 
 /* --------------------------DATA--------------------- */

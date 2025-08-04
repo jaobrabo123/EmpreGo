@@ -171,8 +171,6 @@ async function enviarEdicao() {
   });
 }
 
-
-
 // Formata o campo CPF enquanto o usuário digita
 document.getElementById("inputCpf").addEventListener("input", function (e) {
   let value = e.target.value.replace(/\D/g, "");

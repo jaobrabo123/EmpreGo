@@ -217,22 +217,6 @@ class FormManager {
   }
 
   setupFieldChecks() {
-    // User login fields
-    const loginUsername = document.getElementById("username");
-    const loginPassword = document.getElementById("password");
-    const loginBtn = document.getElementById("loginBtn");
-
-    if (loginUsername && loginPassword && loginBtn) {
-      const checkLoginFields = () => {
-        loginBtn.disabled = !(loginUsername.value && loginPassword.value);
-      };
-
-      [loginUsername, loginPassword].forEach(input => {
-        input.addEventListener("input", checkLoginFields);
-      });
-      checkLoginFields();
-    }
-
     // User register fields
     const registerUsername = document.getElementById("regUsername");
     const registerSobrenome = document.getElementById("regUsernameSobre");
@@ -420,10 +404,10 @@ class FormManager {
       return;
     }
 
-    if (senha.length < 8) {
+    /*if (senha.length < 8) {
       this.showInputError(form.querySelector('input[type="password"]'), 'A senha deve ter pelo menos 8 caracteres.');
       return;
-    }
+    }*/
 
     try {
       const res = await fetch("/login", {
@@ -600,19 +584,6 @@ class FormManager {
     // Validate inputs
     if (cnpj1.length !== 18 || !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)) {
       this.showInputError(cnpjInput, "CNPJ inválido. formato 00.000.000/0000-00.");
-      return;
-    }
-
-    if (senha.length < 8) {
-      this.showInputError(senhaInput, "mínimo 8 caracteres.");
-      return;
-    }
-
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
-      this.showInputError(
-        senhaInput,
-        "Senha deve ter maiúscula, minúscula, número e caractere especial."
-      );
       return;
     }
 
@@ -822,7 +793,8 @@ class FormManager {
         throw { status: response.status, message: erro.error || "Erro ao cadastrar a empresa." };
       }
     } catch (erro) {
-      btnAdd.disabled = false;btnAdd.textContent = "Cadastrar Empresa";
+      btnAdd.disabled = false;
+      btnAdd.textContent = "Cadastrar Empresa";
       if (erro.status === 409) {
         this.mostrarErroTopo("Empresa já cadastrada.");
       } else if (erro.status === 500) {

@@ -1131,3 +1131,32 @@ nav a:hover svg {
   flex: 1;
   min-width: 150px;
 }
+
+/* Ajustes para o campo de senha e mensagem de erro */
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-group .error-message {
+    margin-top: 5px;
+    color: #ff4757;
+    font-size: 0.8rem;
+}

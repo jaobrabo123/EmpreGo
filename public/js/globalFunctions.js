@@ -7,7 +7,7 @@ export function mostrarErroTopo(mensagem) {
 
   const contrasteDiv = document.createElement('div');
   contrasteDiv.className = 'erro-mensagem-contraste';
-  contrasteDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${mensagem}`;
+  contrasteDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${mensagem}`;
 
   erroDiv.appendChild(contrasteDiv);
   document.body.prepend(erroDiv);

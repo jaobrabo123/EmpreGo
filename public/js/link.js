@@ -4,4 +4,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   await carregarLinks();
 });
 
-document.querySelector('#logout').addEventListener('click', logout)
+document.querySelector('#logout').addEventListener('click', logout);

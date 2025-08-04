@@ -1,815 +1,851 @@
-// Modo Login/Cadastro
-const sign_in_btn = document.querySelector("#login-in-btn");
-const sign_up_btn = document.querySelector("#login-up-btn");
-const container = document.querySelector(".container");
-
-sign_up_btn.addEventListener("click", () =>
-  container.classList.add("sign-up-mode")
-);
-sign_in_btn.addEventListener("click", () =>
-  container.classList.remove("sign-up-mode")
-);
-
-const empresaLoginBtn = document.getElementById("empresa-login-btn");
-const empresaCadastroBtn = document.getElementById("empresa-cadastro-btn");
-
-empresaLoginBtn.addEventListener("click", () => {
-  container.classList.remove("sign-up-mode");
-  setTimeout(() => {
-    container.classList.add("empresa-mode");
-  }, 700);
-});
-empresaCadastroBtn.addEventListener("click", () => {
-  setTimeout(() => {
-    container.classList.add("empresa-mode");
-  }, 700);
-  container.classList.add("sign-up-mode");
-});
-
-sign_in_btn.addEventListener("click", () =>
-  container.classList.remove("empresa-mode")
-);
-sign_up_btn.addEventListener("click", () =>
-  container.classList.remove("empresa-mode")
-);
-
-// _________________________ OLHO SENHA _______________________
-function handlePasswordToggle(inputId, eyeIconId, toggleBtnId) {
-  const passwordInput = document.getElementById(inputId);
-  const eyeIcon = document.getElementById(eyeIconId);
-  const togglePasswordBtn = document.getElementById(toggleBtnId);
-
-  function updateVisibility() {
-    eyeIcon.style.display = passwordInput.value.length > 0 ? "block" : "none";
-    togglePasswordBtn.style.display =
-      passwordInput.value.length > 0 ? "block" : "none";
+// Main Form Controller
+class FormManager {
+  constructor() {
+    this.forms = {
+      'user-login': document.getElementById('user-login'),
+      'user-register': document.getElementById('user-register'),
+      'company-login': document.getElementById('company-login'),
+      'company-register': document.getElementById('company-register')
+    };
+    
+    this.currentForm = 'user-login';
+    this.init();
   }
 
-  passwordInput.addEventListener("input", updateVisibility);
-  updateVisibility();
+  init() {
+    // Setup tab navigation
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tabId = e.currentTarget.dataset.tab;
+        this.switchTab(tabId);
+      });
+    });
 
-  togglePasswordBtn.addEventListener("click", function () {
-    passwordInput.type =
-      passwordInput.type === "password" ? "text" : "password";
-    eyeIcon.src =
-      passwordInput.type === "password"
-        ? "/assets/imgs/escondido.png"
-        : "/assets/imgs/olho.png";
-  });
-}
+    // Setup form links
+    document.querySelectorAll('[data-show-form]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const formId = e.currentTarget.dataset.showForm;
+        this.showForm(formId);
+      });
+    });
 
-handlePasswordToggle("password", "eyeIcon", "togglePassword");
-handlePasswordToggle(
-  "registerPassword",
-  "eyeIconRegister",
-  "toggleRegisterPassword"
-);
-handlePasswordToggle(
-  "confirmPassword",
-  "eyeIconConfirm",
-  "toggleConfirmPassword"
-);
-// EMPRESA OLHO
-handlePasswordToggle(
-  "empresaPassword",
-  "eyeIconEmpresa",
-  "toggleEmpresaPassword"
-);
-handlePasswordToggle(
-  "empresaRegisterPassword",
-  "eyeIconEmpresaRegister",
-  "toggleEmpresaRegisterPassword"
-);
-handlePasswordToggle(
-  "empresaConfirmPassword",
-  "eyeIconEmpresaConfirm",
-  "toggleEmpresaConfirmPassword"
-);
+    // Setup password toggles
+    this.setupPasswordToggles();
 
-// _________________________ CAMPOS OBRIGATÓRIOS _______________________
-const loginForm = document.getElementById("loginForm");
-const loginUsername = document.getElementById("username");
-const loginPassword = document.getElementById("password");
-const loginBtn = document.getElementById("loginBtn");
-const registerForm = document.getElementById("registerForm");
-const registerUsername = document.getElementById("regUsername");
-const registerSobrenome = document.getElementById("regUsernameSobre");
-const registerEmail = document.getElementById("email");
-const registerPassword = document.getElementById("registerPassword");
-const confirmPassword = document.getElementById("confirmPassword");
-const dob = document.getElementById("dob");
-const genderSelect = document.getElementById("genderSelect");
-const outroGeneroInput = document.getElementById("outroGeneroInput");
+    // Initialize form validation
+    this.setupValidation();
 
-function checkLoginFields() {
-  loginBtn.disabled = !(loginUsername.value && loginPassword.value);
-}
+    // Initialize masks and other utilities
+    this.setupUtilities();
 
-function checkRegisterFields() {
-  const outroGeneroVal = outroGeneroInput ? outroGeneroInput.value.trim() : "";
-  const generoSelecionado = genderSelect.value;
+    // Show initial form
+    this.showForm(this.currentForm);
 
-  const generoPreenchido =
-    (generoSelecionado !== "" && generoSelecionado !== "Outro") ||
-    (generoSelecionado === "Outro" && outroGeneroVal !== "");
-
-  const allFieldsFilled =
-    registerUsername.value.trim() &&
-    registerEmail.value.trim() &&
-    registerPassword.value.trim() &&
-    confirmPassword.value.trim() &&
-    dob.value.trim() &&
-    generoPreenchido;
-}
-
-const loginInputs = [loginUsername, loginPassword];
-const registerInputs = [
-  registerUsername,
-  registerEmail,
-  registerPassword,
-  confirmPassword,
-  dob,
-  genderSelect,
-];
-
-loginInputs.forEach((input) =>
-  input.addEventListener("input", checkLoginFields)
-);
-registerInputs.forEach((input) =>
-  input.addEventListener("input", checkRegisterFields)
-);
-if (outroGeneroInput)
-  outroGeneroInput.addEventListener("input", checkRegisterFields);
-
-// Inicializa estado dos botões
-checkLoginFields();
-checkRegisterFields();
-// ________________________________________________________USUARIO ________________________________________________________________________
-// ________________________ DROPDOWN DE GÊNERO _______________________
-function handleGenderChange() {
-  const select = document.getElementById("genderSelect");
-  const otherInputContainer = document.querySelector(
-    ".other-gender-input-container"
-  );
-
-  if (select.value === "Outro") {
-    otherInputContainer.style.display = "block";
-    setTimeout(() => {
-      otherInputContainer.classList.add("show");
-    }, 10);
-  } else {
-    otherInputContainer.classList.remove("show");
-    setTimeout(() => {
-      otherInputContainer.style.display = "none";
-    }, 300);
+    // Initialize field checks
+    this.setupFieldChecks();
   }
-  checkRegisterFields();
-}
 
-// ________________________ MÁSCARA DE DATA DE NASCIMENTO _______________________
-document.addEventListener("DOMContentLoaded", function () {
-  const dobInput = document.getElementById("dob");
+  switchTab(tabId) {
+    // Update active tab
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
 
-  // Máscara de data de nascimento
-  dobInput.addEventListener("input", function () {
-    var value = dobInput.value.replace(/\D/g, "");
+    // Show corresponding form
+    this.showForm(tabId);
+  }
 
-    value = value.slice(0, 8);
+  showForm(formId) {
+    // Hide all forms
+    Object.values(this.forms).forEach(form => {
+      if (form) form.classList.remove('active');
+    });
 
-    if (value.length >= 5) {
-      value =
-        value.slice(0, 2) + "/" + value.slice(2, 4) + "/" + value.slice(4);
-    } else if (value.length >= 3) {
-      value = value.slice(0, 2) + "/" + value.slice(2);
+    // Show selected form
+    if (this.forms[formId]) {
+      this.forms[formId].classList.add('active');
+      this.currentForm = formId;
+
+      // Add animation class
+      this.forms[formId].classList.add('animate-in');
+      setTimeout(() => {
+        this.forms[formId].classList.remove('animate-in');
+      }, 300);
+    }
+  }
+
+  setupPasswordToggles() {
+    document.querySelectorAll('.password-toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        const container = e.currentTarget.closest('.password-container');
+        const input = container.querySelector('input');
+        const icon = toggle.querySelector('i');
+        
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+          input.type = 'password';
+          icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+      });
+    });
+  }
+
+  setupValidation() {
+    // User Login Form
+    const userLoginForm = document.getElementById('loginForm');
+    if (userLoginForm) {
+      userLoginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.handleUserLogin();
+      });
     }
 
-    dobInput.value = value;
-  });
-
-  // Permitir apenas números e teclas de navegação
-  dobInput.addEventListener("keydown", function (e) {
-    const key = e.key;
-    const allowedKeys = [
-      "Backspace",
-      "Delete",
-      "ArrowLeft",
-      "ArrowRight",
-      "Tab",
-    ];
-    if (!/[0-9]/.test(key) && !allowedKeys.includes(key)) {
-      e.preventDefault();
+    // User Register Form
+    const userRegisterForm = document.getElementById('registerForm');
+    if (userRegisterForm) {
+      userRegisterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.handleUserRegister();
+      });
     }
-  });
-});
 
-// Função de validação da data de nascimento
-function validarDataNascimento(dobStr) {
-  const partes = dobStr.split("/");
-  if (partes.length !== 3) return false;
-
-  const dia = parseInt(partes[0], 10);
-  const mes = parseInt(partes[1], 10) - 1;
-  const ano = parseInt(partes[2], 10);
-
-  const data = new Date(ano, mes, dia);
-
-  // Verifica se a data é válida
-  if (
-    data.getFullYear() !== ano ||
-    data.getMonth() !== mes ||
-    data.getDate() !== dia
-  ) {
-    return false;
-  }
-
-  const hoje = new Date();
-  var idade = hoje.getFullYear() - ano;
-
-  // Corrige se ainda não fez aniversário no ano
-  const mesAtual = hoje.getMonth();
-  const diaAtual = hoje.getDate();
-  if (mesAtual < mes || (mesAtual === mes && diaAtual < dia)) {
-    idade--;
-  }
-
-  return idade >= 14 && idade <= 120;
-}
-// ________________________________________________________EMPRESA ________________________________________________________________________
-// ________________________ CEP _______________________
-async function preencherEnderecoPorCep() {
-  const cepInput = document.getElementById("empresaCep");
-  const cep = cepInput.value.replace(/\D/g, "");
-
-  if (cep.length !== 8) {
-    document.getElementById("empresaRua").value = "";
-    document.getElementById("empresaBairro").value = "";
-    document.getElementById("empresaCidade").value = "";
-    document.getElementById("empresaEstado").value = "";
-    return;
-  }
-
-  try {
-    const API_CEP = await fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`);
-    if (!API_CEP.ok) throw new Error("CEP não encontrado");
-    const DADOS_API = await API_CEP.json();
-
-    document.getElementById("empresaRua").value = DADOS_API.street || "";
-    document.getElementById("empresaBairro").value =
-      DADOS_API.neighborhood || "";
-    document.getElementById("empresaCidade").value = DADOS_API.city || "";
-    document.getElementById("empresaEstado").value = DADOS_API.state || "";
-  } catch (err) {
-    document.getElementById("empresaRua").value = "";
-    document.getElementById("empresaBairro").value = "";
-    document.getElementById("empresaCidade").value = "";
-    document.getElementById("empresaEstado").value = "";
-  }
-}
-
-const empresaCepInput = document.getElementById("empresaCep");
-if (empresaCepInput) {
-  empresaCepInput.addEventListener("input", function () {
-    var value = this.value.replace(/\D/g, "");
-
-    if (value.length > 5) {
-      value = value.slice(0, 5) + "-" + value.slice(5, 8);
+    // Company Login Form
+    const companyLoginForm = document.getElementById('loginEmpresaForm');
+    if (companyLoginForm) {
+      companyLoginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.handleCompanyLogin();
+      });
     }
-    this.value = value;
 
-    if (value.length === 0) {
+    // Company Register Form
+    const companyRegisterForm = document.getElementById('registerEmpresaForm');
+    if (companyRegisterForm) {
+      companyRegisterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.handleCompanyRegister();
+      });
+    }
+  }
+
+  setupUtilities() {
+    // Date of birth mask
+    const dobInput = document.getElementById("dob");
+    if (dobInput) {
+      dobInput.addEventListener("input", function () {
+        let value = this.value.replace(/\D/g, "");
+        value = value.slice(0, 8);
+
+        if (value.length >= 5) {
+          value = value.slice(0, 2) + "/" + value.slice(2, 4) + "/" + value.slice(4);
+        } else if (value.length >= 3) {
+          value = value.slice(0, 2) + "/" + value.slice(2);
+        }
+
+        this.value = value;
+      });
+
+      dobInput.addEventListener("keydown", function (e) {
+        const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
+        if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+          e.preventDefault();
+        }
+      });
+    }
+
+    // Gender dropdown handler
+    const genderSelect = document.getElementById("genderSelect");
+    if (genderSelect) {
+      genderSelect.addEventListener("change", () => this.handleGenderChange());
+    }
+
+    // CEP handling for company
+    const empresaCepInput = document.getElementById("empresaCep");
+    if (empresaCepInput) {
+      empresaCepInput.addEventListener("input", function () {
+        let value = this.value.replace(/\D/g, "").slice(0, 8); // Limit to 8 digits
+        if (value.length > 5) {
+          value = value.slice(0, 5) + "-" + value.slice(5);
+        }
+        this.value = value;
+      });
+
+      empresaCepInput.addEventListener("keydown", function (e) {
+        const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
+        if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+          e.preventDefault();
+        }
+      });
+
+      empresaCepInput.addEventListener("input", () => this.preencherEnderecoPorCep());
+    }
+
+    // Phone number mask for company
+    const empresaTelefoneInput = document.getElementById("empresaTelefone");
+    if (empresaTelefoneInput) {
+      empresaTelefoneInput.addEventListener("input", function () {
+        let raw = this.value.replace(/\D/g, "");
+        if (raw.startsWith("55")) {
+          raw = raw.slice(2);
+        }
+        raw = raw.slice(0, 11);
+
+        let formatted = "+55";
+        if (raw.length > 0) {
+          formatted += " " + raw.slice(0, 2);
+        }
+        if (raw.length > 2) {
+          formatted += " " + raw.slice(2, 7);
+        }
+        if (raw.length > 7) {
+          formatted += "-" + raw.slice(7, 11);
+        }
+
+        this.value = formatted;
+      });
+    }
+
+    // CNPJ masks
+    const cnpjRegisterInput = document.getElementById("empresaCNPJRegister");
+    if (cnpjRegisterInput) this.aplicarMascaraCNPJ(cnpjRegisterInput);
+
+    const cnpjLoginInput = document.getElementById("empresaCNPJ");
+    if (cnpjLoginInput) this.aplicarMascaraCNPJ(cnpjLoginInput);
+  }
+
+  setupFieldChecks() {
+    // User register fields
+    const registerUsername = document.getElementById("regUsername");
+    const registerSobrenome = document.getElementById("regUsernameSobre");
+    const registerEmail = document.getElementById("email");
+    const registerPassword = document.getElementById("registerPassword");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const dob = document.getElementById("dob");
+    const genderSelect = document.getElementById("genderSelect");
+    const outroGeneroInput = document.getElementById("outroGeneroInput");
+
+    if (registerUsername && registerEmail && registerPassword && confirmPassword && dob && genderSelect) {
+      const checkRegisterFields = () => {
+        const outroGeneroVal = outroGeneroInput ? outroGeneroInput.value.trim() : "";
+        const generoSelecionado = genderSelect.value;
+
+        const generoPreenchido =
+          (generoSelecionado !== "" && generoSelecionado !== "Outro") ||
+          (generoSelecionado === "Outro" && outroGeneroVal !== "");
+
+        const allFieldsFilled =
+          registerUsername.value.trim() &&
+          registerEmail.value.trim() &&
+          registerPassword.value.trim() &&
+          confirmPassword.value.trim() &&
+          dob.value.trim() &&
+          generoPreenchido;
+      };
+
+      [registerUsername, registerEmail, registerPassword, confirmPassword, dob, genderSelect].forEach(input => {
+        if (input) input.addEventListener("input", checkRegisterFields);
+      });
+      if (outroGeneroInput) outroGeneroInput.addEventListener("input", checkRegisterFields);
+      checkRegisterFields();
+    }
+  }
+
+  // Utility methods
+  handleGenderChange() {
+    const select = document.getElementById("genderSelect");
+    const otherInputContainer = document.querySelector(".other-gender-input-container");
+
+    if (!select || !otherInputContainer) return;
+
+    if (select.value === "Outro") {
+      otherInputContainer.style.display = "block";
+      setTimeout(() => {
+        otherInputContainer.classList.add("show");
+      }, 10);
+    } else {
+      otherInputContainer.classList.remove("show");
+      setTimeout(() => {
+        otherInputContainer.style.display = "none";
+      }, 300);
+    }
+  }
+
+  async preencherEnderecoPorCep() {
+    const cepInput = document.getElementById("empresaCep");
+    if (!cepInput) return;
+
+    const cep = cepInput.value.replace(/\D/g, "");
+
+    if (cep.length !== 8) {
+      document.getElementById("empresaRua").value = "";
+      document.getElementById("empresaBairro").value = "";
+      document.getElementById("empresaCidade").value = "";
+      document.getElementById("empresaEstado").value = "";
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`);
+      if (!response.ok) throw new Error("CEP não encontrado");
+      const data = await response.json();
+
+      document.getElementById("empresaRua").value = data.street || "";
+      document.getElementById("empresaBairro").value = data.neighborhood || "";
+      document.getElementById("empresaCidade").value = data.city || "";
+      document.getElementById("empresaEstado").value = data.state || "";
+    } catch (err) {
+      console.error("Erro ao buscar CEP:", err);
       document.getElementById("empresaRua").value = "";
       document.getElementById("empresaBairro").value = "";
       document.getElementById("empresaCidade").value = "";
       document.getElementById("empresaEstado").value = "";
     }
+  }
 
-    if (value.length === 9) {
-      preencherEnderecoPorCep();
-    }
-  });
+  aplicarMascaraCNPJ(input) {
+    input.addEventListener("input", function () {
+      let value = this.value.replace(/\D/g, "").slice(0, 14);
 
-  empresaCepInput.addEventListener("blur", preencherEnderecoPorCep);
-}
-// ________________________ Numero De Telefone _______________________
-const empresaTelefoneInput = document.getElementById("empresaTelefone");
+      if (value.length >= 3) value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+      if (value.length >= 6) value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+      if (value.length >= 9) value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3/$4");
+      if (value.length >= 13) value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d)/, "$1.$2.$3/$4-$5");
 
-if (empresaTelefoneInput) {
-  empresaTelefoneInput.addEventListener("input", function () {
-    // Remove o +55 se já estiver presente para evitar duplicação
-    let raw = this.value.replace(/\D/g, "");
+      this.value = value;
+    });
+  }
 
-    // Remove os dois primeiros dígitos se forem 55
-    if (raw.startsWith("55")) {
-      raw = raw.slice(2);
-    }
+  validarDataNascimento(dobStr) {
+    const partes = dobStr.split("/");
+    if (partes.length !== 3) return false;
 
-    // Limita a 11 dígitos (2 DDD + 9 número)
-    raw = raw.slice(0, 11);
+    const dia = parseInt(partes[0], 10);
+    const mes = parseInt(partes[1], 10) - 1;
+    const ano = parseInt(partes[2], 10);
 
-    let formatted = "+55";
+    const data = new Date(ano, mes, dia);
 
-    if (raw.length > 0) {
-      formatted += " " + raw.slice(0, 2);
-    }
-    if (raw.length > 2) {
-      formatted += " " + raw.slice(2, 7);
-    }
-    if (raw.length > 7) {
-      formatted += "-" + raw.slice(7, 11);
+    if (data.getFullYear() !== ano || data.getMonth() !== mes || data.getDate() !== dia) {
+      return false;
     }
 
-    this.value = formatted;
-  });
-}
-// ________________________ CNPJ _______________________
-function aplicarMascaraCNPJ(input) {
-  input.addEventListener("input", function () {
-    let value = this.value.replace(/\D/g, "").slice(0, 14);
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - ano;
 
-    if (value.length >= 3) value = value.replace(/^(\d{2})(\d)/, "$1.$2");
-    if (value.length >= 6)
-      value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-    if (value.length >= 9)
-      value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3/$4");
-    if (value.length >= 13)
-      value = value.replace(
-        /^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d)/,
-        "$1.$2.$3/$4-$5"
-      );
+    const mesAtual = hoje.getMonth();
+    const diaAtual = hoje.getDate();
+    if (mesAtual < mes || (mesAtual === mes && diaAtual < dia)) {
+      idade--;
+    }
 
-    this.value = value;
-  });
-}
+    return idade >= 14 && idade <= 120;
+  }
 
-const cnpjRegisterInput = document.getElementById("empresaCNPJRegister");
-if (cnpjRegisterInput) aplicarMascaraCNPJ(cnpjRegisterInput);
+  // Error handling
+  showInputError(input, message) {
+    this.clearInputError(input);
 
-const cnpjLoginInput = document.getElementById("empresaCNPJ");
-if (cnpjLoginInput) aplicarMascaraCNPJ(cnpjLoginInput);
+    input.classList.add("erro-input");
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "erro-mensagem";
+    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+    errorDiv.style.display = "block";
 
-// ________________________________________________________________________________________________________________________________
+    input.parentNode.appendChild(errorDiv);
+  }
 
-// ________________________ ERRO _______________________
+  clearInputError(input) {
+    input.classList.remove("erro-input");
+    const error = input.parentNode.querySelector(".erro-mensagem");
+    if (error) error.remove();
+  }
 
-function showInputError(input, message) {
-  clearInputError(input);
+  mostrarErroTopo(mensagem) {
+    const old = document.querySelector('.erro-mensagem-geral');
+    if (old) old.remove();
 
-  input.classList.add("erro-input");
-  const errorDiv = document.createElement("div");
-  errorDiv.className = "erro-mensagem";
-  errorDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
-  errorDiv.style.display = "block";
+    const erroDiv = document.createElement('div');
+    erroDiv.className = 'erro-mensagem-geral';
 
-  input.parentNode.appendChild(errorDiv);
-}
+    const contrasteDiv = document.createElement('div');
+    contrasteDiv.className = 'erro-mensagem-contraste';
+    contrasteDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${mensagem}`;
 
-// ________________________ Erro do Sistema/BDA _______________________
-function mostrarErroTopo(mensagem) {
-  const old = document.querySelector('.erro-mensagem-geral');
-  if (old) old.remove();
+    erroDiv.appendChild(contrasteDiv);
+    document.body.prepend(erroDiv);
 
-  const erroDiv = document.createElement('div');
-  erroDiv.className = 'erro-mensagem-geral';
+    setTimeout(() => {
+      if (erroDiv.parentNode) erroDiv.remove();
+    }, 5000);
+  }
 
-  const contrasteDiv = document.createElement('div');
-  contrasteDiv.className = 'erro-mensagem-contraste';
-  contrasteDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${mensagem}`;
-
-  erroDiv.appendChild(contrasteDiv);
-  document.body.prepend(erroDiv);
-
-  setTimeout(() => {
-    if (erroDiv.parentNode) erroDiv.remove();
-  }, 5000);
-}
-
-function clearInputError(input) {
-  input.classList.remove("erro-input");
-  const error = input.parentNode.querySelector(".erro-mensagem");
-  if (error) error.remove();
-}
-
-
-/**function mostrarErro(input, mensagem) {
-input.classList.add("erro-input");
-var erro = input.parentElement.querySelector(".erro-mensagem");
-if (!erro) {
- erro = document.createElement("span");
- erro.className = "erro-mensagem";
- input.parentElement.appendChild(erro);
-}
- erro.textContent = mensagem;
- erro.style.display = "block";
-}
-*/
-
-function removerErros() {
-  document
-    .querySelectorAll(".erro-input")
-    .forEach((el) => el.classList.remove("erro-input"));
-  document
-    .querySelectorAll(".erro-mensagem")
-    .forEach((el) => (el.style.display = "none"));
-}
-
-document.addEventListener(
-  "click",
-  function () {
-    removerErros();
-  },
-  true
-);
-
-
-// ________________________ LOGIN/EMPRESA _______________________
-document
-  .getElementById("loginEmpresaForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const cnpjInput = document.getElementById("empresaCNPJ");
-    const senhaInput = document.getElementById("empresaPassword");
-
-    [cnpjInput, senhaInput].forEach(clearInputError);
-
-    const cnpj1 = cnpjInput.value.trim();
+  // Form Handlers
+  async handleUserLogin() {
+    const form = document.getElementById('loginForm');
+    const email = form.querySelector('input[type="email"]').value.trim();
+    const senhaInput = form.querySelector('#password');
     const senha = senhaInput.value.trim();
 
-    if (
-      cnpj1.length !== 18 ||
-      !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)
-    ) {
-      showInputError(cnpjInput, "CNPJ inválido. formato 00.000.000/0000-00.");
+    // Validate inputs
+    if (!email) {
+      this.showInputError(form.querySelector('input[type="email"]'), 'Por favor, preencha o e-mail.');
+      return;
+    }
+
+    if (!this.validateEmail(email)) {
+      this.showInputError(form.querySelector('input[type="email"]'), 'Por favor, insira um email válido.');
+      return;
+    }
+
+    if (!senha) {
+      this.showInputError(form.querySelector('input[type="password"]'), 'Por favor, preencha a senha.');
+      return;
+    }
+
+    /*if (senha.length < 8) {
+      this.showInputError(form.querySelector('input[type="password"]'), 'A senha deve ter pelo menos 8 caracteres.');
+      return;
+    }*/
+
+    try {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const erro = await res.json();
+        throw { status: res.status, message: erro.error };
+      }
+
+      window.location.href = "/";
+    } catch (erro) {
+      if (erro.status === 500) {
+        this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
+      } else {
+        this.mostrarErroTopo(erro.message || 'Erro ao fazer login.');
+      }
+    }
+  }
+
+  async handleUserRegister() {
+    const form = document.getElementById('registerForm');
+    const name = form.querySelector('#regUsername').value.trim();
+    const sobrenome = form.querySelector('#regUsernameSobre').value.trim();
+    const dobValue = form.querySelector('#dob').value.trim();
+    const email = form.querySelector('#email').value.trim();
+    const senha = form.querySelector('#registerPassword').value.trim();
+    const confirmSenha = form.querySelector('#confirmPassword').value.trim();
+    const genderSelect = form.querySelector('#genderSelect');
+    const outroGeneroInput = form.querySelector('#outroGeneroInput');
+    let genero = genderSelect.value;
+
+    // Clear previous errors
+    [
+      form.querySelector('#regUsername'),
+      form.querySelector('#regUsernameSobre'),
+      form.querySelector('#email'),
+      form.querySelector('#registerPassword'),
+      form.querySelector('#confirmPassword'),
+      form.querySelector('#dob'),
+      genderSelect,
+      outroGeneroInput
+    ].forEach(input => this.clearInputError(input));
+
+    // Validate inputs
+    if (!name) {
+      this.showInputError(form.querySelector('#regUsername'), 'Por favor, preencha o nome.');
+      return;
+    }
+
+    if (!sobrenome) {
+      this.showInputError(form.querySelector('#regUsernameSobre'), 'Por favor, preencha o sobrenome.');
+      return;
+    }
+
+    if (name.length < 4) {
+      this.showInputError(form.querySelector('#regUsername'), 'Nome deve ter pelo menos 4 caracteres.');
+      return;
+    }
+
+    if (!dobValue) {
+      this.showInputError(form.querySelector('#dob'), 'Por favor, preencha a data de nascimento.');
+      return;
+    }
+
+    if (!dobValue.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+      this.showInputError(form.querySelector('#dob'), 'Formato de data inválido (use DD/MM/AAAA).');
+      return;
+    }
+
+    if (!this.validarDataNascimento(dobValue)) {
+      this.showInputError(form.querySelector('#dob'), 'Data inválida (idade: 14 a 120 anos).');
+      return;
+    }
+
+    if (!email) {
+      this.showInputError(form.querySelector('#email'), 'Por favor, preencha o e-mail.');
+      return;
+    }
+
+    if (!this.validateEmail(email)) {
+      this.showInputError(form.querySelector('#email'), 'Por favor, insira um email válido.');
+      return;
+    }
+
+    if (!senha) {
+      this.showInputError(form.querySelector('#registerPassword'), 'Por favor, preencha a senha.');
       return;
     }
 
     if (senha.length < 8) {
-      showInputError(senhaInput, "mínimo 8 caracteres.");
+      this.showInputError(form.querySelector('#registerPassword'), 'A senha deve ter pelo menos 8 caracteres.');
       return;
     }
+
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
-      showInputError(
+      this.showInputError(
+        form.querySelector('#registerPassword'),
+        'Senha deve ter maiúscula, minúscula, número e caractere especial.'
+      );
+      return;
+    }
+
+    if (!confirmSenha) {
+      this.showInputError(form.querySelector('#confirmPassword'), 'Por favor, confirme a senha.');
+      return;
+    }
+
+    if (senha !== confirmSenha) {
+      this.showInputError(form.querySelector('#confirmPassword'), 'As senhas não coincidem.');
+      return;
+    }
+
+    if (!genero) {
+      this.showInputError(genderSelect, 'Por favor, selecione um gênero.');
+      return;
+    }
+
+    if (genero === "Outro") {
+      const outroGenero = outroGeneroInput.value.trim();
+      if (!outroGenero) {
+        this.showInputError(outroGeneroInput, 'Por favor, preencha o campo de gênero personalizado.');
+        return;
+      }
+      genero = outroGenero;
+    }
+
+    const nome = `${name} ${sobrenome}`;
+    const [dia, mes, ano] = dobValue.split("/");
+    const data_nasc = `${ano}-${mes}-${dia}`;
+
+    const btnAdd = document.querySelector("#registerBtn")
+    btnAdd.disabled = true;
+    btnAdd.textContent = "Cadastrando...";
+
+    fetch("/candidatos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
+    })
+    .then(async (res) => {
+      const data = await res.json()
+      if (!res.ok) throw { status: res.status, message: data.error || "Erro ao cadastrar o usuário." };
+      window.location.href = `/confirmar?email=${email}`;
+    })
+    .catch (erro => {
+      btnAdd.disabled = false;
+      btnAdd.textContent = "Cadastrar";
+      if (erro.status===409) {
+        this.mostrarErroTopo("E-mail já cadastrado. Por favor, use outro e-mail.");
+      } else if (erro.status === 500) {
+        this.mostrarErroTopo("Erro ao cadastrar usuário. (A culpa não foi sua, tente novamente)");
+      } else {
+        this.mostrarErroTopo(`Erro do sistema: ${erro.message}`);
+      }
+    })
+  }
+
+    async handleCompanyLogin() {
+    const form = document.getElementById('loginEmpresaForm');
+    const cnpjInput = form.querySelector('input[type="text"]');
+    const senhaInput = form.querySelector('input[type="password"]');
+
+    const cnpj1 = cnpjInput.value.trim();
+    const senha = senhaInput.value.trim();
+
+    // Clear previous errors
+    [cnpjInput, senhaInput].forEach(input => this.clearInputError(input));
+
+    // Validate inputs
+    if (cnpj1.length !== 18 || !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)) {
+      this.showInputError(cnpjInput, "CNPJ inválido. formato 00.000.000/0000-00.");
+      return;
+    }
+
+    const cnpj = cnpj1.replace(/[^\d]/g, ""); 
+    try { 
+      const res = await fetch("/login-empresa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cnpj, senha }),
+        credentials: "include"
+      });
+
+      if (!res.ok) {
+        const erro = await res.json();
+        throw { status: res.status, message: erro.error };
+      }
+
+      window.location.href = "/";
+    } catch (erro) {
+      if (erro.status === 500) {
+        this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
+      } else {
+        this.mostrarErroTopo(erro.message);
+      }
+    }
+  }
+
+  async handleCompanyRegister() {
+    const form = document.getElementById('registerEmpresaForm');
+    const emailInput = form.querySelector('#empresaEmail');
+    const razaoInput = form.querySelector('#empresaRazao');
+    const cnpjInput = form.querySelector('#empresaCNPJRegister');
+    const senhaInput = form.querySelector('#empresaRegisterPassword');
+    const confirmSenhaInput = form.querySelector('#empresaConfirmPassword');
+    const telefoneInput = form.querySelector('#empresaTelefone');
+    const cepInput = form.querySelector('#empresaCep');
+    const numeroInput = form.querySelector('#empresaNumero');
+    const complementoInput = form.querySelector('#empresaComplemento');
+    const empresaFantasiaInput = form.querySelector('#empresaFantasia');
+
+    // Clear previous errors
+    [
+      emailInput,
+      razaoInput,
+      cnpjInput,
+      senhaInput,
+      confirmSenhaInput,
+      telefoneInput,
+      cepInput,
+      numeroInput,
+      complementoInput,
+      empresaFantasiaInput,
+    ].forEach(input => this.clearInputError(input));
+
+    // Get values
+    const email = emailInput.value.trim();
+    const razao_soci = razaoInput.value.trim();
+    const cnpj1 = cnpjInput.value.trim();
+    const senha = senhaInput.value.trim();
+    const confirmSenha = confirmSenhaInput.value.trim();
+    const telefone = telefoneInput.value.trim();
+    const cep = cepInput.value.trim();
+    const numero = numeroInput.value.trim();
+    let complemento = complementoInput.value.trim();
+    const nome_fant = empresaFantasiaInput.value.trim();
+
+    // Validate inputs
+    if (!email) {
+      this.showInputError(emailInput, "preencha o e-mail.");
+      return;
+    }
+
+    if (!this.validateEmail(email)) {
+      this.showInputError(emailInput, "insira um email válido.");
+      return;
+    }
+
+    if (!telefone) {
+      this.showInputError(telefoneInput, "preencha o telefone.");
+      return;
+    }
+
+    if (!/^\+55 \d{2} \d{4,5}-\d{4}$/.test(telefone)) {
+      this.showInputError(telefoneInput, "Telefone inválido (use +55 XX XXXXX-XXXX)");
+      return;
+    }
+
+    if (!razao_soci) {
+      this.showInputError(razaoInput, "preencha a razão social.");
+      return;
+    }
+
+    if (!nome_fant) {
+      this.showInputError(empresaFantasiaInput, "preencha o nome fantasia.");
+      return;
+    }
+
+    if (!cnpj1) {
+      this.showInputError(cnpjInput, "preencha o CNPJ.");
+      return;
+    }
+
+    if (cnpj1.length !== 18 || !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)) {
+      this.showInputError(cnpjInput, "insira um CNPJ válido.");
+      return;
+    }
+
+    if (!cep) {
+      this.showInputError(cepInput, "preencha o CEP.");
+      return;
+    }
+
+    if (!/^\d{5}-\d{3}$/.test(cep)) {
+      this.showInputError(cepInput, "CEP inválido (use XXXXX-XXX).");
+      return;
+    }
+
+    if (!numero) {
+      this.showInputError(numeroInput, "Por favor, preencha o número.");
+      return;
+    }
+
+    if (!/[a-zA-Z0-9]/.test(numero)) {
+      this.showInputError(numeroInput, "use letras ou números.");
+      return;
+    }
+
+    if (!senha) {
+      this.showInputError(senhaInput, "Por favor, preencha a senha.");
+      return;
+    }
+
+    if (senha.length < 8) {
+      this.showInputError(senhaInput, "mínimo 8 caracteres.");
+      return;
+    }
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
+      this.showInputError(
         senhaInput,
         "Senha deve ter maiúscula, minúscula, número e caractere especial."
       );
       return;
     }
 
+    if (!confirmSenha) {
+      this.showInputError(confirmSenhaInput, "confirme a senha.");
+      return;
+    }
+
+    if (senha !== confirmSenha) {
+      this.showInputError(confirmSenhaInput, "As senhas não coincidem.");
+      return;
+    }
+
+    if (document.getElementById("empresaRua").value === "") {
+      this.showInputError(cepInput, "CEP inválido");
+      return;
+    }
+
+    const estado = document.querySelector("#empresaEstado").value;
+    const cidade = document.querySelector("#empresaCidade").value;
+
     const cnpj = cnpj1.replace(/[^\d]/g, "");
 
-    fetch("/login-empresa", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cnpj, senha }),
-      credentials: "include",
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const erro = await res.json();
-          throw { status: res.status, message: erro.error || "Erro ao fazer login."};
-        }
-        window.location.href = "/";
-      })
-      .catch((erro) => {
-        if(erro.status===500){
-          mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)')
-        }
-        else {mostrarErroTopo(erro.message);}
-      });
-  });
+    const btnAdd = document.querySelector("#empresaRegisterBtn");
+    btnAdd.disabled = true
+    btnAdd.textContent = "Cadastrando...";
 
-// ________________________ CADASTRO/EMPRESA _______________________
-const registerEmpresaForm = document.getElementById("registerEmpresaForm");
-if (registerEmpresaForm) {
-  registerEmpresaForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    cadastrarEmpresa();
-  });
-}
-
-function cadastrarEmpresa() {
-  const emailInput = document.getElementById("empresaEmail");
-  const razaoInput = document.getElementById("empresaRazao");
-  const cnpjInput = document.getElementById("empresaCNPJRegister");
-  const senhaInput = document.getElementById("empresaRegisterPassword");
-  const confirmSenhaInput = document.getElementById("empresaConfirmPassword");
-  const telefoneInput = document.getElementById("empresaTelefone");
-  const cepInput = document.getElementById("empresaCep");
-  const numeroInput = document.getElementById("empresaNumero");
-  const complementoInput = document.getElementById("empresaComplemento");
-  const empresaFantasiaInput = document.getElementById("empresaFantasia");
-  [
-    emailInput,
-    razaoInput,
-    cnpjInput,
-    senhaInput,
-    confirmSenhaInput,
-    telefoneInput,
-    cepInput,
-    numeroInput,
-    complementoInput,
-    empresaFantasiaInput,
-  ].forEach(clearInputError);
-
-  const email = emailInput.value.trim();
-  const razao_soci = razaoInput.value.trim();
-  const cnpj1 = cnpjInput.value.trim();
-  const senha = senhaInput.value.trim();
-  const confirmSenha = confirmSenhaInput.value.trim();
-  const telefone = telefoneInput.value.trim();
-  const cep = cepInput.value.trim();
-  const numero = numeroInput.value.trim();
-  let complemento = complementoInput.value.trim();
-  const nome_fant = empresaFantasiaInput.value.trim();
-
-  if (!email) {
-    showInputError(emailInput, "preencha o e-mail.");
-    return;
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showInputError(emailInput, "insira um email válido.");
-    return;
-  }
-  if (!telefone) {
-    showInputError(telefoneInput, "preencha o telefone.");
-    return;
-  }
-  if (!/^\+55 \d{2} \d{4,5}-\d{4}$/.test(telefone)) {
-    showInputError(telefoneInput, "Telefone inválido (use +55 XX XXXXX-XXXX)");
-    return;
-  }
-  if (!razao_soci) {
-    showInputError(razaoInput, "preencha a razão social.");
-    return;
-  }
-  if (!nome_fant) {
-    showInputError(empresaFantasiaInput, "preencha o nome fantasia.");
-    return;
-  }
-  if (!cnpj1) {
-    showInputError(cnpjInput, "preencha o CNPJ.");
-    return;
-  }
-  if (
-    cnpj1.length !== 18 ||
-    !/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj1)
-  ) {
-    showInputError(cnpjInput, "insira um CNPJ válido.");
-    return;
-  }
-  if (!cep) {
-    showInputError(cepInput, "preencha o CEP.");
-    return;
-  }
-  if (!/^\d{5}-\d{3}$/.test(cep)) {
-    showInputError(cepInput, "CEP inválido (use XXXXX-XXX).");
-    return;
-  }
-  if (!numero) {
-    showInputError(numeroInput, "Por favor, preencha o número.");
-    return;
-  }
-  if (!/[a-zA-Z0-9]/.test(numero)) {
-    showInputError(numeroInput, "use letras ou números.");
-    return;
-  }
-  if (!senha) {
-    showInputError(senhaInput, "Por favor, preencha a senha.");
-    return;
-  }
-  if (senha.length < 8) {
-    showInputError(senhaInput, "mínimo 8 caracteres.");
-    return;
-  }
-  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
-    showInputError(
-      senhaInput,
-      "Senha deve ter maiúscula, minúscula, número e caractere especial."
-    );
-    return;
-  }
-  if (!confirmSenha) {
-    showInputError(confirmSenhaInput, "confirme a senha.");
-    return;
-  }
-  if (senha !== confirmSenha) {
-    showInputError(confirmSenhaInput, "As senhas não coincidem.");
-    return;
-  }
-
-  if(document.getElementById("empresaRua").value === ""){
-    showInputError(cepInput, "CEP inválido");
-    return;
-  }
-
-  const cnpj = cnpj1.replace(/[^\d]/g, "");
-
-  fetch("/empresas", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      cnpj,
-      nome_fant,
-      telefone,
-      email,
-      senha,
-      razao_soci,
-      cep,
-      complemento,
-      numero,
-    }),
-  })
-  .then(async (res) => {
-    if (res.ok) {
-      return fetch("/login-empresa", {
+    try {
+      const response = await fetch("/empresas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cnpj, senha }),
-        credentials: "include",
+        body: JSON.stringify({
+          cnpj,
+          nome_fant,
+          telefone,
+          email,
+          senha,
+          razao_soci,
+          cep,
+          complemento,
+          numero,
+          estado,
+          cidade
+        })
       });
-    } else {
-      const erro = await res.json();
-      throw { status: res.status, message: erro.error || "Erro ao cadastrar a empresa." };
+
+      if (response.ok) {
+        const loginResponse = await fetch("/login-empresa", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cnpj, senha }),
+          credentials: "include",
+        });
+
+        if (!loginResponse.ok) {
+          const erro = await loginResponse.json();
+          throw { status: loginResponse.status, message: erro.error || "Erro ao fazer login automático." };
+        }
+
+        alert("Empresa cadastrada com SUCESSO!");
+        window.location.href = "/";
+      } else {
+        const erro = await response.json();
+        throw { status: response.status, message: erro.error || "Erro ao cadastrar a empresa." };
+      }
+    } catch (erro) {
+      btnAdd.disabled = false;
+      btnAdd.textContent = "Cadastrar Empresa";
+      if (erro.status === 409) {
+        this.mostrarErroTopo("Empresa já cadastrada.");
+      } else if (erro.status === 500) {
+        this.mostrarErroTopo('Erro ao cadastrar empresa (A culpa não foi sua, tente novamente).');
+      } else {
+        this.mostrarErroTopo(erro.message || 'Erro desconhecido, tente novamente.');
+      }
     }
-  })
-  .then(async (res) => {
-    if (!res.ok) {
-      const erro = await res.json();
-      throw { status: res.status, message: erro.error || "Erro ao fazer login automático." };
-    }
-    alert("Empresa cadastrada com SUCESSO!");
-    window.location.href = "/";
-  })
-  .catch((erro) => {
-    console.log(erro.message)
-    if (erro.status===409)
-      {
-      mostrarErroTopo("Empresa já cadastrada.");
-      return;
-    }
-    else if(erro.status===500){
-      mostrarErroTopo('Erro ao cadastrar empresa (A culpa não foi sua, tente novamente).');
-      return;
-    }else{
-      mostrarErroTopo(erro.message||'Erro desconhecido, tente novamente.');
-      return;
-    }
-  });
+  }
+
+  // Helper Methods
+  validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
+  validateCNPJ(cnpj) {
+    const re = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+    return re.test(cnpj);
+  }
 }
 
-// ________________________ LOGIN/US _______________________
-loginForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-  login();
+let formManager;
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  formManager = new FormManager();
+  
+  // Add global click handler to clear errors
+  document.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') {
+      document.querySelectorAll('.erro-input').forEach(el => {
+        formManager.clearInputError(el);
+      });
+    }
+  });
 });
 
-function login() {
-  const email = loginUsername.value.trim();
-  const senha = loginPassword.value.trim();
-
-  fetch("/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, senha }),
-    credentials: "include",
-  })
-  .then(async (res) => {
-    
-    if (!res.ok) {
-      const erro = await res.json();
-      throw { status: res.status, message: erro.error || "Erro ao fazer login."};
-    }
-    window.location.href = "/";
-  })
-  .catch((erro) => {
-    if(erro.status===500){
-      mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)')
-    }else{
-      mostrarErroTopo(erro.message)
-    }
-  });
+// Navigation functions for HTML links
+function showUserLogin() {
+  formManager?.showForm('user-login');
 }
 
-// ________________________ CADASTRO/US _______________________
-registerForm.addEventListener("submit", cadastrar);
+function showUserRegister() {
+  formManager?.showForm('user-register');
+}
 
-function cadastrar(e) {
-  e.preventDefault();
-  [
-    registerUsername,
-    registerEmail,
-    registerPassword,
-    confirmPassword,
-    dob,
-    registerSobrenome,
-  ].forEach(clearInputError);
-  const name = registerUsername.value.trim();
-  const sobrenome = registerSobrenome.value.trim();
-  const dobValue = dob.value.trim();
-  const email = registerEmail.value.trim();
-  const senha = registerPassword.value.trim();
-  const confirmSenha = confirmPassword.value.trim();
-  var genero = genderSelect.value;
+function showCompanyLogin() {
+  formManager?.showForm('company-login');
+}
 
-  if (!name) {
-    showInputError(registerUsername, "preencha o nome.");
-    return;
-  }
-  if (!sobrenome) {
-    showInputError(registerSobrenome, "preencha o sobrenome.");
-    return;
-  }
-  if (name.length < 4) {
-    showInputError(registerUsername, "mínimo 4 caracteres.");
-    return;
-  }
-  if (!dobValue) {
-    showInputError(dob, "preencha a data de nascimento.");
-    return;
-  }
-  if (!dobValue.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-    showInputError(dob, "formato DD/MM/AAAA.");
-    return;
-  }
-  if (!validarDataNascimento(dobValue)) {
-    showInputError(dob, "Data inválida (idade: 14 a 120 anos).");
-    return;
-  }
-  if (!email) {
-    showInputError(registerEmail, "preencha o e-mail.");
-    return;
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showInputError(registerEmail, "insira um email válido.");
-    return;
-  }
-  if (!senha) {
-    showInputError(registerPassword, "preencha a senha.");
-    return;
-  }
-  if (senha.length < 8) {
-    showInputError(registerPassword, "mínimo 8 caracteres.");
-    return;
-  }
-  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(senha)) {
-    showInputError(registerPassword, "use maiúscula, minúscula, número e caractere especial.");
-    return;
-  }
-  if (!confirmSenha) {
-    showInputError(confirmPassword, "confirme a senha.");
-    return;
-  }
-  if (confirmSenha.length < 8) {
-    showInputError(confirmPassword, "mínimo 8 caracteres.");
-    return;
-  }
-  if (senha !== confirmSenha) {
-    showInputError(confirmPassword, "As senhas não coincidem.");
-    return;
-  }
-  if (!genero) {
-    showInputError(genderSelect, "selecione um gênero.");
-    return;
-  }
-  if (genero === "Outro") {
-    const outroGenero = outroGeneroInput.value.trim();
-    if (!outroGenero) {
-      showInputError(
-        outroGeneroInput,
-        "preencha o campo de gênero personalizado."
-      );
-      return;
-    }
-    genero = outroGenero;
-  }
-
-  const nome = `${name} ${sobrenome}`;
-  const [dia, mes, ano] = dobValue.split("/");
-  const data_nasc = `${ano}-${mes}-${dia}`;
-
-  fetch("/candidatos", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
-  })
-  .then(async (res) => {
-    const data = await res.json()
-    if (!res.ok) throw { status: res.status, message: data.error || "Erro ao cadastrar o usuário." };
-    window.location.href = `/confirmar?email=${email}`;
-  })
-  .catch((erro) => {
-    console.log(erro.message)
-    if (erro.status===409) {
-      mostrarErroTopo(
-        erro.message
-      );
-      return;
-    }else
-    if(erro.status===500){
-      mostrarErroTopo("Erro ao cadastrar usuário. (A culpa não foi sua, tente novamente)")
-    }
-    else{
-      mostrarErroTopo(`Erro do sistema: ${erro.message}`);
-    }
-  });
+function showCompanyRegister() {
+  formManager?.showForm('company-register');
 }

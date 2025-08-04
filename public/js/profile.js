@@ -1,5 +1,5 @@
 //Importando as funções do globalFunctions
-import { carregarInfo, mostrarErroTopo, logout } from './globalFunctions.js'
+import { carregarInfo, mostrarErroTopo, logout } from './globalFunctions.js';
 
 //Após o site carregar, ele carrega a navbar e o perfil
 document.addEventListener('DOMContentLoaded', async ()=>{
@@ -147,7 +147,7 @@ function mostrarModalTag() {
 async function adicionarTag() {
     const tagUsuario = inputTag.value;
     inputTag.value = '';
-
+    modalInputTag.style.display = 'none';
     if (tagUsuario) {
         if(document.querySelector("#maisTags")){
             maisTags.style.color = "#f05959";
@@ -155,19 +155,17 @@ async function adicionarTag() {
             await tags(99999999, 6);
             maisTags.remove();
         }
-        fetch('/tags', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nome: tagUsuario })
-        })
-        .then(async res => {
-            const data = await res.json()
-            if(!res.ok) throw ({status: res.status, message: data.error})
-            modalInputTag.style.display = 'none';
-            alert(data.message || 'Tag adicionada com sucesso!');
+        try{
+            const res = await fetch('/tags', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nome: tagUsuario })
+            });
+            const data = await res.json();
+            if(!res.ok) throw ({status: res.status, message: data.error});
 
             const buttonTag = document.createElement("button");
             buttonTag.classList.add("tags");
@@ -190,14 +188,13 @@ async function adicionarTag() {
             buttonTag.addEventListener('click', () => remover(data.id), { once: true });
             
             document.querySelector("#Tags").prepend(buttonTag);
-
-        })
-        .catch(error => {
-            console.error('Erro ao adicionar tag:', error);
-            alert(error.message);
-        });
+        }
+        catch(erro){
+            console.error('Erro ao adicionar tag:', erro);
+            mostrarErroTopo(erro.message);
+        }
     } else {
-        alert("Você precisa digitar uma tag.");
+        mostrarErroTopo("Você precisa digitar uma tag.");
     }
 }
 

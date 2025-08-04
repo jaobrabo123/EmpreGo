@@ -99,6 +99,8 @@ function exibirChatsFront() {
                     room: data.id,
                     type: chatsBack.tipo,
                 };
+                socket.emit('sendMessage', messageObject);
+                
                 fetch('/mensagens',{
                     method: 'POST',
                     credentials: 'include',
@@ -114,15 +116,12 @@ function exibirChatsFront() {
                     const data = await res.json();
                     if(!res.ok) throw ({status: res.status, message: data.error});
 
-                    socket.emit('sendMessage', messageObject);
+                    //socket.emit('sendMessage', messageObject);
                 })
                 .catch(erro=>{
-                    if(erro.status===500){
-                        alert(`Erro ao enviar a mensagem (A culpa não foi sua, tente novamente).`)
-                    }
-                    else{
-                        alert(`${erro.message}: ${erro.status}`)
-                    }
+                    let comecoMsg = message.substring(0, 30);
+                    comecoMsg+='...'
+                    alert(`${erro.message}. (Talvez a mensagem: "${comecoMsg}" não apareça ao recarregar o chat)`)
                 })
 
                 //renderMessage(messageObject);

@@ -20,7 +20,7 @@ class EmpresaModel {
     static async buscarTodasEmpresas(){
         const resultado = await pool.query(`
             SELECT cnpj, nome_fant, telefone, email, razao_soci, cep, 
-            complemento, numero, descricao, setor, porte, data_fund, 
+            complemento, estado, cidade, numero, descricao, setor, porte, data_fund, 
             contato, site, instagram, github, youtube, twitter,
             data_criacao FROM empresas
         `);

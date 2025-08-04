@@ -288,6 +288,7 @@ async function removerTupla(tabela, id) {
         carregarTabela(tabela)
     }
     catch(erro){
+        modal.style.display = 'none'
         if(erro.status===401||erro.status===403){
             alert(erro.message);
             window.location.href = '/'

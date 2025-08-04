@@ -7,7 +7,7 @@ const ChatModel = require('../models/chatModel.js');
 
 class EmpresaService{
 
-  static async popularTabelaEmpresas(cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, num){
+  static async popularTabelaEmpresas(cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, num, estado, cidade){
 
     ValidarCampos.validarTamanhoMin(senha, 8, 'Senha');
     ValidarCampos.validarCnpj(cnpj);
@@ -19,6 +19,7 @@ class EmpresaService{
     ValidarCampos.validarTamanhoMin(num, 1, 'Número do Endereço');
     ValidarCampos.validarTamanhoMax(num, 10, 'Número do Endereço');
     ValidarCampos.validarTelefone(telefone);
+    await ValidarCampos.validarCidadePorEstadoSigla(cidade, estado);
 
     senha = senha.trim();
     cnpj = cnpj.replace(/[^\d]/g, '').trim();
@@ -29,6 +30,7 @@ class EmpresaService{
     complemento = complemento.trim();
     num = num.trim();
     telefone = telefone.replace(/[^\d]/g, '').trim();
+    cidade = cidade.trim();
 
     const empresaExistente = await EmpresaModel.verificarEmpresaExistente(cnpj, email, razao_soci);
 
@@ -40,9 +42,9 @@ class EmpresaService{
 
     await pool.query(
       `INSERT INTO empresas 
-      (cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-      [cnpj, nome_fant, telefone, email, senhaCripitografada, razao_soci, cep, complemento, num]
+      (cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero, estado, cidade) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      [cnpj, nome_fant, telefone, email, senhaCripitografada, razao_soci, cep, complemento, num, estado, cidade]
     );
 
   }

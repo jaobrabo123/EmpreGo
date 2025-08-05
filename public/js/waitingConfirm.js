@@ -4,33 +4,34 @@ if(!email){
     window.location.href = '/';
 }
 
-document.querySelector('#email').textContent = email
+document.querySelector('#email').textContent = email;
 
 const mensagem = document.querySelector('#mensagem');
-
 const input = document.querySelector('#inputCodigo');
 
-input.addEventListener('input', (event)=>{
+input.addEventListener('input', async (event)=>{
     const codigo = event.target.value;
     if(codigo.length < 4) return;
     input.disabled = true;
 
-    fetch(`/candidatos/confirmar`,{
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ codigo })
-    })
-    .then(async (res) =>{
-        const data = await res.json();
-        if(!res.ok) throw {status: res.status, message: data.error};
-        window.location.href = '/'
-    })
-    .catch(erro=>{
-        event.target.value = ''
+    try{
+        const res = await fetch(`/candidatos/confirmar`,{
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ codigo })
+        });
+        if(!res.ok){
+            const data = await res.json();
+            throw {status: res.status, message: data.error};
+        };
+        window.location.href = '/';
+    }
+    catch(erro){
+        event.target.value = '';
         input.disabled = false;
         mensagem.textContent = erro.message;
-    })
-})
+    };
+});
 
 let podeReenviar = true;
 document.querySelector('#reenvio').addEventListener('click', async ()=>{
@@ -47,7 +48,7 @@ document.querySelector('#reenvio').addEventListener('click', async ()=>{
 
         if(!res.ok) throw { status: res.status, message: data.error };
 
-        mensagem.textContent = `${data.message}`
+        mensagem.textContent = `${data.message}`;
         podeReenviar = true;
     }
     catch(erro){
@@ -55,9 +56,9 @@ document.querySelector('#reenvio').addEventListener('click', async ()=>{
         podeReenviar = true;
         if(erro.status === 404){
             podeReenviar = false;
-            mensagem.textContent += ' Redirecionando...'
+            mensagem.textContent += ' Redirecionando...';
             setTimeout(() => {
-                window.location.href = '/'
+                window.location.href = '/';
             }, 3000);
         }
     }

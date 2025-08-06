@@ -552,6 +552,7 @@ class FormManager {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
+      credentials: 'include'
     })
     .then(async (res) => {
       const data = await res.json()

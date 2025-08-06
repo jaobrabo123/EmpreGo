@@ -104,3 +104,28 @@ export function logout(){
     window.location.href = '/';
   });
 }
+
+//Configurando axios
+export function axiosConfig(axios){
+  axios.defaults.withCredentials = true;
+
+  axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+  axios.defaults.baseURL = window.location.hostname.includes('localhost') ? 'http://localhost:3001' : 'https://tcc-vjhk.onrender.com';
+
+  axios.interceptors.response.use(function (config) {
+    return config;
+  }, function (erro) {
+    const msg = erro.response.data.error;
+
+    if (erro.status === 403) {
+      mostrarErroTopo("Sessão expirada. Faça login novamente.");
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 5*1000);
+    }
+
+    mostrarErroTopo(msg);
+    return Promise.reject(erro);
+  });
+}

@@ -1,3 +1,6 @@
+import { axiosConfig } from '/js/globalFunctions.js';
+axiosConfig(axios);
+
 const params = new URLSearchParams(window.location.search);
 const email = params.get('email');
 if(!email){
@@ -14,29 +17,22 @@ input.addEventListener('input', async (event)=>{
     if(codigo.length < 4) return;
     input.disabled = true;
 
-    try{
-        const res = await fetch(`/candidatos/confirmar`,{
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ codigo })
-        });
-        if(!res.ok){
-            const data = await res.json();
-            throw {status: res.status, message: data.error};
-        };
-        window.location.href = '/';
-    }
-    catch(erro){
-        event.target.value = '';
-        input.disabled = false;
-        mensagem.textContent = erro.message;
-    };
+    axios.post('/candidatos/confirmar', { codigo: codigo })
+        .then(()=>{
+            window.location.href = '/';
+        })
+        .catch((erro)=>{
+            event.target.value = '';
+            input.disabled = false;
+            console.error(erro.response.data.error)
+        })
 });
 
 let podeReenviar = true;
 document.querySelector('#reenvio').addEventListener('click', async ()=>{
+    if(!email || !podeReenviar) return;
     try{
-        if(!email || !podeReenviar) return;
+        
         podeReenviar = false;
         const res = await fetch('/candidatos/reenviar',{
             method: 'POST',

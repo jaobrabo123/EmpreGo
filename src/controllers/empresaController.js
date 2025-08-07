@@ -1,7 +1,7 @@
 
 const EmpresaModel = require('../models/empresaModel.js');
-const EmpresaService = require('../services/empresaService.js')
-const Erros = require('../utils/erroClasses.js')
+const EmpresaService = require('../services/empresaService.js');
+const Erros = require('../utils/erroClasses.js');
 
 class EmpresaController{
 

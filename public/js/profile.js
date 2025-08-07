@@ -1,13 +1,14 @@
-//Importando as funções do globalFunctions
-import { carregarInfo, mostrarErroTopo, logout } from './globalFunctions.js';
+// * Importando as funções do globalFunctions
+import { carregarInfo, mostrarErroTopo, logout, axiosConfig } from './globalFunctions.js';
+axiosConfig(axios);
 
-//Após o site carregar, ele carrega a navbar e o perfil
+// * Após o site carregar, ele carrega a navbar e o perfil
 document.addEventListener('DOMContentLoaded', async ()=>{
-    const data = await carregarInfo() //Pega a resposta do carregarInfo
+    const data = await carregarInfo(axios) // * Pega a resposta do carregarInfo
 
-    // Carregar informações
-    if(data.tipo && (data.tipo ==='candidato')){ //Se a resposta for do tipo candidato carrega o perfil do candidato e ajusta a navbar
-        //Tags Formais
+    // * Carregar informações
+    if(data.tipo && (data.tipo ==='candidato')){ // * Se a resposta for do tipo candidato carrega o perfil do candidato e ajusta a navbar
+        // * Tags Formais
         document.querySelector('#loginOuCadas').style.display = 'none';
         document.querySelector('#fotoPerfil').style.display = '';
         document.querySelector('#fotoPerfilImg').src = data.info.foto;
@@ -26,14 +27,14 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         }
         document.querySelector("#pronUsuario").textContent = data.info.pronomes;
 
-        //Tags Sociais
+        // * Tags Sociais
         document.querySelector("#instUsuario").href = data.info.instagram;
         document.querySelector("#gitUsuario").href = data.info.github;
         document.querySelector("#ytUsuario").href = data.info.youtube;
         document.querySelector("#twtUsuario").href = data.info.twitter;
-        console.log(data.info)
+        // ? console.log(data.info) Usa esse log se precisar verificar oq vem no data.info
 
-        // Validação Tags Sociais
+        // * Validação Tags Sociais
         if(!data.info.instagram) {
             document.querySelector("#instUsuario").style.display="none"
             document.querySelector("#LogoInst").style.display="none"
@@ -53,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
             document.querySelector("#LogoTwt").style.display="none"
         }
 
-        // Formata a data de nascimento
+        // * Formata a data de nascimento
         const dataNasc = new Date(data.info.data_nasc);
         const dia = String(dataNasc.getDate()).padStart(2, '0');
         const mes = String(dataNasc.getMonth() + 1).padStart(2, '0');
@@ -61,11 +62,13 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         const dataFormatada = `${dia}/${mes}/${ano}`;
         document.querySelector('#nascUsuario').textContent = dataFormatada;
 
-        //Puxa a função que carrega as experiências do candidato
-        experiencias();
-        await tags(6, 0);
+        // * Promise pra carregar as experiencias e tags simultaneamente
+        await Promise.all([
+            experiencias(),
+            tags(6, 0)
+        ]);
     } else{
-        //Se não for candidato, redireciona para a página inicial e mostra um alerta
+        // * Se não for candidato, redireciona para a página inicial e mostra um alerta
         if(data.tipo==='expirado'){
             alert('Sua sessão expirou faça login novamente.');
             window.location.href = '/login';
@@ -78,16 +81,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
 const bodyBottom = document.getElementById('bodyBottom')
 
-function experiencias(){
-    fetch('/experiencias/info', {
-        method: 'GET',
-        credentials: 'include'
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Erro ao buscar experiências');
-        return response.json();
-    })
-    .then(data => {
+async function experiencias(){
+    try{
+        const response = await axios.get('/experiencias/info');
+        const data = response.data;
         console.log(data);
         data.forEach(expe => {
             const novaDiv = document.createElement("div");
@@ -113,10 +110,10 @@ function experiencias(){
             textExemplo.textContent = `${expe.descricao}`;
             boxExemplo.appendChild(textExemplo);
         });
-    })
-    .catch(error => {
-        console.error('Erro ao carregar experiências:', error);
-    });
+    }
+    catch(erro){
+        console.error('Erro ao carregar experiências: ' + erro.message);
+    }
 }
 
 document.querySelector('#btnAddTags').addEventListener('click', mostrarModalTag);
@@ -150,34 +147,18 @@ async function adicionarTag() {
     modalInputTag.style.display = 'none';
     if (tagUsuario) {
         if(document.querySelector("#maisTags")){
-            maisTags.style.color = "#f05959";
-            maisTags.textContent = 'Carregando...';
-            await tags(99999999, 6);
-            maisTags.remove();
+            await carregarTodasTags();
         }
         try{
-            const res = await fetch('/tags', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ nome: tagUsuario })
-            });
-            const data = await res.json();
-            if(!res.ok) throw ({status: res.status, message: data.error});
+            const response = await axios.post('/tags', { nome: tagUsuario });
+            const data = response.data;
 
             const buttonTag = document.createElement("button");
             buttonTag.classList.add("tags");
             buttonTag.textContent = tagUsuario;
             const remover = async function(id) {
                 try {
-                    const res = await fetch(`/tags/${id}`, {
-                        method: 'DELETE',
-                        credentials: 'include'
-                    });
-                    const data = await res.json();
-                    if(!res.ok) throw { status: res.status, message: data.error };
+                    await axios.delete(`/tags/${id}`);
                     buttonTag.remove();
                 }
                 catch (erro) {
@@ -190,7 +171,6 @@ async function adicionarTag() {
             document.querySelector("#Tags").prepend(buttonTag);
         }
         catch(erro){
-            console.error('Erro ao adicionar tag:', erro);
             mostrarErroTopo(erro.message);
         }
     } else {
@@ -198,23 +178,23 @@ async function adicionarTag() {
     }
 }
 
-
 const maisTags = document.querySelector("#maisTags");
-maisTags.addEventListener("click", async function() {
+
+async function carregarTodasTags(){
     maisTags.style.color = "#f05959";
     maisTags.textContent = 'Carregando...';
     await tags(99999999, 6);
     maisTags.remove();
+}
+
+maisTags.addEventListener("click", async () => {
+    await carregarTodasTags()
 }, { once: true });
 
 async function tags(limit, offset) {
     try{
-        const res = await fetch(`/tags?limit=${limit}&offset=${offset}`, {
-            method: 'GET',
-            credentials: 'include'
-        });
-        const data = await res.json();
-        if(!res.ok) throw { status: res.status, message: data.error };
+        const response = await axios.get(`/tags?limit=${limit}&offset=${offset}`);
+        const data = response.data;
         if(data.length===0){
             maisTags.remove();
             return
@@ -228,17 +208,9 @@ async function tags(limit, offset) {
             const remover = async function(id) {
                 try {
                     if(document.querySelector("#maisTags")){
-                        maisTags.style.color = "#f05959";
-                        maisTags.textContent = 'Carregando...';
-                        await tags(99999999, 6);
-                        maisTags.remove();
+                        await carregarTodasTags();
                     }
-                    const res = await fetch(`/tags/${id}`, {
-                        method: 'DELETE',
-                        credentials: 'include'
-                    });
-                    const data = await res.json();
-                    if(!res.ok) throw { status: res.status, message: data.error };
+                    await axios.delete(`/tags/${id}`);
                     buttonTag.remove();
                 }
                 catch (erro) {
@@ -256,4 +228,4 @@ async function tags(limit, offset) {
     };
 }
 
-document.querySelector('#logout').addEventListener('click', logout);
+document.querySelector('#logout').addEventListener('click', () => logout(axios));

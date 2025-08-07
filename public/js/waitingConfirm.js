@@ -1,6 +1,3 @@
-import { axiosConfig } from '/js/globalFunctions.js';
-axiosConfig(axios);
-
 const params = new URLSearchParams(window.location.search);
 const email = params.get('email');
 if(!email){

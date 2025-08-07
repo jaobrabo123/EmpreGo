@@ -1,6 +1,5 @@
 // * Importando as funções do globalFunctions
-import { carregarInfo, mostrarErroTopo, logout, axiosConfig } from './globalFunctions.js';
-axiosConfig(axios);
+import { carregarInfo, mostrarErroTopo, logout } from '/js/globalFunctions.js';
 
 // * Após o site carregar, ele carrega a navbar e o perfil
 document.addEventListener('DOMContentLoaded', async ()=>{

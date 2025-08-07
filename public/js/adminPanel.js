@@ -31,89 +31,99 @@ async function carregarTabela(tabela) {
     const mostrarDataCriacao = document.querySelector('#dataCriacao').checked;
     const mostrarTodosDados = document.querySelector('#todosDados').checked;
 
-    carregando.style.display = ''
-    tabelaContent.style.display = 'none'
+    carregando.style.display = '';
+    tabelaContent.style.display = 'none';
     
-    let conteudo
-    titleTable.textContent = tabela
-    if(tabela==='Candidatos'){
-        if(candidatos){
-            conteudo = candidatos
-        }else{
-            console.log('Pegando candidatos')
-            
-            candidatos = await fetch('/candidatos/all',{
-                method: 'GET',
-                credentials: 'include',
-            })
-            .then(async res =>{
-                let data = await res.json();
-                if(!res.ok) return {status: res.status, error: data.error};
-                return data;
-            })
-            conteudo = candidatos
-        }
-    }else
-    if(tabela==='Empresas'){
-        if(empresas){
-            conteudo = empresas
-        }else{
-            console.log('Pegando empresas')
-            empresas = await fetch('/empresas/all',{
-                method: 'GET',
-                credentials: 'include',
-            })
-            .then(async res =>{
-                let data = await res.json();
-                if(!res.ok) return {status: res.status, error: data.error};
-                return data;
-            })
-            conteudo = empresas
-        }
-    }else
-    if(tabela==='Experiencias'){
-        if(experiencias){
-            conteudo = experiencias
-        }else{
-            console.log('Pegando experiências')
-            experiencias = await fetch('/experiencias/all',{
-                method: 'GET',
-                credentials: 'include',
-            })
-            .then(async res =>{
-                let data = await res.json();
-                if(!res.ok) return {status: res.status, error: data.error};
-                return data;
-            })
-            conteudo = experiencias
-        }
-    }else
-    if(tabela==='Tags'){
-        if(tags){
-            conteudo = tags
-        }else{
-            console.log('Pegando tags')
-            tags = await fetch('/tags/all',{
-                method: 'GET',
-                credentials: 'include',
-            })
-            .then(async res =>{
-                let data = await res.json();
-                if(!res.ok) return {status: res.status, error: data.error};
-                return data;
-            })
-            conteudo = tags
-        }
+    let conteudo;
+    titleTable.textContent = tabela;
+    switch (tabela) {
+        case 'Candidatos':
+            if(candidatos){
+                conteudo = candidatos
+            }
+            else{
+                console.log('Pegando candidatos')
+                try{
+                    const response = await axios.get('/candidatos/all');
+                    candidatos = response.data;
+                }
+                catch(erro){
+                    candidatos = { status: erro.status, error: erro.message };
+                }
+                finally{
+                    conteudo = candidatos;
+                }
+            }
+            break;
+        case 'Empresas':
+            if(empresas){
+                conteudo = empresas
+            }
+            else{
+                console.log('Pegando empresas')
+                try{
+                    const response = await axios.get('/empresas/all');
+                    empresas = response.data;
+                }
+                catch(erro){
+                    empresas = { status: erro.status, error: erro.message };
+                }
+                finally{
+                    conteudo = empresas;
+                }
+            }
+            break;
+        case 'Experiencias':
+            if(experiencias){
+                conteudo = experiencias
+            }
+            else{
+                console.log('Pegando experiências');
+                try{
+                    const response = await axios.get('/experiencias/all');
+                    experiencias = response.data;
+                }
+                catch(erro){
+                    experiencias = { status: erro.status, error: erro.message };
+                }
+                finally{
+                    conteudo = experiencias;
+                }
+            }
+            break;
+        case 'Tags':
+            if(tags){
+                conteudo = tags
+            }
+            else{
+                console.log('Pegando tags');
+                try{
+                    const response = await axios.get('/tags/all');
+                    tags = response.data;
+                }
+                catch(erro){
+                    tags = { status: erro.status, error: erro.message };
+                }
+                finally{
+                    conteudo = tags;
+                }
+            }
+            break;
+        default:
+            alert('Erro no switch case.')
+            return; // * Só pra ter um debug se der erro no switch
     }
     
     if(conteudo.error) {
         if(conteudo.status===500){
-            alert('Erro de conexão com o Banco de Dados (a culpa não foi sua, tente acessar a página novamente).')
+            alert('Erro de conexão com o Banco de Dados (a culpa não foi sua, tente acessar a página novamente).');
             window.location.href = '/';
+            return;
         }
         else{
             alert(conteudo.error);
             window.location.href = '/';
+            return;
         }
     }
     document.querySelector('body').style.display = ''
@@ -151,7 +161,7 @@ async function carregarTabela(tabela) {
             if(linha[col]===null){
                 td.textContent='[NULL]'
             }else{
-                td.textContent = linha[col]
+                td.textContent = linha[col].length>50 ? linha[col].substring(0, 50) + '...' : linha[col];
             }
             tr.appendChild(td)
         })
@@ -216,79 +226,55 @@ async function botaoLixeira(nome,tabela,id) {
 
 async function removerTupla(tabela, id) {
     try{
-        if(tabela==='Candidatos'){
+        switch (tabela) {
+            case 'Candidatos': {
+                const response = await axios.delete(`/candidatos/${id}`);
+                const data = response.data;
 
-            const res = await fetch(`/candidatos/${id}`,{
-                method: 'DELETE',
-                credentials: 'include',
-            })
+                modal.style.display = 'none';
+                alert(data.message);
 
-            const data = await res.json();
-
-            if(!res.ok) {
-                throw ({status: res.status, message: data.error})
+                candidatos = null;
+                break;
             }
-            modal.style.display = 'none'
-            alert(data.message);
+            case 'Empresas': {
+                const response = await axios.delete(`/empresas/${id}`);
+                const data = response.data;
 
-            candidatos = null;
+                modal.style.display = 'none';
+                alert(data.message);
 
-        }else
-        if(tabela==='Empresas'){
-            const res = await fetch(`/empresas/${id}`,{
-                method: 'DELETE',
-                credentials: 'include',
-            })
-
-            const data = await res.json();
-
-            if(!res.ok) {
-                throw ({status: res.status, message: data.error})
+                empresas = null;
+                break;
             }
+            case 'Experiencias': {
+                const response = await axios.delete(`/experiencias/${id}`);
+                const data = response.data;
 
-            modal.style.display = 'none'
-            alert(data.message);
+                modal.style.display = 'none';
+                alert(data.message);
 
-            empresas = null;
-        }else
-        if(tabela==='Experiencias'){
-            const res = await fetch(`/experiencias/${id}`,{
-                method: 'DELETE',
-                credentials: 'include',
-            })
-
-            const data = await res.json();
-
-            if(!res.ok) {
-                throw ({status: res.status, message: data.error})
+                experiencias = null;
+                break;
             }
+            case 'Tags': {
+                const response = await axios.delete(`/tags/${id}`);
+                const data = response.data;
 
-            modal.style.display = 'none'
-            alert(data.message);
+                modal.style.display = 'none'
+                alert(data.message);
 
-            experiencias = null;
-        }else
-        if(tabela==='Tags'){
-            const res = await fetch(`/tags/${id}`,{
-                method: 'DELETE',
-                credentials: 'include',
-            })
-
-            const data = await res.json();
-
-            if(!res.ok) {
-                throw ({status: res.status, message: data.error})
+                tags = null;
+                break;
             }
-
-            modal.style.display = 'none'
-            alert(data.message);
-
-            tags = null;
+            default:
+                alert('Erro no Switch do delete');
+                return;
         }
         carregarTabela(tabela)
     }
     catch(erro){
-        modal.style.display = 'none'
+        modal.style.display = 'none';
         if(erro.status===401||erro.status===403){
             alert(erro.message);
             window.location.href = '/'

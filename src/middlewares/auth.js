@@ -46,17 +46,17 @@ async function authenticateToken(req, res, next) {
 }
 
 function apenasEmpresa(req,res,next) {
-  if(req.user?.tipo==='empresa'||req.user.nivel==='admin') return next()
+  if(req.user?.tipo==='empresa'||req.user.nivel==='admin') return next();
   return res.status(403).json({ error: 'Acesso apenas para empresas' });
 }
 
 function apenasCandidatos(req,res,next) {
-  if(req.user?.tipo==='candidato') return next()
+  if(req.user?.tipo==='candidato') return next();
   return res.status(403).json({ error: 'Acesso apenas para candidatos' });
 }
 
 function apenasAdmins(req, res, next) {
-  if(req.user?.tipo==='candidato'&&req.user.nivel==='admin') return next()
+  if(req.user?.tipo==='candidato'&&req.user.nivel==='admin') return next();
   return res.status(403).json({ error: 'Acesso apenas para ADMINS' });
 }
 

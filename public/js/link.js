@@ -1,5 +1,4 @@
-import { carregarLinks, logout, axiosConfig } from "./globalFunctions.js";
-axiosConfig(axios);
+import { carregarLinks, logout } from "/js/globalFunctions.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
   await carregarLinks(axios);

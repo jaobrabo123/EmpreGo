@@ -1,10 +1,11 @@
-import { mostrarErroTopo } from './globalFunctions.js'
+// * Importando as funções do globalFunctions
+import { mostrarErroTopo } from '/js/globalFunctions.js';
 
 var liberar = true
 
-document.querySelector('#btnSalvar').addEventListener('click', adicionarExp)
+document.querySelector('#btnSalvar').addEventListener('click', adicionarExp);
 
-function adicionarExp() {
+async function adicionarExp() {
     if(!liberar){
         return;
     }
@@ -20,31 +21,15 @@ function adicionarExp() {
         formData.append('descricao', descricao);
         formData.append('imagem', imagem);
 
-        fetch('/experiencias', {
-            method: 'POST',
-            credentials: 'include',
-            body: formData
-        })
-        .then(async (res) => {
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw ({ status: res.status, message: data.error || 'Erro ao adicionar experiência'});
-            }
-
+        try{
+            await axios.post('/experiencias', formData);
             alert('Experiência adicionada com sucesso!');
             window.location.href = '/perfil/candidato';
-        })
-        .catch(erro => {
+        }
+        catch(erro){
             console.error('Erro ao adicionar experiência:', erro.message);
-            if(erro.status === 500){
-                mostrarErroTopo('Erro ao adicionar experiência, a culpa não foi sua. Tente novamente.')
-                liberar = true;
-                return;
-            }
-            mostrarErroTopo(erro.message);
             liberar = true;
-        });
+        }
     } else {
         mostrarErroTopo("A experiencia deve ter um título e uma descrição.");
         liberar = true;

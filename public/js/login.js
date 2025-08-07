@@ -1,6 +1,3 @@
-import { axiosConfig } from '/js/globalFunctions.js';
-axiosConfig(axios);
-
 // Main Form Controller
 class FormManager {
   constructor() {
@@ -424,11 +421,6 @@ class FormManager {
     } catch (erro) {
       btnAdd.disabled = false;
       btnAdd.textContent = "Entrar";
-      if (erro.status === 500) {
-        this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
-      } else {
-        this.mostrarErroTopo(erro.message || 'Erro ao fazer login.');
-      }
     }
   }
 
@@ -551,6 +543,9 @@ class FormManager {
       window.location.href = `/confirmar?email=${email}`;
     }
     catch (erro){
+      if(erro.status===409){
+        this.mostrarErroTopo('Email já cadastrado.')
+      }
       btnAdd.disabled = false;
       btnAdd.textContent = "Cadastrar";
     }
@@ -583,11 +578,6 @@ class FormManager {
     } catch (erro) {
       btnAdd.disabled = false;
       btnAdd.textContent = "Entrar";
-      if (erro.status === 500) {
-        this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
-      } else {
-        this.mostrarErroTopo(erro.message);
-      }
     }
   }
 
@@ -758,9 +748,6 @@ class FormManager {
       btnAdd.textContent = "Cadastrar Empresa";
       if (erro.status === 409) {
         this.mostrarErroTopo("Empresa já cadastrada.");
-      }
-      else {
-        this.mostrarErroTopo(erro.message || 'Erro desconhecido, tente novamente.');
       }
     }
   }

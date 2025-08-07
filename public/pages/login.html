@@ -48,7 +48,7 @@
           </form>
 
           <div class="form-footer">
-            <a href="#" class="form-link" onclick="showUserRegister()">Não tem uma conta? Cadastre-se</a>
+            <a href="#" id="showSignInCand" class="form-link">Não tem uma conta? Cadastre-se</a>
           </div>
         </div>
 
@@ -118,7 +118,7 @@
           </form>
 
           <div class="form-footer">
-            <a href="#" class="form-link" onclick="showUserLogin()">Já tem uma conta? Faça login</a>
+            <a href="#" id="showLogInCand" class="form-link">Já tem uma conta? Faça login</a>
           </div>
         </div>
 
@@ -146,7 +146,7 @@
           </form>
 
           <div class="form-footer">
-            <a href="#" class="form-link" onclick="showCompanyRegister()">Não tem uma conta? Cadastre-se</a>
+            <a href="#" id="showSignInEnte" class="form-link">Não tem uma conta? Cadastre-se</a>
           </div>
         </div>
 
@@ -242,13 +242,16 @@
           </form>
 
           <div class="form-footer">
-            <a href="#" class="form-link" onclick="showCompanyLogin()">Já tem uma conta? Faça login</a>
+            <a href="#" id="showLogInEnte" class="form-link">Já tem uma conta? Faça login</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script src="/js/login.js"></script>
+  <!-- * SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module" src="/js/axiosConfig.js"></script>
+  <script type="module" src="/js/login.js"></script>
 </body>
 
 </html>

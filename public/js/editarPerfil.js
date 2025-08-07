@@ -147,28 +147,19 @@ async function enviarEdicao() {
   if (pronomes && pronomes!=="NM") formData.append("pronomes", pronomes);
   if (!foto && !descricao && !cpf && estado==="NM" && !cidade && !instagram && !github && !youtube && !twitter && pronomes==="NM") return mostrarErro("Pelo menos um campo deve ser fornecido para editar o perfil.");
 
-  fetch("/perfil/candidato", {
-    method: "POST",
-    credentials: "include",
-    body: formData,
-  })
-  .then(async (response) => {
-    const data = await response.json();
-    if (!response.ok) throw { status: response.status, message: data.error || "Erro ao editar perfil" };
+  try{
+    await axios.post('/perfil/candidato', formData);
     window.location.href = "/perfil/candidato";
-  })
-  .catch((erro) => {
+  }
+  catch(erro){
     if(erro.message.includes('Cidade inválida para o estado')){
       mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
-    }
-    else if(erro.status===500){
-      mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
     }
     else{
       mostrarErro(`Erro ao editar perfil: ${erro.message}`);
     }
     console.error("Erro ao editar perfil: ", erro.message);
-  });
+  }
 }
 
 // Formata o campo CPF enquanto o usuário digita

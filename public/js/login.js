@@ -288,14 +288,14 @@ class FormManager {
     }
 
     try {
-      const response = await fetch(`https://brasilapi.com.br/api/cep/v1/${cep}`);
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`); // ? BrasilApi se precisar: https://brasilapi.com.br/api/cep/v1/${cep}
       if (!response.ok) throw new Error("CEP não encontrado");
       const data = await response.json();
 
-      document.getElementById("empresaRua").value = data.street || "";
-      document.getElementById("empresaBairro").value = data.neighborhood || "";
-      document.getElementById("empresaCidade").value = data.city || "";
-      document.getElementById("empresaEstado").value = data.state || "";
+      document.getElementById("empresaRua").value = data.logradouro || "";
+      document.getElementById("empresaBairro").value = data.bairro || "";
+      document.getElementById("empresaCidade").value = data.localidade || "";
+      document.getElementById("empresaEstado").value = data.uf || "";
     } catch (err) {
       console.error("Erro ao buscar CEP:", err);
       document.getElementById("empresaRua").value = "";
@@ -401,7 +401,7 @@ class FormManager {
     }
 
     if (!senha) {
-      this.showInputError(form.querySelector('input[type="password"]'), 'Por favor, preencha a senha.');
+      this.showInputError(form.querySelector('#password'), 'Por favor, preencha a senha.');
       return;
     }
 
@@ -410,26 +410,17 @@ class FormManager {
       return;
     }*/
 
-    try {
-      const res = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha }),
-        credentials: "include",
-      });
+    const btnAdd = document.querySelector("#loginBtn");
+    btnAdd.disabled = true
+    btnAdd.textContent = "Entrando...";
 
-      if (!res.ok) {
-        const erro = await res.json();
-        throw { status: res.status, message: erro.error };
-      }
+    try {
+      await axios.post("/login", { email, senha });
 
       window.location.href = "/";
     } catch (erro) {
-      if (erro.status === 500) {
-        this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
-      } else {
-        this.mostrarErroTopo(erro.message || 'Erro ao fazer login.');
-      }
+      btnAdd.disabled = false;
+      btnAdd.textContent = "Entrar";
     }
   }
 
@@ -547,34 +538,23 @@ class FormManager {
     const btnAdd = document.querySelector("#registerBtn")
     btnAdd.disabled = true;
     btnAdd.textContent = "Cadastrando...";
-
-    fetch("/candidatos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, email, senha, genero, data_nasc }),
-    })
-    .then(async (res) => {
-      const data = await res.json()
-      if (!res.ok) throw { status: res.status, message: data.error || "Erro ao cadastrar o usuário." };
+    try{
+      await axios.post('/candidatos', { nome, email, senha, genero, data_nasc });
       window.location.href = `/confirmar?email=${email}`;
-    })
-    .catch (erro => {
+    }
+    catch (erro){
+      if(erro.status===409){
+        this.mostrarErroTopo('Email já cadastrado.')
+      }
       btnAdd.disabled = false;
       btnAdd.textContent = "Cadastrar";
-      if (erro.status===409) {
-        this.mostrarErroTopo("E-mail já cadastrado. Por favor, use outro e-mail.");
-      } else if (erro.status === 500) {
-        this.mostrarErroTopo("Erro ao cadastrar usuário. (A culpa não foi sua, tente novamente)");
-      } else {
-        this.mostrarErroTopo(`Erro do sistema: ${erro.message}`);
-      }
-    })
+    }
   }
 
     async handleCompanyLogin() {
     const form = document.getElementById('loginEmpresaForm');
     const cnpjInput = form.querySelector('input[type="text"]');
-    const senhaInput = form.querySelector('input[type="password"]');
+    const senhaInput = form.querySelector('#empresaSenha');
 
     const cnpj1 = cnpjInput.value.trim();
     const senha = senhaInput.value.trim();
@@ -587,28 +567,17 @@ class FormManager {
       this.showInputError(cnpjInput, "CNPJ inválido. formato 00.000.000/0000-00.");
       return;
     }
+    const btnAdd = document.querySelector("#empresaLoginBtn");
+    btnAdd.disabled = true
+    btnAdd.textContent = "Entrando...";
 
     const cnpj = cnpj1.replace(/[^\d]/g, ""); 
     try { 
-      const res = await fetch("/login-empresa", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cnpj, senha }),
-        credentials: "include"
-      });
-
-      if (!res.ok) {
-        const erro = await res.json();
-        throw { status: res.status, message: erro.error };
-      }
-
+      await axios.post('/login-empresa', { cnpj, senha });
       window.location.href = "/";
     } catch (erro) {
-      if (erro.status === 500) {
-        this.mostrarErroTopo('Erro ao fazer login. (A culpa não foi sua, tente novamente)');
-      } else {
-        this.mostrarErroTopo(erro.message);
-      }
+      btnAdd.disabled = false;
+      btnAdd.textContent = "Entrar";
     }
   }
 
@@ -755,52 +724,30 @@ class FormManager {
     btnAdd.textContent = "Cadastrando...";
 
     try {
-      const response = await fetch("/empresas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cnpj,
-          nome_fant,
-          telefone,
-          email,
-          senha,
-          razao_soci,
-          cep,
-          complemento,
-          numero,
-          estado,
-          cidade
-        })
+      await axios.post("/empresas", {
+        cnpj,
+        nome_fant,
+        telefone,
+        email,
+        senha,
+        razao_soci,
+        cep,
+        complemento,
+        numero,
+        estado,
+        cidade
       });
 
-      if (response.ok) {
-        const loginResponse = await fetch("/login-empresa", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cnpj, senha }),
-          credentials: "include",
-        });
+      await axios.post("/login-empresa", { cnpj, senha });
 
-        if (!loginResponse.ok) {
-          const erro = await loginResponse.json();
-          throw { status: loginResponse.status, message: erro.error || "Erro ao fazer login automático." };
-        }
+      alert("Empresa cadastrada com SUCESSO!");
+      window.location.href = "/";
 
-        alert("Empresa cadastrada com SUCESSO!");
-        window.location.href = "/";
-      } else {
-        const erro = await response.json();
-        throw { status: response.status, message: erro.error || "Erro ao cadastrar a empresa." };
-      }
     } catch (erro) {
       btnAdd.disabled = false;
       btnAdd.textContent = "Cadastrar Empresa";
       if (erro.status === 409) {
         this.mostrarErroTopo("Empresa já cadastrada.");
-      } else if (erro.status === 500) {
-        this.mostrarErroTopo('Erro ao cadastrar empresa (A culpa não foi sua, tente novamente).');
-      } else {
-        this.mostrarErroTopo(erro.message || 'Erro desconhecido, tente novamente.');
       }
     }
   }
@@ -849,3 +796,8 @@ function showCompanyLogin() {
 function showCompanyRegister() {
   formManager?.showForm('company-register');
 }
+
+document.getElementById('showSignInCand').addEventListener('click', showUserRegister);
+document.getElementById('showLogInCand').addEventListener('click', showUserLogin);
+document.getElementById('showSignInEnte').addEventListener('click', showCompanyRegister);
+document.getElementById('showLogInEnte').addEventListener('click', showCompanyLogin);

@@ -14,12 +14,11 @@ export function mostrarErroTopo(mensagem) {
 
   setTimeout(() => {
     if (erroDiv.parentNode) erroDiv.remove();
-  }, 5000);
+  }, 3000);
 }
 
-export async function carregarLinks() {
-  const infos = await carregarInfo();
-  console.log(infos)
+export async function carregarLinks(axios) {
+  const infos = await carregarInfo(axios);
   if(infos === 'visitante' || infos.tipo==='visitante' || infos.tipo==='expirado'){
     document.querySelector('#loginOuCadas').style.display = '';
     document.querySelector('#logout').style.display = 'none';
@@ -43,64 +42,41 @@ export async function carregarLinks() {
   }
 }
 
-export async function carregarInfo() {
+export async function carregarInfo(axios) {
   try{
-    const tipo = await fetch('/get-tipo', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(async res=>{
-      const data = await res.json()
-      if(!res.ok) throw ({status: res.status, message: data.error})
-      const { tipo } = data;
-      return tipo;
-    })
-    .catch((erro)=>{
-      if(erro.status===403 && erro.message.includes('Sessão expirada')){
-        return 'expirado'
-      }
-      else{
+    const tipo = await axios.get('/get-tipo')
+      .then((response)=>{
+        const { tipo } = response.data;
+        console.log(response.data)
+        return tipo;
+      })
+      .catch(()=>{
         return 'visitante';
-      }
-    })
+      })
 
     let data = null;
 
     if(tipo==='candidato'){
-      const res = await fetch('/perfil/candidato/info', {
-        method: 'GET',
-        credentials: 'include'
-      });
-      data = await res.json()
-      if (!res.ok) {
-        throw ({status: data.status, message: data.error});
-      }
+      const response = await axios.get('/perfil/candidato/info');
+      data = response.data;
     }
     else if(tipo==='empresa'){
-      const res = await fetch('/perfil/empresa/info', {
-        method: 'GET',
-        credentials: 'include'
-      });
-      data = await res.json()
-      if (!res.ok){
-        throw ({status: data.status, message: data.error});
-      }
+      const response = await axios.get('/perfil/empresa/info');
+      data = response.data;
     }
     return {info: data, tipo: tipo};
   }
   catch(erro){
-    console.log(erro.message)
+    console.error(erro.message)
     return 'visitante'
   }
 }
 
 //Função pra deslogar
-export function logout(){
-  fetch('/logout', {
-    method: 'POST',
-    credentials: 'include'
-  }).then(() => {
-    alert('Você foi desconectado.');
+export function logout(axios){
+  axios.post('/logout')
+  .then(()=>{
+    // ? alert('Você foi desconectado.'); Se achar necessario bota um alert pro logout
     window.location.href = '/';
-  });
+  })
 }

@@ -72,15 +72,16 @@ class LoginController {
 
     static async deslogar(req, res){
         try{
+            limparCookieToken(res);
+            
             const token = req.cookies.token;
             if (token) {
                 await TokenService.removerToken(token);
             }
-            limparCookieToken(res)
             res.status(200).json({ message: 'Logout realizado com sucesso' });
         }
         catch(erro){
-            res.status(500).json({ error: 'Erro ao remover toke: ' + erro.message})
+            res.status(500).json({ error: 'Erro ao remover token: ' + erro.message})
         }
     }
 

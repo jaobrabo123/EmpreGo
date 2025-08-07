@@ -1,7 +1,7 @@
-import { carregarLinks, logout } from "./globalFunctions.js";
+import { carregarLinks, logout } from "/js/globalFunctions.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await carregarLinks();
+  await carregarLinks(axios);
 });
 
-document.querySelector('#logout').addEventListener('click', logout);
+document.querySelector('#logout').addEventListener('click', () => logout(axios));

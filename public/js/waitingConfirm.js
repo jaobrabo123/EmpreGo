@@ -15,40 +15,24 @@ input.addEventListener('input', async (event)=>{
     input.disabled = true;
 
     try{
-        const res = await fetch(`/candidatos/confirmar`,{
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ codigo })
-        });
-        if(!res.ok){
-            const data = await res.json();
-            throw {status: res.status, message: data.error};
-        };
+        await axios.post('/candidatos/confirmar', { codigo: codigo });
         window.location.href = '/';
-    }
+    } 
     catch(erro){
         event.target.value = '';
         input.disabled = false;
-        mensagem.textContent = erro.message;
-    };
+    }
 });
 
 let podeReenviar = true;
 document.querySelector('#reenvio').addEventListener('click', async ()=>{
+    if(!email || !podeReenviar) return;
+
+    podeReenviar = false;
+
     try{
-        if(!email || !podeReenviar) return;
-        podeReenviar = false;
-        const res = await fetch('/candidatos/reenviar',{
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-        });
-
-        const data = await res.json();
-
-        if(!res.ok) throw { status: res.status, message: data.error };
-
-        mensagem.textContent = `${data.message}`;
+        const response = await axios.post('/candidatos/reenviar', { email: email });
+        mensagem.textContent = `${response.data.message}`;
         podeReenviar = true;
     }
     catch(erro){

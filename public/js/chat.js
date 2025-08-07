@@ -1,26 +1,16 @@
-var socket = io('https://tcc-vjhk.onrender.com');
-/*socket.on('connect', () => {
-    socket.emit('joinRoom', 'teste', (response) => {
-        if (response.error) {
-            console.error('Erro ao entrar na sala:', response.error);
-        } else {
-            console.log('Entrou na sala "teste" com sucesso!');
-        }
-    });
-});*/
+// * Conexão com os WebSockets
+const server = window.location.hostname.includes('localhost') ? 
+'http://localhost:3001' : 'https://tcc-vjhk.onrender.com';
+var socket = io(server);
+
 const salasEntradas = new Set();
 
 let chatsBack
 
 async function carregarChatsBack() {
     try{
-        const res = await fetch('/chats/info', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        const data = await res.json();
-        if(!res.ok) throw ({ status: res.status, message: data.error });
-        console.log(data);
+        const response = await axios.get('/chats/info');
+        const data = response.data;
 
         const messages = document.querySelectorAll('.message')
         if(data.tipo==='candidato'){
@@ -89,8 +79,6 @@ function exibirChatsFront() {
             var author = chatsBack.tipo === 'candidato' ? chatsBack.chats[0].nome : chatsBack.chats[0].nome_fant;
             var message = document.querySelector(`#inputBack${data.id}`).value;
             document.querySelector(`#inputBack${data.id}`).value = ''
-
-            console.log(chatsBack.tipo)
             
             if(author.length > 0 && message.length > 0){
                 var messageObject = {
@@ -99,33 +87,21 @@ function exibirChatsFront() {
                     room: data.id,
                     type: chatsBack.tipo,
                 };
+
                 socket.emit('sendMessage', messageObject);
                 
-                fetch('/mensagens',{
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
+                try{
+                    await axios.post('/mensagens',{
                         autor: author,
                         mensagem: message,
                         chat: data.id,
                         de: chatsBack.tipo,
-                    })
-                })
-                .then(async res=>{
-                    const data = await res.json();
-                    if(!res.ok) throw ({status: res.status, message: data.error});
-
-                    //socket.emit('sendMessage', messageObject);
-                })
-                .catch(erro=>{
-                    let comecoMsg = message.substring(0, 30);
-                    comecoMsg+='...'
-                    alert(`${erro.message}. (Talvez a mensagem: "${comecoMsg}" não apareça ao recarregar o chat)`)
-                })
-
-                //renderMessage(messageObject);
-                
+                    });
+                }
+                catch(erro){
+                    let simpMsg = message.length>20 ? message.substring(0, 20) + '...' : message;
+                    alert(`${erro.message} (Talvez a mensagem: "${simpMsg}" não apareça ao recarregar o chat)`)
+                }
             }
         })
 
@@ -145,7 +121,6 @@ function exibirChatsFront() {
 }
 
 async function minimizeELoadMessages(messages, msgsEEnviar, minimize, chatIdBack){
-    console.log('click')
     let display
     if(msgsEEnviar.classList.contains('minimizado')){
         if (!salasEntradas.has(chatIdBack)){
@@ -153,7 +128,6 @@ async function minimizeELoadMessages(messages, msgsEEnviar, minimize, chatIdBack
                 if (response.status==='error') {
                     alert('Erro ao entrar na sala:' + response.message);
                 } else {
-                    console.log(`Entrou na sala ${chatIdBack} com sucesso!`);
                     salasEntradas.add(chatIdBack)
                 }
             });  
@@ -210,26 +184,3 @@ socket.on('previousMessages', function(messages){
 socket.on('receivedMessage', function(message){
     renderMessage(message)
 })
-
-/*const send1 = document.querySelector('#send')
-
-send1.addEventListener('click', ()=>{
-    var author = chatsBack.tipo === 'candidato' ? chatsBack.chats[0].nome : chatsBack.chats[0].nome_fant;
-    var message = document.querySelector('#message').value;
-    document.querySelector('#message').value = ''
-
-    console.log(chatsBack.tipo)
-    
-    if(author.length > 0 && message.length > 0){
-        var messageObject = {
-            author: author,
-            message: message,
-            room: 'teste',
-            type: chatsBack.tipo,
-        };
-
-        //renderMessage(messageObject);
-
-        socket.emit('sendMessage', messageObject);
-    }
-})*/

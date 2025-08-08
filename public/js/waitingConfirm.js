@@ -15,7 +15,7 @@ input.addEventListener('input', async (event)=>{
     input.disabled = true;
 
     try{
-        await axios.post('/candidatos/confirmar', { codigo: codigo });
+        await axios.post('/candidatos/confirmar', { codigo, email });
         window.location.href = '/';
     } 
     catch(erro){
@@ -31,7 +31,7 @@ document.querySelector('#reenvio').addEventListener('click', async ()=>{
     podeReenviar = false;
 
     try{
-        const response = await axios.post('/candidatos/reenviar', { email: email });
+        const response = await axios.post('/candidatos/reenviar', { email });
         mensagem.textContent = `${response.data.message}`;
         podeReenviar = true;
     }

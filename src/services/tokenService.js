@@ -17,7 +17,7 @@ class TokenService{
     }
     
     static async removerToken(tkn){
-        if(!tkn) throw new Error('Token não fornecido.');
+        if(!tkn) throw new ErroDeValidacao('Token não fornecido.');
 
         await pool.query('DELETE FROM tokens WHERE token = $1', 
             [tkn]

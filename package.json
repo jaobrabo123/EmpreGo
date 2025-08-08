@@ -8,7 +8,7 @@
   "author": "João Pedro Azevedo, João Pedro Souza, Alec Vinícius, Mateus Ricardo e Lucas",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^3.0.2",
+    "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",

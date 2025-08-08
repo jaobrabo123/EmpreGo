@@ -9,7 +9,9 @@ const pool = new Pool({
   port: process.env.DATABASE_PORT,
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  max: 75,
+  connectionTimeoutMillis: 5000
 });
 
 module.exports = pool;

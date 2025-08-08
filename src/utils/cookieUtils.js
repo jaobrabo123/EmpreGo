@@ -21,7 +21,17 @@ function salvarCookieToken(res, id, tipo, nivel){
   return token;
 }
 
+function validarCookieToken(tkn){
+  try {
+    jwt.verify(tkn, SECRET_KEY);
+    return true;
+  } catch (erro) {
+    return false;
+  }
+}
+
 module.exports = {
   limparCookieToken,
-  salvarCookieToken
+  salvarCookieToken,
+  validarCookieToken
 };

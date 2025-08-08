@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const TokenService = require('../services/tokenService.js');
-const { limparCookieToken, salvarCookieToken } = require('../utils/cookieUtils.js');
+const { limparCookieToken, salvarCookieToken, validarCookieToken } = require('../utils/cookieUtils.js');
 const Erros = require("../utils/erroClasses.js");
 const CandidatoModel = require('../models/candidatoModel.js')
 const EmpresaModel = require('../models/empresaModel.js')
@@ -13,7 +13,7 @@ class LoginController {
             if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
 
             const tkn = req.cookies.token;
-            if (tkn) {
+            if (tkn && validarCookieToken(tkn)) {
                 await TokenService.removerToken(tkn);
             }
 
@@ -44,7 +44,7 @@ class LoginController {
             if (!cnpj || !senha) return res.status(400).json({ error: 'CNPJ e senha são obrigatórios' });
 
             const tkn = req.cookies.token;
-            if (tkn) {
+            if (tkn && validarCookieToken(tkn)) {
                 await TokenService.removerToken(tkn);
             }
 
@@ -74,13 +74,17 @@ class LoginController {
         try{
             limparCookieToken(res);
             
-            const token = req.cookies.token;
-            if (token) {
-                await TokenService.removerToken(token);
+            const tkn = req.cookies.token;
+            if (tkn && validarCookieToken(tkn)) {
+                await TokenService.removerToken(tkn);
             }
+            
             res.status(200).json({ message: 'Logout realizado com sucesso' });
         }
         catch(erro){
+            if (erro instanceof Erros.ErroDeValidacao){
+                return res.status(400).json({ error: erro.message })
+            }
             res.status(500).json({ error: 'Erro ao remover token: ' + erro.message})
         }
     }

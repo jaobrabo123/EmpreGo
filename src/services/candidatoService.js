@@ -1,4 +1,4 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const pool = require("../config/db.js");
 const CandidatoModel = require('../models/candidatoModel.js');
 const ChatModel = require('../models/chatModel.js');
@@ -25,27 +25,31 @@ class CandidatoService{
     const emailPendente = await CandidatoModel.verificarEmailPendente(email);
     if (emailPendente) throw new Erros.ErroDeConflito("Email aguardando confirmação.");
 
-    //criptografa a senha
-    const senhaCriptografada = await bcrypt.hash(senha, 10);
+    // * Criptografa a senha
+    const [ senhaCriptografada, codigoCriptografado ] = await Promise.all([
+      bcrypt.hash(senha, 10),
+      bcrypt.hash(String(codigo), 10)
+    ])
 
     await pool.query(
       `INSERT INTO candidatos_pend (nome, email, senha, genero, data_nasc, codigo, expira_em) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [nome, email, senhaCriptografada, genero, data_nasc, codigo, expira_em]
+      [nome, email, senhaCriptografada, genero, data_nasc, codigoCriptografado, expira_em]
     );
 
   }
 
-  static async popularTabelaCandidatos(codigo){
-    const candidato = await CandidatoModel.buscarCandidatoPendentePorCodigo(codigo);
+  static async popularTabelaCandidatos(codigo, email){
 
-    if(!candidato) throw new Erros.ErroDeNaoEncontrado("Código inválido ou expirado.");
+    const candidato = await CandidatoModel.buscarCodigoECandidatoPendentePorEmail(email);
+
+    if(!candidato || !await bcrypt.compare(String(codigo), candidato.codigo)) throw new Erros.ErroDeNaoEncontrado("Código inválido ou expirado.");
 
     const result = await pool.query(`insert into candidatos (nome, email, senha, genero, data_nasc) values ($1, $2, $3, $4, $5) returning id`,
-      [candidato.nome, candidato.email, candidato.senha, candidato.genero, candidato.data_nasc]
+      [candidato.nome, email, candidato.senha, candidato.genero, candidato.data_nasc]
     )
 
-    await pool.query(`delete from candidatos_pend where codigo = $1`,
-      [codigo]
+    await pool.query(`delete from candidatos_pend where email = $1`,
+      [email]
     )
 
     return result.rows[0].id;
@@ -58,10 +62,11 @@ class CandidatoService{
     if(!existe) return false;
 
     const codigo = Math.floor(Math.random() * 9000) + 1000;
+    const codigoCriptografado = await bcrypt.hash(String(codigo), 10);
 
     await pool.query(`
       update candidatos_pend set codigo = $1 where email = $2
-    `, [codigo, email]);
+    `, [codigoCriptografado, email]);
 
     return codigo;
   }

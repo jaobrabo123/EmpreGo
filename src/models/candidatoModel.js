@@ -37,11 +37,11 @@ class CandidatoModel{
         return resultado.rows[0].codigo;
     }
 
-    static async buscarCandidatoPendentePorCodigo(codigo){
+    static async buscarCodigoECandidatoPendentePorEmail(email){
         const resultado = await pool.query(`
-            select nome, email, senha, genero, data_nasc from candidatos_pend 
-            where codigo = $1 and expira_em > now()
-        `, [codigo]);
+            select nome, senha, genero, data_nasc, codigo from candidatos_pend 
+            where email = $1 and expira_em > now()
+        `, [email]);
         return resultado.rows[0];
     }
 

@@ -2,7 +2,7 @@ const CandidatoModel = require('../models/candidatoModel.js');
 const CandidatoService = require("../services/candidatoService.js");
 const Erros = require("../utils/erroClasses.js");
 const TokenService = require('../services/tokenService.js');
-const { salvarCookieToken } = require('../utils/cookieUtils.js');
+const { salvarCookieToken, validarCookieToken } = require('../utils/cookieUtils.js');
 
 const transporter = require('../config/nodemailer.js');
 
@@ -36,6 +36,7 @@ class CandidatoController {
             res.status(201).json({ message: "Pré-cadastro concluído." });
         }
         catch(erro){
+            console.error(erro)
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
@@ -48,20 +49,20 @@ class CandidatoController {
 
     static async confirmarCadastro(req, res) {
         try{
-            const { codigo } = req.body;
+            const { codigo, email } = req.body;
 
-            if(!codigo) return res.status(400).json({ error: "Codigo de verificação precisa ser fornecido."});
+            if(!codigo||!email) return res.status(400).json({ error: "Codigo de verificação e email precisam ser fornecidos."});
 
-            const novoId = await CandidatoService.popularTabelaCandidatos(codigo);
+            const novoId = await CandidatoService.popularTabelaCandidatos(codigo, email);
 
             const tkn = req.cookies.token;
-            if (tkn) {
+            if (tkn && validarCookieToken(tkn)) {
                 await TokenService.removerToken(tkn);
             }
 
             const token = salvarCookieToken(res, novoId, 'candidato', 'comum');
             const expira_em = new Date(Date.now() + 24 * 60 * 60 * 1000);
-            await TokenService.adicionarToken(novoId, 'candidato', token, expira_em)
+            await TokenService.adicionarToken(novoId, 'candidato', token, expira_em);
 
             res.status(201).json({ message: 'Email confirmado com sucesso.'});
         }

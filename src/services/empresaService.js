@@ -1,4 +1,4 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const pool = require('../config/db.js');
 const Erros = require('../utils/erroClasses.js');
 const ValidarCampos = require('../utils/validarCampos.js');

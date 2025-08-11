@@ -32,12 +32,6 @@ class EmpresaService{
     telefone = telefone.replace(/[^\d]/g, '').trim();
     cidade = cidade.trim();
 
-    const empresaExistente = await EmpresaModel.verificarEmpresaExistente(cnpj, email, razao_soci);
-
-    if (empresaExistente) {
-      throw new Erros.ErroDeConflito("Empresa já cadastrada.");
-    }
-
     const senhaCripitografada = await bcrypt.hash(senha, 10);
 
     await pool.query(
@@ -142,9 +136,6 @@ class EmpresaService{
       throw new Erros.ErroDeAutorizacao("Apenas a própria empresa pode se remover.");
     }
 
-    const empresaExistente = await EmpresaModel.verificarCnpjExistente(em);
-    if(!empresaExistente) throw new Erros.ErroDeNaoEncontrado('Empresa fornecida não pode ser removida pois não existe.')
-
     const chatsEmpresa = await ChatModel.buscarChatsPorEmpresa(em);
     await Promise.all(
       chatsEmpresa.map(chat => 
@@ -157,7 +148,9 @@ class EmpresaService{
       pool.query(`delete from chats where empresa = $1`, [em])
     ])
 
-    await pool.query(`delete from empresas where cnpj = $1`, [em]);
+    const empresa = await pool.query(`delete from empresas where cnpj = $1`, [em]);
+    if(empresa.rowCount===0) throw new Erros.ErroDeNaoEncontrado('Empresa fornecida não existe.');
+
   }
 
 }

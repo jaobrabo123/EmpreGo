@@ -55,15 +55,14 @@ class CandidatoService{
   static async gerarNovoCodigoPendente(email){
     ValidarCampos.validarEmail(email);
 
-    const existe = await CandidatoModel.verificarEmailPendente(email);
-    if(!existe) return false;
-
     const codigo = Math.floor(Math.random() * 9000) + 1000;
     const codigoCriptografado = await bcrypt.hash(String(codigo), 10);
 
-    await pool.query(`
+    const cand_pend = await pool.query(`
       update candidatos_pend set codigo = $1 where email = $2
     `, [codigoCriptografado, email]);
+
+    if(cand_pend.rowCount===0) return false;
 
     return codigo;
   }
@@ -178,9 +177,6 @@ class CandidatoService{
       throw new Erros.ErroDeAutorizacao("Apenas o próprio candidato pode se remover.");
     }
 
-    const candidatoExistente = await CandidatoModel.verificarIdExistente(cd);
-    if(!candidatoExistente) throw new Erros.ErroDeNaoEncontrado('Candidato fornecido não existe.')
-
     if(nivel==='admin'){
       if(cd===id){
         throw new Erros.ErroDeAutorizacao('Você não pode se remover kkkkkkkk');
@@ -206,7 +202,9 @@ class CandidatoService{
       pool.query(`delete from experiencias where candidato = $1`, [cd])
     ])
 
-    await pool.query(`delete from candidatos where id = $1`, [cd]);
+    const candidato = await pool.query(`delete from candidatos where id = $1`, [cd]);
+    if(candidato.rowCount===0) throw new Erros.ErroDeNaoEncontrado('Candidato fornecido não existe.');
+
   }
 
 }

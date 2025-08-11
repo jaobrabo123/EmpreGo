@@ -2,7 +2,7 @@ const CandidatoModel = require("../models/candidatoModel");
 const EmpresaModel = require("../models/empresaModel");
 const CandidatoService = require("../services/candidatoService");
 const EmpresaService = require("../services/empresaService");
-const { ErroDeValidacao, ErroDeConflito } = require('../utils/erroClasses.js');
+const { ErroDeValidacao } = require('../utils/erroClasses.js');
 
 class PerfilController {
 

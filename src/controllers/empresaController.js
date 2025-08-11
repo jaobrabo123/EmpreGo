@@ -32,8 +32,8 @@ class EmpresaController{
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
-            if(erro instanceof Erros.ErroDeConflito) {
-                return res.status(409).json({ error: erro.message });
+            if(erro.code==='23505'){
+                return res.status(409).json({ error: "Empresa já cadastrada." });
             }
             return res.status(500).json({ error: "Erro ao cadastrar empresa: " + erro.message });
         }

@@ -30,7 +30,14 @@ const empresaPerfilStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'fotos_perfil_empresa', //pasta no Cloudinary para as fotos de perfil de empresa
-    allowed_formats: ['jpg', 'jpeg', 'png']
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'] ,
+    format: 'webp',
+    transformation: [
+      {  
+        quality: 'auto',
+        fetch_format: 'webp'
+      }
+    ],
   }
 });
 const uploadEmpresaPerfil = multer({ storage: empresaPerfilStorage });  // upload das fotos de perfil de empresa

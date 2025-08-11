@@ -4,8 +4,6 @@ import { mostrarErroTopo } from '/js/globalFunctions.js';
 const axiosWe = axios.create();
 axiosWe.defaults.withCredentials = true;
 
-axiosWe.defaults.headers.post['Content-Type'] = 'application/json';
-
 axiosWe.defaults.baseURL = window.location.hostname.includes('localhost') ? 'http://localhost:3001' : 'https://tcc-vjhk.onrender.com';
 
 axiosWe.interceptors.response.use(function (config) {

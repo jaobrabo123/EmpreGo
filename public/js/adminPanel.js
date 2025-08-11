@@ -1,3 +1,5 @@
+import axiosWe from "./axiosConfig.js"
+
 document.querySelector('#selectTabelas').addEventListener('change', (option)=>{
     const tabela = option.target.value
     carregarTabela(tabela)
@@ -44,7 +46,7 @@ async function carregarTabela(tabela) {
             else{
                 console.log('Pegando candidatos')
                 try{
-                    const response = await axios.get('/candidatos/all');
+                    const response = await axiosWe.get('/candidatos/all');
                     candidatos = response.data;
                 }
                 catch(erro){
@@ -62,7 +64,7 @@ async function carregarTabela(tabela) {
             else{
                 console.log('Pegando empresas')
                 try{
-                    const response = await axios.get('/empresas/all');
+                    const response = await axiosWe.get('/empresas/all');
                     empresas = response.data;
                 }
                 catch(erro){
@@ -80,7 +82,7 @@ async function carregarTabela(tabela) {
             else{
                 console.log('Pegando experiências');
                 try{
-                    const response = await axios.get('/experiencias/all');
+                    const response = await axiosWe.get('/experiencias/all');
                     experiencias = response.data;
                 }
                 catch(erro){
@@ -98,7 +100,7 @@ async function carregarTabela(tabela) {
             else{
                 console.log('Pegando tags');
                 try{
-                    const response = await axios.get('/tags/all');
+                    const response = await axiosWe.get('/tags/all');
                     tags = response.data;
                 }
                 catch(erro){
@@ -228,7 +230,7 @@ async function removerTupla(tabela, id) {
     try{
         switch (tabela) {
             case 'Candidatos': {
-                const response = await axios.delete(`/candidatos/${id}`);
+                const response = await axiosWe.delete(`/candidatos/${id}`);
                 const data = response.data;
 
                 modal.style.display = 'none';
@@ -238,7 +240,7 @@ async function removerTupla(tabela, id) {
                 break;
             }
             case 'Empresas': {
-                const response = await axios.delete(`/empresas/${id}`);
+                const response = await axiosWe.delete(`/empresas/${id}`);
                 const data = response.data;
 
                 modal.style.display = 'none';
@@ -248,7 +250,7 @@ async function removerTupla(tabela, id) {
                 break;
             }
             case 'Experiencias': {
-                const response = await axios.delete(`/experiencias/${id}`);
+                const response = await axiosWe.delete(`/experiencias/${id}`);
                 const data = response.data;
 
                 modal.style.display = 'none';
@@ -258,7 +260,7 @@ async function removerTupla(tabela, id) {
                 break;
             }
             case 'Tags': {
-                const response = await axios.delete(`/tags/${id}`);
+                const response = await axiosWe.delete(`/tags/${id}`);
                 const data = response.data;
 
                 modal.style.display = 'none'

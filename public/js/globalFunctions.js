@@ -1,3 +1,6 @@
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
 export function mostrarErroTopo(mensagem) {
   const old = document.querySelector('.erro-mensagem-geral');
   if (old) old.remove();
@@ -17,8 +20,8 @@ export function mostrarErroTopo(mensagem) {
   }, 3000);
 }
 
-export async function carregarLinks(axios) {
-  const infos = await carregarInfo(axios);
+export async function carregarLinks() {
+  const infos = await carregarInfo();
   if(infos === 'visitante' || infos.tipo==='visitante' || infos.tipo==='expirado'){
     document.querySelector('#loginOuCadas').style.display = '';
     document.querySelector('#logout').style.display = 'none';
@@ -42,9 +45,9 @@ export async function carregarLinks(axios) {
   }
 }
 
-export async function carregarInfo(axios) {
+export async function carregarInfo() {
   try{
-    const tipo = await axios.get('/get-tipo')
+    const tipo = await axiosWe.get('/get-tipo')
       .then((response)=>{
         const { tipo } = response.data;
         console.log(response.data)
@@ -57,11 +60,11 @@ export async function carregarInfo(axios) {
     let data = null;
 
     if(tipo==='candidato'){
-      const response = await axios.get('/perfil/candidato/info');
+      const response = await axiosWe.get('/perfil/candidato/info');
       data = response.data;
     }
     else if(tipo==='empresa'){
-      const response = await axios.get('/perfil/empresa/info');
+      const response = await axiosWe.get('/perfil/empresa/info');
       data = response.data;
     }
     return {info: data, tipo: tipo};
@@ -73,8 +76,8 @@ export async function carregarInfo(axios) {
 }
 
 //Função pra deslogar
-export function logout(axios){
-  axios.post('/logout')
+export function logout(){
+  axiosWe.post('/logout')
   .then(()=>{
     // ? alert('Você foi desconectado.'); Se achar necessario bota um alert pro logout
     window.location.href = '/';

@@ -1,9 +1,12 @@
 // * Importando as funções do globalFunctions
 import { carregarInfo, mostrarErroTopo, logout } from '/js/globalFunctions.js';
 
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
 // * Após o site carregar, ele carrega a navbar e o perfil
 document.addEventListener('DOMContentLoaded', async ()=>{
-    const data = await carregarInfo(axios) // * Pega a resposta do carregarInfo
+    const data = await carregarInfo() // * Pega a resposta do carregarInfo
 
     // * Carregar informações
     if(data.tipo && (data.tipo ==='candidato')){ // * Se a resposta for do tipo candidato carrega o perfil do candidato e ajusta a navbar
@@ -82,7 +85,7 @@ const bodyBottom = document.getElementById('bodyBottom')
 
 async function experiencias(){
     try{
-        const response = await axios.get('/experiencias/info');
+        const response = await axiosWe.get('/experiencias/info');
         const data = response.data;
         console.log(data);
         data.forEach(expe => {
@@ -149,7 +152,7 @@ async function adicionarTag() {
             await carregarTodasTags();
         }
         try{
-            const response = await axios.post('/tags', { nome: tagUsuario });
+            const response = await axiosWe.post('/tags', { nome: tagUsuario });
             const data = response.data;
 
             const buttonTag = document.createElement("button");
@@ -157,7 +160,7 @@ async function adicionarTag() {
             buttonTag.textContent = tagUsuario;
             const remover = async function(id) {
                 try {
-                    await axios.delete(`/tags/${id}`);
+                    await axiosWe.delete(`/tags/${id}`);
                     buttonTag.remove();
                 }
                 catch (erro) {
@@ -192,7 +195,7 @@ maisTags.addEventListener("click", async () => {
 
 async function tags(limit, offset) {
     try{
-        const response = await axios.get(`/tags?limit=${limit}&offset=${offset}`);
+        const response = await axiosWe.get(`/tags?limit=${limit}&offset=${offset}`);
         const data = response.data;
         if(data.length===0){
             maisTags.remove();
@@ -209,7 +212,7 @@ async function tags(limit, offset) {
                     if(document.querySelector("#maisTags")){
                         await carregarTodasTags();
                     }
-                    await axios.delete(`/tags/${id}`);
+                    await axiosWe.delete(`/tags/${id}`);
                     buttonTag.remove();
                 }
                 catch (erro) {
@@ -227,4 +230,4 @@ async function tags(limit, offset) {
     };
 }
 
-document.querySelector('#logout').addEventListener('click', () => logout(axios));
+document.querySelector('#logout').addEventListener('click', () => logout());

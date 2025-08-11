@@ -4,9 +4,9 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 function limparCookieToken(res) {
   res.clearCookie('token', {
-    httpOnly: true,
+   httpOnly: true,
     secure: true,
-    sameSite: 'strict'
+    sameSite: 'strict' 
   });
 }
 

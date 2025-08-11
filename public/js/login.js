@@ -1,3 +1,6 @@
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
 // Main Form Controller
 class FormManager {
   constructor() {
@@ -288,9 +291,8 @@ class FormManager {
     }
 
     try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`); // ? BrasilApi se precisar: https://brasilapi.com.br/api/cep/v1/${cep}
-      if (!response.ok) throw new Error("CEP não encontrado");
-      const data = await response.json();
+      const response = await axios(`https://viacep.com.br/ws/${cep}/json/`); // ? BrasilApi se precisar: https://brasilapi.com.br/api/cep/v1/${cep}
+      const data = response.data;
 
       document.getElementById("empresaRua").value = data.logradouro || "";
       document.getElementById("empresaBairro").value = data.bairro || "";
@@ -415,7 +417,7 @@ class FormManager {
     btnAdd.textContent = "Entrando...";
 
     try {
-      await axios.post("/login", { email, senha });
+      await axiosWe.post("/login", { email, senha });
 
       window.location.href = "/";
     } catch (erro) {
@@ -539,7 +541,7 @@ class FormManager {
     btnAdd.disabled = true;
     btnAdd.textContent = "Cadastrando...";
     try{
-      await axios.post('/candidatos', { nome, email, senha, genero, data_nasc });
+      await axiosWe.post('/candidatos', { nome, email, senha, genero, data_nasc });
       window.location.href = `/confirmar?email=${email}`;
     }
     catch (erro){
@@ -573,7 +575,7 @@ class FormManager {
 
     const cnpj = cnpj1.replace(/[^\d]/g, ""); 
     try { 
-      await axios.post('/login-empresa', { cnpj, senha });
+      await axiosWe.post('/login-empresa', { cnpj, senha });
       window.location.href = "/";
     } catch (erro) {
       btnAdd.disabled = false;
@@ -724,7 +726,7 @@ class FormManager {
     btnAdd.textContent = "Cadastrando...";
 
     try {
-      await axios.post("/empresas", {
+      await axiosWe.post("/empresas", {
         cnpj,
         nome_fant,
         telefone,
@@ -738,7 +740,7 @@ class FormManager {
         cidade
       });
 
-      await axios.post("/login-empresa", { cnpj, senha });
+      await axiosWe.post("/login-empresa", { cnpj, senha });
 
       alert("Empresa cadastrada com SUCESSO!");
       window.location.href = "/";

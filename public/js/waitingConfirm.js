@@ -1,3 +1,6 @@
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
 const params = new URLSearchParams(window.location.search);
 const email = params.get('email');
 if(!email){
@@ -15,7 +18,7 @@ input.addEventListener('input', async (event)=>{
     input.disabled = true;
 
     try{
-        await axios.post('/candidatos/confirmar', { codigo, email });
+        await axiosWe.post('/candidatos/confirmar', { codigo, email });
         window.location.href = '/';
     } 
     catch(erro){
@@ -31,7 +34,7 @@ document.querySelector('#reenvio').addEventListener('click', async ()=>{
     podeReenviar = false;
 
     try{
-        const response = await axios.post('/candidatos/reenviar', { email });
+        const response = await axiosWe.post('/candidatos/reenviar', { email });
         mensagem.textContent = `${response.data.message}`;
         podeReenviar = true;
     }

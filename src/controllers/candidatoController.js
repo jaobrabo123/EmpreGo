@@ -36,13 +36,16 @@ class CandidatoController {
             res.status(201).json({ message: "Pré-cadastro concluído." });
         }
         catch(erro){
-            console.error(erro)
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
             if(erro instanceof Erros.ErroDeConflito) {
                 return res.status(409).json({ error: erro.message });
             }
+            if(erro.code==='23505'){
+                return res.status(409).json({ error: "Email aguardando confirmação." });
+            }
+
             res.status(500).json({ error: "Erro ao fazer pré-cadastro: " + erro.message });
         }
     }

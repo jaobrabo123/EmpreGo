@@ -3,13 +3,16 @@ const server = window.location.hostname.includes('localhost') ?
 'http://localhost:3001' : 'https://tcc-vjhk.onrender.com';
 var socket = io(server);
 
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
 const salasEntradas = new Set();
 
 let chatsBack
 
 async function carregarChatsBack() {
     try{
-        const response = await axios.get('/chats/info');
+        const response = await axiosWe.get('/chats/info');
         const data = response.data;
 
         const messages = document.querySelectorAll('.message')
@@ -91,7 +94,7 @@ function exibirChatsFront() {
                 socket.emit('sendMessage', messageObject);
                 
                 try{
-                    await axios.post('/mensagens',{
+                    await axiosWe.post('/mensagens',{
                         autor: author,
                         mensagem: message,
                         chat: data.id,

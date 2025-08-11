@@ -22,9 +22,6 @@ class CandidatoService{
     const emailExistente = await CandidatoModel.verificarEmailExistente(email);
     if (emailExistente) throw new Erros.ErroDeConflito('Email já cadastrado.');
 
-    const emailPendente = await CandidatoModel.verificarEmailPendente(email);
-    if (emailPendente) throw new Erros.ErroDeConflito("Email aguardando confirmação.");
-
     // * Criptografa a senha
     const [ senhaCriptografada, codigoCriptografado ] = await Promise.all([
       bcrypt.hash(senha, 10),

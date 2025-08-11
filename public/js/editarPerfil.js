@@ -1,3 +1,5 @@
+import axiosWe from "./axiosConfig.js";
+
 function mostrarErro(msg) {
   const erroDiv = document.getElementById("mensagemErro");
   erroDiv.textContent = msg;
@@ -89,12 +91,11 @@ async function enviarEdicao() {
   }
 
   if (cidade && estado !== "NM") {
-    const response = await fetch(
+    const response = await axios(
       `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
     );
-    const cidades = await response.json();
-    const nomes = cidades.map((ci) => ci.nome.toLowerCase());
-    if (!nomes.includes(cidade.toLowerCase())) {
+    const cidades = response.data.map((ci) => ci.nome.toLowerCase());
+    if (!cidades.includes(cidade.toLowerCase())) {
       mostrarErro(`Cidade inválida pro estado selecionado: ${estado}`);
       return;
     }
@@ -148,7 +149,7 @@ async function enviarEdicao() {
   if (!foto && !descricao && !cpf && estado==="NM" && !cidade && !instagram && !github && !youtube && !twitter && pronomes==="NM") return mostrarErro("Pelo menos um campo deve ser fornecido para editar o perfil.");
 
   try{
-    await axios.post('/perfil/candidato', formData);
+    await axiosWe.post('/perfil/candidato', formData);
     window.location.href = "/perfil/candidato";
   }
   catch(erro){

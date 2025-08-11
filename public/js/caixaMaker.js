@@ -1,6 +1,9 @@
 // * Importando as funções do globalFunctions
 import { mostrarErroTopo } from '/js/globalFunctions.js';
 
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
 var liberar = true
 
 document.querySelector('#btnSalvar').addEventListener('click', adicionarExp);
@@ -22,7 +25,7 @@ async function adicionarExp() {
         formData.append('imagem', imagem);
 
         try{
-            await axios.post('/experiencias', formData);
+            await axiosWe.post('/experiencias', formData);
             alert('Experiência adicionada com sucesso!');
             window.location.href = '/perfil/candidato';
         }

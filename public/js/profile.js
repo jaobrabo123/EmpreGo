@@ -87,7 +87,6 @@ async function experiencias(){
     try{
         const response = await axiosWe.get('/experiencias/info');
         const data = response.data;
-        console.log(data);
         data.forEach(expe => {
             const novaDiv = document.createElement("div");
             novaDiv.className = 'containerExemplo';

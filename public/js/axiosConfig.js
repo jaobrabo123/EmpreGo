@@ -1,6 +1,6 @@
 import { mostrarErroTopo } from '/js/globalFunctions.js';
 
-//Configurando axios
+// * Configurando axios
 const axiosWe = axios.create();
 axiosWe.defaults.withCredentials = true;
 
@@ -9,7 +9,6 @@ axiosWe.defaults.baseURL = window.location.hostname.includes('localhost') ? 'htt
 axiosWe.interceptors.response.use(function (config) {
   return config;
 }, function (erro) {
-  console.log(erro)
   const status = erro.response?.status || erro.status;
   const originalError = erro.response?.data?.error || erro.message;
   let msg = originalError;

@@ -45,6 +45,7 @@ function validarCPF(cpf) {
   return true;
 }
 
+document.querySelector('#selectPronomes').addEventListener('change', handlePronounChange);
 function handlePronounChange() {
   const select = document.getElementById("selectPronomes");
   const outroPronomeInput = document.getElementById("outroPronomeInput").parentElement;
@@ -101,36 +102,22 @@ async function enviarEdicao() {
     }
   }
 
-  if (
-    instagram &&
-    !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(instagram)
-  ) {
+  if (instagram && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(instagram)){
     mostrarErro("URL do Instagram inválida.");
     return;
   }
 
-  if (
-    github &&
-    !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(github)
-  ) {
+  if (github && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(github)){
     mostrarErro("URL do GitHub inválida.");
     return;
   }
 
-  if (
-    youtube &&
-    !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(
-      youtube
-    )
-  ) {
+  if (youtube && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(youtube)){
     mostrarErro("URL do Youtube inválida.");
     return;
   }
 
-  if (
-    twitter &&
-    !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(twitter)
-  ) {
+  if (twitter && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(twitter)){
     mostrarErro("URL do Twitter/X inválida.");
     return;
   }
@@ -159,7 +146,6 @@ async function enviarEdicao() {
     else{
       mostrarErro(`Erro ao editar perfil: ${erro.message}`);
     }
-    console.error("Erro ao editar perfil: ", erro.message);
   }
 }
 

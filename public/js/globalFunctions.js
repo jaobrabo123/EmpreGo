@@ -50,7 +50,6 @@ export async function carregarInfo() {
     const tipo = await axiosWe.get('/get-tipo')
       .then((response)=>{
         const { tipo } = response.data;
-        console.log(response.data)
         return tipo;
       })
       .catch(()=>{

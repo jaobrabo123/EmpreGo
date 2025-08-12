@@ -546,8 +546,13 @@ class FormManager {
     }
     catch (erro){
       if(erro.status===409){
-        this.mostrarErroTopo('Email já cadastrado.')
-      }
+        if(erro.originalError.includes("Email já cadastrado")){
+          this.mostrarErroTopo('Email já cadastrado.');
+        }
+        else{
+          this.mostrarErroTopo('Email aguardando confirmação.');
+        };
+      };
       btnAdd.disabled = false;
       btnAdd.textContent = "Cadastrar";
     }

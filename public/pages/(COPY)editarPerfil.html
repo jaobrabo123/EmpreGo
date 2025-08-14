@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/(Copy)profileStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>Perfil</title>
+    <title>Editando perfil...</title>
 </head>
 
 <body>
@@ -36,19 +36,16 @@
         <div id="bodyLeft">
             <div id="impInfo">
                 <input type="image" id="inputfotoPerfil" src="/assets/imgs/plusBtn(circle).png" alt="AddPfp">
-                <label for="inputCpf" class="labelsEditar">CPF</label>
-                <input class="inputImp" type="text" id="inputCpf">
-                <select placeholder="Selecione seus pronomes." id="selectPronomes" onchange="handlePronounChange()" required>
+                <input class="inputImp input" type="text" id="inputCpf" placeholder="Informe o seu CPF">
+                <select class="inputImp input" placeholder="Selecione seus pronomes." id="selectPronomes" onchange="handlePronounChange()" required>
                 <option value="Ela/Dela">Ela/Dela</option>
                 <option value="Ele/Dele">Ele/Dele</option>
                 <option value="Qualquer Pronome">Qualquer Pronome</option>
                 <option value="Outro">Outro (Especificar)</option>
                 <option value="Prefiro não informar">Prefiro não informar</option>
                 </select>
-                <button type="submit">Enviar</button>
-                <button type="button" class="btn-voltar-perfil" onclick="window.location.href='/perfil/candidato'">
-                    Cancelar
-                </button>
+
+                <input type="text" id="outroPronomeInput" class="inputImp input" placeholder="Informe seus pronomes." />
             </div>
 
             <div id="bodyMid">
@@ -60,35 +57,26 @@
                     <div id="conexoesColumn">                        
                             <div id="conexoesUpper">
                                 <img id="LogoInst" src="/assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
-                                <input class="infoInput" type="text" id="inputInstagram" name="instagram" placeholder="Insira seu Instagram aqui" />
+                                <input class="infoInput input" type="text" id="inputInstagram" name="instagram" placeholder="Insira seu Instagram aqui" />
                                 
                                 <img id="LogoGit"src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
-                                <input class="infoInput" type="text" id="inputGithub" name="github" placeholder="Insira seu GitHub aqui" />
+                                <input class="infoInput input" type="text" id="inputGithub" name="github" placeholder="Insira seu GitHub aqui" />
                             </div>
                             <div id="conexoesLower">
                                 <img id="LogoYt" src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
-                                <input class="infoInput" type="text" id="inputYoutube" name="youtube" placeholder="Insira seu YouTube aqui" />
+                                <input class="infoInput input" type="text" id="inputYoutube" name="youtube" placeholder="Insira seu YouTube aqui" />
 
                                 <img id="LogoTwt" src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
-                                <input class="infoInput" type="text" id="inputTwitter" name="twitter" placeholder="Insira seu Twitter aqui" />
+                                <input class="infoInput input" type="text" id="inputTwitter" name="twitter" placeholder="Insira seu Twitter aqui" />
                             </div>
-                    </div>
-                </div>
-
-                <div id="enderecoInfo">
-                    <img id="houseIcon" src="/assets/imgs/House.png" alt="HouseIcon">
-                    <div id="alignEndereco">
+                            <div id="enderecoInfo">                             
+                        <img id="houseIcon" src="/assets/imgs/House.png" alt="HouseIcon">
                         <div id="cidadeEstado">
-                            <h1 id="cidadeUsuario">Cidade: ( </h1>
+                            <h1 id="cidadeUsuario">Cidade: </h1>        
+                            <input class="inputCidadeEstado input" type="text" id="inputCidade" name="cidade" placeholder="Insira sua cidade" />
                             
-                            <div class="info">
-                            <input class="inputImp" type="text" id="inputCidade" name="cidade" placeholder="Insira sua cidade" />
-                            </div>
-                            
-                            <h1>)</h1>
-                            <h1 id="estadoUsuario">Estado: (</h1>
-
-                            <select id="selectEstado" name="estado">
+                            <h1 id="estadoUsuario">Estado: </h1>
+                            <select class="inputCidadeEstado input" id="selectEstado" name="estado">
                             <option value="NM" selected>Seu Estado</option>
                             <option value="AC">AC</option>
                             <option value="AL">AL</option>
@@ -119,12 +107,17 @@
                             <option value="TO">TO</option>
                             </select>
 
-                            <h1>)</h1>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+                <div id="buttons">
+                <button type="submit" class="btn" id="btnEnviar">Enviar</button>
+                <button type="button" class="btn" onclick="window.location.href='/perfil/candidato'" id="btnCancelar">
+                    Cancelar
+                </button>
+                </div>
 
         <div id="bodyTags"> <!--Não existe método registro de tags ainda-->
             <h1 id="tituloTags">Tags</h1>

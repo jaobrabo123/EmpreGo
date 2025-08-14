@@ -19,6 +19,45 @@ a {
     font-size: 16px;
 }
 
+.input{
+    color: white;
+    background-color: #393053;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    border-radius: 20px;
+    width: 200px;
+}
+
+.inputImp{
+    margin-top: 20px;
+}
+
+.btn{
+    color: white;
+    background-color:#18122b;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    border-radius: 20px;
+    width: 200px;
+}
+
+#buttons{
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
 #nomUsuario {
     font-size: 50px;
     max-width: 1000px;
@@ -36,18 +75,7 @@ a {
     flex-direction: column;
     align-items: center;
     text-align: center;
-}
-
-#nascUsuario {
-    margin-top: 5px;
-}
-
-#cpfUsuario {
-    margin-top: 5px;
-}
-
-#pronUsuario {
-    margin-top: 5px;
+    
 }
 
 #bodyLeft {
@@ -64,37 +92,39 @@ a {
 }
 
 #enderecoInfo {
-    align-items: center;
     display: flex;
     flex-direction: row;
+    width: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: -100px;
 }
 
-#alignEndereco {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    margin-right: 70px;
+#cidadeEstado {
+   display: flex;
+    flex-direction: row;
+    padding-top: 15px;
 }
+
+.inputCidadeEstado{
+    margin-top: -10px;
+    border-style: solid;
+    justify-content: center;
+    display: flex;
+}
+
 
 #houseIcon {
     width: 50px;
     height: 50px;
-    margin-right: 20px;
+    margin-right: 15px;
    
-}
-
-#enderecoUsuario {
-    margin-top: 10px;
 }
 
 #estadoUsuario{
     margin-left: 15px;
-}
-
-#cidadeEstado {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
 }
 
 
@@ -195,33 +225,24 @@ a {
     border-style: solid;
     border-color: #635985;
     border-width: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     border-radius: 20px;
     resize: none;
 }
 
 .infoInput{
     margin-right: 25px;
-    color: white;
-    background-color: #393053;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-style: solid;
-    border-color: #635985;
-    border-width: 5px;
-    border-radius: 20px;
     margin-left: 5px;
     height: 50px;
-    max-width: 200px;
+    width: 300px;
+    
 }
 
 #conexoesColumn{
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 500px;
+    height: 100x;
     width: 200px;  
 }
 
@@ -232,55 +253,12 @@ a {
 }
 
 #conexoesLower{
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-#gitUsuario {
-    margin-right: 25px;
-    color: white;
-    margin-left: 5px;
-}
-
-#gitUsuario:hover {
-    color: #635985;
-    text-decoration-line: underline;
-}
-
-#ytUsuario {
-    margin-right: 25px;
-    color: white;
-    margin-left: 5px;
-}
-
-#ytUsuario:hover {
-    color: #635985;
-    text-decoration-line: underline;
-}
-
-#twtUsuario {
-    margin-right: 25px;
-    color: white;
-    margin-left: 5px;
-}
-
-#twtUsuario:hover {
-    color: #635985;
-    text-decoration-line: underline;
-}
-
-
-#instUsuario {
-    margin-right: 25px;
-    color: white;
-    margin-left: 5px;
-}
-
-#instUsuario:hover {
-    color: #635985;
-    text-decoration-line: underline;
-}
 
 #tituloExperiencias {
     margin-bottom: 20px;

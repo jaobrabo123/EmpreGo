@@ -2,7 +2,7 @@ const CandidatoModel = require('../models/candidatoModel.js');
 const CandidatoService = require("../services/candidatoService.js");
 const Erros = require("../utils/erroClasses.js");
 const TokenService = require('../services/tokenService.js');
-const { salvarCookieToken, validarCookieToken } = require('../utils/cookieUtils.js');
+const { salvarCookieToken, validarCookieToken, salvarCookieRefreshToken } = require('../utils/cookieUtils.js');
 
 const transporter = require('../config/nodemailer.js');
 
@@ -64,7 +64,8 @@ class CandidatoController {
             }
 
             const token = salvarCookieToken(res, novoId, 'candidato', 'comum');
-            const expira_em = new Date(Date.now() + 24 * 60 * 60 * 1000);
+            salvarCookieRefreshToken(res, token);
+            const expira_em = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
             await TokenService.adicionarToken(novoId, 'candidato', token, expira_em);
 
             res.status(201).json({ message: 'Email confirmado com sucesso.'});
@@ -110,7 +111,9 @@ class CandidatoController {
 
     static async listarTodos(req, res){
         try {
-            const candidatos = await CandidatoModel.buscarTodosCandidatos();
+            const limit = req.query.limit ? parseInt(req.query.limit) : null;
+            const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+            const candidatos = await CandidatoModel.buscarTodosCandidatos(limit, offset);
 
             res.status(200).json(candidatos);
         } catch (erro) {

@@ -194,7 +194,7 @@ maisTags.addEventListener("click", async () => {
 
 async function tags(limit, offset) {
     try{
-        const response = await axiosWe.get(`/tags?limit=${limit}&offset=${offset}`);
+        const response = await axiosWe(`/tags?limit=${limit}&offset=${offset}`);
         const data = response.data;
         if(data.length===0){
             maisTags.remove();

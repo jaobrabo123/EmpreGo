@@ -10,15 +10,33 @@ function limparCookieToken(res) {
   });
 }
 
+function limparCookieRefreshToken(res) {
+  res.clearCookie('refreshToken', {
+   httpOnly: true,
+    secure: true,
+    sameSite: 'strict' 
+  });
+}
+
 function salvarCookieToken(res, id, tipo, nivel){
-  const token = jwt.sign({ id: id, tipo: tipo, nivel: nivel }, SECRET_KEY, { expiresIn: '1d' });
+  const token = jwt.sign({ id: id, tipo: tipo, nivel: nivel }, SECRET_KEY, { expiresIn: '1h' });
   res.cookie('token', token, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
-    maxAge: 7*24*60*60*1000
+    maxAge: 30*24*60*60*1000
   });
   return token;
+}
+
+function salvarCookieRefreshToken(res, acessToken){
+  const refreshToken = jwt.sign({ acessToken }, SECRET_KEY, { expiresIn: '30d' });
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 30*24*60*60*1000
+  })
 }
 
 function validarCookieToken(tkn){
@@ -32,6 +50,8 @@ function validarCookieToken(tkn){
 
 module.exports = {
   limparCookieToken,
+  limparCookieRefreshToken,
   salvarCookieToken,
-  validarCookieToken
+  salvarCookieRefreshToken,
+  validarCookieToken,
 };

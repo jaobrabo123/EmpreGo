@@ -390,6 +390,7 @@ class FormManager {
     const email = form.querySelector('input[type="email"]').value.trim();
     const senhaInput = form.querySelector('#password');
     const senha = senhaInput.value.trim();
+    const lembreMe = document.querySelector('#lembreMe').checked;
 
     // Validate inputs
     if (!email) {
@@ -416,8 +417,9 @@ class FormManager {
     btnAdd.disabled = true
     btnAdd.textContent = "Entrando...";
 
+
     try {
-      await axiosWe.post("/login", { email, senha });
+      await axiosWe.post("/login", { email, senha, lembreMe });
 
       window.location.href = "/";
     } catch (erro) {

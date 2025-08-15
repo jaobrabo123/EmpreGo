@@ -17,13 +17,14 @@ class EmpresaModel {
         return resultado.rowCount > 0;
     }
 
-    static async buscarTodasEmpresas(){
+    static async buscarTodasEmpresas(limit, offset){
         const resultado = await pool.query(`
             SELECT cnpj, nome_fant, telefone, email, razao_soci, cep, 
             complemento, estado, cidade, numero, descricao, setor, porte, data_fund, 
             contato, site, instagram, github, youtube, twitter,
-            data_criacao FROM empresas
-        `);
+            data_criacao FROM empresas 
+            order by data_criacao desc limit $1 offset $2
+        `, [limit, offset]);
         return resultado.rows;
     }
 

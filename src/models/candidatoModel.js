@@ -38,14 +38,15 @@ class CandidatoModel{
         return resultado.rows[0];
     }
 
-    static async buscarTodosCandidatos(){
+    static async buscarTodosCandidatos(limit, offset){
         const resultado = await pool.query(`SELECT 
             id, nome, email, genero, data_nasc, 
             descricao, cpf, estado, cidade, instagram,
             github, youtube, twitter, pronomes, nivel,
             data_criacao 
             FROM candidatos
-        `);
+            order by data_criacao desc limit $1 offset $2
+        `, [limit, offset]);
         return resultado.rows;
     }
 

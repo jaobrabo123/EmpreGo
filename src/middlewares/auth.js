@@ -1,48 +1,73 @@
 //Imports
 const jwt = require('jsonwebtoken');
-const { limparCookieToken } = require('../utils/cookieUtils.js');
+const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken } = require('../utils/cookieUtils.js');
 const TokenModel = require('../models/tokenModel.js');
+const TokenService = require('../services/tokenService.js');
 
 // Chave secreta para o JWT
 const SECRET_KEY = process.env.JWT_SECRET;
 
 // Autenticação JWT
 async function authenticateToken(req, res, next) {
-  const token = req.cookies.token;
+  
+  const acessToken = req.cookies.token;
+  if (!acessToken) return res.status(401).json({ error: 'Você não está logado.' });
+  let user;
+  let token;
 
-  if (!token) return res.status(401).json({ error: 'Você não está logado.' });
+  try {
 
-  jwt.verify(token, SECRET_KEY, async (err, user) => {
-    if (err) {
-      limparCookieToken(res)
+    user = jwt.verify(acessToken, SECRET_KEY);
+    token = acessToken
 
-      if (err.name === 'TokenExpiredError') {
-        return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' });
-      }
-
+    if(!await TokenModel.verificarTokenExistente(token)) {
+      limparCookieToken(res);
       return res.status(403).json({ error: 'Token inválido.' });
     }
 
-    try {
-      const resultado = await TokenModel.verificarTokenExistente(token);
+  } catch (erro) {
+    if(erro.name==='TokenExpiredError'){
+      if(!req.cookies.refreshToken) {
+        limparCookieToken(res);
+        return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' })
+      }
 
-      if(!resultado) {
-        limparCookieToken(res)
+      try {
+
+        const refreshTokenDecoded = jwt.verify(req.cookies.refreshToken, SECRET_KEY);
+        if(!(refreshTokenDecoded.acessToken===acessToken) || !await TokenModel.verificarTokenExistente(acessToken)) {
+          limparCookieToken(res);
+          limparCookieRefreshToken(res);
+          return res.status(403).json({ error: 'Token inválido.' })
+        };
+
+        const acessTokenDecoded = jwt.decode(acessToken);
+        token = salvarCookieToken(res, acessTokenDecoded.id, acessTokenDecoded.tipo, acessTokenDecoded.nivel);
+        user = jwt.decode(token);
+        salvarCookieRefreshToken(res, token);
+        const expira_em = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+        await Promise.all([
+          TokenService.adicionarToken(acessTokenDecoded.id, acessTokenDecoded.tipo, token, expira_em),
+          TokenService.removerToken(acessToken)
+        ])
+
+      } catch (error) {
+        limparCookieToken(res);
+        limparCookieRefreshToken(res);
+        if(error.name==='TokenExpiredError') return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' });
         return res.status(403).json({ error: 'Token inválido.' });
       }
 
-      if (resultado <= new Date()) {
-        limparCookieToken(res)
-        return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' });
-      }
-
-      req.user = user;
-      req.token = token;
-      next();
-    } catch (erro) {
-      return res.status(500).json({ error: 'Erro na verificação do token: ' + erro.message });
     }
-  });
+    else{
+      limparCookieToken(res);
+      return res.status(403).json({ error: 'Token inválido.' });
+    }
+  }
+  req.user = user;
+  req.token = token;
+  next();
+  
 }
 
 function apenasEmpresa(req,res,next) {

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const TokenService = require('../services/tokenService.js');
-const { limparCookieToken, salvarCookieToken, validarCookieToken } = require('../utils/cookieUtils.js');
+const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken, validarCookieToken } = require('../utils/cookieUtils.js');
 const Erros = require("../utils/erroClasses.js");
 const CandidatoModel = require('../models/candidatoModel.js')
 const EmpresaModel = require('../models/empresaModel.js')
@@ -12,6 +12,8 @@ class LoginController {
             const { email, senha } = req.body; 
             if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
 
+            const lembreMe = req.body.lembreMe ? req.body.lembreMe : false;
+
             const tkn = req.cookies.token;
             if (tkn && validarCookieToken(tkn)) {
                 await TokenService.removerToken(tkn);
@@ -20,9 +22,13 @@ class LoginController {
             const candidato = await CandidatoModel.buscarInfoDoTokenPorEmail(email);
 
             if(candidato && await bcrypt.compare(senha, candidato.senha)){
-                const token = salvarCookieToken(res, candidato.id, 'candidato', candidato.nivel)
+                const token = salvarCookieToken(res, candidato.id, 'candidato', candidato.nivel);
+                let expira_em = new Date(Date.now() + 60 * 60 * 1000);
+                if(lembreMe) {
+                    salvarCookieRefreshToken(res, token);
+                    expira_em = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                };
 
-                const expira_em = new Date(Date.now() + 24 * 60 * 60 * 1000);
                 await TokenService.adicionarToken(candidato.id, 'candidato', token, expira_em)
 
                 res.status(200).json({ message: 'Logado com sucesso!' });
@@ -52,7 +58,7 @@ class LoginController {
             if(empresa && await bcrypt.compare(senha, empresa.senha)){
                 const token = salvarCookieToken(res, empresa.cnpj, 'empresa', 'comum')
 
-                const expira_em = new Date(Date.now() + 24 * 60 * 60 * 1000);
+                const expira_em = new Date(Date.now() + 60 * 60 * 1000);
                 await TokenService.adicionarToken(empresa.cnpj, 'empresa', token, expira_em);
 
                 res.status(200).json({ message: 'Logado com sucesso!' });
@@ -72,12 +78,14 @@ class LoginController {
 
     static async deslogar(req, res){
         try{
-            limparCookieToken(res);
             
             const tkn = req.cookies.token;
             if (tkn && validarCookieToken(tkn)) {
                 await TokenService.removerToken(tkn);
             }
+
+            limparCookieRefreshToken(res);
+            limparCookieToken(res);
             
             res.status(200).json({ message: 'Logout realizado com sucesso' });
         }

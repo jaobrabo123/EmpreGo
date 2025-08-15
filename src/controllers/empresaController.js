@@ -41,7 +41,9 @@ class EmpresaController{
 
     static async listarTodas(req, res){
         try {
-            const empresas = await EmpresaModel.buscarTodasEmpresas();
+            const limit = req.query.limit ? parseInt(req.query.limit) : null;
+            const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+            const empresas = await EmpresaModel.buscarTodasEmpresas(limit, offset);
 
             res.status(200).json(empresas);
         } catch (erro) {

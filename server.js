@@ -13,9 +13,9 @@ const app = express();
 const port = process.env.PORT || 3001;
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+app.set('trust proxy', 1);
 
 // * Middlewares globais
-app.set('trust proxy', 1);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));

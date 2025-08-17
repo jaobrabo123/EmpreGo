@@ -1,4 +1,5 @@
-const CandidatoModel = require("../models/candidatoModel");
+// * Imports
+const CandidatoModel = require('../models/candidatoModel.js');
 const EmpresaModel = require("../models/empresaModel");
 const CandidatoService = require("../services/candidatoService");
 const EmpresaService = require("../services/empresaService");
@@ -9,16 +10,11 @@ class PerfilController {
     static async buscarCandidato(req, res){
         try {
             const id = req.user.id;
-
-            const perfilCandidato = await CandidatoModel.buscarPerfilInfoPorId(id);
-
-            if (!perfilCandidato) {
-                return res.status(404).json({ error: 'Usuário não encontrado' });
-            }
-
+            const perfilCandidato = await CandidatoModel.buscarCandidatoPorId(id)
             res.status(200).json(perfilCandidato);
-        } catch (error) {
-            res.status(500).json({ error: 'Erro ao buscar perfil: ' + error.message });
+        } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Usuário não encontrado' });
+            res.status(500).json({ error: 'Erro ao buscar perfil: ' + erro.message });
         }
     }
 
@@ -53,17 +49,11 @@ class PerfilController {
     static async buscarEmpresa(req, res){
         try {
             const cnpj = req.user.id;
-        
-            const empresa = await EmpresaModel.buscarPerfilInfoPorCnpj(cnpj);
-        
-            if (!empresa) {
-              return res.status(404).json({ error: 'Empresa não encontrada' });
-            }
-        
+            const empresa = await EmpresaModel.buscarEmpresaPorCnpj(cnpj);
             res.status(200).json(empresa);
         }
         catch (erro) {
-            console.error(erro)
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Empresa não encontrada' });
             res.status(500).json({ error: 'Erro ao buscar perfil da empresa: ' + erro.message });
         }
     }

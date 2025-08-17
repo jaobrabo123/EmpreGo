@@ -26,7 +26,7 @@ async function carregarChatsBack() {
                 msg.classList.add(msg.classList.contains('candidato') ? 'esquerda' : 'direita');
             });
         }
-        
+        console.log(data)
         chatsBack = data;
     }
     catch(erro){
@@ -49,7 +49,7 @@ function exibirChatsFront() {
 
         const nomeRemetente = document.createElement('p');
         nomeRemetente.className = 'nomeRemetente';
-        const nomeRemetenteConteudo = chatsBack.tipo === 'candidato' ? data.nome_fant : data.nome;
+        const nomeRemetenteConteudo = chatsBack.tipo === 'candidato' ? data.empresas.nome_fant : data.candidatos.nome;
         nomeRemetente.textContent = nomeRemetenteConteudo;
 
         const minimize = document.createElement('button')
@@ -79,7 +79,7 @@ function exibirChatsFront() {
         send.id = `sendBack${data.id}`;
         send.textContent = 'Enviar';
         send.addEventListener('click', async ()=>{
-            var author = chatsBack.tipo === 'candidato' ? chatsBack.chats[0].nome : chatsBack.chats[0].nome_fant;
+            var author = chatsBack.tipo === 'candidato' ? chatsBack.chats[0].candidatos.nome : chatsBack.chats[0].empresas.nome_fant;
             var message = document.querySelector(`#inputBack${data.id}`).value;
             document.querySelector(`#inputBack${data.id}`).value = ''
             

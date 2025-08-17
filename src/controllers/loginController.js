@@ -1,9 +1,10 @@
+// * Imports
 const bcrypt = require('bcrypt');
 const TokenService = require('../services/tokenService.js');
 const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken, validarCookieToken } = require('../utils/cookieUtils.js');
 const Erros = require("../utils/erroClasses.js");
-const CandidatoModel = require('../models/candidatoModel.js')
-const EmpresaModel = require('../models/empresaModel.js')
+const CandidatoModel = require('../models/candidatoModel.js');
+const EmpresaModel = require('../models/empresaModel.js');
 
 class LoginController {
 
@@ -14,33 +15,33 @@ class LoginController {
 
             const lembreMe = req.body.lembreMe ? req.body.lembreMe : false;
 
+            const candidato = await CandidatoModel.loginInfo(email);
+
+            if(!await bcrypt.compare(senha, candidato.senha)) return res.status(401).json({ error: 'Credenciais inválidas.' });
+
             const tkn = req.cookies.token;
             if (tkn && validarCookieToken(tkn)) {
                 await TokenService.removerToken(tkn);
             }
 
-            const candidato = await CandidatoModel.buscarInfoDoTokenPorEmail(email);
+            const token = salvarCookieToken(res, candidato.id, 'candidato', candidato.nivel);
+            let expira_em = new Date(Date.now() + 60 * 60 * 1000);
+            if(lembreMe) {
+                salvarCookieRefreshToken(res, token);
+                expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+            };
 
-            if(candidato && await bcrypt.compare(senha, candidato.senha)){
-                const token = salvarCookieToken(res, candidato.id, 'candidato', candidato.nivel);
-                let expira_em = new Date(Date.now() + 60 * 60 * 1000);
-                if(lembreMe) {
-                    salvarCookieRefreshToken(res, token);
-                    expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-                };
+            await TokenService.adicionarToken(candidato.id, 'candidato', token, expira_em)
 
-                await TokenService.adicionarToken(candidato.id, 'candidato', token, expira_em)
-
-                res.status(200).json({ message: 'Logado com sucesso!' });
+            res.status(200).json({ message: 'Logado com sucesso!' });
+        } catch (erro) {
+            if (erro instanceof Erros.ErroDeValidacao){
+                return res.status(400).json({ error: erro.message })
             }
-            else{
-                res.status(401).json({ error: 'Credenciais inválidas.' });
+            if(erro.code==='P2025'){
+                return res.status(401).json({ error: 'Credenciais inválidas.' });
             }
-        } catch (error) {
-            if (error instanceof Erros.ErroDeValidacao){
-                return res.status(400).json({ error: error.message })
-            }
-            res.status(500).json({ error: 'Erro ao fazer login: ' + error.message });
+            res.status(500).json({ error: 'Erro ao fazer login: ' + erro.message });
         }
     }
 
@@ -54,25 +55,24 @@ class LoginController {
                 await TokenService.removerToken(tkn);
             }
 
-            const empresa = await EmpresaModel.buscarInfoDoTokenPorCnpj(cnpj);
-            if(empresa && await bcrypt.compare(senha, empresa.senha)){
-                const token = salvarCookieToken(res, empresa.cnpj, 'empresa', 'comum')
+            const empresa = await EmpresaModel.loginInfo(cnpj);
 
-                const expira_em = new Date(Date.now() + 60 * 60 * 1000);
-                await TokenService.adicionarToken(empresa.cnpj, 'empresa', token, expira_em);
+            if(!await bcrypt.compare(senha, empresa.senha)) return res.status(401).json({ error: 'Credenciais inválidas.' });
 
-                res.status(200).json({ message: 'Logado com sucesso!' });
-            }
-            else{
-                res.status(401).json({ error: 'Credenciais inválidas.' });
-            }
+            const token = salvarCookieToken(res, cnpj, 'empresa', 'comum')
+            const expira_em = new Date(Date.now() + 60 * 60 * 1000);
+            await TokenService.adicionarToken(cnpj, 'empresa', token, expira_em);
+
+            res.status(200).json({ message: 'Logado com sucesso!' });
         }
-        catch(error){
-            console.error(error);
-            if (error instanceof Erros.ErroDeValidacao){
-                return res.status(400).json({ error: error.message })
+        catch(erro){
+            if (erro instanceof Erros.ErroDeValidacao){
+                return res.status(400).json({ error: erro.message })
             }
-            res.status(500).json({ error: 'Erro ao fazer login: ' + error.message });
+            if(erro.code==='P2025'){
+                return res.status(401).json({ error: 'Credenciais inválidas.' });
+            }
+            res.status(500).json({ error: 'Erro ao fazer login: ' + erro.message });
         }
     }
 

@@ -1,3 +1,7 @@
+// * Prisma
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient();
+
 const pool = require('../config/db.js');
 
 class CandidatoModel{
@@ -38,21 +42,32 @@ class CandidatoModel{
         return resultado.rows[0];
     }
 
-    static async buscarTodosCandidatos(limit, offset){
-        const resultado = await pool.query(`SELECT 
-            id, nome, email, genero, data_nasc, 
-            descricao, cpf, estado, cidade, instagram,
-            github, youtube, twitter, pronomes, nivel,
-            data_criacao 
-            FROM candidatos
-            order by data_criacao desc limit $1 offset $2
-        `, [limit, offset]);
-        return resultado.rows;
+    static async buscarTodosCandidatos(limit = null, offset = null){
+        const configPrisma = {
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        }
+        if(limit) configPrisma.take = Number(limit);
+        if(offset) configPrisma.skip = Number(offset);
+        const resultado = await prisma.candidatos.findMany(configPrisma);
+        const resultadoSemSenha = resultado.map(({senha, ...resto}) => resto)
+
+        return resultadoSemSenha;
     }
 
-    static async buscarInfoDoTokenPorEmail(email){
-        const resultado = await pool.query('SELECT id, senha, nivel FROM candidatos WHERE email = $1', [email]);
-        return resultado.rows[0];
+    static async loginInfo(email){
+        const resultado = await prisma.candidatos.findUniqueOrThrow({
+            select: {
+                id: true,
+                senha: true,
+                nivel: true
+            },
+            where: {
+                email
+            }
+        })
+        return resultado;
     }
 
     static async buscarNivelPorId(id){
@@ -74,6 +89,16 @@ class CandidatoModel{
             SELECT estado FROM candidatos WHERE id = $1
         `,[id]);
         return resultado.rows[0].estado;
+    }
+
+    static async buscarCandidatoPorId(id){
+        const resultado = await prisma.candidatos.findUniqueOrThrow({
+            where: {
+                id
+            }
+        });
+        const {senha, ...resultadoSemSenha } = resultado;
+        return resultadoSemSenha;
     }
 
 }

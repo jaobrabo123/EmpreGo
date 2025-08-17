@@ -1,3 +1,7 @@
+// * Prisma
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
+
 const pool = require('../config/db.js');
 
 class EmpresaModel {
@@ -17,30 +21,39 @@ class EmpresaModel {
         return resultado.rowCount > 0;
     }
 
-    static async buscarTodasEmpresas(limit, offset){
-        const resultado = await pool.query(`
-            SELECT cnpj, nome_fant, telefone, email, razao_soci, cep, 
-            complemento, estado, cidade, numero, descricao, setor, porte, data_fund, 
-            contato, site, instagram, github, youtube, twitter,
-            data_criacao FROM empresas 
-            order by data_criacao desc limit $1 offset $2
-        `, [limit, offset]);
-        return resultado.rows;
+    static async buscarTodasEmpresas(limit=null, offset=null){
+        const configPrisma = {
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        }
+        if(limit) configPrisma.take = Number(limit);
+        if(offset) configPrisma.skip = Number(offset);
+        const resultado = await prisma.empresas.findMany(configPrisma)
+        const resultadoSemSenha = resultado.map(({ senha, ...resto }) => resto);
+        return resultadoSemSenha;
     }
 
-    static async buscarInfoDoTokenPorCnpj(cnpj){
-        const resultado = await pool.query(`
-            SELECT senha, cnpj FROM empresas WHERE cnpj = $1
-        `, [cnpj]);
-        return resultado.rows[0];
+    static async loginInfo(cnpj){
+        const resultado = await prisma.empresas.findUniqueOrThrow({
+            select: {
+                senha: true
+            },
+            where: {
+                cnpj
+            }
+        });
+        return resultado;
     }
 
-    static async buscarPerfilInfoPorCnpj(cnpj){
-        const resultado = await pool.query(`
-            SELECT nome_fant, telefone, cep, complemento, numero, descricao, setor, porte, data_fund, contato, site, instagram, github, youtube, twitter, foto
-            FROM empresas where cnpj = $1
-        `,[cnpj]);
-        return resultado.rows[0];
+    static async buscarEmpresaPorCnpj(cnpj){
+        const resultado = await prisma.empresas.findUniqueOrThrow({
+            where: {
+                cnpj
+            }
+        });
+        const { senha, ...resultadoSemSenha } = resultado;
+        return resultadoSemSenha;
     }
 
 }

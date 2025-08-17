@@ -65,7 +65,7 @@ class CandidatoController {
 
             const token = salvarCookieToken(res, novoId, 'candidato', 'comum');
             salvarCookieRefreshToken(res, token);
-            const expira_em = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+            const expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             await TokenService.adicionarToken(novoId, 'candidato', token, expira_em);
 
             res.status(201).json({ message: 'Email confirmado com sucesso.'});

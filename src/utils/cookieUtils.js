@@ -24,18 +24,18 @@ function salvarCookieToken(res, id, tipo, nivel){
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
-    maxAge: 30*24*60*60*1000
+    maxAge: 7*24*60*60*1000
   });
   return token;
 }
 
 function salvarCookieRefreshToken(res, acessToken){
-  const refreshToken = jwt.sign({ acessToken }, SECRET_KEY, { expiresIn: '30d' });
+  const refreshToken = jwt.sign({ acessToken }, SECRET_KEY, { expiresIn: '7d' });
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
-    maxAge: 30*24*60*60*1000
+    maxAge: 7*24*60*60*1000
   })
 }
 

@@ -45,7 +45,7 @@ async function authenticateToken(req, res, next) {
         token = salvarCookieToken(res, acessTokenDecoded.id, acessTokenDecoded.tipo, acessTokenDecoded.nivel);
         user = jwt.decode(token);
         salvarCookieRefreshToken(res, token);
-        const expira_em = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+        const expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
         await Promise.all([
           TokenService.adicionarToken(acessTokenDecoded.id, acessTokenDecoded.tipo, token, expira_em),
           TokenService.removerToken(acessToken)

@@ -26,7 +26,7 @@ class LoginController {
                 let expira_em = new Date(Date.now() + 60 * 60 * 1000);
                 if(lembreMe) {
                     salvarCookieRefreshToken(res, token);
-                    expira_em = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                    expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
                 };
 
                 await TokenService.adicionarToken(candidato.id, 'candidato', token, expira_em)

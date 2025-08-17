@@ -4,49 +4,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre | EmpreGo</title>
+    
+    <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/stylesSobre.css">
-    <title>Sobre</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#8B5CF6',
+                            600: '#7C3AED',
+                        },
+                        dark: {
+                            900: '#111827',
+                            800: '#1F2937',
+                            700: '#374151',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 3s ease infinite',
+                        'text-glitch': 'text-glitch 0.5s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(139, 92, 246, 0.5)' },
+                            '50%': { boxShadow: '0 0 20px rgba(139, 92, 246, 0.8)' },
+                        },
+                        'text-glitch': {
+                            '0%': { textShadow: '2px 0 #8B5CF6, -2px 0 #EC4899' },
+                            '25%': { textShadow: '-2px 0 #8B5CF6, 2px 0 #EC4899' },
+                            '50%': { textShadow: '2px 0 #EC4899, -2px 0 #8B5CF6' },
+                            '75%': { textShadow: '-2px 0 #EC4899, 2px 0 #8B5CF6' },
+                            '100%': { textShadow: '2px 0 #8B5CF6, -2px 0 #EC4899' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+<link rel="stylesheet" href="/css/stylesSobre.css">
 </head>
 
-<body>
-    <header>
-        <div id="logo">
-            <a href="/" target="_self">
-                <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg">
-            </a>
-            <a href="/" target="_self" id="nomedosite">Empre<span>Go</span></a>
+<body class="font-sans antialiased">
+    <!-- Header -->
+    <header class="fixed w-full bg-black bg-opacity-90 backdrop-blur-md z-50 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- glitch  -->
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center group" id="logo-container">
+                        <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" class="h-10 w-10 transition-transform group-hover:scale-110">
+                        <span class="ml-2 text-2xl font-bold group-hover:animate-text-glitch">
+                            Empre<span class="text-primary-500">Go</span>
+                        </span>
+                    </a>
+                </div>
 
+                <!-- Navegação -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Início</a>
+                    <a href="/#servicos" class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Serviços</a>
+                    <a href="/#testperfis" class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Biografias</a>
+                    <a href="/sobre" class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Sobre</a>
+                    <a href="/suporte" class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Suporte</a>
+                    <a href="/login" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center animate-pulse-glow">
+                        <i class='bx bx-log-in mr-2'></i> Login / Cadastrar
+                    </a>
+                </nav>
+
+                <!-- menu de celular -->
+                <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
+                    <i class='bx bx-menu text-3xl'></i>
+                </button>
+            </div>
+
+            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-4 pb-4">
+                <a href="/" class="block text-gray-300 hover:text-primary-400 transition-colors">Início</a>
+                <a href="/#servicos" class="block text-gray-300 hover:text-primary-400 transition-colors">Serviços</a>
+                <a href="/#testperfis" class="block text-gray-300 hover:text-primary-400 transition-colors">Biografias</a>
+                <a href="/sobre" class="block text-gray-300 hover:text-primary-400 transition-colors">Sobre</a>
+                <a href="/suporte" class="block text-gray-300 hover:text-primary-400 transition-colors">Suporte</a>
+                <a href="/login" class="block px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-center mt-4 animate-pulse-glow">
+                    Login / Cadastrar
+                </a>
+            </div>
         </div>
-        <nav class="links">
-            <a href="/">Inicio</a>
-            <a class="headerlink" href="/sobre" target="_self">Sobre</a>
-            <a class="headerlink" href="/suporte" target="_self">Suporte</a>
-            <a class="headerlink" href="/login" target="_self" id="loginOuCadas">Login / Cadastrar</a>
-            <a class="headerlink" href="/perfil/candidato" target="_self" style="display: none;" id="fotoPerfil"><img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
-            <a href="#" id="logout">Sair</a>
-        </nav>
     </header>
 
-    <div id="main">
-        <h1>Sobre</h1>
-        <div class="suporteText">
-            <p>Este website é dedicado a garantir uma rápida e accessível maneira de se filtrar entre possiveis
-                candidatos em busca de vagas de emprego para a empresa "DAREDE Serviços de TI"</p>
-            <p>O site foi desenvolvido por um grupo de 5 estudantes da escola técnica "SENAI", os quais participam da
-                turma de "Desenvolvimento de Sistemas", no Terceiro Ano do curso</p>
-            <p>Os alunos sendo "Mateus Ricardo Bitencourt Gomes", "João Pedro Souza", "João Pedro Azevedo", "Alec
-                Vinicius Souza Carvalho" e "Lucas -----"</p>
-            <p>Tudo graças a supervisão do educador "Wallace Oliveira dos Santos"</p>
-            <p>Caso ocorra algum problema ou seja encontrado um erro, não hesite em enviar um e-mail para
-                "gagagag@gmail.com", seu feedback é de extrema importância para nós!</p>
+    <main class="pt-32 pb-20 bg-grid-pattern min-h-screen">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto opacity-0" id="about-content">
+                <!-- Historia -->
+                <div class="mb-20">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center">
+                        <span class="text-gradient">Sobre</span> Nós
+                    </h1>
+                    
+                    <div class="bg-dark-900 rounded-xl p-8 shadow-lg border border-gray-800 mb-12">
+                        <p class="text-gray-400 mb-6">
+                            Este website é dedicado a garantir uma rápida e accessível maneira de se filtrar entre possiveis candidatos em busca de vagas de emprego para a empresa "DAREDE Serviços de TI".
+                        </p>
+                        
+                        <p class="text-gray-400 mb-6">
+                            O site foi desenvolvido por um grupo de 5 estudantes da escola técnica "SENAI", os quais participam da turma de "Desenvolvimento de Sistemas", no Terceiro Ano do curso.
+                        </p>
+                        
+                        <p class="text-gray-400">
+                            Caso ocorra algum problema ou seja encontrado um erro, não hesite em enviar um e-mail para "gagagag@gmail.com", seu feedback é de extrema importância para nós!
+                        </p>
+                    </div>
+                    
+                    <h2 class="text-3xl font-bold mb-8 text-center">
+                        Nossa <span class="text-gradient">Equipe</span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- membro 1 -->
+                        <div class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Alec Vinícius</h3>
+                            <p class="text-gray-400 mb-4">Desenvolvedor Front-end</p>
+                            <div class="flex items-center text-gray-500">
+                                <i class='bx bx-code-alt mr-2'></i>
+                                <span>HTML, CSS, tailwindcss, anime.js, JavaScript</span>
+                            </div>
+                        </div>
+                        
+                        <!-- membro 2 -->
+                        <div class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                            <h3 class="text-2xl font-bold text-primary-400 mb-2">João Pedro Azevedo</h3>
+                            <p class="text-gray-400 mb-4">Desenvolvedor Back-end</p>
+                            <div class="flex items-center text-gray-500">
+                                <i class='bx bx-server mr-2'></i>
+                                <span>Node.js, Axios, Banco de Dados</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Membro 3 -->
+                        <div class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Mateus Ricardo</h3>
+                            <p class="text-gray-400 mb-4">Designer</p>
+                            <div class="flex items-center text-gray-500">
+                                <i class='bx bx-palette mr-2'></i>
+                                <span>krita</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Membro 4 -->
+                        <div class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                            <h3 class="text-2xl font-bold text-primary-400 mb-2">João Souza</h3>
+                            <p class="text-gray-400 mb-4">Tester</p>
+                            <div class="flex items-center text-gray-500">
+                                <i class='bx bx-clipboard mr-2'></i>
+                                <span>testes, Documentação</span>
+                            </div>
+                        </div>
+                        
+                        <!-- membro 5 -->
+                        <div class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Lucas</h3>
+                            <p class="text-gray-400 mb-4">Influencer</p>
+                            <div class="flex items-center text-gray-500">
+                                <i class='bx bx-code-curly mr-2'></i>
+                                <span>Tiktok, Youtube, Instagram, X</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mentor -->
+                <div class="bg-dark-900 rounded-xl p-8 border border-gray-800">
+                    <h2 class="text-3xl font-bold mb-6 text-center">
+                        Nossos <span class="text-gradient">Mentores</span>
+                    </h2>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="w-24 h-24 rounded-full bg-primary-500 bg-opacity-20 flex items-center justify-center mb-6">
+                            <i class='bx bx-user text-4xl text-primary-400'></i>
+                        </div>
+                        
+                        <h3 class="text-2xl font-bold text-primary-400 mb-2">Wallace Oliveira dos Santos</h3>
+                        <p class="text-gray-400 mb-6">Educador e Orientador</p>
+                        
+                        <p class="text-gray-400 text-center max-w-2xl">
+                            Tudo graças a supervisão do educador "Wallace Oliveira dos Santos" que nos guiou e apoiou durante todo o desenvolvimento deste projeto.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <footer>&copy; EmpreGo</footer>
-    <!-- * SCRIPTS -->
+    <!-- Footer -->
+    <footer class="bg-dark-900 py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Coluna 1 -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" class="h-10 w-10">
+                        <span class="ml-2 text-2xl font-bold">
+                            Empre<span class="text-primary-500">Go</span>
+                        </span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        A mais nova plataforma para encontrar e divulgar trabalho no Brasil.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://x.com" class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-twitter text-xl'></i>
+                        </a>
+                        <a href="https://www.tiktok.com" class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-tiktok text-xl'></i>
+                        </a>
+                        <a href="https://www.instagram.com/" class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-instagram text-xl'></i>
+                        </a>
+                        <a href="https://www.youtube.com/" class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-youtube text-xl'></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- coluna 2 -->
+                <div>
+                    <h3 class="text-lg font--semibold text-white mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-primary-400 transition-colors">Início</a></li>
+                        <li><a href="#servicos" class="text-gray-400 hover:text-primary-400 transition-colors">Serviços</a></li>
+                        <li><a href="#testperfis" class="text-gray-400 hover:text-primary-400 transition-colors">Biografias</a></li>
+                        <li><a href="/sobre" class="text-gray-400 hover:text-primary-400 transition-colors">Sobre</a></li>
+                        <li><a href="/suporte" class="text-gray-400 hover:text-primary-400 transition-colors">Suporte</a></li>
+                    </ul>
+                </div>
+                
+                <!-- coluna 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Recursos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Termos de Serviço</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Coluna 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Contato</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#emprego.contato22@gmail.com" class="text-gray-400 cursor: pointer;"><i class='bx bx-envelope mr-2'></i> emprego.contato22@gmail.com</a></li>
+                        <li class="text-gray-400"><i class='bx bx-phone mr-2'></i> (XX) XXXX-XXXX</li>
+                        <li class="text-gray-400"><i class='bx bx-map mr-2'></i> Cidade, Estado - Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-500">
+                    &copy; 2023 EmpreGo. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 opacity-0 invisible transform hover:scale-110">
+        <i class='bx bx-chevron-up text-xl'></i>
+    </button>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="/js/link.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="/js/sobre.js"></script>
+
 </body>
 </html>

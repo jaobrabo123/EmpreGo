@@ -185,7 +185,7 @@ header > .container {
   align-items: center;
   flex: 1;
   max-width: 700px;
-  min-width: 250px;
+  min-width: 550px;
   background: var(--bg-light);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -252,6 +252,18 @@ header > .container {
   padding: 6px 10px;
   font-size: 1rem;
   transition: background 0.2s;
+}
+
+@media (min-width: 992px) {
+  .filter-dropdown-toggle .filter-label {
+    display: none;
+  }
+}
+
+@media (max-width: 992px) {
+  .filter-label {
+    display: none;
+  }
 }
 
 .filter-dropdown-toggle:hover {

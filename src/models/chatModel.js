@@ -2,28 +2,36 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient();
 
-const pool = require('../config/db.js');
-
 class ChatModel {
 
-    static async buscarChatsPorCandidato(cd){
-        const resultado = await pool.query(`
-            select id from chats where candidato = $1 
-        `, [cd]);
-        return resultado.rows;
+    static async buscarChatsPorCandidato(id){
+        const resultado = await prisma.chats.findMany({
+            select: {
+                id: true
+            },
+            where: {
+                candidato: id
+            }
+        })
+        return resultado;
     }
 
     static async buscarChatsPorEmpresa(cnpj){
-        const resultado = await pool.query(`
-            select id from chats where empresa = $1
-        `, [cnpj]);
-        return resultado.rows;
+        const resultado = await prisma.chats.findMany({
+            select: {
+                id: true
+            },
+            where: {
+                empresa: cnpj
+            }
+        })
+        return resultado;
     }
 
     static async buscarChatsInfo(id, tipo){
         const where = tipo==='candidato' ? { candidato: id } 
             : { empresa: id };
-        const resultado = prisma.chats.findMany({
+        const resultado = await prisma.chats.findMany({
             select: {
                 id: true,
                 empresa: true,

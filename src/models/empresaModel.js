@@ -2,23 +2,19 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-const pool = require('../config/db.js');
-
 class EmpresaModel {
 
     static async verificarEmpresaExistente(cnpj, email, razao_soci){
-        const resultado = await pool.query(
-            'SELECT 1 FROM empresas WHERE cnpj = $1 OR email = $2 OR razao_soci = $3',
-            [cnpj, email, razao_soci]
-        );
-        return resultado.rowCount > 0;
-    }
-
-    static async verificarCnpjExistente(cnpj){
-        const resultado = await pool.query(`
-            select 1 from empresas where cnpj = $1
-        `, [cnpj]);
-        return resultado.rowCount > 0;
+        const resultado = await prisma.empresas.count({
+            where: {
+                OR: [
+                    { cnpj },
+                    { email },
+                    { razao_soci }
+                ]
+            }
+        });
+        return resultado > 0;
     }
 
     static async buscarTodasEmpresas(limit=null, offset=null){

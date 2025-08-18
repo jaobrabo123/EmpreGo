@@ -39,7 +39,7 @@ class CandidatoService{
 
     const candidato = await CandidatoModel.buscarCodigoECandidatoPendentePorEmail(email);
 
-    if(!candidato || !await bcrypt.compare(String(codigo), candidato.codigo)) throw new Erros.ErroDeNaoEncontrado("Código inválido ou expirado.");
+    if(!await bcrypt.compare(String(codigo), candidato.codigo)) throw new Erros.ErroDeValidacao("Código inválido ou expirado.");
 
     const result = await pool.query(`insert into candidatos (nome, email, senha, genero, data_nasc) values ($1, $2, $3, $4, $5) returning id`,
       [candidato.nome, email, candidato.senha, candidato.genero, candidato.data_nasc]

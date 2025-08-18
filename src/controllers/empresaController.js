@@ -40,7 +40,7 @@ class EmpresaController{
 
     static async listarTodas(req, res){
         try {
-            const empresas = EmpresaModel.buscarTodasEmpresas(req.query.limit, req.query.offset);
+            const empresas = await EmpresaModel.buscarTodasEmpresas(req.query.limit, req.query.offset);
             res.status(200).json(empresas);
         } catch (erro) {
             res.status(500).json({ error: `Erro ao buscar empresas: ${erro?.message || "erro desconhecido"}` });

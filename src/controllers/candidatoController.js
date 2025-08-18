@@ -72,8 +72,8 @@ class CandidatoController {
             res.status(201).json({ message: 'Email confirmado com sucesso.'});
         }
         catch(erro){
-            if(erro instanceof Erros.ErroDeNaoEncontrado){
-                return res.status(404).json({ error: erro.message });
+            if(erro.code==='P2025'){
+                return res.status(404).json({ error: "Email fornecido não está aguardando confirmação." });
             }
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });

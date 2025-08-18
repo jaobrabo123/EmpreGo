@@ -1,4 +1,6 @@
-const pool = require("../config/db.js");
+// * Prisma
+const prisma = require('../config/prisma.js');
+
 const TagModel = require("../models/tagModel.js");
 const { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");
 const ValidarCampos = require('../utils/validarCampos.js');
@@ -10,8 +12,13 @@ class TagService {
     ValidarCampos.validarTamanhoMax(nome, 25, 'Tag');
     nome = nome.trim();
 
-    const idTag = await pool.query(`INSERT INTO tags (nome, candidato) VALUES ($1, $2) returning id`, [ nome, id, ]);
-    return idTag.rows[0].id;
+    const idTag = await prisma.tags.create({
+      data: {
+        nome,
+        candidato: id
+      }
+    });
+    return idTag.id;
   }
 
   static async removerTag(tg, id, nivel) {
@@ -29,7 +36,11 @@ class TagService {
       throw new ErroDeAutorizacao("A tag só pode ser removida pelo dono dela.");
     }
 
-    await pool.query(`delete from tags where id = $1`, [tg]);
+    await prisma.tags.delete({
+      where: {
+        id: tg
+      }
+    })
   }
 
 }

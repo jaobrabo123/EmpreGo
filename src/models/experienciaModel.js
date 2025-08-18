@@ -1,14 +1,18 @@
 // * Prisma
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient();
-
-const pool = require('../config/db.js');
+const prisma = require('../config/prisma.js')
 
 class ExperienciaModel {
 
-    static async buscarCandidatoPorExperienciaId(xp){
-        const resultado = await pool.query(`select candidato from experiencias where id = $1`, [xp]);
-        return resultado.rows[0].candidato;
+    static async buscarCandidatoPorExperienciaId(id){
+        const resultado = await prisma.experiencias.findUnique({
+            select: {
+                candidato: true
+            },
+            where: {
+                id
+            }
+        })
+        return resultado.candidato;
     }
 
     static async buscarExperienciasPorCandidatoId(id){

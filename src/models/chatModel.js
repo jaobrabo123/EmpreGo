@@ -1,6 +1,5 @@
 // * Prisma
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient();
+const prisma = require('../config/prisma.js')
 
 class ChatModel {
 

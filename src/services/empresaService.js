@@ -1,5 +1,7 @@
+// * Prisma
+const prisma = require('../config/prisma.js');
+
 const bcrypt = require("bcrypt");
-const pool = require('../config/db.js');
 const Erros = require('../utils/erroClasses.js');
 const ValidarCampos = require('../utils/validarCampos.js');
 const EmpresaModel = require("../models/empresaModel.js");
@@ -34,12 +36,23 @@ class EmpresaService{
 
     const senhaCripitografada = await bcrypt.hash(senha, 10);
 
-    await pool.query(
-      `INSERT INTO empresas 
-      (cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero, estado, cidade) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-      [cnpj, nome_fant, telefone, email, senhaCripitografada, razao_soci, cep, complemento, num, estado, cidade]
-    );
+    if(complemento==='') complemento = null;
+
+    await prisma.empresas.create({
+      data: {
+        cnpj,
+        nome_fant,
+        telefone,
+        email,
+        senha: senhaCripitografada,
+        razao_soci,
+        cep,
+        complemento,
+        numero: num,
+        estado,
+        cidade
+      }
+    });
 
   }
 
@@ -120,9 +133,15 @@ class EmpresaService{
       }
     }
 
-    const inserts = atributos.map((atri, index) => `${atri} = $${index + 1}`).join(", ");
-
-    await pool.query(`update empresas set ${inserts} where cnpj = $${atributos.length + 1}`, [...valores, cnpj]);
+    const data = Object.fromEntries(
+      atributos.map((atri, index)=>[atri,valores[index]])
+    );
+    await prisma.empresas.update({
+      where: {
+        cnpj
+      },
+      data
+    });
   }
 
   static async removerEmpresa(em, id, nivel){
@@ -130,26 +149,17 @@ class EmpresaService{
       throw new Erros.ErroDeValidacao('Campos faltando para a remoção.')
     }
 
-    em = Number(em);
+    //em = Number(em);
 
     if(nivel!=='admin'&& em!==id){
       throw new Erros.ErroDeAutorizacao("Apenas a própria empresa pode se remover.");
     }
 
-    const chatsEmpresa = await ChatModel.buscarChatsPorEmpresa(em);
-    await Promise.all(
-      chatsEmpresa.map(chat => 
-        pool.query(`delete from mensagens where chat = $1`, [chat.id])
-      )
-    )
-
-    await Promise.all([
-      pool.query(`delete from tokens where empresa_cnpj = $1`, [em]),
-      pool.query(`delete from chats where empresa = $1`, [em])
-    ])
-
-    const empresa = await pool.query(`delete from empresas where cnpj = $1`, [em]);
-    if(empresa.rowCount===0) throw new Erros.ErroDeNaoEncontrado('Empresa fornecida não existe.');
+    await prisma.empresas.delete({
+      where: {
+        cnpj: em
+      }
+    });
 
   }
 

@@ -1,11 +1,13 @@
 // * Prisma
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const prisma = require('../config/prisma.js')
 
 class EmpresaModel {
 
-    static async verificarEmpresaExistente(cnpj, email, razao_soci){
-        const resultado = await prisma.empresas.count({
+    /*static async verificarEmpresaExistente(cnpj, email, razao_soci){
+        const resultado = await prisma.empresas.findFirst({
+            select: {
+                cnpj: true
+            },
             where: {
                 OR: [
                     { cnpj },
@@ -14,8 +16,8 @@ class EmpresaModel {
                 ]
             }
         });
-        return resultado > 0;
-    }
+        return !!resultado;
+    }*/
 
     static async buscarTodasEmpresas(limit=null, offset=null){
         const configPrisma = {

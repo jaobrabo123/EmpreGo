@@ -1,12 +1,18 @@
-const pool = require('../config/db.js')
+// * Prisma
+const prisma = require('../config/prisma.js')
 
 class TokenModel{
 
     static async verificarTokenExistente(tkn){
-        const resultado = await pool.query(`
-            SELECT 1 FROM tokens WHERE token = $1
-        `, [tkn]);
-        return resultado.rowCount>0;
+        const resultado = await prisma.tokens.findFirst({
+            select: {
+                id: true
+            },
+            where: {
+                token: tkn
+            }
+        })
+        return !!resultado;
     }
     
 }

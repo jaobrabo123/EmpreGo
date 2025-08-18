@@ -68,7 +68,7 @@
 
 <body class="font-sans antialiased ">
     <!-- Header -->
-    <header class="fixed w-full bg-black bg-opacity-90 backdrop-blur-md z-50 border-b border-gray-800">
+    <header class="fixed w-full bg-black bg-opacity-90 backdrop-blur-md z-20 border-b border-gray-800">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <!-- Efeito de glitch -->
@@ -83,7 +83,7 @@
                 </div>
 
                 <!-- Naveção  -->
-                <nav class="hidden md:flex items-center space-x-8">
+                <nav class="links hidden md:flex items-center space-x-8">
                     <a href="#home"
                         class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Início</a>
                     <a href="#servicos"
@@ -94,10 +94,25 @@
                         class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Sobre</a>
                     <a href="/suporte"
                         class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Suporte</a>
+
+                    <!-- Login / Cadastrar -->
                     <a href="/login"
-                        class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center animate-pulse-glow">
+                        class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center animate-pulse-glow"
+                        id="loginOuCadas">
                         <i class='bx bx-log-in mr-2'></i> Login / Cadastrar
                     </a>
+
+                    <!-- Foto de Perfil (inicialmente oculta) -->
+                    <a href="/perfil/candidato"
+                        class="rounded-full overflow-hidden w-10 h-10 border-2 border-primary-500"
+                        style="display: none;" id="fotoPerfil">
+                        <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"
+                            class="w-full h-full object-cover">
+                    </a>
+
+                    <!-- Botão de Logout (inicialmente oculto) -->
+                    <a href="#" class="text-gray-300 hover:text-primary-400 transition-colors" style="display: none;"
+                        id="logout">Sair</a>
                 </nav>
 
                 <!-- Mobile Menu Button -->
@@ -114,16 +129,31 @@
                     class="block text-gray-300 hover:text-primary-400 transition-colors">Biografias</a>
                 <a href="/sobre" class="block text-gray-300 hover:text-primary-400 transition-colors">Sobre</a>
                 <a href="/suporte" class="block text-gray-300 hover:text-primary-400 transition-colors">Suporte</a>
+
+                <!-- Login / Cadastrar -->
                 <a href="/login"
-                    class="block px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-center mt-4 animate-pulse-glow">
+                    class="block px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-center animate-pulse-glow"
+                    id="mobileLoginOuCadas">
                     Login / Cadastrar
                 </a>
+
+                <!-- Foto de Perfil (inicialmente oculta) -->
+                <a href="/perfil/candidato"
+                    class="block w-12 h-12 mx-auto rounded-full overflow-hidden border-2 border-primary-500"
+                    style="display: none;" id="mobileFotoPerfil">
+                    <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="mobileFotoPerfilImg"
+                        class="w-full h-full object-cover">
+                </a>
+
+                <!-- Botão de Logout (inicialmente oculto) -->
+                <a href="#" class="block text-gray-300 hover:text-primary-400 text-center transition-colors"
+                    style="display: none;" id="mobileLogout">Sair</a>
             </div>
         </div>
     </header>
 
     <section id="home" class="min-h-screen flex items-center pt-20 bg-grid-pattern relative overflow-hidden">
-        
+
         <!-- particulas de fundo -->
         <div id="particles-js" class="fixed inset-0 z-0"></div>
 
@@ -196,11 +226,11 @@
 
     <!-- Serviços -->
     <section id="servicos" class="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
-        
+
         <div class="absolute top-0 left-0 w-full h-full opacity-5 bg-grid-pattern"></div>
 
         <!-- Canvas para partículas -->
-         
+
         <canvas id="particles" class="absolute inset-0 z-0"></canvas>
 
         <!-- particulas flutuando -->
@@ -266,7 +296,10 @@
                             <h3 class="text-2xl font-bold text-primary-400 mb-2">Info Extra</h3>
                             <p class="text-gray-400">
                                 Caso ocorra algum problema ou seja encontrado um erro, não hesite em enviar um e-mail
-                                para "QUALEMAIL?@gmail.com", seu feedback é de extrema importância para nós! Cheque
+                                para <a
+                                    href="mailto:emprego.contato22@gmail.com?subject=Contato&body=Olá,%20gostaria%20de%20mais%20informações"
+                                    class="text-gray-400 hover:text-primary-400 transition-colors">"emprego.contato22@gmail.com"</a>,
+                                seu feedback é de extrema importância para nós! Cheque
                                 também o suporte para mais informações.
                             </p>
                         </div>
@@ -498,8 +531,9 @@
                 <div>
                     <h3 class="text-lg font-semibold text-white mb-4">Contato</h3>
                     <ul class="space-y-2">
-                        <li><a href="#emprego.contato22@gmail.com" class="text-gray-400 cursor: pointer;"><i
-                                    class='bx bx-envelope mr-2'></i> emprego.contato22@gmail.com</a></li>
+                        <li><a href="mailto:emprego.contato22@gmail.com?subject=Contato&body=Olá,%20gostaria%20de%20mais%20informações"
+                                class="text-gray-400 cursor: pointer;"><i class='bx bx-envelope mr-2'></i>
+                                emprego.contato22@gmail.com</a></li>
                         <li class="text-gray-400"><i class='bx bx-phone mr-2'></i> (XX) XXXX-XXXX</li>
                         <li class="text-gray-400"><i class='bx bx-map mr-2'></i> Cidade, Estado - Brasil</li>
                     </ul>
@@ -514,9 +548,9 @@
         </div>
     </footer>
 
-    <!-- botão de sair -->
+    <!-- botão de topo -->
     <button id="back-to-top"
-        class="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 opacity-0 invisible transform hover:scale-110">
+        class="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 opacity-0 invisible transform hover:scale-110 z-[9999]">
         <i class='bx bx-chevron-up text-xl'></i>
     </button>
 

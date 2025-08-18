@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model candidatos {
+  id           Int            @id @default(autoincrement())
+  nome         String         @db.VarChar(100)
+  email        String         @unique @db.VarChar(254)
+  senha        String
+  genero       String         @db.VarChar(30)
+  data_nasc    DateTime       @db.Date
+  foto         String?        @default("/assets/imgs/genPfp.png")
+  descricao    String?        @default("Sua descrição")
+  cpf          String?        @unique(map: "candidatos_cpf_idx")
+  estado       String?
+  cidade       String?
+  instagram    String?
+  github       String?
+  youtube      String?
+  twitter      String?
+  pronomes     String?
+  data_criacao DateTime?      @default(now()) @db.Timestamptz(6)
+  nivel        String         @default("comum") @db.VarChar(10)
+  chats        chats[]
+  experiencias experiencias[]
+  tags         tags[]
+  tokens       tokens[]
+}
+
+model candidatos_pend {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  email     String    @unique
+  senha     String
+  genero    String
+  data_nasc DateTime  @db.Date
+  confirmed Boolean?  @default(false)
+  criado_em DateTime? @default(now()) @db.Timestamptz(6)
+  codigo    String    @unique(map: "codigo_unico_candidatos_pend")
+  expira_em DateTime  @db.Timestamptz(6)
+}
+
+model chats {
+  id           Int         @id @default(autoincrement())
+  empresa      String
+  candidato    Int
+  data_criacao DateTime?   @default(now()) @db.Timestamptz(6)
+  candidatos   candidatos  @relation(fields: [candidato], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  empresas     empresas    @relation(fields: [empresa], references: [cnpj], onDelete: NoAction, onUpdate: NoAction)
+  mensagens    mensagens[]
+}
+
+model empresas {
+  cnpj         String    @id
+  nome_fant    String
+  telefone     String
+  email        String    @unique
+  senha        String
+  razao_soci   String    @unique
+  cep          String
+  complemento  String?
+  numero       String
+  descricao    String?
+  setor        String?
+  porte        String?
+  data_fund    DateTime? @db.Date
+  contato      String?
+  site         String?
+  instagram    String?
+  github       String?
+  youtube      String?
+  twitter      String?
+  foto         String?   @default("../assets/imgs/genPfp.png")
+  data_criacao DateTime? @default(now()) @db.Timestamptz(6)
+  estado       String    @db.Char(2)
+  cidade       String    @db.VarChar(25)
+  chats        chats[]
+  tokens       tokens[]
+}
+
+model experiencias {
+  id           Int        @id @default(autoincrement())
+  titulo       String
+  descricao    String
+  imagem       String?    @default("../assets/imgs/SalsaHire.png")
+  data_criacao DateTime?  @default(now()) @db.Timestamptz(6)
+  candidato    Int
+  candidatos   candidatos @relation(fields: [candidato], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model mensagens {
+  id           Int       @id @default(autoincrement())
+  mensagem     String
+  de           String
+  status       Boolean?  @default(false)
+  data_criacao DateTime? @default(now()) @db.Timestamptz(6)
+  chat         Int?
+  autor        String
+  chats        chats?    @relation(fields: [chat], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tags {
+  id           Int        @id @default(autoincrement())
+  nome         String
+  data_criacao DateTime?  @default(now()) @db.Timestamptz(6)
+  candidato    Int
+  candidatos   candidatos @relation(fields: [candidato], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tokens {
+  id           Int         @id @default(autoincrement())
+  candidato_id Int?
+  empresa_cnpj String?     @db.Char(14)
+  tipo         String      @db.VarChar(10)
+  token        String
+  data_criacao DateTime?   @default(now()) @db.Timestamp(6)
+  expira_em    DateTime    @db.Timestamp(6)
+  candidatos   candidatos? @relation(fields: [candidato_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  empresas     empresas?   @relation(fields: [empresa_cnpj], references: [cnpj], onDelete: NoAction, onUpdate: NoAction)
+}

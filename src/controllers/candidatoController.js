@@ -1,11 +1,12 @@
-const CandidatoModel = require('../models/candidatoModel.js');
+// * Imports
 const CandidatoService = require("../services/candidatoService.js");
+const CandidatoModel = require('../models/candidatoModel.js');
 const Erros = require("../utils/erroClasses.js");
 const TokenService = require('../services/tokenService.js');
 const { salvarCookieToken, validarCookieToken, salvarCookieRefreshToken } = require('../utils/cookieUtils.js');
-
 const transporter = require('../config/nodemailer.js');
 
+// * Variáveis de ambiente
 const EMAIL_SERVER = process.env.EMAIL;
 
 class CandidatoController {
@@ -71,8 +72,8 @@ class CandidatoController {
             res.status(201).json({ message: 'Email confirmado com sucesso.'});
         }
         catch(erro){
-            if(erro instanceof Erros.ErroDeNaoEncontrado){
-                return res.status(404).json({ error: erro.message });
+            if(erro.code==='P2025'){
+                return res.status(404).json({ error: "Email fornecido não está aguardando confirmação." });
             }
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
@@ -111,10 +112,7 @@ class CandidatoController {
 
     static async listarTodos(req, res){
         try {
-            const limit = req.query.limit ? parseInt(req.query.limit) : null;
-            const offset = req.query.offset ? parseInt(req.query.offset) : 0;
-            const candidatos = await CandidatoModel.buscarTodosCandidatos(limit, offset);
-
+            const candidatos = await CandidatoModel.buscarTodosCandidatos(req.query.limit, req.query.offset);
             res.status(200).json(candidatos);
         } catch (erro) {
             res.status(500).json({ error: `Erro ao buscar usuários: ${erro?.message || "erro desconhecido"}` });

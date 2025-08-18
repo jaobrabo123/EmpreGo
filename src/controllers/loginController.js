@@ -93,6 +93,7 @@ class LoginController {
             if (erro instanceof Erros.ErroDeValidacao){
                 return res.status(400).json({ error: erro.message })
             }
+            console.error(erro)
             res.status(500).json({ error: 'Erro ao remover token: ' + erro.message})
         }
     }

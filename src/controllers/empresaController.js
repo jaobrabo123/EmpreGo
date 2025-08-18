@@ -56,14 +56,15 @@ class EmpresaController{
 
             res.status(200).json({ message: "Empresa removida com sucesso" });
         } catch (erro) {
+            console.error(erro)
             if (erro instanceof Erros.ErroDeAutorizacao) {
                 return res.status(403).json({ error: erro.message });
             }
             if (erro instanceof Erros.ErroDeValidacao){
                 return res.status(400).json({ error: erro.message });
             }
-            if (erro instanceof Erros.ErroDeNaoEncontrado){
-                return res.status(404).json({ error: erro.message });
+            if (erro.code==='P2025'){
+                return res.status(404).json({ error: 'Empresa fornecida não existe.' });
             }
             res.status(500).json({ error: erro.message });
         }

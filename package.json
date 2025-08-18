@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "prisma generate"
   },
   "author": "João Pedro Azevedo, João Pedro Souza, Alec Vinícius, Mateus Ricardo e Lucas",
   "license": "ISC",

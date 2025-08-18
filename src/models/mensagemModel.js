@@ -1,14 +1,30 @@
-const pool = require('../config/db.js');
+// * Prisma
+const prisma = require('../config/prisma.js')
 
 class MensagemModel {
 
     static async buscarMensagensPorChat(chat){
-        const resultado = await pool.query(`select autor as author, mensagem as message, chat as room, de as type from mensagens 
-            where chat = $1
-            order by data_criacao asc`,
-            [chat]
-        );
-        return resultado.rows;
+        const resultado = await prisma.mensagens.findMany({
+            select: {
+                autor: true,
+                mensagem: true,
+                chat: true,
+                de: true
+            },
+            where: {
+                chat
+            },
+            orderBy: {
+                data_criacao: 'asc'
+            }
+        });
+        const resultadoComAs = resultado.map(msg=>({
+            author: msg.autor,
+            message: msg.mensagem,
+            room: msg.chat,
+            type: msg.de
+        }));
+        return resultadoComAs;
     }
 
 }

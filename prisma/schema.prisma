@@ -50,8 +50,8 @@ model chats {
   empresa      String
   candidato    Int
   data_criacao DateTime?   @default(now()) @db.Timestamptz(6)
-  candidatos   candidatos  @relation(fields: [candidato], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  empresas     empresas    @relation(fields: [empresa], references: [cnpj], onDelete: NoAction, onUpdate: NoAction)
+  candidatos   candidatos  @relation(fields: [candidato], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  empresas     empresas    @relation(fields: [empresa], references: [cnpj], onDelete: Cascade, onUpdate: NoAction)
   mensagens    mensagens[]
 }
 
@@ -90,7 +90,7 @@ model experiencias {
   imagem       String?    @default("../assets/imgs/SalsaHire.png")
   data_criacao DateTime?  @default(now()) @db.Timestamptz(6)
   candidato    Int
-  candidatos   candidatos @relation(fields: [candidato], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  candidatos   candidatos @relation(fields: [candidato], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model mensagens {
@@ -101,7 +101,7 @@ model mensagens {
   data_criacao DateTime? @default(now()) @db.Timestamptz(6)
   chat         Int?
   autor        String
-  chats        chats?    @relation(fields: [chat], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  chats        chats?    @relation(fields: [chat], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model tags {
@@ -109,7 +109,7 @@ model tags {
   nome         String
   data_criacao DateTime?  @default(now()) @db.Timestamptz(6)
   candidato    Int
-  candidatos   candidatos @relation(fields: [candidato], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  candidatos   candidatos @relation(fields: [candidato], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model tokens {
@@ -117,9 +117,9 @@ model tokens {
   candidato_id Int?
   empresa_cnpj String?     @db.Char(14)
   tipo         String      @db.VarChar(10)
-  token        String
+  token        String      @unique(map: "token_unico")
   data_criacao DateTime?   @default(now()) @db.Timestamp(6)
   expira_em    DateTime    @db.Timestamp(6)
-  candidatos   candidatos? @relation(fields: [candidato_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  empresas     empresas?   @relation(fields: [empresa_cnpj], references: [cnpj], onDelete: NoAction, onUpdate: NoAction)
+  candidatos   candidatos? @relation(fields: [candidato_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  empresas     empresas?   @relation(fields: [empresa_cnpj], references: [cnpj], onDelete: Cascade, onUpdate: NoAction)
 }

@@ -1,16 +1,18 @@
 // * Prisma
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient();
+const prisma = require('../config/prisma.js')
 
 class CandidatoModel{
 
     static async verificarEmailExistente(email){
-        const resultado = await prisma.candidatos.count({
+        const resultado = await prisma.candidatos.findUnique({
+            select :{
+                id: true
+            },
             where: {
                 email
             }
         });
-        return resultado > 0;
+        return !!resultado;
     }
 
     static async buscarCodigoECandidatoPendentePorEmail(email){

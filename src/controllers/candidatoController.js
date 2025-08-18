@@ -89,7 +89,6 @@ class CandidatoController {
             if(!email) return res.status(400).json({ error: 'Email precisa ser fornecido.' });
 
             const codigo = await CandidatoService.gerarNovoCodigoPendente(email);
-            if(!codigo) return res.status(404).json({ error: 'Email fornecido não está aguardando confirmação.'});
 
             const emailOptions = {
                 from: EMAIL_SERVER,
@@ -103,6 +102,9 @@ class CandidatoController {
             res.status(200).json({ message: 'Reenvio realizado com sucesso.'})
         }
         catch(erro){
+            if(erro.code==='P2025'){
+                return res.status(404).json({ error: 'Email fornecido não está aguardando confirmação.' });
+            }
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
@@ -134,8 +136,8 @@ class CandidatoController {
             if (erro instanceof Erros.ErroDeValidacao){
                 return res.status(400).json({ error: erro.message })
             }
-            if(erro instanceof Erros.ErroDeNaoEncontrado){
-                return res.status(404).json({ error: erro.message });
+            if(erro.code==='P2025'){
+                return res.status(404).json({ error: "Candidato fornecido não existe." });
             }
             res.status(500).json({ error: erro.message });
         }

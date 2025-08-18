@@ -1,4 +1,7 @@
-const pool = require('../config/db.js');
+
+// * Prisma
+const prisma = require('../config/prisma.js');
+
 const {ErroDeValidacao, ErroDeAutorizacao} = require('../utils/erroClasses.js');
 const ValidarCampos = require('../utils/validarCampos.js');
 const ExperienciaModel = require('../models/experienciaModel.js')
@@ -16,9 +19,15 @@ class ExperienciaService {
     titulo = titulo.trim();
     descricao = descricao.trim();   
 
-    await pool.query(`INSERT INTO experiencias (titulo, descricao, imagem, candidato) VALUES ($1, $2, $3, $4)`,
-      [titulo, descricao, imagem, id]
-    );
+    await prisma.experiencias.create({
+      data: {
+        titulo,
+        descricao,
+        imagem,
+        candidato: id
+      }
+    });
+
   }
 
   static async removerExperiencia(xp, id, nivel){
@@ -30,13 +39,17 @@ class ExperienciaService {
 
     if (!candidato) {
       throw new ErroDeValidacao("Experiência não encontrada.");
-    }
+    };
 
     if (nivel !== "admin" && id !== candidato) {
       throw new ErroDeAutorizacao("A experiência só pode ser removida pelo dono dela.");
-    }
+    };
 
-    await pool.query(`delete from experiencias where id = $1`, [xp]);
+    await prisma.experiencias.delete({
+      where: {
+        id: xp
+      }
+    });
   }
 
 }

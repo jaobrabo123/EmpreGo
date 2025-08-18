@@ -1,3 +1,7 @@
+// * Prisma
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient();
+
 const pool = require('../config/db.js');
 
 class ExperienciaModel {
@@ -7,24 +11,45 @@ class ExperienciaModel {
         return resultado.rows[0].candidato;
     }
 
-    static async buscarExperienciasPorCandidatoId(cd){
-        const resultado = await pool.query(`
-            SELECT e.titulo, e.descricao, e.imagem
-            FROM experiencias e
-            JOIN candidatos c ON e.candidato = c.id
-            WHERE e.candidato = $1
-            ORDER BY e.data_criacao DESC
-        `, [cd]);
-        return resultado.rows;
+    static async buscarExperienciasPorCandidatoId(id){
+        const resultado = await prisma.experiencias.findMany({
+            select:{
+                titulo: true,
+                descricao: true,
+                imagem: true
+            },
+            where: {
+                candidato: id
+            },
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        });
+        return resultado;
     }
 
     static async buscarTodasExperiencias(){
-        const resultado = await pool.query(`
-            select e.id, e.titulo, e.descricao, c.email as email_candidato, e.data_criacao
-            from experiencias e join candidatos c 
-            on e.candidato = c.id
-        `);
-        return resultado.rows;
+        const resultado = await prisma.experiencias.findMany({
+            select: {
+                id: true,
+                titulo: true,
+                descricao: true,
+                data_criacao: true,
+                candidatos: {
+                    select: {
+                        email: true
+                    }
+                }
+            }
+        });
+        const resultadoEmailComAS = resultado.map(exp=>({
+            id: exp.id,
+            titulo: exp.titulo,
+            descricao: exp.descricao,
+            data_criacao: exp.data_criacao,
+            email_candidato: exp.candidatos.email
+        }))
+        return resultadoEmailComAS;
     }
 
 }

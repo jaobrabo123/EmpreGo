@@ -1,4 +1,3 @@
-
 const EmpresaModel = require('../models/empresaModel.js');
 const EmpresaService = require('../services/empresaService.js');
 const Erros = require('../utils/erroClasses.js');
@@ -41,10 +40,7 @@ class EmpresaController{
 
     static async listarTodas(req, res){
         try {
-            const limit = req.query.limit ? parseInt(req.query.limit) : null;
-            const offset = req.query.offset ? parseInt(req.query.offset) : 0;
-            const empresas = await EmpresaModel.buscarTodasEmpresas(limit, offset);
-
+            const empresas = await EmpresaModel.buscarTodasEmpresas(req.query.limit, req.query.offset);
             res.status(200).json(empresas);
         } catch (erro) {
             res.status(500).json({ error: `Erro ao buscar empresas: ${erro?.message || "erro desconhecido"}` });

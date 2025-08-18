@@ -1,79 +1,97 @@
-const pool = require('../config/db.js');
+// * Prisma
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient();
 
 class CandidatoModel{
 
     static async verificarEmailExistente(email){
-        const resultado = await pool.query(`
-            select 1 from candidatos where email = $1
-        `, [email]);
-        return resultado.rowCount > 0;
-    }
-    
-    static async verificarEmailPendente(email){
-        const resultado = await pool.query(`
-            select 1 from candidatos_pend where email = $1
-        `, [email]);
-        return resultado.rowCount > 0;
-    }
-
-    static async verificarIdExistente(id){
-        const resultado = await pool.query(`
-            select 1 from candidatos where id = $1
-        `, [id]);
-        return resultado.rowCount > 0;
-    }
-
-    static async verificarCpfExistente(cpf){
-        const resultado = await pool.query(`
-            select 1 from candidatos where cpf = $1
-        `, [cpf]);
-        return resultado.rowCount > 0;
+        const resultado = await prisma.candidatos.count({
+            where: {
+                email
+            }
+        });
+        return resultado > 0;
     }
 
     static async buscarCodigoECandidatoPendentePorEmail(email){
-        const resultado = await pool.query(`
-            select nome, senha, genero, data_nasc, codigo from candidatos_pend 
-            where email = $1 and expira_em > now()
-        `, [email]);
-        return resultado.rows[0];
+        const resultado = await prisma.candidatos_pend.findUniqueOrThrow({
+            select:{
+                nome: true,
+                senha: true,
+                genero: true,
+                data_nasc: true,
+                codigo: true
+            },
+            where: {
+                email,
+                expira_em: {
+                    gt: new Date()
+                }
+            }
+        })
+        return resultado;
     }
 
-    static async buscarTodosCandidatos(limit, offset){
-        const resultado = await pool.query(`SELECT 
-            id, nome, email, genero, data_nasc, 
-            descricao, cpf, estado, cidade, instagram,
-            github, youtube, twitter, pronomes, nivel,
-            data_criacao 
-            FROM candidatos
-            order by data_criacao desc limit $1 offset $2
-        `, [limit, offset]);
-        return resultado.rows;
+    static async buscarTodosCandidatos(limit = null, offset = null){
+        const configPrisma = {
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        };
+        if(limit) configPrisma.take = Number(limit);
+        if(offset) configPrisma.skip = Number(offset);
+        const resultado = await prisma.candidatos.findMany(configPrisma);
+        const resultadoSemSenha = resultado.map(({senha, ...resto}) => resto)
+
+        return resultadoSemSenha;
     }
 
-    static async buscarInfoDoTokenPorEmail(email){
-        const resultado = await pool.query('SELECT id, senha, nivel FROM candidatos WHERE email = $1', [email]);
-        return resultado.rows[0];
+    static async loginInfo(email){
+        const resultado = await prisma.candidatos.findUniqueOrThrow({
+            select: {
+                id: true,
+                senha: true,
+                nivel: true
+            },
+            where: {
+                email
+            }
+        });
+        return resultado;
     }
 
     static async buscarNivelPorId(id){
-        const resultado = await pool.query('select nivel from candidatos where id = $1',[id]);
-        return resultado.rows[0].nivel;
-    }
-
-    static async buscarPerfilInfoPorId(id){
-        const resultado = await pool.query(`
-            SELECT nome, data_nasc, email, descricao, foto, cpf, 
-            estado, cidade, instagram, github, youtube, twitter, pronomes
-            FROM candidatos where id = $1
-        `, [id]);
-        return resultado.rows[0];
+        const resultado = await prisma.candidatos.findUnique({
+            select: {
+                nivel: true
+            },
+            where: {
+                id
+            }
+        });
+        return resultado.nivel;
     }
 
     static async buscarEstadoPorId(id){
-        const resultado = await pool.query(`
-            SELECT estado FROM candidatos WHERE id = $1
-        `,[id]);
-        return resultado.rows[0].estado;
+        const resultado = await prisma.candidatos.findUnique({
+            select: {
+                estado: true
+            },
+            where: {
+                id
+            }
+        });
+        return resultado.estado;
+    }
+
+    static async buscarCandidatoPorId(id){
+        const resultado = await prisma.candidatos.findUniqueOrThrow({
+            where: {
+                id
+            }
+        });
+        const {senha, ...resultadoSemSenha } = resultado;
+        return resultadoSemSenha;
     }
 
 }

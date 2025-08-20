@@ -15,7 +15,7 @@ class LoginController {
 
             const lembreMe = req.body.lembreMe ? req.body.lembreMe : false;
 
-            const candidato = await CandidatoModel.loginInfo(email);
+            const candidato = await CandidatoModel.loginInfoPorEmail(email);
 
             if(!await bcrypt.compare(senha, candidato.senha)) return res.status(401).json({ error: 'Credenciais inválidas.' });
 
@@ -29,7 +29,10 @@ class LoginController {
             if(lembreMe) {
                 salvarCookieRefreshToken(res, token);
                 expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-            };
+            }
+            else{
+                limparCookieRefreshToken(res)
+            }
 
             await TokenService.adicionarToken(candidato.id, 'candidato', token, expira_em)
 
@@ -57,13 +60,15 @@ class LoginController {
                 await TokenService.removerToken(tkn);
             }
 
-            const empresa = await EmpresaModel.loginInfo(cnpj);
+            const empresa = await EmpresaModel.loginInfoPorCnpj(cnpj);
 
             if(!await bcrypt.compare(senha, empresa.senha)) return res.status(401).json({ error: 'Credenciais inválidas.' });
 
             const token = salvarCookieToken(res, cnpj, 'empresa', 'comum')
             const expira_em = new Date(Date.now() + 60 * 60 * 1000);
             await TokenService.adicionarToken(cnpj, 'empresa', token, expira_em);
+
+            salvarCookieFoto(res, empresa.foto);
 
             res.status(200).json({ message: 'Logado com sucesso!' });
         }

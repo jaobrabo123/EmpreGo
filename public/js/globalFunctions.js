@@ -26,22 +26,37 @@ export async function carregarLinks() {
     document.querySelector('#loginOuCadas').style.display = '';
     document.querySelector('#logout').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = 'none';
+    document.querySelector('#mobileLoginOuCadas').style.display = '';
+    document.querySelector('#mobileLogout').style.display = 'none';
+    document.querySelector('#mobileFotoPerfil').style.display = 'none';
     if(infos.tipo==='expirado'){
       alert('Sua sessão expirou faça login novamente.');
       window.location.href = '/login';
     }
   }
   else if (infos.tipo==='candidato'){
+    // * Linkagem da foto de perfil para PC
     document.querySelector('#fotoPerfil').href = '/perfil/candidato';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
     document.querySelector('#fotoPerfilImg').src = infos.foto;
+    // * Linkagem da foto de perfil para Mobile
+    document.querySelector('#mobileFotoPerfil').href = '/perfil/candidato';
+    document.querySelector('#mobileLoginOuCadas').style.display = 'none';
+    document.querySelector('#mobileFotoPerfil').style.display = '';
+    document.querySelector('#mobileFotoPerfilImg').src = infos.foto;
   }
   else if (infos.tipo==='empresa') {
+    // * Linkagem da foto de perfil para PC
     document.querySelector('#fotoPerfil').href = '/perfil/empresa';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
     document.querySelector('#fotoPerfilImg').src = infos.foto;
+    // * Linkagem da foto de perfil para Mobile
+    document.querySelector('#mobileFotoPerfil').href = '/perfil/empresa';
+    document.querySelector('#mobileLoginOuCadas').style.display = 'none';
+    document.querySelector('#mobileFotoPerfil').style.display = '';
+    document.querySelector('#mobileFotoPerfilImg').src = infos.foto;
   }
 }
 

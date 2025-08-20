@@ -32,10 +32,11 @@ class EmpresaModel {
         return resultadoSemSenha;
     }
 
-    static async loginInfo(cnpj){
+    static async loginInfoPorCnpj(cnpj){
         const resultado = await prisma.empresas.findUniqueOrThrow({
             select: {
-                senha: true
+                senha: true,
+                foto: true
             },
             where: {
                 cnpj
@@ -52,6 +53,18 @@ class EmpresaModel {
         });
         const { senha, ...resultadoSemSenha } = resultado;
         return resultadoSemSenha;
+    }
+
+    static async buscarFotoPorCnpj(cnpj){
+        const resultado = await prisma.empresas.findUniqueOrThrow({
+            where: {
+                cnpj
+            },
+            select: {
+                foto: true
+            }
+        })
+        return resultado.foto;
     }
 
 }

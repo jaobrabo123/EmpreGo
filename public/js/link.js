@@ -5,3 +5,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 document.querySelector('#logout').addEventListener('click', () => logout());
+document.querySelector('#mobileLogout').addEventListener('click', () => logout());

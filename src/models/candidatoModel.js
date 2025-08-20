@@ -48,7 +48,7 @@ class CandidatoModel{
         return resultadoSemSenha;
     }
 
-    static async loginInfo(email){
+    static async loginInfoPorEmail(email){
         const resultado = await prisma.candidatos.findUniqueOrThrow({
             select: {
                 id: true,

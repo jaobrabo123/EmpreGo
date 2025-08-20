@@ -24,15 +24,14 @@ class PerfilController {
             const id = req.user.id;
             let foto = req.cookies.foto_perfil;
             if(!foto) {
-                console.log('busccando forto')
                 const foto_perfil = await CandidatoModel.buscarFotoPorId(id);
                 salvarCookieFoto(res, foto_perfil);
                 foto = foto_perfil;
             }
             res.status(200).json(foto);
         } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Candidato não encontrado' });
             console.error(erro);
-            if(erro.code==='P2025') return res.status(404).json({ error: 'Usuário não encontrado' });
             res.status(500).json({ error: 'Erro ao buscar foto de perfil: ' + erro.message });
         }
     }
@@ -79,9 +78,18 @@ class PerfilController {
 
     static async buscarFotoEmpresa(req, res){
         try {
-            
+            const cnpj = req.user.id;
+            let foto = req.cookies.foto_perfil;
+            if(!foto) {
+                const foto_perfil = await EmpresaModel.buscarFotoPorCnpj(cnpj);
+                salvarCookieFoto(res, foto_perfil);
+                foto = foto_perfil;
+            }
+            res.status(200).json(foto);
         } catch (erro) {
-            
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Empresa não encontrada' });
+            console.error(erro);
+            res.status(500).json({ error: 'Erro ao buscar foto de perfil: ' + erro.message });
         }
     }
 

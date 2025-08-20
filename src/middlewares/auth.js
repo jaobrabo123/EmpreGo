@@ -1,6 +1,6 @@
 //Imports
 const jwt = require('jsonwebtoken');
-const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken } = require('../utils/cookieUtils.js');
+const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken, limparCookieFoto } = require('../utils/cookieUtils.js');
 const TokenModel = require('../models/tokenModel.js');
 const TokenService = require('../services/tokenService.js');
 
@@ -21,7 +21,9 @@ async function authenticateToken(req, res, next) {
     token = acessToken
 
     if(!await TokenModel.verificarTokenExistente(token)) {
+      limparCookieRefreshToken(res);
       limparCookieToken(res);
+      limparCookieFoto(res);
       return res.status(403).json({ error: 'Token inválido.' });
     }
 
@@ -29,6 +31,7 @@ async function authenticateToken(req, res, next) {
     if(erro.name==='TokenExpiredError'){
       if(!req.cookies.refreshToken) {
         limparCookieToken(res);
+        limparCookieFoto(res);
         return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' })
       }
 
@@ -38,6 +41,7 @@ async function authenticateToken(req, res, next) {
         if(!(refreshTokenDecoded.acessToken===acessToken) || !await TokenModel.verificarTokenExistente(acessToken)) {
           limparCookieToken(res);
           limparCookieRefreshToken(res);
+          limparCookieFoto(res);
           return res.status(403).json({ error: 'Token inválido.' })
         };
 
@@ -54,6 +58,7 @@ async function authenticateToken(req, res, next) {
       } catch (error) {
         limparCookieToken(res);
         limparCookieRefreshToken(res);
+        limparCookieFoto(res);
         if(error.name==='TokenExpiredError') return res.status(403).json({ error: 'Sessão expirada, faça login novamente.' });
         return res.status(403).json({ error: 'Token inválido.' });
       }
@@ -61,6 +66,8 @@ async function authenticateToken(req, res, next) {
     }
     else{
       limparCookieToken(res);
+      limparCookieRefreshToken(res);
+      limparCookieFoto(res);
       return res.status(403).json({ error: 'Token inválido.' });
     }
   }

@@ -3,7 +3,7 @@ const CandidatoService = require("../services/candidatoService.js");
 const CandidatoModel = require('../models/candidatoModel.js');
 const Erros = require("../utils/erroClasses.js");
 const TokenService = require('../services/tokenService.js');
-const { salvarCookieToken, validarCookieToken, salvarCookieRefreshToken } = require('../utils/cookieUtils.js');
+const { salvarCookieToken, validarCookieToken, salvarCookieRefreshToken, salvarCookieFoto } = require('../utils/cookieUtils.js');
 const transporter = require('../config/nodemailer.js');
 
 // * Variáveis de ambiente
@@ -57,18 +57,19 @@ class CandidatoController {
 
             if(!codigo||!email) return res.status(400).json({ error: "Codigo de verificação e email precisam ser fornecidos."});
 
-            const novoId = await CandidatoService.popularTabelaCandidatos(codigo, email);
+            const newCand = await CandidatoService.popularTabelaCandidatos(codigo, email);
 
             const tkn = req.cookies.token;
             if (tkn && validarCookieToken(tkn)) {
                 await TokenService.removerToken(tkn);
             }
 
-            const token = salvarCookieToken(res, novoId, 'candidato', 'comum');
+            const token = salvarCookieToken(res, newCand.id, 'candidato', 'comum');
             salvarCookieRefreshToken(res, token);
             const expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-            await TokenService.adicionarToken(novoId, 'candidato', token, expira_em);
+            await TokenService.adicionarToken(newCand.id, 'candidato', token, expira_em);
 
+            salvarCookieFoto(res, newCand.foto);
             res.status(201).json({ message: 'Email confirmado com sucesso.'});
         }
         catch(erro){

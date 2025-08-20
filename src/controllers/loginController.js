@@ -1,7 +1,7 @@
 // * Imports
 const bcrypt = require('bcrypt');
 const TokenService = require('../services/tokenService.js');
-const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken, validarCookieToken } = require('../utils/cookieUtils.js');
+const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken, validarCookieToken, limparCookieFoto, salvarCookieFoto } = require('../utils/cookieUtils.js');
 const Erros = require("../utils/erroClasses.js");
 const CandidatoModel = require('../models/candidatoModel.js');
 const EmpresaModel = require('../models/empresaModel.js');
@@ -32,6 +32,8 @@ class LoginController {
             };
 
             await TokenService.adicionarToken(candidato.id, 'candidato', token, expira_em)
+
+            salvarCookieFoto(res, candidato.foto);
 
             res.status(200).json({ message: 'Logado com sucesso!' });
         } catch (erro) {
@@ -86,6 +88,7 @@ class LoginController {
 
             limparCookieRefreshToken(res);
             limparCookieToken(res);
+            limparCookieFoto(res);
             
             res.status(200).json({ message: 'Logout realizado com sucesso' });
         }

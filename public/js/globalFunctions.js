@@ -21,7 +21,7 @@ export function mostrarErroTopo(mensagem) {
 }
 
 export async function carregarLinks() {
-  const infos = await carregarInfo();
+  const infos = await carregarFoto();
   if(infos === 'visitante' || infos.tipo==='visitante' || infos.tipo==='expirado'){
     document.querySelector('#loginOuCadas').style.display = '';
     document.querySelector('#logout').style.display = 'none';
@@ -35,13 +35,13 @@ export async function carregarLinks() {
     document.querySelector('#fotoPerfil').href = '/perfil/candidato';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
-    document.querySelector('#fotoPerfilImg').src = infos.info.foto;
+    document.querySelector('#fotoPerfilImg').src = infos.foto;
   }
   else if (infos.tipo==='empresa') {
     document.querySelector('#fotoPerfil').href = '/perfil/empresa';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
-    document.querySelector('#fotoPerfilImg').src = infos.info.foto;
+    document.querySelector('#fotoPerfilImg').src = infos.foto;
   }
 }
 
@@ -67,6 +67,36 @@ export async function carregarInfo() {
       data = response.data;
     }
     return {info: data, tipo: tipo};
+  }
+  catch(erro){
+    console.error(erro.message)
+    return 'visitante'
+  }
+}
+
+export async function carregarFoto() {
+  try{
+    const tipo = await axiosWe.get('/get-tipo')
+      .then((response)=>{
+        const { tipo } = response.data;
+        return tipo;
+      })
+      .catch(()=>{
+        return 'visitante';
+      })
+
+    let foto = null;
+
+    if(tipo==='candidato'){
+      const response = await axiosWe('/perfil/candidato/foto');
+      foto = response.data;
+      console.log(response)
+    }
+    else if(tipo==='empresa'){
+      const response = await axiosWe('/perfil/empresa/foto');
+      foto = response.data;
+    }
+    return {foto, tipo: tipo};
   }
   catch(erro){
     console.error(erro.message)

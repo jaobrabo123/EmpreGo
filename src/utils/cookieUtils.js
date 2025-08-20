@@ -48,10 +48,29 @@ function validarCookieToken(tkn){
   }
 }
 
+function salvarCookieFoto(res, foto){
+  res.cookie('foto_perfil', foto, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 10*60*1000
+  })
+}
+
+function limparCookieFoto(res) {
+  res.clearCookie('foto_perfil', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict' 
+  });
+}
+
 module.exports = {
   limparCookieToken,
   limparCookieRefreshToken,
   salvarCookieToken,
   salvarCookieRefreshToken,
   validarCookieToken,
+  salvarCookieFoto,
+  limparCookieFoto
 };

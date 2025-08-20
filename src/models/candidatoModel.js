@@ -53,7 +53,8 @@ class CandidatoModel{
             select: {
                 id: true,
                 senha: true,
-                nivel: true
+                nivel: true,
+                foto: true
             },
             where: {
                 email
@@ -94,6 +95,18 @@ class CandidatoModel{
         });
         const {senha, ...resultadoSemSenha } = resultado;
         return resultadoSemSenha;
+    }
+
+    static async buscarFotoPorId(id){
+        const resultado = await prisma.candidatos.findUniqueOrThrow({
+            where: {
+                id
+            },
+            select: {
+                foto: true
+            }
+        })
+        return resultado.foto;
     }
 
 }

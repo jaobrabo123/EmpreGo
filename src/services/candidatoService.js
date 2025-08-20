@@ -58,7 +58,8 @@ class CandidatoService{
           data_nasc: candidato.data_nasc
         },
         select: {
-          id: true
+          id: true,
+          foto: true
         }
       }),
       prisma.candidatos_pend.delete({
@@ -69,7 +70,7 @@ class CandidatoService{
     ])
 
 
-    return result.id;
+    return result;
   }
 
   static async gerarNovoCodigoPendente(email){

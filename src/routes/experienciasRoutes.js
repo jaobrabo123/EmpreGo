@@ -5,7 +5,7 @@ const { authenticateToken, apenasAdmins, apenasCandidatos } = require("../middle
 // Cloudinary + Multer
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("../config/cloudinary.js");
+const cloudinary = require("@config/cloudinary.js");
 
 // storage para as imagens das experiencias
 const expStorage = new CloudinaryStorage({

@@ -6,7 +6,7 @@ const PerfilController = require('../controllers/perfilController.js');
 // Cloudinary + Multer
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('../config/cloudinary.js');
+const cloudinary = require('@config/cloudinary.js');
 
 // storage para as fotos de perfil
 const perfilStorage = new CloudinaryStorage({

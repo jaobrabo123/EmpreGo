@@ -30,7 +30,8 @@
     "@middlewares": "src/middlewares",
     "@routes": "src/routes",
     "@sockets": "src/sockets",
-    "@tasks": "src/tasks"
+    "@tasks": "src/tasks",
+    "@config": "src/config"
   },
   "description": "",
   "devDependencies": {

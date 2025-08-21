@@ -1,5 +1,5 @@
 // * Prisma
-const prisma = require('../config/prisma.js');
+const prisma = require('@config/db.js');
 
 const TagModel = require("../models/tagModel.js");
 const { ErroDeValidacao, ErroDeAutorizacao } = require("../utils/erroClasses.js");

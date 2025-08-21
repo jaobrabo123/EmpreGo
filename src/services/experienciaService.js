@@ -1,6 +1,6 @@
 
 // * Prisma
-const prisma = require('../config/prisma.js');
+const prisma = require('@config/db.js');
 
 const {ErroDeValidacao, ErroDeAutorizacao} = require('../utils/erroClasses.js');
 const ValidarCampos = require('../utils/validarCampos.js');

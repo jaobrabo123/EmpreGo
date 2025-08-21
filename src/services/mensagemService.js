@@ -1,5 +1,5 @@
 // * Prisma
-const prisma = require('../config/prisma.js');
+const prisma = require('@config/db.js');
 
 class MensagemService {
 

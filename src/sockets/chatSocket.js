@@ -18,7 +18,7 @@ module.exports = (io) => {
                 console.error(erro)
                 if (callback) callback({ 
                     status: 'error',
-                    message: 'Erro ao enviar mensagem'
+                    message: 'Erro ao carregar mensagens'
                 });
             }
         });

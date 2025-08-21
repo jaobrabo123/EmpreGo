@@ -20,11 +20,16 @@ async function authenticateToken(req, res, next) {
     user = jwt.verify(acessToken, SECRET_KEY);
     token = acessToken
 
-    if(!await TokenModel.verificarTokenExistente(token)) {
-      limparCookieRefreshToken(res);
-      limparCookieToken(res);
-      limparCookieFoto(res);
-      return res.status(403).json({ error: 'Token inválido.' });
+    try {
+      const tokenExistente = await TokenModel.verificarTokenExistente(token);
+      if(!tokenExistente) {
+        limparCookieRefreshToken(res);
+        limparCookieToken(res);
+        limparCookieFoto(res);
+        return res.status(403).json({ error: 'Token inválido.' });
+      }
+    } catch (erro) {
+      return res.status(500).json({ error: `Erro ao verificar token: ${erro.message}` });
     }
 
   } catch (erro) {

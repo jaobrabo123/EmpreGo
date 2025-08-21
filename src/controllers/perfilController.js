@@ -11,7 +11,8 @@ class PerfilController {
     static async buscarCandidato(req, res){
         try {
             const id = req.user.id;
-            const perfilCandidato = await CandidatoModel.buscarCandidatoPorId(id)
+            const perfilCandidato = await CandidatoModel.buscarCandidatoPorId(id);
+            salvarCookieFoto(res, perfilCandidato.foto);
             res.status(200).json(perfilCandidato);
         } catch (erro) {
             if(erro.code==='P2025') return res.status(404).json({ error: 'Usuário não encontrado' });
@@ -68,6 +69,7 @@ class PerfilController {
         try {
             const cnpj = req.user.id;
             const empresa = await EmpresaModel.buscarEmpresaPorCnpj(cnpj);
+            salvarCookieFoto(empresa.foto);
             res.status(200).json(empresa);
         }
         catch (erro) {

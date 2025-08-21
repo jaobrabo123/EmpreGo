@@ -36,9 +36,10 @@ axiosWe.interceptors.response.use(function (config) {
 
       break;
     case 500:
-      
+      console.log(msg)
       if(msg.includes('Erro ao enviar mensagem')) erroTopo = false;
-      msg = 'Erro do servidor, tente novamente.';
+      if(msg.includes('Erro ao verificar token')) msg = 'Erro ao validar sessão, tente recarregar a página.';
+      else msg = 'Erro do servidor, tente novamente.';
 
       break;
     default:

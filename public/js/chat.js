@@ -116,14 +116,14 @@ function exibirChatsFront() {
         chat.appendChild(msgsEEnviar);
 
         minimize.addEventListener('click', async ()=>{
-            await minimizeELoadMessages(messages, msgsEEnviar, minimize, data.id)
+            await minimizeELoadMessages(msgsEEnviar, minimize, data.id)
         })
 
         document.querySelector('#chats').appendChild(chat);
     })
 }
 
-async function minimizeELoadMessages(messages, msgsEEnviar, minimize, chatIdBack){
+async function minimizeELoadMessages(msgsEEnviar, minimize, chatIdBack){
     let display
     if(msgsEEnviar.classList.contains('minimizado')){
         if (!salasEntradas.has(chatIdBack)){
@@ -154,8 +154,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     exibirChatsFront();
 })
 
-
-const messages = document.querySelectorAll('.messages')
 function renderMessage(message) {
     const texto = message.message;
     const autor = message.author;

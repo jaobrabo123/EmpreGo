@@ -1,15 +1,15 @@
-//Imports
+// * Imports
 const jwt = require('jsonwebtoken');
 const { limparCookieToken, limparCookieRefreshToken, salvarCookieToken, salvarCookieRefreshToken, limparCookieFoto } = require('../utils/cookieUtils.js');
 const TokenModel = require('../models/tokenModel.js');
 const TokenService = require('../services/tokenService.js');
 
-// Chave secreta para o JWT
+// * Chave secreta para o JWT
 const SECRET_KEY = process.env.JWT_SECRET;
 
-// Autenticação JWT
+// * Autenticação JWT
 async function authenticateToken(req, res, next) {
-  
+
   const acessToken = req.cookies.token;
   if (!acessToken) return res.status(401).json({ error: 'Você não está logado.' });
   let user;
@@ -18,7 +18,7 @@ async function authenticateToken(req, res, next) {
   try {
 
     user = jwt.verify(acessToken, SECRET_KEY);
-    token = acessToken
+    token = acessToken;
 
     try {
       const tokenExistente = await TokenModel.verificarTokenExistente(token);
@@ -41,13 +41,19 @@ async function authenticateToken(req, res, next) {
       }
 
       try {
-
+        
         const refreshTokenDecoded = jwt.verify(req.cookies.refreshToken, SECRET_KEY);
-        if(!(refreshTokenDecoded.acessToken===acessToken) || !await TokenModel.verificarTokenExistente(acessToken)) {
+        let tokenValido;
+        try {
+          tokenValido = await TokenModel.verificarTokenExistente(acessToken);
+        } catch (erro) {
+          return res.status(500).json({ error: `Erro ao verificar token: ${erro.message}` });
+        }
+        if(!(refreshTokenDecoded.acessToken===acessToken) || !tokenValido) {
           limparCookieToken(res);
           limparCookieRefreshToken(res);
           limparCookieFoto(res);
-          return res.status(403).json({ error: 'Token inválido.' })
+          return res.status(403).json({ error: 'Token inválido.' });
         };
 
         const acessTokenDecoded = jwt.decode(acessToken);

@@ -1,10 +1,10 @@
 // * Prisma
-const prisma = require('@config/db.js')
+const prisma = require('../config/db.js');
 
 class TokenModel{
 
     static async verificarTokenExistente(tkn){
-        const resultado = await prisma.tokens.findFirst({
+        const resultado = await prisma.tokens.findUnique({
             select: {
                 id: true
             },
@@ -12,9 +12,9 @@ class TokenModel{
                 token: tkn
             }
         })
-        return !!resultado;
+        return resultado;
     }
-    
+
 }
 
 module.exports = TokenModel;

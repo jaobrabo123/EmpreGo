@@ -35,7 +35,7 @@ class CandidatoService{
         email,
         senha: senhaCriptografada,
         genero,
-        data_nasc,
+        data_nasc: new Date(data_nasc),
         codigo: codigoCriptografado,
         expira_em
       }

@@ -1,5 +1,5 @@
 // * Prisma
-const prisma = require('@config/db.js')
+const prisma = require('../config/db.js');
 
 class CandidatoModel{
 

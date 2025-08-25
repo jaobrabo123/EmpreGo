@@ -2,7 +2,7 @@
 require('module-alias/register');
 require('dotenv').config();
 
-const express = require('express');
+const express = require('express'); // É a mesma coisa que: import express from 'express';
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const { limiteGeral } = require('@middlewares/rateLimit.js');

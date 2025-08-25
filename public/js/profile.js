@@ -199,6 +199,8 @@ maisTags.addEventListener("click", async () => {
     await carregarTodasTags()
 }, { once: true });
 
+let idTagDelBD = "NM";
+let idTagDelFront = "NM";
 async function tags(limit, offset) {
     try{
         const response = await axiosWe(`/tags?limit=${limit}&offset=${offset}`);
@@ -226,7 +228,14 @@ async function tags(limit, offset) {
                     alert(erro.message);
                 };
             }
-            buttonTag.addEventListener('click', () => remover(tag.id), { once: true });
+            //buttonTag.addEventListener('click', () => remover(tag.id), { once: true });
+            buttonTag.addEventListener('click', () => {
+                idTagDelBD = tag.id;
+                idTagDelFront = buttonTag;
+                console.log(idTagDelBD)
+                console.log(idTagDelFront)
+                mostrarModalDel()
+            });
             
             divTags.insertBefore(buttonTag, maisTags);
         })
@@ -235,5 +244,48 @@ async function tags(limit, offset) {
         alert(erro.message);
     };
 }
+
+const modalDelete = document.querySelector('#modalDelete');
+const btnCancelarDel = document.querySelector('#btnCancelarDel');
+const btnConfirmarDel = document.querySelector('#btnConfirmarDel');
+
+function mostrarModalDel(){
+    modalDelete.style.display = 'flex';
+}
+
+btnCancelarDel.addEventListener('click', function(){
+    idTagDelBD = "NM";
+    idTagDelFront = "NM";
+    modalDelete.style.display = 'none';
+    console.log(idTagDelBD);
+    console.log(idTagDelFront);
+});
+
+btnConfirmarDel.addEventListener('click', async function(){
+    if(idTagDelBD==="NM"||idTagDelFront==="NM"){
+        idTagDelBD = "NM";
+        idTagDelFront = "NM";
+        return;
+    }
+    try {
+        btnCancelarDel.disabled = true;
+        btnConfirmarDel.disabled = true;
+        if(document.querySelector("#maisTags")){
+            await carregarTodasTags();
+        }
+        await axiosWe.delete(`/tags/${idTagDelBD}`);
+        idTagDelFront.remove();
+    }
+    catch (erro) {
+        alert(erro.message);
+    }
+    finally{
+        btnCancelarDel.disabled = false;
+        btnConfirmarDel.disabled = false;
+        idTagDelBD = "NM";
+        idTagDelFront = "NM";
+        modalDelete.style.display = 'none';
+    } 
+});
 
 document.querySelector('#logout').addEventListener('click', () => logout());

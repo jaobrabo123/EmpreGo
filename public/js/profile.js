@@ -157,7 +157,14 @@ async function adicionarTag() {
             const buttonTag = document.createElement("button");
             buttonTag.classList.add("tags");
             buttonTag.textContent = tagUsuario;
+
+            
             const remover = async function(id) {
+                
+                const modalDelete = document.querySelector('#modalDelete')
+                modalDelete.style.display = 'flex'
+
+
                 try {
                     await axiosWe.delete(`/tags/${id}`);
                     buttonTag.remove();

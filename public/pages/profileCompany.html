@@ -1,11 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil da Empresa</title>
+    <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Perfil-Empresa</title>
 </head>
+
 <body>
-    <h1>Nada por aqui ainda</h1>
+    <header>
+        <div id="logo">
+            <a href="/" target="_self">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg">
+            </a>
+            <a href="/" target="_self" id="nomedosite">Empre<span>Go</span></a>
+
+        </div>
+        <nav class="links">
+            <a href="/">Inicio</a>
+            <a class="headerlink" href="/sobre" target="_self">Sobre</a>
+            <a class="headerlink" href="/suporte" target="_self">Suporte</a>
+            <a class="headerlink" href="/login" target="_self" id="loginOuCadas">Login / Cadastrar</a>
+            <a class="headerlink" href="/perfil/candidato" target="_self" style="display: none;" id="fotoPerfil"><img
+                src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
+            <a href="#" id="logout">Sair</a>
+        </nav>
+    </header>
+
+    <div id="main">
+        <div id="bodyLeft">
+            <div id="impInfo" class="flex flex-col items-center">
+                <img id="fotoEmpresa" src="/assets/imgs/genPfp.png" alt="genPfp" class="w-250 h-250 border-[5px] border-violet-400 rounded-full">
+                <h1 id="cnpjUsuario" class="text-[16px] font-semibold my-5">Edite o perfil para exibir o CNPJ</h1>
+                <h1 id="cepUsuario" class="text-[16px] font-semibold my-5">Edite o perfil para exibir o CEP</h1>
+                <button id="btnEditarPerfil" onclick="window.location.href='/perfil/candidato/editar'"
+                    class="btn-editar-perfil text-white bg-violet-400 my-5 border-none py-[10px] px-[28px] hover:cursor-pointer rounded-lg text-[1.4rem] font-bold">
+                    Editar Perfil
+                </button>
+            </div>
+
+            <div id="bodyMid">
+                <h1 id="nomeFant" class="text-[50px] text-center font-bold">Nome Fantasia</h1>
+                <h1 id="telEmpresa" class="text-[25px] text-center font-medium space">Edite o perfil para exibir o telefone</h1>
+                <p id="descUsuario"></p>
+                <div id="conexoes">
+                    <img id="LogoInst" src="/assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
+                    <a id="instUsuario" href="https://youtu.be/ua_DSJAD7gc?si=O3y6hQHb0lpgrBmo" class="nomeRedeSoc"
+                        target="_blank">
+                        Instagram
+                    </a>
+                    <img id="LogoGit"src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
+                    <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc"
+                        target="_blank">
+                        GitHub
+                    </a>
+
+                    <img id="LogoYt" src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
+                    <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc"
+                        target="_blank">
+                        Youtube
+                    </a>
+
+                    <img id="LogoTwt" src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
+                    <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc"
+                        target="_blank">
+                        Twitter/X
+                    </a>
+                </div>
+
+                <div id="enderecoInfo">
+                    <img id="houseIcon" src="/assets/imgs/House.png" alt="HouseIcon">
+                    <div id="alignEndereco">
+                        <div id="cidadeEstado">
+                            <h1 id="cidadeUsuario">Cidade: (Nenhuma)</h1>
+                            <h1>(</h1>
+                            <h1 id="estadoUsuario">Estado: (XX)</h1>
+                            <h1>)</h1>
+                            <!--separar em 2 linhas diferentes-->
+                            <h1 id="bairroUsuario">Bairro: (Nenhuma)</h1>
+                            <h1 id="ruaUsuario">Rua: (Nenhuma)</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div></div>
+            </div>
+        </div>
+
+        <div id="bodyTags"> <!--Não existe método registro de tags ainda-->
+            <h1 id="tituloTags">Tags</h1>
+            <div id="boxTags">
+                <input type="image" id="btnAddTags" src="/assets/imgs/miniPlusBtn.png">
+                <div id="Tags">
+                    
+                    <button class="tags" id="maisTags">...</button>
+                </div>
+            </div>
+        </div>
+
+        <h1 id="tituloExperiencias">Experiências</h1>
+        <div id="bodyBottom">
+            <div id="boxCriar">
+                <a href="/experiencias/criar"> 
+                    <input type="image" id="fotoCriarBtn" src="/assets/imgs/plusBtn.png" alt="plusBtn">
+                </a>
+                <a id="textCriar">"Adicione um texto para descrever sua experiência em projetos ou empresas anteriores."</a>
+            </div>
+        </div>
+        <div id="modalInput" class="invisible">
+            <div id="modalInput-content">
+                <p>Digite a tag que você deseja adicionar:</p>
+                <input type="text" id="inputTag" placeholder="Digite aqui o nome da Tag">
+                <button id="btnConfirmar">Confirmar</button>
+                <button id="btnCancelar">Cancelar</button>
+            </div>
+        </div>
+
+
+        <div id="modalDelete" class="invisible">
+            <div id="modalDelete-content">
+                <p><strong>Você tem certeza de que quer deletar a tag?</strong></p>
+                <button id="btnConfirmarDel">Confirmar</button>
+                <button id="btnCancelarDel">Cancelar</button>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- * SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
 </body>
+
 </html>

@@ -41,7 +41,7 @@ model candidatos_pend {
   data_nasc DateTime  @db.Date
   confirmed Boolean?  @default(false)
   criado_em DateTime? @default(now()) @db.Timestamptz(6)
-  codigo    String    @unique(map: "codigo_unico_candidatos_pend")
+  codigo    String
   expira_em DateTime  @db.Timestamptz(6)
 }
 
@@ -75,7 +75,7 @@ model empresas {
   github       String?
   youtube      String?
   twitter      String?
-  foto         String?   @default("../assets/imgs/genPfp.png")
+  foto         String?   @default("/assets/imgs/genPfp.png")
   data_criacao DateTime? @default(now()) @db.Timestamptz(6)
   estado       String    @db.Char(2)
   cidade       String    @db.VarChar(25)

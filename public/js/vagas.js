@@ -17,7 +17,7 @@ async function carregarInit() {
         <div class="card-body p-5 flex-1">
           <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">${emp.nome_fant}</h3>
           <p class="empresa-descricao text-dark-400 text-sm mb-4 line-clamp-3 leading-relaxed">
-            ${emp.descricao}
+            ${emp.descricao?emp.descricao:''}
           </p>
         </div>
         <div class="card-footer flex justify-between items-center p-4 border-t border-dark-700 bg-black/10 flex-wrap gap-2">
@@ -60,7 +60,7 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
           <div class="card-body p-5 flex-1">
             <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">${emp.nome_fant}</h3>
             <p class="empresa-descricao text-dark-400 text-sm mb-4 line-clamp-3 leading-relaxed">
-              ${emp.descricao}
+              ${emp.descricao?emp.descricao:''}
             </p>
           </div>
           <div class="card-footer flex justify-between items-center p-4 border-t border-dark-700 bg-black/10 flex-wrap gap-2">
@@ -80,6 +80,8 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
     if (data.length < 9){
       document.querySelector("#ver-pagina-btn").style.display = "none"
     }
+    setupFavoriteButtons()
+    setupCompanyChips()
   } catch (erro) {
     pagina--
     console.error(erro)
@@ -88,6 +90,120 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
   }
 })
   
+function setupFavoriteButtons() {
+  const favoriteButtons = document.querySelectorAll('.favorite-btn');
+  
+  favoriteButtons.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Alterna a classe active
+      this.classList.toggle('active');
+      
+      // Alterna o ícone e a cor
+      const icon = this.querySelector('i');
+      if (this.classList.contains('active')) {
+        icon.className = 'bx bxs-star';
+        this.style.color = '#fbbf24'; // Amarelo
+        this.setAttribute('aria-label', 'Desmarcar favorito');
+      } else {
+        icon.className = 'bx bx-star';
+        this.style.color = ''; // Volta para a cor padrão
+        this.setAttribute('aria-label', 'Marcar como favorito');
+      }
+      
+      // para o futuro: adicionar a logica para favoritar
+      const cardTitle = this.closest('.empresa-card').querySelector('.empresa-nome').textContent;
+      console.log(`Empresa ${this.classList.contains('active') ? 'adicionada aos' : 'removida dos'} favoritos: ${cardTitle}`);
+    });
+  });
+}
+
+function setupCompanyChips() {
+  // Seleciona todos os chips de empresa
+  const companyChips = document.querySelectorAll('.empresa-card .tag-chip');
+  
+  companyChips.forEach(chip => {
+    chip.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // adiciona efeito visual de clique
+      this.classList.add('clicked');
+      setTimeout(() => {
+        this.classList.remove('clicked');
+      }, 300);
+      
+      // obtém o valor do chip (texto dentro dele)
+      const chipValue = this.innerText.trim();
+      
+      // Usa o valor do chip diretamente, sem processamento adicional
+      const filterValue = chipValue;
+      
+      console.log(`Filtrando por: ${filterValue}`);
+      
+      // encontra o chip no painel de filtros
+      const filterChips = document.querySelectorAll('.filter-chip');
+      let matchingChip = null;
+      
+      filterChips.forEach(filterChip => {
+        // compara o texto do chip ou o valor do atributo data-value
+        const chipText = filterChip.innerText.trim();
+        const chipDataValue = filterChip.getAttribute('data-value');
+        
+        if (chipText === filterValue || chipDataValue === filterValue.toLowerCase()) {
+          matchingChip = filterChip;
+        }
+      });
+      
+      // se encontrou um chip correspondente, ele é selecionado
+      if (matchingChip) {
+        matchingChip.setAttribute('aria-pressed', 'true');
+        matchingChip.classList.add('selected');
+        
+        // abre o painel de filtros
+        const filterContainer = document.getElementById('filter-chips-container');
+        if (filterContainer) {
+          filterContainer.classList.add('open');
+        }
+        
+        // Rola até o chip selecionado
+        matchingChip.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // destaque do chip
+        matchingChip.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+          matchingChip.style.transform = '';
+        }, 300);
+        
+        // automaticamente clica no botão de confirmar após um breve delay
+        setTimeout(() => {
+          const confirmBtn = document.querySelector('.filter-confirm');
+          if (confirmBtn) {
+            confirmBtn.click();
+          }
+        }, 800);
+      } else {
+        // Se não encontrou no filtro, podemos adicionar uma busca direta
+        const searchBar = document.querySelector('.search-bar input');
+        if (searchBar) {
+          searchBar.value = filterValue;
+          searchBar.dispatchEvent(new Event('input'));
+          
+          searchBar.focus();
+          
+          // efeito visual na barra de pesquisa
+          searchBar.parentElement.classList.add('highlight');
+          setTimeout(() => {
+            searchBar.parentElement.classList.remove('highlight');
+          }, 800);
+        }
+      }
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
       await carregarInit();
       // Inicialização do Swiper (mantido conforme original)
@@ -294,123 +410,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       setupFilterChips();
       
       // -------------- Filtro de Chips/tags/empresa --------------
-      function setupCompanyChips() {
-        // Seleciona todos os chips de empresa
-        const companyChips = document.querySelectorAll('.empresa-card .tag-chip');
-        
-        companyChips.forEach(chip => {
-          chip.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // adiciona efeito visual de clique
-            this.classList.add('clicked');
-            setTimeout(() => {
-              this.classList.remove('clicked');
-            }, 300);
-            
-            // obtém o valor do chip (texto dentro dele)
-            const chipValue = this.innerText.trim();
-            
-            // Usa o valor do chip diretamente, sem processamento adicional
-            const filterValue = chipValue;
-            
-            console.log(`Filtrando por: ${filterValue}`);
-            
-            // encontra o chip no painel de filtros
-            const filterChips = document.querySelectorAll('.filter-chip');
-            let matchingChip = null;
-            
-            filterChips.forEach(filterChip => {
-              // compara o texto do chip ou o valor do atributo data-value
-              const chipText = filterChip.innerText.trim();
-              const chipDataValue = filterChip.getAttribute('data-value');
-              
-              if (chipText === filterValue || chipDataValue === filterValue.toLowerCase()) {
-                matchingChip = filterChip;
-              }
-            });
-            
-            // se encontrou um chip correspondente, ele é selecionado
-            if (matchingChip) {
-              matchingChip.setAttribute('aria-pressed', 'true');
-              matchingChip.classList.add('selected');
-              
-              // abre o painel de filtros
-              const filterContainer = document.getElementById('filter-chips-container');
-              if (filterContainer) {
-                filterContainer.classList.add('open');
-              }
-              
-              // Rola até o chip selecionado
-              matchingChip.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              
-              // destaque do chip
-              matchingChip.style.transform = 'scale(1.1)';
-              setTimeout(() => {
-                matchingChip.style.transform = '';
-              }, 300);
-              
-              // automaticamente clica no botão de confirmar após um breve delay
-              setTimeout(() => {
-                const confirmBtn = document.querySelector('.filter-confirm');
-                if (confirmBtn) {
-                  confirmBtn.click();
-                }
-              }, 800);
-            } else {
-              // Se não encontrou no filtro, podemos adicionar uma busca direta
-              const searchBar = document.querySelector('.search-bar input');
-              if (searchBar) {
-                searchBar.value = filterValue;
-                searchBar.dispatchEvent(new Event('input'));
-                
-                searchBar.focus();
-                
-                // efeito visual na barra de pesquisa
-                searchBar.parentElement.classList.add('highlight');
-                setTimeout(() => {
-                  searchBar.parentElement.classList.remove('highlight');
-                }, 800);
-              }
-            }
-          });
-        });
-      }
-
       setupCompanyChips();
 
-      // -------------- Favoritos nos cartões de empresas --------------
-      function setupFavoriteButtons() {
-        const favoriteButtons = document.querySelectorAll('.favorite-btn');
-        
-        favoriteButtons.forEach(btn => {
-          btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Alterna a classe active
-            this.classList.toggle('active');
-            
-            // Alterna o ícone e a cor
-            const icon = this.querySelector('i');
-            if (this.classList.contains('active')) {
-              icon.className = 'bx bxs-star';
-              this.style.color = '#fbbf24'; // Amarelo
-              this.setAttribute('aria-label', 'Desmarcar favorito');
-            } else {
-              icon.className = 'bx bx-star';
-              this.style.color = ''; // Volta para a cor padrão
-              this.setAttribute('aria-label', 'Marcar como favorito');
-            }
-            
-            // para o futuro: adicionar a logica para favoritar
-            const cardTitle = this.closest('.empresa-card').querySelector('.empresa-nome').textContent;
-            console.log(`Empresa ${this.classList.contains('active') ? 'adicionada aos' : 'removida dos'} favoritos: ${cardTitle}`);
-          });
-        });
-      }
-      
+      // -------------- Favoritos nos cartões de empresas --------------      
       setupFavoriteButtons();
       
       // -------------- Animações de entrada --------------

@@ -1,5 +1,5 @@
 // * Prisma
-const prisma = require('@config/db.js')
+const prisma = require('../config/db.js')
 
 class EmpresaModel {
 
@@ -30,6 +30,27 @@ class EmpresaModel {
         const resultado = await prisma.empresas.findMany(configPrisma)
         const resultadoSemSenha = resultado.map(({ senha, ...resto }) => resto);
         return resultadoSemSenha;
+    }
+
+    static async buscarTodasEmpresasPublic(page){
+        const pagina = page && Number(page)>1 ? Number(page) : 1;
+        const resultado = await prisma.empresas.findMany({
+            select: {
+                cnpj: true,
+                nome_fant: true,
+                descricao: true,
+                setor: true,
+                porte: true,
+                estado: true,
+                foto: true
+            },
+            orderBy: {
+                data_criacao: 'desc'
+            },
+            skip: (pagina-1)*9,
+            take: 9
+        });
+        return resultado;
     }
 
     static async loginInfoPorCnpj(cnpj){

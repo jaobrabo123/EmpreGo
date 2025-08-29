@@ -516,9 +516,9 @@
 
     <section class="empresas-section w-full px-5 py-6 mt-8">
       <h2 class="section-title text-2xl font-bold mb-8 text-white text-center relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-14 after:h-1 after:bg-primary after:rounded-full">Empresas em Destaque</h2>
-      <div class="empresas-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <div id="divEmpresas" class="empresas-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
         <!-- Cartão 1 -->
-        <article class="empresa-card bg-dark-800 rounded-lg overflow-hidden shadow-md transition-all relative border border-dark-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-primary-400">
+        <!-- <article class="empresa-card bg-dark-800 rounded-lg overflow-hidden shadow-md transition-all relative border border-dark-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-primary-400">
           <div class="card-header relative h-32 bg-dark-700 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-primary-800/30 before:to-transparent">
             <img src="/assets/imgs/BIGSlogo.png" alt="Logo Tech Solutions" class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-dark-800 bg-white shadow-md z-10 transition-transform">
             <button class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110" aria-label="Marcar como favorito">
@@ -541,10 +541,10 @@
             </div>
             <button class="ver-mais-btn bg-primary-800 btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-primary-500 hover:-translate-y-0.5 hover:shadow">Ver mais</button>
           </div>
-        </article>
+        </article> -->
 
         <!-- Cartão 2 -->
-        <article class="empresa-card bg-dark-800 rounded-lg overflow-hidden shadow-md transition-all relative border border-dark-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-primary-400">
+        <!-- <article class="empresa-card bg-dark-800 rounded-lg overflow-hidden shadow-md transition-all relative border border-dark-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-primary-400">
           <div class="card-header relative h-32 bg-dark-700 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-primary-800/30 before:to-transparent">
             <img src="/assets/imgs/BIGSlogo.png" alt="Logo DesignHub" class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-dark-800 bg-white shadow-md z-10 transition-transform">
             <button class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-yellow-400 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110" aria-label="Desmarcar favorito">
@@ -567,10 +567,10 @@
             </div>
             <button class="ver-mais-btn bg-primary-800 btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-primary-500 hover:-translate-y-0.5 hover:shadow">Ver mais</button>
           </div>
-        </article>
+        </article> -->
 
         <!-- Cartão 3 -->
-        <article class="empresa-card bg-dark-800 rounded-lg overflow-hidden shadow-md transition-all relative border border-dark-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-primary-400">
+        <!-- <article class="empresa-card bg-dark-800 rounded-lg overflow-hidden shadow-md transition-all relative border border-dark-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-primary-400">
           <div class="card-header relative h-32 bg-dark-700 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-primary-800/30 before:to-transparent">
             <img src="/assets/imgs/BIGSlogo.png" alt="Logo GreenEnergy" class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-dark-800 bg-white shadow-md z-10 transition-transform">
             <button class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110" aria-label="Marcar como favorito">
@@ -593,7 +593,7 @@
             </div>
             <button class="ver-mais-btn bg-primary-800 btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-primary-500 hover:-translate-y-0.5 hover:shadow">Ver mais</button>
           </div>
-        </article>
+        </article> -->
       </div>
       <div class="ver-todas text-center mt-8 w-full">
         <a href="#" class="ver-todas-btn btn-outline-primary inline-block px-8 py-3 rounded-full text-base font-medium cursor-pointer transition-all no-underline">Ver todas as empresas</a>
@@ -601,8 +601,8 @@
     </section>
   </main>
 
-  <script src="/js/vagas.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module" src="/js/vagas.js"></script>
   
 </body>
 

@@ -12,6 +12,7 @@ router.post('/candidatos', CandidatoController.cadastrar);
 router.post('/candidatos/confirmar', limiteValidarCodigo, CandidatoController.confirmarCadastro);
 router.post('/candidatos/reenviar', limiteNodemailer, CandidatoController.enviarNovoCodigo);
 router.get('/candidatos/all', authenticateToken, apenasAdmins, CandidatoController.listarTodos);
+router.get('/candidatos/public', authenticateToken, apenasAdmins, CandidatoController.listarTodosPublic);
 router.delete('/candidatos/:cd', authenticateToken, apenasCandidatos, CandidatoController.remover);
 
 module.exports = router;

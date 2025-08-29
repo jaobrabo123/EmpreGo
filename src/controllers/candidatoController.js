@@ -122,6 +122,15 @@ class CandidatoController {
         }
     }
 
+    static async listarTodosPublic(req, res){
+        try {
+            const candidatos = await CandidatoModel.buscarTodosCandidatosPublic(req.query.page);
+            res.status(200).json(candidatos);
+        } catch (erro) {
+            res.status(500).json({ error: `Erro ao buscar candidatos: ${erro.message}` });
+        }
+    }
+
     static async remover(req, res){
         try {
             const { cd } = req.params;

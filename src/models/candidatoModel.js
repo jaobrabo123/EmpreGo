@@ -48,6 +48,33 @@ class CandidatoModel{
         return resultadoSemSenha;
     }
 
+    static async buscarTodosCandidatosPublic(page){
+        const pagina = page && Number(page)>1 ? Number(page) : 1;
+        const resultado = await prisma.candidatos.findMany({
+            select: {
+                id: true,
+                nome: true,
+                descricao: true,
+                foto: true,
+                tags: {
+                    select: {
+                        nome: true
+                    },
+                    take: 3,
+                    orderBy: {
+                        data_criacao: 'desc'
+                    }
+                }
+            },
+            orderBy: {
+                data_criacao: 'desc'
+            },
+            skip: (pagina-1)*9,
+            take: 9
+        });
+        return resultado;
+    }
+
     static async loginInfoPorEmail(email){
         const resultado = await prisma.candidatos.findUniqueOrThrow({
             select: {

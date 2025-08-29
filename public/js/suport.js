@@ -88,6 +88,6 @@
                 fuseBox.classList.add('animate-shake');
                 setTimeout(() => {
                     fuseBox.classList.remove('animate-shake');
-                }, 500);
+                }, 80);
             }, 3000);
         });

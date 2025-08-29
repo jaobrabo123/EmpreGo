@@ -1,4 +1,42 @@
- document.addEventListener('DOMContentLoaded', function() {
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
+async function carregarInit() {
+  const response = await axiosWe('/empresas/public');
+  const data = response.data;
+  data.forEach(emp => {
+    const html = `
+      <article class="empresa-card bg-dark-800 rounded-lg overflow-hidden shadow-md transition-all relative border border-dark-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-primary-400">
+          <div class="card-header relative h-32 bg-dark-700 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-primary-800/30 before:to-transparent">
+            <img src="${emp.foto}" alt="Logo da Empresa" class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-dark-800 bg-white shadow-md z-10 transition-transform">
+            <button class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110" aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
+            </button>
+          </div>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">${emp.nome_fant}</h3>
+            <p class="empresa-descricao text-dark-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              ${emp.descricao}
+            </p>
+          </div>
+          <div class="card-footer flex justify-between items-center p-4 border-t border-dark-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span class="tag-chip bg-primary-800 text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all hover:bg-primary-500">${emp.setor}</span>
+                <span class="tag-chip bg-primary-800 text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all hover:bg-primary-500">${emp.porte}</span>
+                <span class="tag-chip bg-primary-800 text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all hover:bg-primary-500">${emp.estado}</span>
+              </div>
+            </div>
+            <button class="ver-mais-btn bg-primary-800 btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-primary-500 hover:-translate-y-0.5 hover:shadow">Ver mais</button>
+          </div>
+        </article>
+    `
+    document.querySelector('#divEmpresas').innerHTML += html;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+      await carregarInit();
       // Inicialização do Swiper (mantido conforme original)
       const swiper = new Swiper('.recomendacoes-swiper', {
         loop: true,

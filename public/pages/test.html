@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços - Design 3D Moderno</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                        },
+                        light: {
+                            200: '#f3f4f6',
+                        },
+                        dark: {
+                            900: '#111827',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-grid-pattern {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(15 23 42 / 0.04)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+        }
+        .bg-grid-pattern-light {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(15 23 42 / 0.05)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+        }
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
+        
+        /* Estilos 3D e efeitos especiais */
+        .floating-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .floating-card:hover {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(20px);
+        }
+        
+        .tech-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #3b82f6, #60a5fa);
+            opacity: 0.4;
+            filter: blur(5px);
+            transform-style: preserve-3d;
+        }
+        
+        .hologram-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hologram-effect::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.1), rgba(59, 130, 246, 0.1));
+            transform: rotate(45deg);
+            animation: hologram 3s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes hologram {
+            0% { transform: translateY(-100%) rotate(45deg); }
+            100% { transform: translateY(100%) rotate(45deg); }
+        }
+        
+        .timeline-dot-3d {
+            transform-style: preserve-3d;
+            transform: translateZ(20px);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        
+        .code-line {
+            font-family: monospace;
+            color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-light-200 dark:bg-dark-900 transition-colors duration-300">
+    <section id="servicos" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Grid de fundo tecnológico -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-5 bg-grid-pattern-light dark:bg-grid-pattern"></div>
+        
+        <!-- Partículas flutuantes em 3D -->
+        <div class="tech-particle top-20 left-20 w-32 h-32 animate-float" style="transform: translateZ(10px);"></div>
+        <div class="tech-particle bottom-40 right-32 w-40 h-40 animate-float" style="animation-delay: 2s; transform: translateZ(30px);"></div>
+        
+        <!-- Partículas adicionais para efeito 3D -->
+        <div class="tech-particle top-1/4 right-1/4 w-16 h-16 animate-float" style="animation-delay: 1s; transform: translateZ(50px);"></div>
+        <div class="tech-particle bottom-1/3 left-1/3 w-24 h-24 animate-float" style="animation-delay: 3s; transform: translateZ(40px);"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 opacity-0" id="services-header">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+                    Nossos <span class="text-gradient">Serviços</span>
+                </h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Oferecemos soluções completas para candidatos e empresas alcançarem seus objetivos profissionais.
+                </p>
+            </div>
+
+            <div class="max-w-5xl mx-auto">
+                <!-- Timeline 3D moderna -->
+                <div class="relative opacity-0" id="timeline-container">
+                    <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-primary-500/20 to-transparent">
+                        <div class="absolute inset-0 bg-gradient-to-b from-primary-500 to-transparent opacity-70" style="filter: blur(8px);"></div>
+                    </div>
+
+                    <!-- Item 1 da timeline com efeito 3D -->
+                    <div class="mb-16 flex items-center justify-between">
+                        <div class="w-5/12 pr-8 text-right opacity-0 timeline-item">
+                            <div class="floating-card inline-block p-6 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border border-white/20 dark:border-gray-700/20">
+                                <h3 class="text-2xl font-bold text-primary-500 dark:text-primary-400 mb-2 hologram-effect px-2 py-1 rounded-md">Introdução Básica</h3>
+                                <p class="text-gray-600 dark:text-gray-400">
+                                    Este website é dedicado a garantir uma rápida e accessível maneira de se filtrar entre
+                                    possiveis candidatos em busca de vagas de emprego.
+                                </p>
+                                <div class="mt-4 text-xs text-primary-500 font-mono">
+                                    <span class="code-line">filterCandidates()</span> • 
+                                    <span class="code-line">optimizeSearch()</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-2/12 flex justify-center">
+                            <div class="timeline-dot-3d w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center shadow-lg">
+                                <div class="w-4 h-4 rounded-full bg-white animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="w-5/12"></div>
+                    </div>
+
+                    <!-- Item 2 da timeline com efeito 3D -->
+                    <div class="mb-16 flex items-center justify-between">
+                        <div class="w-5/12"></div>
+                        <div class="w-2/12 flex justify-center">
+                            <div class="timeline-dot-3d w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center shadow-lg">
+                                <div class="w-4 h-4 rounded-full bg-white animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="w-5/12 pl-8 opacity-0 timeline-item">
+                            <div class="floating-card inline-block p-6 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border border-white/20 dark:border-gray-700/20">
+                                <h3 class="text-2xl font-bold text-primary-500 dark:text-primary-400 mb-2 hologram-effect px-2 py-1 rounded-md">Quem Está Por Trás</h3>
+                                <p class="text-gray-600 dark:text-gray-400">
+                                    O site foi desenvolvido por um grupo de 5 estudantes da escola técnica "SENAI", os quais
+                                    participam da turma de "Desenvolvimento de Sistemas", no Terceiro Ano do curso.
+                                </p>
+                                <div class="mt-4 text-xs text-primary-500 font-mono">
+                                    <span class="code-line">team:5</span> • 
+                                    <span class="code-line">course:"DS"</span> • 
+                                    <span class="code-line">year:3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 da timeline com efeito 3D -->
+                    <div class="flex items-center justify-between">
+                        <div class="w-5/12 pr-8 text-right opacity-0 timeline-item">
+                            <div class="floating-card inline-block p-6 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border border-white/20 dark:border-gray-700/20">
+                                <h3 class="text-2xl font-bold text-primary-500 dark:text-primary-400 mb-2 hologram-effect px-2 py-1 rounded-md">Info Extra</h3>
+                                <a href="mailto:emprego.contato22@gmail.com?subject=Contato&body=Olá,%20gostaria%20de%20mais%20informações"
+                                    class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors block">
+                                    <p>
+                                        Caso ocorra algum problema ou seja encontrado um erro, não hesite em enviar um
+                                        e-mail para "emprego.contato22@gmail.com",
+                                        seu feedback é de extrema importância para nós! Cheque
+                                        também o suporte para mais informações.
+                                    </p>
+                                </a>
+                                <div class="mt-4 text-xs text-primary-500 font-mono">
+                                    <span class="code-line">contactSupport()</span> • 
+                                    <span class="code-line">sendFeedback()</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-2/12 flex justify-center">
+                            <div class="timeline-dot-3d w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center shadow-lg">
+                                <div class="w-4 h-4 rounded-full bg-white animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="w-5/12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Elementos 3D adicionais flutuantes -->
+        <div class="absolute bottom-10 left-10 w-20 h-20 rounded-lg bg-primary-500/10 dark:bg-primary-500/5 border border-primary-500/20 animate-float" style="transform: rotate(25deg) translateZ(15px); animation-delay: 1.5s;"></div>
+        <div class="absolute top-10 right-10 w-16 h-16 rounded-full bg-primary-600/10 dark:bg-primary-600/5 border border-primary-600/20 animate-float" style="transform: translateZ(25px); animation-delay: 3.5s;"></div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animação de entrada para o cabeçalho
+            anime({
+                targets: '#services-header',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                duration: 1000,
+                easing: 'easeOutCubic'
+            });
+            
+            // Animação para os itens da timeline
+            anime({
+                targets: '.timeline-item',
+                opacity: [0, 1],
+                translateX: function(el, i) {
+                    return i % 2 === 0 ? [-50, 0] : [50, 0];
+                },
+                delay: anime.stagger(300),
+                duration: 800,
+                easing: 'easeOutCubic'
+            });
+            
+            // Animação para a linha do tempo
+            anime({
+                targets: '#timeline-container',
+                opacity: [0, 1],
+                duration: 1200,
+                easing: 'easeOutCubic'
+            });
+            
+            // Animação contínua para os cartões flutuantes
+            const floatingCards = document.querySelectorAll('.floating-card');
+            floatingCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    anime({
+                        targets: card,
+                        translateY: -10,
+                        scale: 1.02,
+                        duration: 300,
+                        easing: 'easeOutCubic'
+                    });
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    anime({
+                        targets: card,
+                        translateY: 0,
+                        scale: 1,
+                        duration: 300,
+                        easing: 'easeOutCubic'
+                    });
+                });
+            });
+            
+            // Efeito de parallax para as partículas
+            window.addEventListener('mousemove', function(e) {
+                const particles = document.querySelectorAll('.tech-particle');
+                const x = (window.innerWidth / 2 - e.clientX) / 25;
+                const y = (window.innerHeight / 2 - e.clientY) / 25;
+                
+                particles.forEach(particle => {
+                    const depth = parseInt(particle.style.transform.split('translateZ(')[1] || '0');
+                    const moveX = x * (depth / 10);
+                    const moveY = y * (depth / 10);
+                    
+                    anime({
+                        targets: particle,
+                        translateX: moveX,
+                        translateY: moveY,
+                        duration: 2000,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

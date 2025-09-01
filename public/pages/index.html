@@ -20,6 +20,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -28,9 +29,15 @@
                             600: '#7C3AED',
                         },
                         dark: {
-                            900: '#111827',
-                            800: '#1F2937',
-                            700: '#374151',
+                            900: '#000000',
+                            800: '#0A0A0A',
+                            700: '#141414',
+                        },
+                        light: {
+                            100: '#FFFFFF',
+                            200: '#F9FAFB',
+                            300: '#F3F4F6',
+                            400: '#E5E7EB',
                         }
                     },
                     fontFamily: {
@@ -66,9 +73,15 @@
 
 <link rel="stylesheet" href="/css/index.css">
 
-<body class="font-sans antialiased ">
+<body class="font-sans antialiased bg-light-100 text-gray-800 dark:bg-dark-900 dark:text-gray-200 transition-colors duration-300">
+    <!-- Botão de alternância de tema -->
+    <button id="theme-toggle" class="fixed top-24 right-8 z-30 p-3 rounded-full bg-light-300 dark:bg-dark-700 shadow-md hover:shadow-lg transition-all duration-300">
+        <i class='bx bx-sun text-xl text-yellow-500 dark:block hidden' id="theme-icon-dark"></i>
+        <i class='bx bx-moon text-xl text-gray-700 dark:hidden block' id="theme-icon-light"></i>
+    </button>
+
     <!-- Header -->
-    <header class="fixed w-full bg-black bg-opacity-90 backdrop-blur-md z-20 border-b border-gray-800">
+    <header class="fixed w-full bg-light-100 dark:bg-dark-900 bg-opacity-90 dark:bg-opacity-90 backdrop-blur-md z-20 border-b border-gray-300 dark:border-gray-800 transition-colors duration-300">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <!-- Efeito de glitch -->
@@ -76,7 +89,7 @@
                     <a href="/" class="flex items-center group" id="logo-container">
                         <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo"
                             class="h-10 w-10 transition-transform group-hover:scale-110">
-                        <span class="ml-2 text-2xl font-bold group-hover:animate-text-glitch">
+                        <span class="ml-2 text-2xl font-bold group-hover:animate-text-glitch text-gray-900 dark:text-white">
                             Empre<span class="text-primary-500">Go</span>
                         </span>
                     </a>
@@ -85,15 +98,15 @@
                 <!-- Naveção  -->
                 <nav class="links hidden md:flex items-center space-x-8">
                     <a href="#home"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Início</a>
+                        class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors link-underline">Início</a>
                     <a href="#servicos"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Serviços</a>
+                        class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors link-underline">Serviços</a>
                     <a href="#testperfis"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Biografias</a>
+                        class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors link-underline">Biografias</a>
                     <a href="/sobre"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Sobre</a>
+                        class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors link-underline">Sobre</a>
                     <a href="/suporte"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Suporte</a>
+                        class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors link-underline">Suporte</a>
 
                     <!-- Login / Cadastrar -->
                     <a href="/login"
@@ -110,23 +123,23 @@
                     </a>
 
                     <!-- Botão de Logout (inicialmente oculto) -->
-                    <a href="#" class="text-gray-300 hover:text-primary-400 transition-colors" id="logout">Sair</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors" id="logout">Sair</a>
                 </nav>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
+                <button id="mobile-menu-button" class="md:hidden text-gray-600 dark:text-gray-300 focus:outline-none">
                     <i class='bx bx-menu text-3xl'></i>
                 </button>
             </div>
 
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-4 pb-4">
-                <a href="#home" class="block text-gray-300 hover:text-primary-400 transition-colors">Início</a>
-                <a href="#servicos" class="block text-gray-300 hover:text-primary-400 transition-colors">Serviços</a>
+                <a href="#home" class="block text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">Início</a>
+                <a href="#servicos" class="block text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">Serviços</a>
                 <a href="#testperfis"
-                    class="block text-gray-300 hover:text-primary-400 transition-colors">Biografias</a>
-                <a href="/sobre" class="block text-gray-300 hover:text-primary-400 transition-colors">Sobre</a>
-                <a href="/suporte" class="block text-gray-300 hover:text-primary-400 transition-colors">Suporte</a>
+                    class="block text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">Biografias</a>
+                <a href="/sobre" class="block text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">Sobre</a>
+                <a href="/suporte" class="block text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">Suporte</a>
 
                 <!-- Login / Cadastrar -->
                 <a href="/login"
@@ -144,29 +157,29 @@
                 </a>
 
                 <!-- Botão de Logout (inicialmente oculto) -->
-                <a href="#" class="block text-gray-300 hover:text-primary-400 text-center transition-colors"
+                <a href="#" class="block text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 text-center transition-colors"
                      id="mobileLogout">Sair</a>
             </div>
         </div>
     </header>
 
-    <section id="home" class="min-h-screen flex items-center pt-20 bg-grid-pattern relative overflow-hidden">
+    <section id="home" class="min-h-screen flex items-center pt-20 bg-grid-pattern-light dark:bg-grid-pattern relative overflow-hidden bg-light-200 dark:bg-dark-900 transition-colors duration-300">
 
         <!-- particulas de fundo -->
         <div id="particles-js" class="fixed inset-0 z-0"></div>
 
         <!-- particulas flutuando -->
-        <div class="absolute top-20 left-20 w-32 h-32 rounded-full bg-primary-500 opacity-10 animate-float"></div>
-        <div class="absolute bottom-40 right-32 w-40 h-40 rounded-full bg-primary-600 opacity-10 animate-float"
+        <div class="absolute top-20 left-20 w-32 h-32 rounded-full bg-primary-500 opacity-20 dark:opacity-10 animate-float"></div>
+        <div class="absolute bottom-40 right-32 w-40 h-40 rounded-full bg-primary-600 opacity-20 dark:opacity-10 animate-float"
             style="animation-delay: 2s;"></div>
 
         <div class="container mx-auto px-6 py-20">
             <div class="flex flex-col lg:flex-row items-center">
                 <div class="lg:w-11/2 mb-12 lg:mb-0 opacity-0" id="hero-content">
-                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6" id="hero-title">
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-gray-900 dark:text-white" id="hero-title">
                         Encontre seu <span class="text-gradient">emprego</span> dos sonhos
                     </h1>
-                    <p class="text-xl md:text-2xl text-gray-400 mb-8" id="hero-subtitle">
+                    <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-8" id="hero-subtitle">
                         A plataforma mais inovadora para conectar talentos a oportunidades incríveis no mercado de
                         trabalho brasileiro.
                     </p>
@@ -177,29 +190,29 @@
                             <i class='bx bx-rocket mr-2'></i> Começar Agora
                         </a>
                         <a href="/sobre"
-                            class="px-8 py-4 border-2 border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-white rounded-xl text-lg font-semibold transition-colors duration-300 text-center transform hover:scale-105">
+                            class="px-8 py-4 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white rounded-xl text-lg font-semibold transition-colors duration-300 text-center transform hover:scale-105">
                             <i class='bx bx-info-circle mr-2'></i> Saiba Mais
                         </a>
                     </div>
 
                     <div class="mt-12">
-                        <p class="text-gray-500 mb-4">Conecte-se conosco</p>
+                        <p class="text-gray-500 dark:text-gray-500 mb-4">Conecte-se conosco</p>
                         <div class="flex space-x-4">
                             <a href="https://x.com/Oficial_EmpreGo"
-                                class="w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
-                                <i class='bx bxl-twitter text-xl text-primary-400'></i>
+                                class="w-8 h-8 rounded-full bg-light-300 hover:bg-light-400 dark:bg-gray-900 dark:hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
+                                <i class='bx bxl-twitter text-xl text-primary-500 dark:text-primary-400'></i>
                             </a>
                             <a href="https://www.tiktok.com/@oficial_emprego?lang=pt-BR"
-                                class="w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
-                                <i class='bx bxl-tiktok text-xl text-primary-400'></i>
+                                class="w-8 h-8 rounded-full bg-light-300 hover:bg-light-400 dark:bg-gray-900 dark:hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
+                                <i class='bx bxl-tiktok text-xl text-primary-500 dark:text-primary-400'></i>
                             </a>
                             <a href="https://www.instagram.com/oficial_emprego/"
-                                class="w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
-                                <i class='bx bxl-instagram text-xl text-primary-400'></i>
+                                class="w-8 h-8 rounded-full bg-light-300 hover:bg-light-400 dark:bg-gray-900 dark:hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
+                                <i class='bx bxl-instagram text-xl text-primary-500 dark:text-primary-400'></i>
                             </a>
                             <a href="https://www.youtube.com/channel/UCp_SRaBRFFBsBe7e-X_ExWA"
-                                class="w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
-                                <i class='bx bxl-youtube text-xl text-primary-400'></i>
+                                class="w-8 h-8 rounded-full bg-light-300 hover:bg-light-400 dark:bg-gray-900 dark:hover:bg-gray-800 flex items-center justify-center transition-colors duration-300 transform hover:scale-110">
+                                <i class='bx bxl-youtube text-xl text-primary-500 dark:text-primary-400'></i>
                             </a>
                         </div>
                     </div>
@@ -211,10 +224,10 @@
                         <img src="/assets/imgs/SalsaHire.png" alt="Ilustração de contratação"
                             class="w-full max-w-lg animate-float">
                         <div
-                            class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary-500 rounded-full opacity-20 blur-xl">
+                            class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary-500 rounded-full opacity-20 dark:opacity-20 blur-xl">
                         </div>
                         <div
-                            class="absolute -top-10 -right-10 w-40 h-40 bg-primary-600 rounded-full opacity-20 blur-xl">
+                            class="absolute -top-10 -right-10 w-40 h-40 bg-primary-600 rounded-full opacity-20 dark:opacity-20 blur-xl">
                         </div>
                     </div>
                 </div>
@@ -223,25 +236,24 @@
     </section>
 
     <!-- Serviços -->
-    <section id="servicos" class="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
+    <section id="servicos" class="min-h-screen flex items-center justify-center bg-light-200 dark:bg-dark-900 relative overflow-hidden transition-colors duration-300">
 
-        <div class="absolute top-0 left-0 w-full h-full opacity-5 bg-grid-pattern"></div>
+        <div class="absolute top-0 left-0 w-full h-full opacity-5 bg-grid-pattern-light dark:bg-grid-pattern"></div>
 
-        <!-- Canvas para partículas -->
 
-        <canvas id="particles" class="absolute inset-0 z-0"></canvas>
 
+        
         <!-- particulas flutuando -->
-        <div class="absolute top-20 left-20 w-32 h-32 rounded-full bg-primary-500 opacity-10 animate-float"></div>
-        <div class="absolute bottom-40 right-32 w-40 h-40 rounded-full bg-primary-600 opacity-10 animate-float"
+        <div class="absolute top-20 left-20 w-32 h-32 rounded-full bg-primary-500 opacity-20 dark:opacity-10 animate-float"></div>
+        <div class="absolute bottom-40 right-32 w-40 h-40 rounded-full bg-primary-600 opacity-20 dark:opacity-10 animate-float"
             style="animation-delay: 2s;"></div>
 
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center mb-16 opacity-0" id="services-header">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
                     Nossos <span class="text-gradient">Serviços</span>
                 </h2>
-                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
                     Oferecemos soluções completas para candidatos e empresas alcançarem seus objetivos profissionais.
                 </p>
             </div>
@@ -255,8 +267,8 @@
                     <!-- linha de historia 1 -->
                     <div class="mb-12 flex items-center justify-between">
                         <div class="w-5/12 pr-8 text-right opacity-0 timeline-item">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Introdução Básica</h3>
-                            <p class="text-gray-400">
+                            <h3 class="text-2xl font-bold text-primary-500 dark:text-primary-400 mb-2">Introdução Básica</h3>
+                            <p class="text-gray-600 dark:text-gray-400">
                                 Este website é dedicado a garantir uma rápida e accessível maneira de se filtrar entre
                                 possiveis candidatos em busca de vagas de emprego.
                             </p>
@@ -280,8 +292,8 @@
                             </div>
                         </div>
                         <div class="w-5/12 pl-8 opacity-0 timeline-item">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Quem Está Por Trás</h3>
-                            <p class="text-gray-400">
+                            <h3 class="text-2xl font-bold text-primary-500 dark:text-primary-400 mb-2">Quem Está Por Trás</h3>
+                            <p class="text-gray-600 dark:text-gray-400">
                                 O site foi desenvolvido por um grupo de 5 estudantes da escola técnica "SENAI", os quais
                                 participam da turma de "Desenvolvimento de Sistemas", no Terceiro Ano do curso.
                             </p>
@@ -291,10 +303,10 @@
                     <!-- linha de historia 3 -->
                     <div class="flex items-center justify-between">
                         <div class="w-5/12 pr-5 text-right opacity-0 timeline-item">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Info Extra</h3>
+                            <h3 class="text-2xl font-bold text-primary-500 dark:text-primary-400 mb-2">Info Extra</h3>
                             <a href="mailto:emprego.contato22@gmail.com?subject=Contato&body=Olá,%20gostaria%20de%20mais%20informações"
-                                class="text-gray-400 hover:text-primary-400 transition-colors">
-                                <p class="text-gray-400 ">
+                                class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">
+                                <p class="text-gray-600 dark:text-gray-400">
                                     Caso ocorra algum problema ou seja encontrado um erro, não hesite em enviar um
                                     e-mail para "emprego.contato22@gmail.com",
                                     seu feedback é de extrema importância para nós! Cheque
@@ -316,22 +328,22 @@
     </section>
 
     <!-- Perfis -->
-    <section id="testperfis" class="py-20 bg-black relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full opacity-5 bg-grid-pattern"></div>
+    <section id="testperfis" class="py-20 bg-light-200 dark:bg-dark-900 relative overflow-hidden transition-colors duration-300">
+        <div class="absolute top-0 left-0 w-full h-full opacity-5 bg-grid-pattern-light dark:bg-grid-pattern"></div>
 
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center mb-16 opacity-0" id="profiles-header">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
                     Nossos <span class="text-gradient">Talentos</span>
                 </h2>
-                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
                     Equipe de desenvolvedores
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Perfil 1 -->
-                <div class="bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="0">
+                <div class="bg-white dark:bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="0">
                     <div class="flex justify-center mb-6">
                         <div class="relative">
                             <img src="/assets/imgs/test.png" alt="Perfil"
@@ -342,16 +354,16 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-2">Alec Vinícius</h3>
-                    <p class="text-primary-400 text-center mb-4 ">Front-end</p>
-                    <p class="text-gray-400 text-center">
+                    <h3 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">Alec Vinícius</h3>
+                    <p class="text-primary-500 dark:text-primary-400 text-center mb-4 ">Front-end</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
                         Alec Vinícius é um desenvolvedor front-end, tendo a obrigação de criar interfaces intuitivas e
                         responsivas. Com experiência em HTML, CSS, tailwindcss, anime.js e JavaScript.
                     </p>
                 </div>
 
                 <!-- Perfil 2 -->
-                <div class="bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="100">
+                <div class="bg-white dark:bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="100">
                     <div class="flex justify-center mb-6">
                         <div class="relative">
                             <img src="/assets/imgs/test.png" alt="Perfil"
@@ -362,16 +374,16 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-2">João Azevedo</h3>
-                    <p class="text-primary-400 text-center mb-4">Back-end</p>
-                    <p class="text-gray-400 text-center">
+                    <h3 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">João Azevedo</h3>
+                    <p class="text-primary-500 dark:text-primary-400 text-center mb-4">Back-end</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
                         João Azevedo é um desenvolvedor back-end, responsável por criar a lógica do servidor e gerenciar
                         bancos de dados. Ele é proficiente em postegreSQL, Axios e Node.js.
                     </p>
                 </div>
 
                 <!-- Perfil 3 -->
-                <div class="bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="200">
+                <div class="bg-white dark:bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="200">
                     <div class="flex justify-center mb-6">
                         <div class="relative">
                             <img src="/assets/imgs/test.png" alt="Perfil"
@@ -382,16 +394,16 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-2">Mateus Ricardo</h3>
-                    <p class="text-primary-400 text-center mb-4">Design</p>
-                    <p class="text-gray-400 text-center">
+                    <h3 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">Mateus Ricardo</h3>
+                    <p class="text-primary-500 dark:text-primary-400 text-center mb-4">Design</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
                         Mateus Ricardo é um designer gráfico, especializado em criar visuais atraentes e funcionais.
                         Focado em desenvolver interfaces de usuário.
                     </p>
                 </div>
 
                 <!-- Perfil 4 -->
-                <div class="bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="300">
+                <div class="bg-white dark:bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="300">
                     <div class="flex justify-center mb-6">
                         <div class="relative">
                             <img src="/assets/imgs/test.png" alt="Perfil"
@@ -402,9 +414,9 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-2">João Souza</h3>
-                    <p class="text-primary-400 text-center mb-4">Tester</p>
-                    <p class="text-gray-400 text-center">
+                    <h3 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">João Souza</h3>
+                    <p class="text-primary-500 dark:text-primary-400 text-center mb-4">Tester</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
                         João Souza é um tester de software, responsável por garantir a qualidade do produto final. Ele
                         realiza testes funcionais e de usabilidade para identificar bugs e melhorar a experiência do
                         usuário.
@@ -412,7 +424,7 @@
                 </div>
 
                 <!-- Perfil 5 -->
-                <div class="bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="400">
+                <div class="bg-white dark:bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="400">
                     <div class="flex justify-center mb-6">
                         <div class="relative">
                             <img src="/assets/imgs/test.png" alt="Perfil"
@@ -423,16 +435,16 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-2">Carolina Kaippert</h3>
-                    <p class="text-primary-400 text-center mb-4">Back-end</p>
-                    <p class="text-gray-400 text-center">
+                    <h3 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">Carolina Kaippert</h3>
+                    <p class="text-primary-500 dark:text-primary-400 text-center mb-4">Back-end</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
                         Carolina Kaippert é uma desenvolvedora back-end, responsável pela manutenção do site e rotas do servidor.
                         Ela é proficiente em JavaScript, Tailwind, Prisma, Node.Js.
                     </p>
                 </div>
 
                 <!-- Perfil 6 -->
-                <div class="bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="500">
+                <div class="bg-white dark:bg-dark-900 rounded-xl p-6 shadow-lg card-hover opacity-0 profile-card" data-delay="500">
                     <div class="flex justify-center mb-6">
                         <div class="relative">
                             <img src="/assets/imgs/test.png" alt="Perfil"
@@ -443,15 +455,15 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-center mb-2">Athon Fernandes</h3>
-                    <p class="text-primary-400 text-center mb-4">Influencer</p>
-                    <p class="text-gray-400 text-center">
+                    <h3 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">Athon Fernandes</h3>
+                    <p class="text-primary-500 dark:text-primary-400 text-center mb-4">Influencer</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
                         Athon Fernandes é um criador de conteúdo digital, responsável pela produção e gestão de materiais para TikTok,
                         YouTube, Instagram e X. 
                 </div>
             </div>
             <div class="text-center mt-12 opacity-100" id="profiles-footer">
-                <p class="text-gray-500">
+                <p class="text-gray-500 dark:text-gray-500">
                     Conheça mais sobre nossa equipe e veja como podemos ajudar sua empresa a encontrar os melhores
                     talentos.
                 </p>
@@ -464,33 +476,33 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark-900/50 py-12 border-t border-gray-800 relative z-20 ">
+    <footer class="bg-light-300 dark:bg-dark-900/50 py-12 border-t border-gray-300 dark:border-gray-800 relative z-20 transition-colors duration-300">
         <div class="container mx-auto px-6 ">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 ">
                 <!-- Coluna 1 -->
                 <div>
                     <div class="flex items-center mb-4">
                         <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" class="h-10 w-10">
-                        <span class="ml-2 text-2xl font-bold">
+                        <span class="ml-2 text-2xl font-bold text-gray-900 dark:text-white">
                             Empre<span class="text-primary-500">Go</span>
                         </span>
                     </div>
-                    <p class="text-gray-400 mb-4">
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
                         A mais nova plataforma para encontrar e divulgar trabalho no Brasil.
                     </p>
                     <div class="flex space-x-4">
-                        <a href="https://x.com/Oficial_EmpreGo" class="text-gray-400 hover:text-primary-400 transition-colors ">
+                        <a href="https://x.com/Oficial_EmpreGo" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors ">
                             <i class='bx bxl-twitter text-xl'></i>
                         </a>
-                        <a href="https://www.tiktok.com/@oficial_emprego?lang=pt-BR" class="text-gray-400 hover:text-primary-400 transition-colors">
+                        <a href="https://www.tiktok.com/@oficial_emprego?lang=pt-BR" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">
                             <i class='bx bxl-tiktok text-xl'></i>
                         </a>
                         <a href="https://www.instagram.com/oficial_emprego/"
-                            class="text-gray-400 hover:text-primary-400 transition-colors">
+                            class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">
                             <i class='bx bxl-instagram text-xl'></i>
                         </a>
                         <a href="https://www.youtube.com/channel/UCp_SRaBRFFBsBe7e-X_ExWA"
-                            class="text-gray-400 hover:text-primary-400 transition-colors">
+                            class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">
                             <i class='bx bxl-youtube text-xl'></i>
                         </a>
                     </div>
@@ -498,48 +510,48 @@
 
                 <!-- coluna 2 -->
                 <div>
-                    <h3 class="text-lg font--semibold text-white mb-4">Links Rápidos</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Links Rápidos</h3>
                     <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-400 hover:text-primary-400 transition-colors">Início</a>
+                        <li><a href="#home" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Início</a>
                         </li>
                         <li><a href="#servicos"
-                                class="text-gray-400 hover:text-primary-400 transition-colors">Serviços</a></li>
+                                class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Serviços</a></li>
                         <li><a href="#testperfis"
-                                class="text-gray-400 hover:text-primary-400 transition-colors">Biografias</a></li>
-                        <li><a href="/sobre" class="text-gray-400 hover:text-primary-400 transition-colors">Sobre</a>
+                                class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Biografias</a></li>
+                        <li><a href="/sobre" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Sobre</a>
                         </li>
                         <li><a href="/suporte"
-                                class="text-gray-400 hover:text-primary-400 transition-colors">Suporte</a></li>
+                                class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Suporte</a></li>
                     </ul>
                 </div>
 
                 <!-- coluna 3 -->
                 <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Recursos</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recursos</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">FAQ</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Termos de
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Termos de
                                 Serviço</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Política de
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Política de
                                 Privacidade</a></li>
                     </ul>
                 </div>
 
                 <!-- Coluna 4 -->
                 <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Contato</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contato</h3>
                     <ul class="space-y-2">
                         <li><a href="mailto:emprego.contato22@gmail.com?subject=Contato&body=Olá,%20gostaria%20de%20mais%20informações"
-                                class="text-gray-400 cursor: pointer;"><i class='bx bx-envelope mr-2'></i>
+                                class="text-gray-600 dark:text-gray-400 cursor: pointer;"><i class='bx bx-envelope mr-2'></i>
                                 emprego.contato22@gmail.com</a></li>
-                        <li class="text-gray-400"><i class='bx bx-phone mr-2'></i> (XX) XXXX-XXXX</li>
-                        <li class="text-gray-400"><i class='bx bx-map mr-2'></i> Cidade, Estado - Brasil</li>
+                        <li class="text-gray-600 dark:text-gray-400"><i class='bx bx-phone mr-2'></i> (XX) XXXX-XXXX</li>
+                        <li class="text-gray-600 dark:text-gray-400"><i class='bx bx-map mr-2'></i> Cidade, Estado - Brasil</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="border-t border-gray-800 pt-8 text-center">
-                <p class="text-gray-500">
+            <div class="border-t border-gray-300 dark:border-gray-800 pt-8 text-center">
+                <p class="text-gray-500 dark:text-gray-500">
                     &copy; 2025 EmpreGo. Todos os direitos reservados.
                 </p>
             </div>
@@ -558,6 +570,47 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="/js/index.js"></script>
     <script type="module" src="/js/link.js"></script>
+
+    <script>
+        // Função para alternar entre light e dark mode
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            
+            // Verificar se há uma preferência salva
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+            } else {
+                // Se não houver preferência salva, usar a preferência do sistema
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', prefersDark);
+                localStorage.setItem('theme', prefersDark ? 'dark' : 'light');
+            }
+            
+            // Atualizar ícones com base no tema atual
+            updateThemeIcons();
+            
+            // Alternar tema quando o botão for clicado
+            themeToggle.addEventListener('click', function() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateThemeIcons();
+            });
+            
+            function updateThemeIcons() {
+                const isDark = document.documentElement.classList.contains('dark');
+                if (isDark) {
+                    themeIconDark.classList.remove('hidden');
+                    themeIconLight.classList.add('hidden');
+                } else {
+                    themeIconDark.classList.add('hidden');
+                    themeIconLight.classList.remove('hidden');
+                }
+            }
+        });
+    </script>
 
 </body>
 

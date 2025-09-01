@@ -1,4 +1,6 @@
-const pool = require('../config/db.js');
+// * Prisma
+const prisma = require('../config/db.js');
+
 const { ErroDeValidacao } = require('../utils/erroClasses.js');
 
 class TokenService{
@@ -6,22 +8,26 @@ class TokenService{
     static async adicionarToken(iden, tipo, token, expira_em){
         if(!iden||!tipo||!token||!expira_em) throw new ErroDeValidacao('Todos os campos devem ser fornecidos.');
 
-        let insert
-        if(tipo==='candidato') insert = 'candidato_id';
-        else if(tipo==='empresa') insert = 'empresa_cnpj'
+        const data = {
+            tipo,
+            token,
+            expira_em
+        }
+        if(tipo==='candidato') data.candidato_id = iden;
+        else if(tipo==='empresa') data.empresa_cnpj = iden;
         else throw new ErroDeValidacao('Tipo inválido para o token.');
 
-        await pool.query(`insert into tokens (${insert}, tipo, token, expira_em) values($1, $2, $3, $4)`,
-            [iden, tipo, token, expira_em]
-        )
+        await prisma.tokens.create({ data });
     }
     
     static async removerToken(tkn){
-        if(!tkn) throw new Error('Token não fornecido.');
+        if(!tkn) throw new ErroDeValidacao('Token não fornecido.');
 
-        await pool.query('DELETE FROM tokens WHERE token = $1', 
-            [tkn]
-        );
+        await prisma.tokens.delete({
+            where: {
+                token: tkn
+            }
+        })
     }
 }
 

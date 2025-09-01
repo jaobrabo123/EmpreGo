@@ -111,7 +111,7 @@ a {
 #boxTags {
     background-color: #393053;
     width: 1000px;
-    height: 70px;
+    min-height: 70px;
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -138,7 +138,7 @@ a {
     opacity: 80%;
 }
 
-.Tags button {
+#Tags button {
     color: White;
     font-weight: bold;
     height: 50px;
@@ -154,16 +154,16 @@ a {
     background-color: #18122b;
 }
 
-.Tags button:hover {
+#Tags button:hover {
     cursor: pointer;
     opacity: 80%;
 }
 
-#tagLing {
+.tagLing {
     border-color: #692785;
 }
 
-#tagHorario {
+.tagHorario {
     border-color: white;
 }
 
@@ -346,4 +346,86 @@ a {
 
 .btn-editar-perfil:hover {
     background: #443C68;
+}
+
+#modalInput {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#modalInput-content {
+    background-color: #fff;
+    color: #2c3e50;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+#modalInput-content p {
+    margin-bottom: 1rem;
+}
+
+#modalInput-content button {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#modalDelete {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#modalDelete-content {
+    background-color: #fff;
+    color: #2c3e50;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+#modalDelete-content p {
+    margin-bottom: 1rem;
+}
+
+#modalDelete-content button {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#btnConfirmar {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+#btnCancelar {
+    background-color: #bdc3c7;
+    color: #2c3e50;
 }

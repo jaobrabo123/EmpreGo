@@ -1,24 +1,39 @@
-const CandidatoModel = require("../models/candidatoModel");
+// * Imports
+const CandidatoModel = require('../models/candidatoModel.js');
 const EmpresaModel = require("../models/empresaModel");
 const CandidatoService = require("../services/candidatoService");
 const EmpresaService = require("../services/empresaService");
-const { ErroDeValidacao, ErroDeConflito } = require('../utils/erroClasses.js');
+const { salvarCookieFoto } = require('../utils/cookieUtils.js');
+const { ErroDeValidacao } = require('../utils/erroClasses.js');
 
 class PerfilController {
 
     static async buscarCandidato(req, res){
         try {
             const id = req.user.id;
-
-            const perfilCandidato = await CandidatoModel.buscarPerfilInfoPorId(id);
-
-            if (!perfilCandidato) {
-                return res.status(404).json({ error: 'Usuário não encontrado' });
-            }
-
+            const perfilCandidato = await CandidatoModel.buscarCandidatoPorId(id);
+            salvarCookieFoto(res, perfilCandidato.foto);
             res.status(200).json(perfilCandidato);
-        } catch (error) {
-            res.status(500).json({ error: 'Erro ao buscar perfil: ' + error.message });
+        } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Usuário não encontrado' });
+            res.status(500).json({ error: 'Erro ao buscar perfil: ' + erro.message });
+        }
+    }
+
+    static async buscarFotoCandidato(req, res){
+        try {
+            const id = req.user.id;
+            let foto = req.cookies.foto_perfil;
+            if(!foto) {
+                const foto_perfil = await CandidatoModel.buscarFotoPorId(id);
+                salvarCookieFoto(res, foto_perfil);
+                foto = foto_perfil;
+            }
+            res.status(200).json(foto);
+        } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Candidato não encontrado' });
+            console.error(erro);
+            res.status(500).json({ error: 'Erro ao buscar foto de perfil: ' + erro.message });
         }
     }
 
@@ -53,18 +68,30 @@ class PerfilController {
     static async buscarEmpresa(req, res){
         try {
             const cnpj = req.user.id;
-        
-            const empresa = await EmpresaModel.buscarPerfilInfoPorCnpj(cnpj);
-        
-            if (!empresa) {
-              return res.status(404).json({ error: 'Empresa não encontrada' });
-            }
-        
+            const empresa = await EmpresaModel.buscarEmpresaPorCnpj(cnpj);
+            salvarCookieFoto(empresa.foto);
             res.status(200).json(empresa);
         }
         catch (erro) {
-            console.error(erro)
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Empresa não encontrada' });
             res.status(500).json({ error: 'Erro ao buscar perfil da empresa: ' + erro.message });
+        }
+    }
+
+    static async buscarFotoEmpresa(req, res){
+        try {
+            const cnpj = req.user.id;
+            let foto = req.cookies.foto_perfil;
+            if(!foto) {
+                const foto_perfil = await EmpresaModel.buscarFotoPorCnpj(cnpj);
+                salvarCookieFoto(res, foto_perfil);
+                foto = foto_perfil;
+            }
+            res.status(200).json(foto);
+        } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Empresa não encontrada' });
+            console.error(erro);
+            res.status(500).json({ error: 'Erro ao buscar foto de perfil: ' + erro.message });
         }
     }
 

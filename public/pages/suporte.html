@@ -4,63 +4,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suporte | EmpreGo</title>
+
+    <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
-    <script type="module" src="/js/link.js" defer></script>
-    <link rel="stylesheet" href="/css/styles.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#8B5CF6',
+                            600: '#7C3AED',
+                        },
+                        dark: {
+                            900: '#111827',
+                            800: '#1F2937',
+                            700: '#374151',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 3s ease infinite',
+                        'text-glitch': 'text-glitch 0.5s linear infinite',
+                        'shake': 'shake 0.5s ease infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(139, 92, 246, 0.5)' },
+                            '50%': { boxShadow: '0 0 20px rgba(139, 92, 246, 0.8)' },
+                        },
+                        'text-glitch': {
+                            '0%': { textShadow: '2px 0 #8B5CF6, -2px 0 #EC4899' },
+                            '25%': { textShadow: '-2px 0 #8B5CF6, 2px 0 #EC4899' },
+                            '50%': { textShadow: '2px 0 #EC4899, -2px 0 #8B5CF6' },
+                            '75%': { textShadow: '-2px 0 #EC4899, 2px 0 #8B5CF6' },
+                            '100%': { textShadow: '2px 0 #8B5CF6, -2px 0 #EC4899' },
+                        },
+                        'shake': {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+                            '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <link rel="stylesheet" href="/css/stylesSuporte.css">
-    <title>Suporte</title>
 </head>
 
-<body>
-    <header>
-        <div id="logo">
-            <a href="/" target="_self">
-                <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg">
-            </a>
-            <a href="/" target="_self" id="nomedosite">Empre<span>Go</span></a>
+<body class="font-sans antialiased">
+    <!-- Header -->
+    <header class="fixed w-full bg-black bg-opacity-90 backdrop-blur-md z-20 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Efeito de glitch -->
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center group" id="logo-container">
+                        <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo"
+                            class="h-10 w-10 transition-transform group-hover:scale-110">
+                        <span class="ml-2 text-2xl font-bold group-hover:animate-text-glitch">
+                            Empre<span class="text-primary-500">Go</span>
+                        </span>
+                    </a>
+                </div>
 
+                <!-- Naveção  -->
+                <nav class="links hidden md:flex items-center space-x-8">
+                    <a href="/#home"
+                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Início</a>
+                    <a href="/#servicos"
+                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Serviços</a>
+                    <a href="/#testperfis"
+                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Biografias</a>
+                    <a href="/sobre"
+                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Sobre</a>
+                    <a href="/suporte"
+                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Suporte</a>
+
+                    <!-- Login / Cadastrar -->
+                    <a href="/login"
+                        class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center animate-pulse-glow"
+                        id="loginOuCadas">
+                        <i class='bx bx-log-in mr-2'></i> Login / Cadastrar
+                    </a>
+
+                    <!-- Foto de Perfil (inicialmente oculta) -->
+                    <a href="/perfil/candidato"
+                        class="rounded-full w-10 h-10 border-2 border-primary-500"
+                         id="fotoPerfil">
+                        <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"
+                            class="w-full h-full rounded-full object-cover">
+                    </a>
+
+                    <!-- Botão de Logout (inicialmente oculto) -->
+                    <a href="#" class="text-gray-300 hover:text-primary-400 transition-colors" 
+                        id="logout">Sair</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
+                    <i class='bx bx-menu text-3xl'></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-4 pb-4">
+                <a href="/#home" class="block text-gray-300 hover:text-primary-400 transition-colors">Início</a>
+                <a href="/#servicos" class="block text-gray-300 hover:text-primary-400 transition-colors">Serviços</a>
+                <a href="/#testperfis"
+                    class="block text-gray-300 hover:text-primary-400 transition-colors">Biografias</a>
+                <a href="/sobre" class="block text-gray-300 hover:text-primary-400 transition-colors">Sobre</a>
+                <a href="/suporte" class="block text-gray-300 hover:text-primary-400 transition-colors">Suporte</a>
+
+                <!-- Login / Cadastrar -->
+                <a href="/login"
+                    class="block px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-center animate-pulse-glow"
+                    id="mobileLoginOuCadas">
+                    Login / Cadastrar
+                </a>
+
+                <!-- Foto de Perfil (inicialmente oculta) -->
+                <a href="/perfil/candidato"
+                    class="block w-12 h-12 mx-auto rounded-full overflow-hidden border-2 border-primary-500"
+                    style="display: none;" id="mobileFotoPerfil">
+                    <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="mobileFotoPerfilImg"
+                        class="w-full h-full rounded-full object-cover">
+                </a>
+
+                <!-- Botão de Logout (inicialmente oculto) -->
+                <a href="#" class="block text-gray-300 hover:text-primary-400 text-center transition-colors"
+                     id="mobileLogout">Sair</a>
+            </div>
         </div>
-        <nav class="links">
-            <a href="/">Inicio</a>
-            <a class="headerlink" href="/sobre" target="_self">Sobre</a>
-            <a class="headerlink" href="/suporte" target="_self">Suporte</a>
-            <a class="headerlink" href="/login" target="_self" id="loginOuCadas">Login / Cadastrar</a>
-            <a class="headerlink" href="/perfil/candidato" target="_self" style="display: none;" id="fotoPerfil"><img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
-            <a href="#" id="logout">Sair</a>
-        </nav>
     </header>
-    </div>
-    <div id="main">
-        <img src="/assets/imgs/bustedFuseBox.png" alt="" id="bustedFuseBox">
-        <div class="suporteTexto">
-            <p>Caso encontre qualquer problema ou tenha alguma dúvida</p>
-            <p>Você pode ler as nossas Perguntas Frequentes (FAQ) Logo abaixo!</p>
-            <p>E caso não resolva, encontram-se também nossos contatos.</p>
-            <p>Sinta-se a vontade de nos contactar caso necessário!</p>
+
+    <main class="pt-32 pb-20 bg-grid-pattern min-h-screen">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto opacity-0" id="support-content">
+                <!-- Suporte Header -->
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                        Suporte<span class="text-gradient"> Técnico</span>
+                    </h1>
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                        Estamos aqui para ajudar com qualquer problema ou dúvida que você possa ter.
+                    </p>
+                </div>
+
+                <div class="flex justify-center items-center gap-10 mb-16 ">
+                    <!-- Texto -->
+                    <div class="bg-dark-900 rounded-xl p-8 border border-gray-800 max-w-md">
+                        <p class="text-gray-400 mb-4 text-center">
+                            Caso encontre qualquer problema ou tenha alguma dúvida
+                        </p>
+                        <p class="text-gray-400 mb-4 text-center">
+                            Você pode ler as nossas Perguntas Frequentes (FAQ) Logo abaixo!
+                        </p>
+                        <p class="text-gray-400 mb-4 text-center">
+                            E caso não resolva, encontram-se também nossos contatos.
+                        </p>
+                        <p class="text-gray-400 text-center">
+                            Sinta-se à vontade para nos contactar caso necessário!
+                        </p>
+                    </div>
+
+                    <!-- Imagem -->
+                    <div class="relative animate-shake">
+                        <img src="/assets/imgs/bustedFuseBox.png" alt="Suporte Técnico"
+                            class="w-64 h-64 object-contain">
+                        <div
+                            class="absolute -bottom-6 -right-6 w-16 h-16 bg-primary-500 rounded-full opacity-20 blur-xl">
+                        </div>
+                    </div>
+                </div>
+                <!-- Contact Options -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Email -->
+                    <div
+                        class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors text-center">
+                        <div
+                            class="w-16 h-16 bg-primary-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class='bx bx-envelope text-3xl text-primary-400'></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-primary-400 mb-4">E-mail</h3>
+                        <a href="mailto:emprego.contato22@gmail.com?subject=Contato&body=Olá,%20gostaria%20de%20mais%20informações"
+                            class="text-gray-400 hover:text-primary-400 transition-colors block">
+                            emprego.contato22@gmail.com
+                        </a>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div
+                        class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors text-center">
+                        <div
+                            class="w-16 h-16 bg-primary-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class='bx bx-help-circle text-3xl text-primary-400'></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-primary-400 mb-4">FAQ</h3>
+                        <button
+                            class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors transform hover:scale-105">
+                            Clique aqui!
+                        </button>
+                    </div>
+
+                    <!-- Phone -->
+                    <div
+                        class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors text-center">
+                        <div
+                            class="w-16 h-16 bg-primary-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class='bx bx-phone text-3xl text-primary-400'></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-primary-400 mb-4">Telefone</h3>
+                        <a href="tel:+5579123456789"
+                            class="text-gray-400 hover:text-primary-400 transition-colors block">
+                            +55 79 12345-6789
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+    </main>
 
-        <div id="informacoes">
+    <!-- Footer -->
+    <footer class="bg-dark-900 py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Coluna 1 -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" class="h-10 w-10">
+                        <span class="ml-2 text-2xl font-bold">
+                            Empre<span class="text-primary-500">Go</span>
+                        </span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        A mais nova plataforma para encontrar e divulgar trabalho no Brasil.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://x.com" class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-twitter text-xl'></i>
+                        </a>
+                        <a href="https://www.tiktok.com" class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-tiktok text-xl'></i>
+                        </a>
+                        <a href="https://www.instagram.com/"
+                            class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-instagram text-xl'></i>
+                        </a>
+                        <a href="https://www.youtube.com/"
+                            class="text-gray-400 hover:text-primary-400 transition-colors">
+                            <i class='bx bxl-youtube text-xl'></i>
+                        </a>
+                    </div>
+                </div>
 
-            <div id="espacoTeste">
-                <h2 id="emailTitulo">E-mail</h2>
-                <a id="emailTexto">Emailde.Exemplo@gmail.com</a>
+                <!-- coluna 2 -->
+                <div>
+                    <h3 class="text-lg font--semibold text-white mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-primary-400 transition-colors">Início</a>
+                        </li>
+                        <li><a href="#servicos"
+                                class="text-gray-400 hover:text-primary-400 transition-colors">Serviços</a></li>
+                        <li><a href="#testperfis"
+                                class="text-gray-400 hover:text-primary-400 transition-colors">Biografias</a></li>
+                        <li><a href="/sobre" class="text-gray-400 hover:text-primary-400 transition-colors">Sobre</a>
+                        </li>
+                        <li><a href="/suporte"
+                                class="text-gray-400 hover:text-primary-400 transition-colors">Suporte</a></li>
+                    </ul>
+                </div>
+
+                <!-- coluna 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Recursos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Termos de
+                                Serviço</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Política de
+                                Privacidade</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Contato</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#emprego.contato22@gmail.com" class="text-gray-400 cursor: pointer;"><i
+                                    class='bx bx-envelope mr-2'></i> emprego.contato22@gmail.com</a></li>
+                        <li class="text-gray-400"><i class='bx bx-phone mr-2'></i> (XX) XXXX-XXXX</li>
+                        <li class="text-gray-400"><i class='bx bx-map mr-2'></i> Cidade, Estado - Brasil</li>
+                    </ul>
+                </div>
             </div>
 
-            <div id='espacoFaq'>
-                <h2 id="faqTitulo">FAQ</h2>
-                <button id="faqBtn">Clique aqui!</button>
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-500">
+                    &copy; 2025 EmpreGo. Todos os direitos reservados.
+                </p>
             </div>
-
-            <div id="espacoTel">
-                <h2 id="telTitulo">Telefone</h2>
-                <a id="telNum">+55 79123456789</a>
-            </div>
-
         </div>
-    </div>
+    </footer>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 opacity-0 invisible transform hover:scale-110">
+        <i class='bx bx-chevron-up text-xl'></i>
+    </button>
 
-    <footer>&copy; EmpreGo</footer>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="/js/suport.js"></script>
+    <script type="module" src="/js/link.js"></script>
+
 </body>
 
 </html>

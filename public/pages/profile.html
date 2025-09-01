@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
-    <script type="module" src="/js/profile.js" defer></script>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/profileStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -27,7 +26,7 @@
             <a class="headerlink" href="/suporte" target="_self">Suporte</a>
             <a class="headerlink" href="/login" target="_self" id="loginOuCadas">Login / Cadastrar</a>
             <a class="headerlink" href="/perfil/candidato" target="_self" style="display: none;" id="fotoPerfil"><img
-                    src="../assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
+              src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
             <a href="#" id="logout">Sair</a>
         </nav>
     </header>
@@ -93,10 +92,9 @@
             <h1 id="tituloTags">Tags</h1>
             <div id="boxTags">
                 <input type="image" id="btnAddTags" src="/assets/imgs/miniPlusBtn.png">
-                <div class="Tags">
-                    <button id="tagLing">C#</button>
-                    <!--Separar tags de diferentest tipos por cores (por exemplo, linguagens de programação são roxas, horas de trabalho branco, etc.)-->
-                    <button id="tagHorario">Manhã</button>
+                <div id="Tags">
+                    
+                    <button class="tags" id="maisTags">...</button>
                 </div>
             </div>
         </div>
@@ -110,6 +108,29 @@
                 <a id="textCriar">"Adicione um texto para descrever sua experiência em projetos ou empresas anteriores."</a>
             </div>
         </div>
+        <div id="modalInput">
+            <div id="modalInput-content">
+                <p>Digite a tag que você deseja adicionar:</p>
+                <input type="text" id="inputTag" placeholder="Digite aqui o nome da Tag">
+                <button id="btnConfirmar">Confirmar</button>
+                <button id="btnCancelar">Cancelar</button>
+            </div>
+        </div>
+
+
+        <div id="modalDelete">
+            <div id="modalDelete-content">
+                <p><strong>Você tem certeza de que quer deletar a tag?</strong></p>
+                <button id="btnConfirmarDel">Confirmar</button>
+                <button id="btnCancelarDel">Cancelar</button>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- * SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/js/profile.js"></script>
 </body>
 
 </html>

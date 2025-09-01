@@ -1,10 +1,18 @@
 const cron = require('node-cron');
-const pool = require('../config/db.js');
+const prisma = require('../config/db.js');
 
 const limpezaDeMensagens = cron.schedule('0 * * * *', async () => {
   try{
-    const deletados = await pool.query(`delete from mensagens where data_criacao < now() - INTERVAL '7 days'`);
-    console.log(`Mensagens antigas removidas: ${deletados.rowCount}`);
+    const seteDiasAtras = new Date();
+    seteDiasAtras.setDate(seteDiasAtras.getDate() - 7);
+    const deletados = await prisma.mensagens.deleteMany({
+      where: {
+        data_criacao: {
+          lt: seteDiasAtras
+        }
+      }
+    });
+    console.log(`Mensagens antigas removidas: ${deletados.count}`);
   }
   catch(erro){
     console.error('Erro ao remover mensagens antigas: ' + erro.message)
@@ -13,4 +21,4 @@ const limpezaDeMensagens = cron.schedule('0 * * * *', async () => {
   timezone: 'America/Sao_Paulo'
 });
 
-module.exports = limpezaDeMensagens
+module.exports = limpezaDeMensagens;

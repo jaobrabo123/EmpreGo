@@ -1,45 +1,91 @@
-const pool = require('../config/db.js');
+// * Prisma
+const prisma = require('../config/db.js');
 
 class EmpresaModel {
 
-    static async verificarEmpresaExistente(cnpj, email, razao_soci){
-        const resultado = await pool.query(
-            'SELECT 1 FROM empresas WHERE cnpj = $1 OR email = $2 OR razao_soci = $3',
-            [cnpj, email, razao_soci]
-        );
-        return resultado.rowCount > 0;
+    /*static async verificarEmpresaExistente(cnpj, email, razao_soci){
+        const resultado = await prisma.empresas.findFirst({
+            select: {
+                cnpj: true
+            },
+            where: {
+                OR: [
+                    { cnpj },
+                    { email },
+                    { razao_soci }
+                ]
+            }
+        });
+        return !!resultado;
+    }*/
+
+    static async buscarTodasEmpresas(limit=null, offset=null){
+        const configPrisma = {
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        }
+        if(limit) configPrisma.take = Number(limit);
+        if(offset) configPrisma.skip = Number(offset);
+        const resultado = await prisma.empresas.findMany(configPrisma)
+        const resultadoSemSenha = resultado.map(({ senha, ...resto }) => resto);
+        return resultadoSemSenha;
     }
 
-    static async verificarCnpjExistente(cnpj){
-        const resultado = await pool.query(`
-            select 1 from empresas where cnpj = $1
-        `, [cnpj]);
-        return resultado.rowCount > 0;
+    static async buscarTodasEmpresasPublic(page){
+        const pagina = page && Number(page)>1 ? Number(page) : 1;
+        const resultado = await prisma.empresas.findMany({
+            select: {
+                cnpj: true,
+                nome_fant: true,
+                descricao: true,
+                setor: true,
+                porte: true,
+                estado: true,
+                foto: true
+            },
+            orderBy: {
+                data_criacao: 'desc'
+            },
+            skip: (pagina-1)*9,
+            take: 9
+        });
+        return resultado;
     }
 
-    static async buscarTodasEmpresas(){
-        const resultado = await pool.query(`
-            SELECT cnpj, nome_fant, telefone, email, razao_soci, cep, 
-            complemento, numero, descricao, setor, porte, data_fund, 
-            contato, site, instagram, github, youtube, twitter,
-            data_criacao FROM empresas
-        `);
-        return resultado.rows;
+    static async loginInfoPorCnpj(cnpj){
+        const resultado = await prisma.empresas.findUniqueOrThrow({
+            select: {
+                senha: true,
+                foto: true
+            },
+            where: {
+                cnpj
+            }
+        });
+        return resultado;
     }
 
-    static async buscarInfoDoTokenPorCnpj(cnpj){
-        const resultado = await pool.query(`
-            SELECT senha, cnpj FROM empresas WHERE cnpj = $1
-        `, [cnpj]);
-        return resultado.rows[0];
+    static async buscarEmpresaPorCnpj(cnpj){
+        const resultado = await prisma.empresas.findUniqueOrThrow({
+            where: {
+                cnpj
+            }
+        });
+        const { senha, ...resultadoSemSenha } = resultado;
+        return resultadoSemSenha;
     }
 
-    static async buscarPerfilInfoPorCnpj(cnpj){
-        const resultado = await pool.query(`
-            SELECT nome_fant, telefone, cep, complemento, numero, descricao, setor, porte, data_fund, contato, site, instagram, github, youtube, twitter, foto
-            FROM empresas where cnpj = $1
-        `,[cnpj]);
-        return resultado.rows[0];
+    static async buscarFotoPorCnpj(cnpj){
+        const resultado = await prisma.empresas.findUniqueOrThrow({
+            where: {
+                cnpj
+            },
+            select: {
+                foto: true
+            }
+        })
+        return resultado.foto;
     }
 
 }

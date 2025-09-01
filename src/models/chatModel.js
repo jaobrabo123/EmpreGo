@@ -1,41 +1,57 @@
-const pool = require('../config/db.js');
+// * Prisma
+const prisma = require('../config/db.js');
 
 class ChatModel {
 
-    static async buscarChatsPorCandidato(cd){
-        const resultado = await pool.query(`
-            select id from chats where candidato = $1 
-        `, [cd]);
-        return resultado.rows;
+    static async buscarChatsPorCandidato(id){
+        const resultado = await prisma.chats.findMany({
+            select: {
+                id: true
+            },
+            where: {
+                candidato: id
+            }
+        })
+        return resultado;
     }
 
     static async buscarChatsPorEmpresa(cnpj){
-        const resultado = await pool.query(`
-            select id from chats where empresa = $1
-        `, [cnpj]);
-        return resultado.rows;
+        const resultado = await prisma.chats.findMany({
+            select: {
+                id: true
+            },
+            where: {
+                empresa: cnpj
+            }
+        })
+        return resultado;
     }
 
-    static async buscarChatsInfoPorCandidato(cd){
-        const resultado = await pool.query(`
-            select c.id, c.empresa, c.candidato, e.nome_fant, can.nome 
-            from chats c join empresas e
-            on c.empresa = e.cnpj
-            join candidatos can on c.candidato = can.id
-            where candidato = $1 order by c.data_criacao desc
-        `, [cd]);
-        return resultado.rows;
-    }
-
-    static async buscarChatsInfoPorEmpresa(cnpj){
-        const resultado = await pool.query(`
-            select c.id, c.empresa, c.candidato, can.nome, e.nome_fant 
-            from chats c join candidatos can
-            on c.candidato = can.id
-            join empresas e on c.empresa = e.cnpj
-            where empresa = $1 order by c.data_criacao desc
-        `, [cnpj]);
-        return resultado.rows;
+    static async buscarChatsInfo(id, tipo){
+        const where = tipo==='candidato' ? { candidato: id } 
+            : { empresa: id };
+        const resultado = await prisma.chats.findMany({
+            select: {
+                id: true,
+                empresa: true,
+                candidato: true,
+                empresas: {
+                    select: {
+                        nome_fant: true
+                    }
+                },
+                candidatos: {
+                    select: {
+                        nome: true
+                    }
+                }
+            },
+            where,
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        });
+        return resultado;
     }
 
 }

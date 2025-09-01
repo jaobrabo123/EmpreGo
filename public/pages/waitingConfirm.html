@@ -3,15 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="/js/waitingConfirm.js" defer></script>
     <title>Confirmação</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- Stylesheet CSS -->
+    <link rel="stylesheet" href="/css/waitingConfirm.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#8B5CF6',
+                            600: '#7C3AED',
+                        },
+                        dark: {
+                            900: '#111827',
+                            800: '#1F2937',
+                            700: '#374151',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 3s ease infinite',
+                        'text-glitch': 'text-glitch 0.5s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(139, 92, 246, 0.5)' },
+                            '50%': { boxShadow: '0 0 20px rgba(139, 92, 246, 0.8)' },
+                        },
+                        'text-glitch': {
+                            '0%': { textShadow: '2px 0 #8B5CF6, -2px 0 #EC4899' },
+                            '25%': { textShadow: '-2px 0 #8B5CF6, 2px 0 #EC4899' },
+                            '50%': { textShadow: '2px 0 #EC4899, -2px 0 #8B5CF6' },
+                            '75%': { textShadow: '-2px 0 #EC4899, 2px 0 #8B5CF6' },
+                            '100%': { textShadow: '2px 0 #8B5CF6, -2px 0 #EC4899' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
+
 <body>
-    <h1>Código de verificação enviado!</h1>
-    <p>Um email com um código de verificação (validade: 15 minutos) foi enviado para <span id="email">"email"</span> (verifique a caixa de SPAM).</p>
-    <label for="inputCodigo">Seu código de verificação: </label>
-    <input name="inputCodigo" id="inputCodigo" type="text" placeholder="Digite aqui o seu código" maxlength="4">
-    <p>Não recebeu o email? Clique <a id="reenvio" style="color: blue; cursor: pointer; text-decoration: underline;">aqui</a> para reenviar.</p>
-    <p id="mensagem"></p>
+    <section id="home" class="min-h-screen flex items-center pt-20 bg-grid-pattern relative overflow-hidden">
+        <!-- particulas de fundo -->
+        <div id="particles-js" class="fixed inset-0 z-0"></div>
+
+        <!-- particulas flutuando -->
+        <div class="absolute top-20 left-20 w-32 h-32 rounded-full bg-primary-500 opacity-10 animate-float"></div>
+        <div class="absolute bottom-40 right-32 w-40 h-40 rounded-full bg-primary-600 opacity-10 animate-float" style="animation-delay: 2s;"></div>
+        <div class="container mx-auto px-6 py-20">
+    
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-10" id="hero-title">
+            Código de verificação <span class="text-gradient">enviado!</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-400 mb-2" id="hero-subtitle">
+            Um email com um código de verificação foi enviado para <span class="text-gradient" id="email">"email"</span>
+        </p>
+        <p class="text-xl md:text-1x4 text-gray-400 mb-8" id="hero-subtitle">
+            <span class="text-gradient">O Código expira em 15 minutos.</span>
+        </p>
+        <input name="inputCodigo" id="inputCodigo" type="text" placeholder="Digite aqui o seu código" maxlength="4">
+        <p>Não recebeu o email? Clique <a id="reenvio" style="color: blue; cursor: pointer; text-decoration: underline;">aqui</a> para reenviar.</p>
+
+        <p id="mensagem"></p>
+    </section>
+
+    <!-- * SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/js/waitingConfirm.js"></script>
 </body>
 </html>

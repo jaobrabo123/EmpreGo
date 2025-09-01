@@ -1,10 +1,16 @@
 const cron = require('node-cron');
-const pool = require('../config/db.js');
+const prisma = require('../config/db.js');
 
-const limpezaDeTokens = cron.schedule('*/10 * * * *', async () => {
+const limpezaDeCandidatosPendentes = cron.schedule('*/10 * * * *', async () => {
   try{
-    const deletados = await pool.query('delete from candidatos_pend where expira_em < now()');
-    console.log(`Candidatos com codigos expirados removidos: ${deletados.rowCount}`);
+    const deletados = await prisma.candidatos_pend.deleteMany({
+      where: {
+        expira_em: {
+          lt: new Date()
+        }
+      }
+    });
+    console.log(`Candidatos com codigos expirados removidos: ${deletados.count}`);
   }
   catch(erro){
     console.error('Erro ao remover candidatos com codigos expirados: ' + erro.message)
@@ -13,4 +19,4 @@ const limpezaDeTokens = cron.schedule('*/10 * * * *', async () => {
   timezone: 'America/Sao_Paulo'
 });
 
-module.exports = limpezaDeTokens
+module.exports = limpezaDeCandidatosPendentes;

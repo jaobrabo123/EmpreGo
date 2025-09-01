@@ -2,7 +2,6 @@ body {
     background-color: #000;
     color: #E5E7EB;
     overflow-x: hidden;
-    user-select: none;
 }
 
 .text-gradient {
@@ -79,8 +78,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #7E22CE;
-}
-
-footer {
-    user-select: all !important;
 }

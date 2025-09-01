@@ -1,5 +1,7 @@
-const bcrypt = require("bcryptjs");
-const pool = require('../config/db.js');
+// * Prisma
+const prisma = require('../config/db.js');
+
+const bcrypt = require("bcrypt");
 const Erros = require('../utils/erroClasses.js');
 const ValidarCampos = require('../utils/validarCampos.js');
 const EmpresaModel = require("../models/empresaModel.js");
@@ -7,7 +9,7 @@ const ChatModel = require('../models/chatModel.js');
 
 class EmpresaService{
 
-  static async popularTabelaEmpresas(cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, num){
+  static async popularTabelaEmpresas(cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, num, estado, cidade){
 
     ValidarCampos.validarTamanhoMin(senha, 8, 'Senha');
     ValidarCampos.validarCnpj(cnpj);
@@ -19,6 +21,7 @@ class EmpresaService{
     ValidarCampos.validarTamanhoMin(num, 1, 'Número do Endereço');
     ValidarCampos.validarTamanhoMax(num, 10, 'Número do Endereço');
     ValidarCampos.validarTelefone(telefone);
+    await ValidarCampos.validarCidadePorEstadoSigla(cidade, estado);
 
     senha = senha.trim();
     cnpj = cnpj.replace(/[^\d]/g, '').trim();
@@ -29,22 +32,64 @@ class EmpresaService{
     complemento = complemento.trim();
     num = num.trim();
     telefone = telefone.replace(/[^\d]/g, '').trim();
-
-    const empresaExistente = await EmpresaModel.verificarEmpresaExistente(cnpj, email, razao_soci);
-
-    if (empresaExistente) {
-      throw new Erros.ErroDeConflito("Empresa já cadastrada.");
-    }
+    cidade = cidade.trim();
 
     const senhaCripitografada = await bcrypt.hash(senha, 10);
 
-    await pool.query(
-      `INSERT INTO empresas 
-      (cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-      [cnpj, nome_fant, telefone, email, senhaCripitografada, razao_soci, cep, complemento, num]
-    );
+    if(complemento==='') complemento = null;
 
+    await prisma.empresas.create({
+      data: {
+        cnpj,
+        nome_fant,
+        telefone,
+        email,
+        senha: senhaCripitografada,
+        razao_soci,
+        cep,
+        complemento,
+        numero: num,
+        estado,
+        cidade
+      }
+    });
+
+  }
+
+  static async popularTabelaEmpresasMany(data){
+    const empresas = await Promise.all(data.map(async(emp)=>{
+      ValidarCampos.validarTamanhoMin(emp.senha, 8, 'Senha');
+      ValidarCampos.validarCnpj(emp.cnpj);
+      ValidarCampos.validarTamanhoMax(emp.nome_fant, 50, 'Nome Fantasia');
+      ValidarCampos.validarEmail(emp.email);
+      ValidarCampos.validarTamanhoMax(emp.razao_soci, 100, 'Razão Social');
+      ValidarCampos.validarCep(emp.cep);
+      if (emp.complemento!== '') ValidarCampos.validarTamanhoMax(emp.complemento, 100, 'Complemento');
+      ValidarCampos.validarTamanhoMin(emp.numero, 1, 'Número do Endereço');
+      ValidarCampos.validarTamanhoMax(emp.numero, 10, 'Número do Endereço');
+      ValidarCampos.validarTelefone(emp.telefone);
+      await ValidarCampos.validarCidadePorEstadoSigla(emp.cidade, emp.estado);
+
+      emp.cnpj = emp.cnpj.replace(/[^\d]/g, '').trim();
+      emp.nome_fant = emp.nome_fant.trim();
+      emp.email = emp.email.trim();
+      emp.razao_soci = emp.razao_soci.trim();
+      emp.cep = emp.cep.replace(/[^\d]/g, '').trim();
+      emp.complemento = emp.complemento.trim();
+      emp.numero = emp.numero.trim();
+      emp.telefone = emp.telefone.replace(/[^\d]/g, '').trim();
+      emp.cidade = emp.cidade.trim();
+      emp.senha = await bcrypt.hash(emp.senha.trim(), 10);
+
+      if(emp.complemento==='') emp.complemento = null;
+      return emp;
+    }));
+
+    const quant = await prisma.empresas.createMany({
+      data: empresas,
+      skipDuplicates: true
+    })
+    return quant.count;
   }
 
   static async editarPerfilEmpresa(atributos, valores, cnpj){
@@ -124,9 +169,15 @@ class EmpresaService{
       }
     }
 
-    const inserts = atributos.map((atri, index) => `${atri} = $${index + 1}`).join(", ");
-
-    await pool.query(`update empresas set ${inserts} where cnpj = $${atributos.length + 1}`, [...valores, cnpj]);
+    const data = Object.fromEntries(
+      atributos.map((atri, index)=>[atri,valores[index]])
+    );
+    await prisma.empresas.update({
+      where: {
+        cnpj
+      },
+      data
+    });
   }
 
   static async removerEmpresa(em, id, nivel){
@@ -134,28 +185,18 @@ class EmpresaService{
       throw new Erros.ErroDeValidacao('Campos faltando para a remoção.')
     }
 
-    em = Number(em);
+    //em = Number(em);
 
     if(nivel!=='admin'&& em!==id){
       throw new Erros.ErroDeAutorizacao("Apenas a própria empresa pode se remover.");
     }
 
-    const empresaExistente = await EmpresaModel.verificarCnpjExistente(em);
-    if(!empresaExistente) throw new Erros.ErroDeNaoEncontrado('Empresa fornecida não pode ser removida pois não existe.')
+    await prisma.empresas.delete({
+      where: {
+        cnpj: em
+      }
+    });
 
-    const chatsEmpresa = await ChatModel.buscarChatsPorEmpresa(em);
-    await Promise.all(
-      chatsEmpresa.map(chat => 
-        pool.query(`delete from mensagens where chat = $1`, [chat.id])
-      )
-    )
-
-    await Promise.all([
-      pool.query(`delete from tokens where empresa_cnpj = $1`, [em]),
-      pool.query(`delete from chats where empresa = $1`, [em])
-    ])
-
-    await pool.query(`delete from empresas where cnpj = $1`, [em]);
   }
 
 }

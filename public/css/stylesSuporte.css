@@ -1,118 +1,57 @@
-:root {
-    --text-color: #ffffff;
-    /* Cor do texto */
-    --bg-color: #18122B;
-    /* Cor de fundo principal */
-    --second-bg-color: #443C68;
-    /* Segunda cor de fundo, quase preta */
-    --main-color: #635985;
-    /* Cor principal */
-    --primary: #393053;
-    --barra-lateral: black;
-}
-
-#main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    align-content: center;
-    flex-direction: column;
-    background-image: url("/imagens/SalsaFix.png");
-    background-repeat: no-repeat;
-    background-position: 95% 50%;
-
-}
-
-#bustedFuseBox {
-    position: fixed;
-    top: 25%;
-    left: 2%;
-}
-
-.suporteTexto {
-    align-items: center;
-    text-align: center;
-    width: 700px;
-    font-size: 20px;
-    margin-bottom: 15px;
-    margin-top: 75px;
-}
-
-p {
-    padding-bottom: 15px;
-    user-select: text;
-}
-
-a {
-    user-select: text;
-}
-
-#informacoes {
-    align-items: center;
-    text-align: center;
-    display: flex;
-    font-size: 20px;
-    align-content: center;
-    flex-direction: row;
-    margin-top: 70px;
-}
-
-#espacoTeste {
-    padding-bottom: 25px;
-    margin-right: 100px;
-}
-
-#espacoFaq {
-    margin-right: 100px;
-}
-
-#espacoTel {
-    padding-right: 90px;
-}
-
-h2 {
-    margin-bottom: 10px;
-}
-
-#faqBtn {
-    margin-bottom: 25px;
-    display: inline-block;
-    /* Exibe o botão como um bloco em linha */
-    padding: 1rem 2.8rem;
-    /* Padding do botão */
-    background: var(--main-color);
-    /* Cor de fundo do botão */
-    box-shadow: 0 0 25px var(--main-color);
-    /* Sombra ao redor do botão */
-    border-radius: 4rem;
-    /* Bordas arredondadas */
-    font-size: 1.6rem;
-    /* Tamanho da fonte do botão */
-    color: black;
-    /* Cor do texto */
-    border: 2px solid transparent;
-    /* Borda transparente */
-    letter-spacing: 0.1rem;
-    /* Espaçamento entre letras */
-    font-weight: 600;
-    /* Peso da fonte */
-    transition: 0.3s ease-in-out;
-    /* Transição suave ao passar o mouse */
-    cursor: pointer;
-    /* Torna o botão clicável */
-}
-
-#faqBtn:hover {
-    color: rgb(255, 255, 255);
-    transform: scale(1.05);
-    /* Aumenta o botão ao passar o mouse */
-    box-shadow: 0 0 50px var(--main-color);
-    /* Aumenta a sombra ao passar o mouse */
-}
-
-/*#salsaFix{
-    display: flex !important;
-    flex-direction: row !important;
-    align-self: flex-end !important;
-}*/
+ /* Custom Styles */
+        body {
+            background-color: #000;
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        .link-underline {
+            position: relative;
+        }
+        
+        .link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #8B5CF6;
+            transition: width 0.3s ease;
+        }
+        
+        .link-underline:hover::after {
+            width: 100%;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #6B21A8;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7E22CE;
+        }

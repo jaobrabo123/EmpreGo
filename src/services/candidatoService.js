@@ -1,7 +1,8 @@
-const bcrypt = require("bcryptjs");
-const pool = require("../config/db.js");
+// * Prisma
+const prisma = require('../config/db.js');
+
+const bcrypt = require("bcrypt");
 const CandidatoModel = require('../models/candidatoModel.js');
-const ChatModel = require('../models/chatModel.js');
 const ValidarCampos = require('../utils/validarCampos.js');
 const Erros = require("../utils/erroClasses.js");
 
@@ -22,52 +23,76 @@ class CandidatoService{
     const emailExistente = await CandidatoModel.verificarEmailExistente(email);
     if (emailExistente) throw new Erros.ErroDeConflito('Email já cadastrado.');
 
-    const emailPendente = await CandidatoModel.verificarEmailPendente(email);
-    if (emailPendente) throw new Erros.ErroDeConflito("Email aguardando confirmação.");
+    // * Criptografa a senha
+    const [ senhaCriptografada, codigoCriptografado ] = await Promise.all([
+      bcrypt.hash(senha, 10),
+      bcrypt.hash(String(codigo), 10)
+    ])
 
-    //criptografa a senha
-    const senhaCriptografada = await bcrypt.hash(senha, 10);
-
-    await pool.query(
-      `INSERT INTO candidatos_pend (nome, email, senha, genero, data_nasc, codigo, expira_em) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [nome, email, senhaCriptografada, genero, data_nasc, codigo, expira_em]
-    );
-
+    await prisma.candidatos_pend.create({
+      data: {
+        nome,
+        email,
+        senha: senhaCriptografada,
+        genero,
+        data_nasc: new Date(data_nasc),
+        codigo: codigoCriptografado,
+        expira_em
+      }
+    });
   }
 
-  static async popularTabelaCandidatos(codigo){
-    const candidato = await CandidatoModel.buscarCandidatoPendentePorCodigo(codigo);
+  static async popularTabelaCandidatos(codigo, email){
 
-    if(!candidato) throw new Erros.ErroDeNaoEncontrado("Código inválido ou expirado.");
+    const candidato = await CandidatoModel.buscarCodigoECandidatoPendentePorEmail(email);
 
-    const result = await pool.query(`insert into candidatos (nome, email, senha, genero, data_nasc) values ($1, $2, $3, $4, $5) returning id`,
-      [candidato.nome, candidato.email, candidato.senha, candidato.genero, candidato.data_nasc]
-    )
+    if(!await bcrypt.compare(String(codigo), candidato.codigo)) throw new Erros.ErroDeValidacao("Código inválido ou expirado.");
 
-    await pool.query(`delete from candidatos_pend where codigo = $1`,
-      [codigo]
-    )
+    const [result, del] = await Promise.all([
+      prisma.candidatos.create({
+        data: {
+          nome: candidato.nome,
+          email,
+          senha: candidato.senha,
+          genero: candidato.genero,
+          data_nasc: candidato.data_nasc
+        },
+        select: {
+          id: true,
+          foto: true
+        }
+      }),
+      prisma.candidatos_pend.delete({
+        where: {
+          email
+        }
+      })
+    ])
 
-    return result.rows[0].id;
+
+    return result;
   }
 
   static async gerarNovoCodigoPendente(email){
     ValidarCampos.validarEmail(email);
 
-    const existe = await CandidatoModel.verificarEmailPendente(email);
-    if(!existe) return false;
-
     const codigo = Math.floor(Math.random() * 9000) + 1000;
+    const codigoCriptografado = await bcrypt.hash(String(codigo), 10);
 
-    await pool.query(`
-      update candidatos_pend set codigo = $1 where email = $2
-    `, [codigo, email]);
+    await prisma.candidatos_pend.update({
+      where: {
+        email
+      },
+      data: {
+        codigo: codigoCriptografado
+      }
+    });
 
     return codigo;
   }
 
   static async editarPerfil(atributos, valores, id){
-    if (!atributos || !valores || !id) {
+    if (atributos.length === 0 || valores.length === 0 || !id) {
       throw new Erros.ErroDeValidacao("Os atributos, valores e id do candidato devem ser fornecidos.");
     }
 
@@ -110,7 +135,14 @@ class CandidatoService{
         await ValidarCampos.validarEstadoSigla(valor);
         valor = valor.toUpperCase();
         if (atributos.findIndex((x) => x === "cidade") === -1) {
-          await pool.query("UPDATE candidatos SET cidade = null WHERE id = $1", [id]);
+          await prisma.candidatos.update({
+            where: {
+              id
+            },
+            data: {
+              cidade: null
+            }
+          });
         }
       } 
       else if (atri === "cidade") {
@@ -155,14 +187,14 @@ class CandidatoService{
       valores[i] = valor;
     }
 
-    const pedido = atributos.map((coluna, index) => `${coluna} = $${index + 1}`);
-    const pedidoForm = pedido.join(", ");
+    const data = Object.fromEntries(atributos.map((atri, index)=>[atri, valores[index]]))
 
-    const query = `UPDATE candidatos SET ${pedidoForm} WHERE id = $${atributos.length + 1}`;
-
-    const valoresComId = [...valores, id];
-
-    await pool.query(query, valoresComId);
+    await prisma.candidatos.update({
+      where: {
+        id
+      },
+      data
+    })
   }
 
   static async removerCandidato(cd, id, nivel){
@@ -176,9 +208,6 @@ class CandidatoService{
       throw new Erros.ErroDeAutorizacao("Apenas o próprio candidato pode se remover.");
     }
 
-    const candidatoExistente = await CandidatoModel.verificarIdExistente(cd);
-    if(!candidatoExistente) throw new Erros.ErroDeNaoEncontrado('Candidato fornecido não existe.')
-
     if(nivel==='admin'){
       if(cd===id){
         throw new Erros.ErroDeAutorizacao('Você não pode se remover kkkkkkkk');
@@ -189,22 +218,11 @@ class CandidatoService{
       
     }
 
-    const chatsCandidato = await ChatModel.buscarChatsPorCandidato(cd);
-
-    await Promise.all(
-      chatsCandidato.map(chat =>
-        pool.query('delete from mensagens where chat = $1', [chat.id])
-      )
-    )
-
-    await Promise.all([
-      pool.query(`delete from tokens where candidato_id = $1`, [cd]),
-      pool.query(`delete from chats where candidato = $1`, [cd]),
-      pool.query(`delete from tags where candidato = $1`, [cd]),
-      pool.query(`delete from experiencias where candidato = $1`, [cd])
-    ])
-
-    await pool.query(`delete from candidatos where id = $1`, [cd]);
+    await prisma.candidatos.delete({
+      where: {
+        id: cd
+      }
+    })
   }
 
 }

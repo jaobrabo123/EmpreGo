@@ -1,3 +1,5 @@
+import axiosWe from "./axiosConfig.js";
+
 function mostrarErro(msg) {
   const erroDiv = document.getElementById("mensagemErro");
   erroDiv.textContent = msg;
@@ -43,12 +45,14 @@ function validarCPF(cpf) {
   return true;
 }
 
+document.querySelector('#selectPronomes').addEventListener('change', handlePronounChange);
 function handlePronounChange() {
   const select = document.getElementById("selectPronomes");
   const outroPronomeInput = document.getElementById("outroPronomeInput").parentElement;
   if (select.value === "Outro") {
     outroPronomeInput.style.display = "flex";
-  } else {
+  }
+  else {
     outroPronomeInput.style.display = "none";
   }
 }
@@ -69,9 +73,7 @@ async function enviarEdicao() {
   // Obtem os pronomes corretamente, considerando "Outro"
   let pronomes = document.getElementById("selectPronomes").value;
   if (pronomes === "Outro") {
-    const outroPronome = document
-      .getElementById("outroPronomeInput")
-      .value.trim();
+    const outroPronome = document.getElementById("outroPronomeInput").value.trim();
     if (!outroPronome) {
       mostrarErro("Por favor, preencha o campo de pronomes personalizados.");
       return;
@@ -90,47 +92,32 @@ async function enviarEdicao() {
   }
 
   if (cidade && estado !== "NM") {
-    const response = await fetch(
+    const response = await axios(
       `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
     );
-    const cidades = await response.json();
-    const nomes = cidades.map((ci) => ci.nome.toLowerCase());
-    if (!nomes.includes(cidade.toLowerCase())) {
+    const cidades = response.data.map((ci) => ci.nome.toLowerCase());
+    if (!cidades.includes(cidade.toLowerCase())) {
       mostrarErro(`Cidade inválida pro estado selecionado: ${estado}`);
       return;
     }
   }
 
-  if (
-    instagram &&
-    !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(instagram)
-  ) {
+  if (instagram && !/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/.test(instagram)){
     mostrarErro("URL do Instagram inválida.");
     return;
   }
 
-  if (
-    github &&
-    !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(github)
-  ) {
+  if (github && !/^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9._-]+\/?$/.test(github)){
     mostrarErro("URL do GitHub inválida.");
     return;
   }
 
-  if (
-    youtube &&
-    !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(
-      youtube
-    )
-  ) {
+  if (youtube && !/^https?:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._-]+)(\/)?(\?.*)?$/.test(youtube)){
     mostrarErro("URL do Youtube inválida.");
     return;
   }
 
-  if (
-    twitter &&
-    !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(twitter)
-  ) {
+  if (twitter && !/^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9._-]+\/?$/.test(twitter)){
     mostrarErro("URL do Twitter/X inválida.");
     return;
   }
@@ -145,37 +132,22 @@ async function enviarEdicao() {
   if (github) formData.append("github", github);
   if (youtube) formData.append("youtube", youtube);
   if (twitter) formData.append("twitter", twitter);
-  if (pronomes) formData.append("pronomes", pronomes);
+  if (pronomes && pronomes!=="NM") formData.append("pronomes", pronomes);
+  if (!foto && !descricao && !cpf && estado==="NM" && !cidade && !instagram && !github && !youtube && !twitter && pronomes==="NM") return mostrarErro("Pelo menos um campo deve ser fornecido para editar o perfil.");
 
-  fetch("/perfil/candidato", {
-    method: "POST",
-    credentials: "include",
-    body: formData,
-  })
-    .then(async (response) => {
-      const data = await response.json();
-      if (!response.ok) {
-        throw {
-          status: response.status,
-          message: data.error || "Erro ao editar perfil",
-        };
-      }
-      window.location.href = "/perfil/candidato";
-    })
-    .catch((erro) => {
-      if(erro.message.includes('Cidade inválida para o estado')){
-        mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
-      }
-      else if(erro.status===500){
-        mostrarErro("Erro ao editar perfil. (A culpa não foi sua, tente novamente)");
-      } else{
-        mostrarErro(`Erro ao editar perfil: ${erro.message}`);
-      }
-      console.error("Erro ao editar perfil: ", erro.message);
-    });
+  try{
+    await axiosWe.post('/perfil/candidato', formData);
+    window.location.href = "/perfil/candidato";
+  }
+  catch(erro){
+    if(erro.message.includes('Cidade inválida para o estado')){
+      mostrarErro("A cidade digitada não é equivalente ao estado cadastrado no seu perfil, altere o estado ou cadastre uma cidade válida.");
+    }
+    else{
+      mostrarErro(`Erro ao editar perfil: ${erro.message}`);
+    }
+  }
 }
-
-
 
 // Formata o campo CPF enquanto o usuário digita
 document.getElementById("inputCpf").addEventListener("input", function (e) {

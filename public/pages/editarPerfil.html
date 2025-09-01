@@ -8,9 +8,6 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="/css/editarPerfil.css" />
-  <script src="/js/editarPerfil.js" defer></script>
-  <script type="module" src="/js/link.js" defer></script>
-
   <title>Editar Perfil</title>
 </head>
 
@@ -21,7 +18,6 @@
         <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg">
       </a>
       <a href="/" target="_self" id="nomedosite">Empre<span>Go</span></a>
-
     </div>
     <nav class="links">
       <a href="/">Inicio</a>
@@ -104,7 +100,8 @@
       </div>
       <div class="info">
         <label for="inputPronomes" class="labelsEditar">Pronomes</label>
-        <select placeholder="Selecione seus pronomes." id="selectPronomes" onchange="handlePronounChange()" required>
+        <select placeholder="Selecione seus pronomes." id="selectPronomes" required>
+          <option value="NM" selected>Seus pronomes</option>
           <option value="Ela/Dela">Ela/Dela</option>
           <option value="Ela/Elu">Ela/Elu</option>
           <option value="Ela/Ele">Ela/Ele</option>
@@ -123,7 +120,6 @@
           <option value="Pronome Nulo">Pronome Nulo</option>
           <option value="Qualquer Pronome">Qualquer Pronome</option>
           <option value="Outro">Outro (Especificar)</option>
-          <option value="Prefiro não informar">Prefiro não informar</option>
         </select>
         <div class="info" id="outroPronome" style="display: none;">
           <input type="text" id="outroPronomeInput" class="labelsEditar" placeholder="Informe seus pronomes." />
@@ -135,6 +131,10 @@
         </button>
     </form>
   </div>
+  <!-- * SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module" src="/js/link.js"></script>
+  <script type="module" src="/js/editarPerfil.js"></script>
 </body>
 
 </html>

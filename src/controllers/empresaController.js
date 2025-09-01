@@ -1,15 +1,14 @@
-
 const EmpresaModel = require('../models/empresaModel.js');
-const EmpresaService = require('../services/empresaService.js')
-const Erros = require('../utils/erroClasses.js')
+const EmpresaService = require('../services/empresaService.js');
+const Erros = require('../utils/erroClasses.js');
 
 class EmpresaController{
 
     static async cadastrar(req, res){
         try {
-            const { cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero } = req.body;
+            const { cnpj, nome_fant, telefone, email, senha, razao_soci, cep, complemento, numero, estado, cidade } = req.body;
 
-            if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !numero ) {
+            if (!cnpj || !nome_fant || !telefone || !email || !senha || !razao_soci || !cep || !numero || !estado || !cidade ) {
                 return res.status(400).json({ error: "Informações faltando para o cadastro!" });
             }
 
@@ -22,7 +21,9 @@ class EmpresaController{
                 razao_soci,
                 cep,
                 complemento,
-                numero
+                numero,
+                estado,
+                cidade
             );
 
             res.status(201).json({ message: "Empresa cadastrada com sucesso!" });
@@ -30,8 +31,24 @@ class EmpresaController{
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
-            if(erro instanceof Erros.ErroDeConflito) {
-                return res.status(409).json({ error: erro.message });
+            if(erro.code==='23505'){
+                return res.status(409).json({ error: "Empresa já cadastrada." });
+            }
+            return res.status(500).json({ error: "Erro ao cadastrar empresa: " + erro.message });
+        }
+    }
+
+    static async cadastrarVarias(req, res){
+        try {
+            const data = req.body.data;
+            if(!data || !Array.isArray(data)){
+                return res.status(400).json({ error: "Informações faltando para o cadastro!" });
+            }
+            const empresasQuant = await EmpresaService.popularTabelaEmpresasMany(data);
+            res.status(201).json({ message: "Empresas criadas com sucesso: "+empresasQuant});
+        } catch (erro) {
+            if (erro instanceof Erros.ErroDeValidacao) {
+                return res.status(400).json({ error: erro.message });
             }
             return res.status(500).json({ error: "Erro ao cadastrar empresa: " + erro.message });
         }
@@ -39,8 +56,16 @@ class EmpresaController{
 
     static async listarTodas(req, res){
         try {
-            const empresas = await EmpresaModel.buscarTodasEmpresas();
+            const empresas = await EmpresaModel.buscarTodasEmpresas(req.query.limit, req.query.offset);
+            res.status(200).json(empresas);
+        } catch (erro) {
+            res.status(500).json({ error: `Erro ao buscar empresas: ${erro?.message || "erro desconhecido"}` });
+        }
+    }
 
+    static async listarTodasPublic(req, res){
+        try {
+            const empresas = await EmpresaModel.buscarTodasEmpresasPublic(req.query.page);
             res.status(200).json(empresas);
         } catch (erro) {
             res.status(500).json({ error: `Erro ao buscar empresas: ${erro?.message || "erro desconhecido"}` });
@@ -56,14 +81,15 @@ class EmpresaController{
 
             res.status(200).json({ message: "Empresa removida com sucesso" });
         } catch (erro) {
+            console.error(erro)
             if (erro instanceof Erros.ErroDeAutorizacao) {
                 return res.status(403).json({ error: erro.message });
             }
             if (erro instanceof Erros.ErroDeValidacao){
                 return res.status(400).json({ error: erro.message });
             }
-            if (erro instanceof Erros.ErroDeNaoEncontrado){
-                return res.status(404).json({ error: erro.message });
+            if (erro.code==='P2025'){
+                return res.status(404).json({ error: 'Empresa fornecida não existe.' });
             }
             res.status(500).json({ error: erro.message });
         }

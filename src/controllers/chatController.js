@@ -22,17 +22,9 @@ class ChatController {
         try{
             const tipo = req.user.tipo;
             const id = req.user.id;
-
-            if(tipo==='candidato'){
-                const chats = await ChatModel.buscarChatsInfoPorCandidato(id);
-                return res.status(200).json({ chats: chats, tipo: tipo });
-            }
-            else if(tipo==='empresa'){
-                const chats = await ChatModel.buscarChatsInfoPorEmpresa(id);
-                return res.status(200).json({ chats: chats, tipo: tipo });
-            }else{
-                return res.status(401).json({ error: 'Tipo de usuário não reconhecido.'})
-            }
+            if(tipo!=='candidato' && tipo!=='empresa') return res.status(401).json({ error: 'Tipo de usuário não reconhecido.'});
+            const chats = await ChatModel.buscarChatsInfo(id, tipo);
+            return res.status(200).json({ chats: chats, tipo: tipo });
         }
         catch(erro){
             return res.status(500).json({ error: 'Erro ao pegar chats: ' + erro.message})

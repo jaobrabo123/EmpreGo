@@ -1,6 +1,7 @@
-const ExperienciaService = require('../services/experienciaService.js');
+// * Imports
 const ExperienciaModel = require('../models/experienciaModel.js');
-const Erros = require('../utils/erroClasses.js')
+const ExperienciaService = require('../services/experienciaService.js');
+const Erros = require('../utils/erroClasses.js');
 
 class ExperienciaController {
 
@@ -9,7 +10,6 @@ class ExperienciaController {
             const { titulo, descricao } = req.body;
             const id = req.user.id;
             const imagem = req.file?.path || "imagem padrão";
-
             await ExperienciaService.popularTabelaExperiencias(titulo, descricao, imagem, id);
             res.status(201).json({ message: "Experiência cadastrada com sucesso!" });
         } catch (error) {
@@ -36,6 +36,15 @@ class ExperienciaController {
             res.status(200).json(experiencias);
         } catch (erro) {
             res.status(500).json({ error: `Erro ao buscar todas as experiências: ${ erro?.message || "erro desconhecido" }`});
+        }
+    }
+
+    static async listarTodosPublic(req, res){
+        try {
+            const experiencias = await ExperienciaModel.buscarExperienciasPublic();
+            res.status(200).json(experiencias);
+        } catch (erro) {
+            res.status(500).json({ error: `Erro ao buscar experiências: ${erro.message}`});
         }
     }
 

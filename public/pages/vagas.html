@@ -5,374 +5,1283 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="EmpreGo - Encontre as melhores vagas de emprego">
-  <link rel="stylesheet" href="/css/vagas.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Cores da Twitch
+            twitch: {
+              dark: '#0E0E10',
+              gray: '#18181B',
+              purple: '#9146FF',
+              lightpurple: '#AF78FF',
+              text: '#EFEFF1'
+            },
+            primary: {
+              50: '#faf5ff',
+              100: '#f3e8ff',
+              200: '#e9d5ff',
+              300: '#d8b4fe',
+              400: '#c084fc',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
+              800: '#6b21a8',
+              900: '#581c87',
+            },
+            dark: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            'inter': ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-  <script defer src="/js/vagas.js"></script>
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style type="text/css">
+    /* Cores da Twitch */
+    body {
+      background-color: #0E0E10;
+      color: #EFEFF1;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #18181B;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #9146FF;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #AF78FF;
+    }
+
+    /* Estilos do slider (mantidos conforme solicitado) */
+    .recomendacoes-swiper {
+      width: 100%;
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      position: relative;
+      border-radius: 18px;
+    }
+
+    .swiper-slide {
+      background-color: #18181B;
+      color: #EFEFF1;
+      padding: 3rem 2rem;
+      box-sizing: border-box;
+      height: auto;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+      border-radius: 10px;
+    }
+
+    .swiper-slide-active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .slide-empresa {
+      display: block;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ccc;
+      margin-bottom: 0.5rem;
+    }
+
+    .slide-titulo {
+      font-size: 2rem;
+      margin: 0 0 1.5rem;
+      color: #EFEFF1;
+      line-height: 1.2;
+    }
+
+    .slide-texto {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin: 0 0 2rem;
+      padding: 0;
+      font-style: italic;
+      position: relative;
+    }
+
+    .slide-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .swiper-button-next {
+      position: absolute;
+      transform: translate(50%, -50%);
+      z-index: 10;
+    }
+
+    .swiper-button-prev {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .swiper-button-next:hover {
+      position: absolute;
+      width: 250px;
+      height: 750px;
+      background-color: rgba(255, 255, 255, 0);
+      box-shadow: inset -120px 0 100px rgba(255, 255, 255, 0.8);
+    }
+
+    .swiper-button-prev:hover {
+      position: absolute;
+      width: 250px;
+      height: 750px;
+      background-color: rgba(255, 255, 255, 0);
+      box-shadow: inset 120px 0 100px rgba(255, 255, 255, 0.8);
+    }
+
+    .swiper-button-prev::after,
+    .swiper-button-next::after {
+      position: absolute;
+      width: 250px;
+      height: 750px;
+    }
+
+    .swiper-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      background: red;
+      border: 2px solid white;
+      opacity: 1;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .swiper-pagination-bullet-active {
+      transform: scale(1.2);
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .swiper-pagination-bullet::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: rgb(255, 255, 255);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 768px) {
+      .slide-titulo {
+        font-size: 1.5rem;
+      }
+
+      .slide-texto {
+        font-size: 1rem;
+      }
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        width: 40px;
+        height: 40px;
+      }
+
+      .swiper-button-prev::after,
+      .swiper-button-next::after {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .swiper-slide {
+        padding: 2rem 1.5rem;
+      }
+
+      .slide-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        width: 35px;
+        height: 35px;
+      }
+
+      .swiper-button-prev::after,
+      .swiper-button-next::after {
+        font-size: 1rem;
+      }
+    }
+
+    /* Estilos de animação para os filtros */
+    .filter-chips-container {
+      display: none;
+    }
+
+    .filter-chips-container.open {
+      display: block;
+      animation: dropdown-fade-in 0.18s;
+    }
+
+    @keyframes dropdown-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .profile-dropdown {
+      display: none;
+      animation: dropdown-fade-in 0.18s;
+    }
+
+    .profile-dropdown.show {
+      display: flex;
+    }
+
+    /* Ajustes específicos para melhorar a acessibilidade visual */
+    .filter-chip:focus,
+    .favorite-btn:focus,
+    .ver-mais-btn:focus,
+    .ver-todas-btn:focus {
+      outline: 2px solid #9146FF;
+      outline-offset: 2px;
+    }
+
+    /* Melhorar contraste para acessibilidade */
+    .text-dark-400 {
+      color: #94a3b8;
+    }
+
+    /* Efeito de pulso para os chips quando clicados */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .tag-chip.clicked {
+      animation: pulse 0.3s ease;
+    }
+
+    /* Classe para sidebar aberta */
+    .sidebar-open {
+      transform: translateX(0) !important;
+    }
+
+    /* Estilo para estrela ativa */
+    .favorite-btn.active {
+      color: #fbbf24 !important;
+    }
+
+    /* Estilos para botões roxos com animação */
+    .btn-primary {
+      background-color: #9146FF;
+      /* Roxo da Twitch */
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #AF78FF;
+      /* Roxo claro da Twitch */
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-primary {
+      background-color: transparent;
+      border: 2px solid #9146FF;
+      color: #9146FF;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: #9146FF;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Novos estilos para os filtros categorizados */
+    .filter-category {
+      margin-bottom: 0.5rem;
+    }
+
+    .filter-category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      cursor: pointer;
+      background-color: #18181B;
+      border-radius: 0.25rem;
+      transition: background-color 0.2s;
+    }
+
+    .filter-category-header:hover {
+      background-color: #252529;
+    }
+
+    .filter-category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .filter-category-content.open {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .filter-category-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 0.5rem;
+    }
+
+    /* Container de filtros com tamanho fixo e scroll */
+    .filter-chips-container {
+      max-height: 400px;
+      overflow-y: auto;
+      width: 350px;
+    }
+
+    /* NOVOS ESTILOS PARA OS CHIPS - CINZA ESCURO E ROXO AO CLICAR */
+    .filter-chip,
+    .tag-chip {
+      background-color: #2D2D2D !important;
+      /* Cinza escuro */
+      color: #EFEFF1 !important;
+      transition: all 0.3s ease;
+    }
+
+    .filter-chip.selected,
+    .tag-chip.selected,
+    .filter-chip[aria-pressed="true"],
+    .tag-chip[aria-pressed="true"] {
+      background-color: #9146FF !important;
+      /* Roxo quando selecionado */
+    }
+
+    .filter-chip:hover,
+    .tag-chip:hover {
+      background-color: #3D3D3D !important;
+      /* Cinza um pouco mais claro no hover */
+    }
+
+    .filter-chip.selected:hover,
+    .tag-chip.selected:hover,
+    .filter-chip[aria-pressed="true"]:hover,
+    .tag-chip[aria-pressed="true"]:hover {
+      background-color: #AF78FF !important;
+      /* Roxo claro no hover quando selecionado */
+    }
+
+    /* NOVOS ESTILOS PARA FAVORITOS NA SIDEBAR */
+    .favoritos-container {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      max-height: 300px;
+      /* Altura máxima antes de aparecer o scroll */
+      overflow-y: auto;
+    }
+
+    .favoritos-container.scrollable {
+      overflow-y: scroll;
+    }
+
+    /* Estilizar a scrollbar para combinar com o tema */
+    .favoritos-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      border-radius: 3px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-thumb {
+      background: #9146FF;
+      border-radius: 3px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-thumb:hover {
+      background: #AF78FF;
+    }
+
+    .favorito-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.25rem;
+      transition: background-color 0.2s;
+    }
+
+    .favorito-item:hover {
+      background-color: #252529;
+    }
+
+    .favorito-info {
+      flex-grow: 1;
+      margin-left: 0.5rem;
+      overflow: hidden;
+    }
+
+    .favorito-nome {
+      font-size: 0.9rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .favorito-categoria {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .favorito-actions {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .chat-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: #9146FF;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chat-btn:hover {
+      background-color: #AF78FF;
+      transform: scale(1.1);
+    }
+
+    .favorito-star {
+      color: #fbbf24;
+      margin-right: 0.25rem;
+    }
+
+    .ver-mais-favoritos {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      background-color: #252529;
+      border-radius: 0.25rem;
+      color: #EFEFF1;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: background-color 0.2s;
+    }
+
+    .ver-mais-favoritos:hover {
+      background-color: #9146FF;
+    }
+
+    .favoritos-select {
+      width: 100%;
+      background-color: #18181B;
+      color: #EFEFF1;
+      border: 1px solid #3D3D3D;
+      border-radius: 0.25rem;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .favoritos-select:focus {
+      outline: none;
+      border-color: #9146FF;
+    }
+
+    .favoritos-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-thumb {
+      background-color: #9147ff;
+      /* twitch-purple */
+      border-radius: 3px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-track {
+      background-color: #1f1f1f;
+      /* fundo da sidebar */
+    }
+
+    /* AJUSTES DE LAYOUT PARA EMPRESAS */
+    .empresas-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Quando a sidebar estiver fechada */
+    .sidebar-closed .empresas-container {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1200px) {
+      .empresas-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sidebar-closed .empresas-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .empresas-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-closed .empresas-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
   <title>EmpreGo - Encontre sua vaga ideal</title>
 </head>
 
-<body>
-  <header>
-    <div class="container">
+<body class="bg-twitch-dark text-twitch-text font-inter min-h-screen flex flex-col">
+  <header
+    class="fixed top-0 left-0 right-0 h-16 bg-twitch-gray flex items-center z-50 border-b border-gray-800 shadow-md">
+    <div class="container mx-auto px-5 flex items-center w-full gap-4 justify-center">
       <!-- menu -->
-      <button class='bx bx-menu' id="menu-toggle" aria-label="abrir menu"></button>
-      <!-- Nossa logo 1  -->
-      <div id="logo">
+      <button
+        class='bx bx-menu text-2xl text-white cursor-pointer bg-transparent border-none rounded-full w-9 h-9 flex items-center justify-center transition-colors hover:bg-white/20 absolute left-1'
+        id="menu-toggle" aria-label="abrir menu"></button>
+
+      <!-- Logo -->
+      <div id="logo" class="flex items-center gap-3 text-white font-black cursor-pointer transition-all">
         <a href="/">
-          <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" id="logoimg">
+          <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" class="h-10 w-auto ">
         </a>
-        <a href="/" id="nomedosite">Empre<span>Go</span></a>
+        <a href="/" class="text-2xl text-white no-underline transition-colors px-3 py-1 rounded text-shadow-lg"
+          style="text-shadow: 0 0 25px #9146FF;">Empre<span class="text-twitch-purple">Go</span></a>
       </div>
+
       <!-- Barra de pesquisa -->
-      <div class="search-bar">
-        <input type="text" placeholder="Pesquisar vagas..." />
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg" width="24px" fill="#fff">
-            <path
-              d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-          </svg>
+      <div
+class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-full overflow-hidden mr-4 ml-auto justify-between transition-all duration-300 border border-gray-700 focus-within:ring-2 focus-within:ring-twitch-purple focus-within:border-twitch-purple"
+        role="search" aria-label="Barra de pesquisa de vagas">
+        <input type="text" placeholder="Pesquisar empresas..."
+          class="flex-1 border-none px-4 py-3 bg-transparent text-white text-sm outline-none placeholder:text-gray-500" />
+        <button
+          class="filter-dropdown-toggle bg-twitch-purple btn-primary border-none text-white p-2 cursor-pointer mx-1 rounded-full flex items-center justify-center transition-colors hover:bg-twitch-lightpurple"
+          id="filter-toggle" aria-label="Abrir filtros" aria-expanded="false" aria-controls="filter-chips-container">
+          <img src="/assets/imgs/lupa.png" alt="Pesquisar" height="20" width="20" class="mr-1"
+            style="filter: brightness(0) invert(1);" />
+          <img src="/assets/imgs/filtro.png" alt="Filtrar" height="20" width="20"
+            style="filter: brightness(0) invert(1);" />
+          <span class="filter-label text-white text-sm ml-1 select-none hidden lg:block">Filtragem</span>
         </button>
       </div>
+
       <!-- filtragem -->
-      <div class="filters">
-        <button class="filter-dropdown-toggle" id="filter-toggle" aria-label="Abrir filtros" aria-expanded="false"
-          aria-controls="filter-chips-container">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000">
-            <path d="M710-150q-63 0-106.5-43.5T560-300q0-63 43.5-106.5T710-450q63 0 106.5 43.5T860-300q0 63-43.5 106.5T710-150Zm0-80q29 0 49.5-20.5T780-300q0-29-20.5-49.5T710-370q-29 0-49.5 20.5T640-300q0 29 20.5 49.5T710-230Zm-550-30v-80h320v80H160Zm90-250q-63 0-106.5-43.5T100-660q0-63 43.5-106.5T250-810q63 0 106.5 43.5T400-660q0 63-43.5 106.5T250-510Zm0-80q29 0 49.5-20.5T320-660q0-29-20.5-49.5T250-730q-29 0-49.5 20.5T180-660q0 29 20.5 49.5T250-590Zm230-30v-80h320v80H480Zm230 320ZM250-660Z"/>
-          </svg>
-          <span class="filter-label">Filtragem</span>
-        </button>
-
-        <div class="filter-chips-container" id="filter-chips-container">
-
+      <div class="filters relative -right-10 ml-auto mr-4">
+        <div
+          class="filter-chips-container absolute top-14 right-0 bg-twitch-gray rounded-lg shadow-xl p-3 min-w-80 z-50"
+          id="filter-chips-container">
           <!-- Grupo: Nível -->
-          <fieldset class="filter-group">
-            <legend>Nível</legend>
-            <div class="chip-group">
-              <button type="button" class="filter-chip" data-value="junior" aria-pressed="false"
-                title="Nível Júnior">Júnior</button>
-              <button type="button" class="filter-chip" data-value="pleno" aria-pressed="false">Pleno</button>
-              <button type="button" class="filter-chip" data-value="senior" aria-pressed="false">Sênior</button>
-              <button type="button" class="filter-chip" data-value="estagiario" aria-pressed="false">Estagiário</button>
-              <button type="button" class="filter-chip" data-value="trainee" aria-pressed="false">Trainee</button>
-              <button type="button" class="filter-chip" data-value="tecnico" aria-pressed="false">Técnico</button>
+          <div class="filter-category">
+            <div class="filter-category-header" data-category="nivel">
+              <span class="text-dark-300 text-sm font-medium">Nível</span>
+              <i class='bx bx-chevron-down text-sm'></i>
             </div>
-          </fieldset>
-          <hr>
+            <div class="filter-category-content" id="category-nivel">
+              <div class="filter-category-chips">
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="junior" aria-pressed="false" title="Nível Júnior">Júnior</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="pleno" aria-pressed="false">Pleno</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="senior" aria-pressed="false">Sênior</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="estagiario" aria-pressed="false">Estagiário</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="trainee" aria-pressed="false">Trainee</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="tecnico" aria-pressed="false">Técnico</button>
+              </div>
+            </div>
+          </div>
 
           <!-- Grupo: Tipo -->
-          <fieldset class="filter-group">
-            <legend>Tipo</legend>
-            <div class="chip-group">
-              <button type="button" class="filter-chip" data-value="clt" aria-pressed="false"
-                title="CLT: Contrato de trabalho tradicional">CLT</button>
-              <button type="button" class="filter-chip" data-value="pj" aria-pressed="false">PJ</button>
-              <button type="button" class="filter-chip" data-value="freelancer" aria-pressed="false">Freelancer</button>
-              <button type="button" class="filter-chip" data-value="temporario" aria-pressed="false">Temporário</button>
+          <div class="filter-category">
+            <div class="filter-category-header" data-category="tipo">
+              <span class="text-dark-300 text-sm font-medium">Tipo</span>
+              <i class='bx bx-chevron-down text-sm'></i>
             </div>
-          </fieldset>
-
-          <hr>
+            <div class="filter-category-content" id="category-tipo">
+              <div class="filter-category-chips">
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="clt" aria-pressed="false" title="CLT: Contrato de trabalho tradicional">CLT</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="pj" aria-pressed="false">PJ</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="freelancer" aria-pressed="false">Freelancer</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="temporario" aria-pressed="false">Temporário</button>
+              </div>
+            </div>
+          </div>
 
           <!-- Grupo: Jornada -->
-          <fieldset class="filter-group">
-            <legend>Jornada</legend>
-            <div class="chip-group">
-              <button type="button" class="filter-chip" data-value="meio-periodo" aria-pressed="false">Meio
-                período</button>
-              <button type="button" class="filter-chip" data-value="integral" aria-pressed="false">Integral</button>
-              <button type="button" class="filter-chip" data-value="flexivel" aria-pressed="false">Flexível</button>
+          <div class="filter-category">
+            <div class="filter-category-header" data-category="jornada">
+              <span class="text-dark-300 text-sm font-medium">Jornada</span>
+              <i class='bx bx-chevron-down text-sm'></i>
             </div>
-          </fieldset>
-
-          <hr>
+            <div class="filter-category-content" id="category-jornada">
+              <div class="filter-category-chips">
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="meio-periodo" aria-pressed="false">Meio período</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="integral" aria-pressed="false">Integral</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="flexivel" aria-pressed="false">Flexível</button>
+              </div>
+            </div>
+          </div>
 
           <!-- Grupo: Salário -->
-          <fieldset class="filter-group">
-            <legend>Salário</legend>
-            <div class="chip-group">
-              <button type="button" class="filter-chip" data-value="0-500" aria-pressed="false">R$ 0-500</button>
-              <button type="button" class="filter-chip" data-value="500-1500" aria-pressed="false">R$ 500-1500</button>
-              <button type="button" class="filter-chip" data-value="1500-3000" aria-pressed="false">R$
-                1500-3000</button>
-              <button type="button" class="filter-chip" data-value="3000-5000" aria-pressed="false">R$
-                3000-5000</button>
-              <button type="button" class="filter-chip" data-value="5000+" aria-pressed="false">R$ 5000+</button>
+          <div class="filter-category">
+            <div class="filter-category-header" data-category="salario">
+              <span class="text-dark-300 text-sm font-medium">Salário</span>
+              <i class='bx bx-chevron-down text-sm'></i>
             </div>
-          </fieldset>
-
-          <hr>
+            <div class="filter-category-content" id="category-salario">
+              <div class="filter-category-chips">
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="0-500" aria-pressed="false">R$ 0-500</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="500-1500" aria-pressed="false">R$ 500-1500</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="1500-3000" aria-pressed="false">R$ 1500-3000</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="3000-5000" aria-pressed="false">R$ 3000-5000</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="5000+" aria-pressed="false">R$ 5000+</button>
+              </div>
+            </div>
+          </div>
 
           <!-- Grupo: Área -->
-          <fieldset class="filter-group">
-            <legend>Área</legend>
-            <div class="chip-group">
-              <button type="button" class="filter-chip" data-value="ti" aria-pressed="false">TI</button>
-              <button type="button" class="filter-chip" data-value="pintura" aria-pressed="false">Pintura</button>
-              <button type="button" class="filter-chip" data-value="vendas" aria-pressed="false">Vendas</button>
-              <button type="button" class="filter-chip" data-value="rh" aria-pressed="false">RH</button>
-              <button type="button" class="filter-chip" data-value="administrativo"
-                aria-pressed="false">Administrativo</button>
+          <div class="filter-category">
+            <div class="filter-category-header" data-category="area">
+              <span class="text-dark-300 text-sm font-medium">Área</span>
+              <i class='bx bx-chevron-down text-sm'></i>
             </div>
-          </fieldset>
+            <div class="filter-category-content" id="category-area">
+              <div class="filter-category-chips">
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="ti" aria-pressed="false">TI</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="pintura" aria-pressed="false">Pintura</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="vendas" aria-pressed="false">Vendas</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="rh" aria-pressed="false">RH</button>
+                <button type="button"
+                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
+                  data-value="administrativo" aria-pressed="false">Administrativo</button>
+              </div>
+            </div>
+          </div>
 
-          <div class="filter-actions">
-            <button type="button" class="filter-confirm" aria-label="Aplicar filtros selecionados">Confirmar filtros</button>
-            <button type="button" class="filter-clear" aria-label="Limpar todos os filtros">Limpar filtros</button>
+          <div class="filter-actions flex justify-between gap-2 mt-3">
+            <button type="button"
+              class="filter-confirm bg-twitch-purple btn-primary text-white px-2.5 py-1.5 text-xs border-none rounded cursor-pointer transition-colors flex-1 hover:bg-twitch-lightpurple"
+              aria-label="Aplicar filtros selecionados">Confirmar filtros</button>
+            <button type="button"
+              class="filter-clear bg-twitch-purple btn-primary text-white px-2.5 py-1.5 text-xs border-none rounded cursor-pointer transition-colors flex-1 hover:bg-twitch-lightpurple"
+              aria-label="Limpar todos os filtros">Limpar filtros</button>
           </div>
         </div>
       </div>
 
       <!-- Perfil no header -->
-      <div class="header-profile" id="profile-toggle">
-        <div class="user-avatar">A</div>
-        <div class="profile-dropdown" id="profile-dropdown">
-          <div class="profile-info">
-            <p class="profile-name">nome VISIVEL</p>
-            <p class="profile-username">nome do perfil</p>
-            <a href="#">Acessar perfil</a>
+      <div
+        class="header-profile flex items-center gap-3 bg-transparent px-1 py-1 rounded-full cursor-pointer transition-colors hover:bg-gray-700"
+        id="profile-toggle">
+        <div
+          class="user-avatar bg-twitch-purple text-white font-bold text-base w-9 h-9 rounded-full flex justify-center items-center select-none shadow-x1">
+          A</div>
+        <div
+          class="profile-dropdown fixed top-16 right-4 bg-twitch-gray text-white w-60 rounded-lg shadow-xl flex flex-col p-2 z-50 hidden"
+          id="profile-dropdown">
+          <div class="profile-info p-3">
+            <p class="profile-name font-bold m-0">nome VISIVEL</p>
+            <p class="profile-username text-sm m-0 text-gray-400">nome do perfil</p>
+            <a href="#" class="text-twitch-purple text-sm no-underline">Acessar perfil</a>
           </div>
-          <hr>
-          <button>Editar perfil</button>
-          <button>Sair</button>
-          <hr>
-          <button>Notificações</button>
-          <button>Chats</button>
-          <hr>
-          <button>Configurações</button>
-          <button>Modo: claro</button>
-          <button>Ajuda</button>
+          <hr class="border-t border-gray-700 my-1">
+          <button
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Editar
+            perfil</button>
+          <button
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Sair</button>
+          <hr class="border-t border-gray-700 my-1">
+          <button
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Notificações</button>
+          <button
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Chats</button>
+          <hr class="border-t border-gray-700 my-1">
+          <button
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Configurações</button>
+          <button
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Modo:
+            claro</button>
+          <button
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Ajuda</button>
         </div>
       </div>
     </div>
   </header>
 
-  <aside>
-    <div class="sidebar-right">
+  <aside
+    class="w-72 bg-twitch-gray border-r border-gray-700 flex flex-col justify-between transition-transform -translate-x-full z-40 fixed left-0 top-0 h-screen shadow-xl pt-5"
+    id="sidebar">
+    <div class="sidebar-right px-6 py-4">
       <!-- menu -->
-      <i class='bx bx-menu' id="menu-back" aria-label="fechar menu"></i>
-      <div id="logo_side">
-        <!-- nossa logo 2 -->
-        <a href="/empresas">
-          <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logo_img">
-        </a>
-        <div class="logo_side_name">EmpreGo</div>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#" class="active">Eventos</a></li>
-          <hr>
-          <li><a href="#">Favoritos</a></li>
+      <nav class="mt-10">
+        <ul class="list-none pl-0 m-0">
+          <li class="mb-1">
+            <a href="#"
+              class="flex items-center gap-3 px-4 py-2 text-sm rounded-xl bg-gray-700 text-gray-300 hover:bg-purple-700 hover:text-white transition-colors">
+              <i class='bx bx-calendar-event text-lg'></i>
+              Inicio
+            </a>
+          </li>
+
+          <hr class="border-t border-gray-700 my-2">
+
+          <!-- Botões adicionais -->
+          <li class="mb-2">
+            <a href="#"
+              class="flex items-center gap-3 px-4 py-2 text-sm rounded-xl bg-gray-700 text-gray-300 hover:bg-purple-700 hover:text-white transition-colors">
+              <i class='bx bx-message-rounded text-lg'></i>
+              <span>Chat Geral</span>
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a href="#"
+              class="flex items-center gap-3 px-4 py-2 text-sm rounded-xl bg-gray-700 text-gray-300 hover:bg-purple-700 hover:text-white transition-colors">
+              <i class='bx bx-group text-lg'></i>
+              <span>Fórum</span>
+            </a>
+          </li>
+
+          <hr class="border-t border-gray-700 my-2">
+
+          <li class="mb-1">
+            <div
+              class="favoritos-header flex items-center gap-3 px-4 py-2 bg-gray-700 text-gray-300 no-underline text-sm rounded-xl hover:bg-purple-700 hover:text-white transition-colors cursor-pointer"
+              id="favoritos-toggle">
+              <i class='bx bx-star text-lg'></i>Favoritos
+              <i class='bx bx-chevron-down ml-auto'></i>
+            </div>
+
+            <!-- Seção de favoritos-->
+            <div class="favoritos-container hidden" id="favoritos-container">
+              <!-- Item de favorito 1 -->
+              <!-- <div class="favorito-item">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo Tech Solutions"
+                  class="empresa-logo w-10 h-10 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+                <div class="favorito-info">
+                  <div class="favorito-nome">Tech Solutions Inc.</div>
+                  <div class="favorito-categoria">Desenvolvimento de Software</div>
+                </div>
+                <div class="favorito-actions">
+                  <button class="chat-btn" aria-label="Abrir chat">
+                    <i class='bx bx-message-rounded'></i>
+                  </button>
+                </div>
+              </div> -->
+
+              <!-- Item de favorito 2 -->
+              <!-- <div class="favorito-item">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo DesignHub"
+                  class="empresa-logo w-10 h-10 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform ">
+                <div class="favorito-info">
+                  <div class="favorito-nome">DesignHub</div>
+                  <div class="favorito-categoria">Design Gráfico</div>
+                </div>
+                <div class="favorito-actions">
+                  <button class="chat-btn" aria-label="Abrir chat">
+                    <i class='bx bx-message-rounded'></i>
+                  </button>
+                </div>
+              </div> -->
+
+              <!-- Item de favorito 3 -->
+              <!-- <div class="favorito-item">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo GreenEnergy"
+                  class="empresa-logo w-10 h-10 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+                <div class="favorito-info">
+                  <div class="favorito-nome">GreenEnergy</div>
+                  <div class="favorito-categoria">Energia Renovável</div>
+                </div>
+                <div class="favorito-actions">
+                  <button class="chat-btn" aria-label="Abrir chat">
+                    <i class='bx bx-message-rounded'></i>
+                  </button>
+                </div>
+              </div> -->
+
+              <!-- Item de favorito 4 -->
+              <!-- <div class="favorito-item">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo InovaTech"
+                  class="empresa-logo w-10 h-10 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+                <div class="favorito-info">
+                  <div class="favorito-nome">InovaTech</div>
+                  <div class="favorito-categoria">Tecnologia</div>
+                </div>
+                <div class="favorito-actions">
+                  <button class="chat-btn" aria-label="Abrir chat">
+                    <i class='bx bx-message-rounded'></i>
+                  </button>
+                </div>
+              </div> -->
+
+              <!-- Item de favorito 5 -->
+              <!-- <div class="favorito-item">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo Data Systems"
+                  class="empresa-logo w-10 h-10 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+                <div class="favorito-info">
+                  <div class="favorito-nome">Data Systems</div>
+                  <div class="favorito-categoria">Análise de Dados</div>
+                </div>
+                <div class="favorito-actions">
+                  <button class="chat-btn" aria-label="Abrir chat">
+                    <i class='bx bx-message-rounded'></i>
+                  </button>
+                </div>
+              </div> -->
+
+              <!-- Item de favorito 6 -->
+              <!-- <div class="favorito-item">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo Cloud Solutions"
+                  class="empresa-logo w-10 h-10 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+                <div class="favorito-info">
+                  <div class="favorito-nome">Cloud Solutions</div>
+                  <div class="favorito-categoria">Computação em Nuvem</div>
+                </div>
+                <div class="favorito-actions">
+                  <button class="chat-btn" aria-label="Abrir chat">
+                    <i class='bx bx-message-rounded'></i>
+                  </button>
+                </div>
+              </div> -->
+              
+            </div>
+          </li>
         </ul>
       </nav>
     </div>
   </aside>
 
-  <main>
-  <!-- Slider de Recomendações com Swiper -->
-<section class="recomendacoes-swiper swiper" aria-label="Recomendações de clientes">
-  <div class="swiper-wrapper">
-    
-    <!-- Slide 1 -->
-    <div class="swiper-slide">
-      <div class="slide-content">
-        <span class="slide-empresa">TechSolutions Inc.</span>
-        <h3 class="slide-titulo">Parceria Excepcional</h3>
-        <blockquote class="slide-texto">
-          "Trabalhar com esta equipe foi uma experiência transformadora para nosso negócio. A qualidade do serviço superou todas as expectativas e os resultados foram visíveis já no primeiro mês de colaboração."
-        </blockquote>
-        <div class="slide-meta">
-          <span class="slide-autor">Carlos Mendes</span>
-          <span class="slide-data">15 de Março, 2023</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Slide 2 -->
-    <div class="swiper-slide">
-      <div class="slide-content">
-        <span class="slide-empresa">Global Innovations</span>
-        <h3 class="slide-titulo">Profissionalismo Notável</h3>
-        <blockquote class="slide-texto">
-          "Recomendo fortemente os serviços prestados. A equipe demonstrou um nível de profissionalismo raro no mercado, com atenção aos detalhes e prazos rigorosamente cumpridos. Uma parceria que certamente continuaremos no futuro."
-        </blockquote>
-        <div class="slide-meta">
-          <span class="slide-autor">Ana Beatriz Silva</span>
-          <span class="slide-data">2 de Abril, 2023</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Slide 3 -->
-    <div class="swiper-slide">
-      <div class="slide-content">
-        <span class="slide-empresa">Digital Ventures</span>
-        <h3 class="slide-titulo">Resultados Exponenciais</h3>
-        <blockquote class="slide-texto">
-          "Em menos de 6 meses, nossa presença online cresceu 300% graças ao trabalho meticuloso desta equipe. A abordagem estratégica e a capacidade de adaptação às necessidades do nosso setor foram impressionantes."
-        </blockquote>
-        <div class="slide-meta">
-          <span class="slide-autor">Ricardo Almeida</span>
-          <span class="slide-data">22 de Maio, 2023</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Slide 4 -->
-    <div class="swiper-slide">
-      <div class="slide-content">
-        <span class="slide-empresa">Future Labs</span>
-        <h3 class="slide-titulo">Inovação Contínua</h3>
-        <blockquote class="slide-texto">
-          "O que mais impressiona é a capacidade de inovar constantemente, trazendo soluções que não apenas resolvem problemas imediatos, mas preparam nossa empresa para os desafios futuros. Uma relação de confiança construída ao longo de anos."
-        </blockquote>
-        <div class="slide-meta">
-          <span class="slide-autor">Fernanda Oliveira</span>
-          <span class="slide-data">10 de Junho, 2023</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Navegação -->
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
-  
-  <!-- Paginação (dots) -->
-  <div class="swiper-pagination"></div>
-</section>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const swiper = new Swiper('.recomendacoes-swiper', {
-    loop: true,
-    effect: 'fade',
-    fadeEffect: {
-      crossFade: true
-    },
-    
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false,
-    },
-    
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    
-    // Configurações de acessibilidade
-    a11y: {
-      prevSlideMessage: 'Slide anterior',
-      nextSlideMessage: 'Próximo slide',
-      paginationBulletMessage: 'Ir para slide {{index}}',
-    },
-    
-    // Eventos
-    on: {
-      // Pausa o autoplay quando o mouse está sobre o slider
-      mouseenter: function() {
-        swiper.autoplay.stop();
-      },
-      // Retoma o autoplay quando o mouse sai do slider
-      mouseleave: function() {
-        swiper.autoplay.start();
-      },
-    }
-  });
-});
-  </script>
+  <main class="flex-grow overflow-y-auto flex flex-col items-center w-full max-w-6xl mx-auto mt-16">
+    <!-- Slider de Recomendações com Swiper -->
+    <section class="recomendacoes-swiper swiper w-full max-w-6xl mx-auto my-8 px-4 relative rounded-xl"
+      aria-label="Recomendações de clientes">
+      <div class="swiper-wrapper">
 
-    <section class="empresas-section">
-      <h2 class="section-title">Empresas em Destaque</h2>
-      <div class="empresas-container">
+        <!-- Slide 1 -->
+        <div class="swiper-slide">
+          <div class="slide-content">
+            <span class="slide-empresa">TechSolutions Inc.</span>
+            <h3 class="slide-titulo">Parceria Excepcional</h3>
+            <blockquote class="slide-texto">
+              "Trabalhar com esta equipe foi uma experiência transformadora para nosso negócio. A qualidade do serviço
+              superou todas as expectativas e os resultados foram visíveis já no primeiro mês de colaboração."
+            </blockquote>
+            <div class="slide-meta">
+              <span class="slide-autor">Carlos Mendes</span>
+              <span class="slide-data">15 de Março, 2023</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="swiper-slide">
+          <div class="slide-content">
+            <span class="slide-empresa">Global Innovations</span>
+            <h3 class="slide-titulo">Profissionalismo Notável</h3>
+            <blockquote class="slide-texto">
+              "Recomendo fortemente os serviços prestados. A equipe demonstrou um nível de profissionalismo raro no
+              mercado, with atenção aos detalhes and prazos rigorosamente cumpridos. Uma parceria que certamente
+              continuaremos no futuro."
+            </blockquote>
+            <div class="slide-meta">
+              <span class="slide-autor">Ana Beatriz Silva</span>
+              <span class="slide-data">2 de Abril, 2023</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="swiper-slide">
+          <div class="slide-content">
+            <span class="slide-empresa">Digital Ventures</span>
+            <h3 class="slide-titulo">Resultados Exponenciais</h3>
+            <blockquote class="slide-texto">
+              "Em menos de 6 meses, nossa presença online cresceu 300% graças ao trabalho meticuloso desta equipe. A
+              abordagem estratégica e a capacidade de adaptação às necessidades do nosso setor foram impressionantes."
+            </blockquote>
+            <div class="slide-meta">
+              <span class="slide-autor">Ricardo Almeida</span>
+              <span class="slide-data">22 de Maio, 2023</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="swiper-slide">
+          <div class="slide-content">
+            <span class="slide-empresa">Future Labs</span>
+            <h3 class="slide-titulo">Inovação Contínua</h3>
+            <blockquote class="slide-texto">
+              "O que mais impressiona is the capacidade de inovar constantly, trazendo soluções que não apenas
+              resolvem problemas imediatos, mas preparam nossa empresa para os desafios futuros. Uma relação de
+              confiança construída ao longo de anos."
+            </blockquote>
+            <div class="slide-meta">
+              <span class="slide-autor">Fernanda Oliveira</span>
+              <span class="slide-data">10 de Junho, 2023</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navegação -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+
+      <!-- Paginação (dots) -->
+      <div class="swiper-pagination"></div>
+    </section>
+
+    <section class="empresas-section w-full px-5 py-6 mt-8">
+      <h2
+        class="section-title text-2xl font-bold mb-8 text-white text-center relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-14 after:h-1 after:bg-twitch-purple after:rounded-full">
+        Empresas Recentes</h2>
+      <div id="divEmpresas" class="empresas-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
         <!-- Cartão 1 -->
-        <article class="empresa-card">
-          <div class="card-header">
-            <img src="/assets/imgs/BIGSlogo.png" alt="Logo Tech Solutions" class="empresa-logo">
-            <button class="favorite-btn" aria-label="Marcar como favorito">
-              <i class='bx bx-star'></i>
+        <!-- <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="/assets/imgs/BIGSlogo.png" alt="Logo Tech Solutions"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
             </button>
           </div>
-          <div class="card-body">
-            <h3 class="empresa-nome">Tech Solutions Inc.</h3>
-            <p class="empresa-descricao">Empresa líder em desenvolvimento de software com foco em soluções inovadoras
-              para o mercado financeiro. Atuamos globalmente com mais de 15 anos de experiência.</p>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">Tech Solutions Inc.</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              Empresa líder em desenvolvimento de software com foco em soluções inovadoras para o mercado financeiro.
+              Atuamos globalmente com mais de 15 anos de experiência.
+            </p>
           </div>
-          <div class="card-footer">
-            <div class="card-meta">
-              <div class="tag-chips">
-                <span class="tag-chip">Remoto</span>
-                <span class="tag-chip">CLT</span>
-                <span class="tag-chip">TI</span>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Remoto</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">CLT</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">TI</span>
               </div>
             </div>
-            <button class="ver-mais-btn">Ver mais</button>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
           </div>
-        </article>
+        </article> -->
 
         <!-- Cartão 2 -->
-        <article class="empresa-card">
-          <div class="card-header">
-            <img src="/assets/imgs/BIGSlogo.png" alt="Logo DesignHub" class="empresa-logo">
-            <button class="favorite-btn active" aria-label="Desmarcar favorito">
-              <i class='bx bxs-star'></i>
+        <!-- <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="/assets/imgs/BIGSlogo.png" alt="Logo DesignHub"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-yellow-400 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              aria-label="Desmarcar favorito">
+              <i class='bx bxs-star text-xl'></i>
             </button>
           </div>
-          <div class="card-body">
-            <h3 class="empresa-nome">DesignHub</h3>
-            <p class="empresa-descricao">Agência de design especializada em identidade visual e experiência do usuário.
-              Nossa equipe criativa transforma ideias em realidade visual.</p>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">DesignHub</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              Agência de design especializada em identidade visual e experiência do usuário. Nossa equipe criativa
+              transforma ideias em realidade visual.
+            </p>
           </div>
-          <div class="card-footer">
-            <div class="card-meta">
-              <div class="tag-chips">
-                <span class="tag-chip">Presencial</span>
-                <span class="tag-chip">PJ</span>
-                <span class="tag-chip">Design</span>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Presencial</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">PJ</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Design</span>
               </div>
             </div>
-            <button class="ver-mais-btn">Ver mais</button>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
           </div>
-        </article>
+        </article> -->
 
         <!-- Cartão 3 -->
-        <article class="empresa-card">
-          <div class="card-header">
-            <img src="/assets/imgs/BIGSlogo.png" alt="Logo GreenEnergy" class="empresa-logo">
-            <button class="favorite-btn" aria-label="Marcar como favorito">
-              <i class='bx bx-star'></i>
+        <!-- <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="/assets/imgs/BIGSlogo.png" alt="Logo GreenEnergy"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
             </button>
           </div>
-          <div class="card-body">
-            <h3 class="empresa-nome">GreenEnergy</h3>
-            <p class="empresa-descricao">Pioneira em soluções de energia renovável na Europa. Desenvolvemos tecnologias
-              sustentáveis para um futuro mais verde e eficiente.</p>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">GreenEnergy</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              Pioneira em soluções de energia renovável na Europa. Desenvolvemos tecnologias sustentáveis para um futuro
+              mais verde and eficiente.
+            </p>
           </div>
-          <div class="card-footer">
-            <div class="card-meta">
-              <div class="tag-chips">
-                <span class="tag-chip">Híbrido</span>
-                <span class="tag-chip">Estágio</span>
-                <span class="tag-chip">Engenharia</span>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Híbrido</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Estágio</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Engenharia</span>
               </div>
             </div>
-            <button class="ver-mais-btn">Ver mais</button>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
           </div>
-        </article>
+        </article> -->
+
+        <!-- Cartão 4 -->
+        <!-- <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="/assets/imgs/BIGSlogo.png" alt="Logo InovaTech"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
+            </button>
+          </div>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">InovaTech</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              Especialistas em transformação digital e soluções tecnológicas inovadoras para empresas de todos os
+              tamanhos.
+            </p>
+          </div>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Remoto</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">CLT</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">TI</span>
+              </div>
+            </div>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
+          </div>
+        </article> -->
+
+        <!-- Cartão 5 -->
+        <!-- <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="/assets/imgs/BIGSlogo.png" alt="Logo Data Systems"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
+            </button>
+          </div>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">Data Systems</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              Líder em análise de dados e business intelligence, ajudando empresas a tomar decisões baseadas em dados.
+            </p>
+          </div>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Híbrido</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">PJ</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Dados</span>
+              </div>
+            </div>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
+          </div>
+        </article> -->
+
+        <!-- Cartão 6 -->
+        <!-- <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="/assets/imgs/BIGSlogo.png" alt="Logo Cloud Solutions"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
+            </button>
+          </div>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">Cloud Solutions</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              Especialistas em infraestrutura em nuvem e migração de sistemas, oferecendo soluções escaláveis e seguras.
+            </p>
+          </div>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Remoto</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">CLT</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">Cloud</span>
+              </div>
+            </div>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
+          </div>
+        </article> -->
       </div>
-      <div class="ver-todas">
-        <a href="#" class="ver-todas-btn">Ver todas as empresas</a>
+      <div class="ver-todas text-center mt-8 w-full">
+        <a id="ver-pagina-btn" class="ver-todas-btn btn-outline-primary text-white inline-block px-8 py-3 rounded-full text-base font-medium cursor-pointer transition-all no-underline">Ver mais</a>
       </div>
     </section>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module" src="/js/vagas.js"></script>
 
 </body>
 

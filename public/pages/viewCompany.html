@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="EmpreGo - Encontre os melhores talentos para sua empresa">
+  <link rel="stylesheet" href="/css/viewCompany.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <script defer src="/js/viewCompany.js"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>EmpreGo - Encontre talentos para sua empresa</title>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <!-- menu -->
+      <button class='bx bx-menu' id="menu-toggle" aria-label="abrir menu"></button>
+      <!-- Nossa logo 1  -->
+      <div id="logo">
+        <a href="/">
+          <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" id="logoimg">
+        </a>
+        <a href="/" id="nomedosite">Empre<span>Go</span></a>
+      </div>
+      <!-- Barra de pesquisa -->
+      <div class="search-bar">
+        <input type="text" placeholder="Pesquisar candidatos..." />
+        <button class="filter-dropdown-toggle" id="filter-toggle" aria-label="Abrir filtros" aria-expanded="false"
+        aria-controls="filter-chips-container">
+            <img src="/assets/imgs/lupa.png" alt="Pesquisar" height="24" width="24" />
+          <img src="/assets/imgs/filtro.png" alt="Filtrar" height="24" width="24" />
+          <span class="filter-label">Filtragem</span>
+        </button>
+      </div>
+      <!-- filtragem -->
+      <div class="filters">
+
+        <div class="filter-chips-container" id="filter-chips-container">
+
+          <!-- Grupo: Nível de Experiência -->
+          <fieldset class="filter-group">
+            <legend>
+              Experiência
+              <button class="toggle-chips" aria-label="Mostrar opções de nível">
+                <i class="bx bx-chevron-down"></i>
+              </button>
+            </legend>
+            <div class="chip-group" style="display: none;">
+              <button type="button" class="filter-chip" data-value="junior" aria-pressed="false"
+                title="Nível Júnior">Júnior (0-2 anos)</button>
+              <button type="button" class="filter-chip" data-value="pleno" aria-pressed="false">Pleno (2-5 anos)</button>
+              <button type="button" class="filter-chip" data-value="senior" aria-pressed="false">Sênior (5+ anos)</button>
+              <button type="button" class="filter-chip" data-value="estagiario" aria-pressed="false">Estagiário</button>
+              <button type="button" class="filter-chip" data-value="trainee" aria-pressed="false">Trainee</button>
+            </div>
+          </fieldset>
+          <hr>
+
+          <!-- Grupo: Formação -->
+          <fieldset class="filter-group">
+            <legend>Formação</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="tecnico" aria-pressed="false"
+                title="Técnico">Técnico</button>
+              <button type="button" class="filter-chip" data-value="graduacao" aria-pressed="false">Graduação</button>
+              <button type="button" class="filter-chip" data-value="pos" aria-pressed="false">Pós-graduação</button>
+              <button type="button" class="filter-chip" data-value="mestrado" aria-pressed="false">Mestrado</button>
+              <button type="button" class="filter-chip" data-value="doutorado" aria-pressed="false">Doutorado</button>
+            </div>
+          </fieldset>
+
+          <hr>
+
+          <!-- Grupo: Habilidades -->
+          <fieldset class="filter-group">
+            <legend>Habilidades</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="ingles" aria-pressed="false">Inglês</button>
+              <button type="button" class="filter-chip" data-value="espanhol" aria-pressed="false">Espanhol</button>
+              <button type="button" class="filter-chip" data-value="leadership" aria-pressed="false">Liderança</button>
+              <button type="button" class="filter-chip" data-value="comunicacao" aria-pressed="false">Comunicação</button>
+            </div>
+          </fieldset>
+
+          <hr>
+
+          <!-- Grupo: Disponibilidade -->
+          <fieldset class="filter-group">
+            <legend>Disponibilidade</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="integral" aria-pressed="false">Integral</button>
+              <button type="button" class="filter-chip" data-value="meio-periodo" aria-pressed="false">Meio período</button>
+              <button type="button" class="filter-chip" data-value="home-office" aria-pressed="false">Home Office</button>
+              <button type="button" class="filter-chip" data-value="hibrido" aria-pressed="false">Híbrido</button>
+            </div>
+          </fieldset>
+
+          <hr>
+
+          <!-- Grupo: Área -->
+          <fieldset class="filter-group">
+            <legend>Área</legend>
+            <div class="chip-group">
+              <button type="button" class="filter-chip" data-value="ti" aria-pressed="false">TI</button>
+              <button type="button" class="filter-chip" data-value="engenharia" aria-pressed="false">Engenharia</button>
+              <button type="button" class="filter-chip" data-value="vendas" aria-pressed="false">Vendas</button>
+              <button type="button" class="filter-chip" data-value="rh" aria-pressed="false">RH</button>
+              <button type="button" class="filter-chip" data-value="marketing" aria-pressed="false">Marketing</button>
+            </div>
+          </fieldset>
+
+          <div class="filter-actions">
+            <button type="button" class="filter-confirm" aria-label="Aplicar filtros selecionados">Confirmar filtros</button>
+            <button type="button" class="filter-clear" aria-label="Limpar todos os filtros">Limpar filtros</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Perfil no header -->
+      <div class="header-profile" id="profile-toggle">
+        <div class="user-avatar">E</div>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <div class="profile-info">
+            <p class="profile-name">Recursos Humanos</p>
+            <p class="profile-username">TechSolutions Inc.</p>
+            <a href="#">Acessar perfil da empresa</a>
+          </div>
+          <hr>
+          <button>Editar perfil</button>
+          <button>Gerenciar vagas</button>
+          <hr>
+          <button>Candidatos salvos</button>
+          <button>Mensagens</button>
+          <hr>
+          <button>Configurações</button>
+          <button>Relatórios</button>
+          <button>Ajuda</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside>
+    <div class="sidebar-right">
+      <!-- menu -->
+      <i class='bx bx-menu' id="menu-back" aria-label="fechar menu"></i>
+      <div id="logo_side">
+        <!-- nossa logo 2 -->
+        <a href="/empresas">
+          <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logo_img">
+        </a>
+        <div class="logo_side_name">EmpreGo</div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#" class="active">Candidatos</a></li>
+          <hr>
+          <li><a href="#">Vagas publicadas</a></li>
+          <li><a href="#">Candidatos salvos</a></li>
+          <li><a href="#">Relatórios</a></li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <main>
+  <!-- Slider de Recomendações com Swiper -->
+<section class="recomendacoes-swiper swiper" aria-label="Candidatos em destaque">
+  <div class="swiper-wrapper">
+    
+    <!-- Slide 1 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">Engenheiro de Software</span>
+        <h3 class="slide-titulo">Perfil Excepcional</h3>
+        <blockquote class="slide-texto">
+          "Candidato com 8 anos de experiência em desenvolvimento full-stack, especializado em arquitetura de sistemas escaláveis. Domina JavaScript, Python e arquitetura de microsserviços. Fluente em inglês com experiência em times internacionais."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Carlos Mendes, 32 anos</span>
+          <span class="slide-data">Disponibilidade: Imediata</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slide 2 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">Gerente de Marketing</span>
+        <h3 class="slide-titulo">Liderança Comprovada</h3>
+        <blockquote class="slide-texto">
+          "Profissional com MBA em Marketing Digital e 5 anos de experiência liderando equipes multiculturais. Especialista em growth hacking e métricas de conversão. Aumentou em 150% o ROI de campanhas na última empresa."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Ana Beatriz Silva, 29 anos</span>
+          <span class="slide-data">Disponibilidade: 30 dias</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slide 3 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">Analista de Dados</span>
+        <h3 class="slide-titulo">Habilidades Técnicas Destaque</h3>
+        <blockquote class="slide-texto">
+          "Mestre em Ciência de Dados com domínio avançado em Python, SQL e ferramentas de BI. Implementou soluções de análise preditiva que reduziram custos operacionais em 35%. Certificado em Machine Learning pela Stanford University."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Ricardo Almeida, 27 anos</span>
+          <span class="slide-data">Disponibilidade: Imediata</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slide 4 -->
+    <div class="swiper-slide">
+      <div class="slide-content">
+        <span class="slide-empresa">Estagiário em UX Design</span>
+        <h3 class="slide-titulo">Potencial Excepcional</h3>
+        <blockquote class="slide-texto">
+          "Estudante de Design com portfólio impressionante de projetos acadêmicos e freelances. Domínio de Figma, Adobe XD e pesquisa de usuários. Vencedor do prêmio Jovens Talentos em Design 2022. Busca primeira experiência profissional."
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">Fernanda Oliveira, 21 anos</span>
+          <span class="slide-data">Disponibilidade: Imediata</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navegação -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+  
+  <!-- Paginação (dots) -->
+  <div class="swiper-pagination"></div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const swiper = new Swiper('.recomendacoes-swiper', {
+    loop: true,
+    effect: 'fade',
+    fadeEffect: {
+      crossFade: true
+    },
+    
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    
+    // Configurações de acessibilidade
+    a11y: {
+      prevSlideMessage: 'Slide anterior',
+      nextSlideMessage: 'Próximo slide',
+      paginationBulletMessage: 'Ir para slide {{index}}',
+    },
+    
+    // Eventos
+    on: {
+      // Pausa o autoplay quando o mouse está sobre o slider
+      mouseenter: function() {
+        swiper.autoplay.stop();
+      },
+      // Retoma o autoplay quando o mouse sai do slider
+      mouseleave: function() {
+        swiper.autoplay.start();
+      },
+    }
+  });
+});
+  </script>
+
+    <section class="empresas-section">
+      <h2 class="section-title">Candidatos em Destaque</h2>
+      <div class="empresas-container">
+        <!-- Cartão 1 -->
+        <article class="empresa-card">
+          <div class="card-header">
+            <img src="/assets/imgs/candidate1.jpg" alt="Foto do candidato" class="empresa-logo">
+            <button class="favorite-btn" aria-label="Salvar candidato">
+              <i class='bx bx-star'></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <h3 class="empresa-nome">Mariana Costa</h3>
+            <p class="empresa-descricao">Desenvolvedora Front-end com 4 anos de experiência em React e TypeScript. Já liderou a migração de 3 projetos para arquitetura moderna, reduzindo tempo de carregamento em 40%.</p>
+          </div>
+          <div class="card-footer">
+            <div class="card-meta">
+              <div class="tag-chips">
+                <span class="tag-chip">Remoto</span>
+                <span class="tag-chip">Pleno</span>
+                <span class="tag-chip">Front-end</span>
+              </div>
+            </div>
+            <button class="ver-mais-btn">Ver perfil</button>
+          </div>
+        </article>
+
+        <!-- Cartão 2 -->
+        <article class="empresa-card">
+          <div class="card-header">
+            <img src="/assets/imgs/candidate2.jpg" alt="Foto do candidato" class="empresa-logo">
+            <button class="favorite-btn active" aria-label="Remover dos salvos">
+              <i class='bx bxs-star'></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <h3 class="empresa-nome">João Pedro Silva</h3>
+            <p class="empresa-descricao">Gerente de Projetos certificado PMP com experiência internacional. Gerenciou equipes de até 15 pessoas em projetos com orçamento superior a R$ 2 milhões.</p>
+          </div>
+          <div class="card-footer">
+            <div class="card-meta">
+              <div class="tag-chips">
+                <span class="tag-chip">Híbrido</span>
+                <span class="tag-chip">Sênior</span>
+                <span class="tag-chip">Gestão</span>
+              </div>
+            </div>
+            <button class="ver-mais-btn">Ver perfil</button>
+          </div>
+        </article>
+
+        <!-- Cartão 3 -->
+        <article class="empresa-card">
+          <div class="card-header">
+            <img src="/assets/imgs/candidate3.jpg" alt="Foto do candidato" class="empresa-logo">
+            <button class="favorite-btn" aria-label="Salvar candidato">
+              <i class='bx bx-star'></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <h3 class="empresa-nome">Luiza Fernandes</h3>
+            <p class="empresa-descricao">Analista de Dados com mestrado em Estatística. Domina Python, SQL e Power BI. Implementou modelo preditivo que aumentou retenção de clientes em 25% na última empresa.</p>
+          </div>
+          <div class="card-footer">
+            <div class="card-meta">
+              <div class="tag-chips">
+                <span class="tag-chip">Presencial</span>
+                <span class="tag-chip">Pleno</span>
+                <span class="tag-chip">Data Science</span>
+              </div>
+            </div>
+            <button class="ver-mais-btn">Ver perfil</button>
+          </div>
+        </article>
+      </div>
+      <div class="ver-todas">
+        <a href="#" class="ver-todas-btn">Ver todos os candidatos</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  document.querySelectorAll('.toggle-chips').forEach(button => {
+    button.addEventListener('click', () => {
+      const chipGroup = button.closest('fieldset').querySelector('.chip-group');
+      chipGroup.style.display = chipGroup.style.display === 'none' ? 'flex' : 'none';
+      button.querySelector('i').classList.toggle('bx-chevron-down');
+      button.querySelector('i').classList.toggle('bx-chevron-up');
+    });
+  });
+  </script>
+</body>
+
+</html>

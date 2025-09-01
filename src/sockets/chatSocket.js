@@ -6,8 +6,8 @@ module.exports = (io) => {
 
         socket.on('joinRoom', async (roomId, callback) =>{
             try{
-                socket.join(roomId)
-                console.log(`Socket ${socket.id} entrou na sala ${roomId}`)
+                socket.join(roomId);
+                console.log(`Socket ${socket.id} entrou na sala ${roomId}`);
                 const mensagens = await MensagemModel.buscarMensagensPorChat(roomId);
 
                 socket.emit('previousMessages', mensagens);
@@ -18,7 +18,7 @@ module.exports = (io) => {
                 console.error(erro)
                 if (callback) callback({ 
                     status: 'error',
-                    message: 'Erro ao enviar mensagem'
+                    message: 'Erro ao carregar mensagens'
                 });
             }
         });

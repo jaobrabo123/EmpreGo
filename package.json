@@ -1,14 +1,16 @@
 {
-  "name": "new-project",
-  "version": "1.0.0",
+  "name": "emprego",
+  "version": "2.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "prisma generate"
   },
   "author": "João Pedro Azevedo, João Pedro Souza, Alec Vinícius, Mateus Ricardo e Lucas",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^3.0.2",
+    "@prisma/client": "^6.14.0",
+    "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
@@ -21,16 +23,18 @@
     "multer-storage-cloudinary": "^4.0.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.5",
-    "pg": "^8.16.0",
-    "socket.io": "^4.8.1",
-    "uuid": "^11.1.0"
+    "socket.io": "^4.8.1"
   },
   "_moduleAliases": {
     "@root": ".",
     "@middlewares": "src/middlewares",
     "@routes": "src/routes",
     "@sockets": "src/sockets",
-    "@tasks": "src/tasks"
+    "@tasks": "src/tasks",
+    "@config": "src/config"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "prisma": "^6.14.0"
+  }
 }

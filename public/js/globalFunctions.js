@@ -1,3 +1,6 @@
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
 export function mostrarErroTopo(mensagem) {
   const old = document.querySelector('.erro-mensagem-geral');
   if (old) old.remove();
@@ -7,100 +10,120 @@ export function mostrarErroTopo(mensagem) {
 
   const contrasteDiv = document.createElement('div');
   contrasteDiv.className = 'erro-mensagem-contraste';
-  contrasteDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${mensagem}`;
+  contrasteDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${mensagem}`;
 
   erroDiv.appendChild(contrasteDiv);
   document.body.prepend(erroDiv);
 
   setTimeout(() => {
     if (erroDiv.parentNode) erroDiv.remove();
-  }, 5000);
+  }, 3000);
 }
 
 export async function carregarLinks() {
-  const infos = await carregarInfo();
-  console.log(infos)
+  const infos = await carregarFoto();
   if(infos === 'visitante' || infos.tipo==='visitante' || infos.tipo==='expirado'){
     document.querySelector('#loginOuCadas').style.display = '';
     document.querySelector('#logout').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = 'none';
+    document.querySelector('#mobileLoginOuCadas').style.display = '';
+    document.querySelector('#mobileLogout').style.display = 'none';
+    document.querySelector('#mobileFotoPerfil').style.display = 'none';
     if(infos.tipo==='expirado'){
-      alert('Sua sessão expirou faça login novamente.')
-      window.location.href = '/login'
+      alert('Sua sessão expirou faça login novamente.');
+      window.location.href = '/login';
     }
-  }else
-  if (infos.tipo==='candidato'){
+  }
+  else if (infos.tipo==='candidato'){
+    // * Linkagem da foto de perfil para PC
     document.querySelector('#fotoPerfil').href = '/perfil/candidato';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
-    document.querySelector('#fotoPerfilImg').src = infos.info.foto;
+    document.querySelector('#fotoPerfilImg').src = infos.foto;
+    // * Linkagem da foto de perfil para Mobile
+    document.querySelector('#mobileFotoPerfil').href = '/perfil/candidato';
+    document.querySelector('#mobileLoginOuCadas').style.display = 'none';
+    document.querySelector('#mobileFotoPerfil').style.display = '';
+    document.querySelector('#mobileFotoPerfilImg').src = infos.foto;
   }
-  else
-  if (infos.tipo==='empresa') {
+  else if (infos.tipo==='empresa') {
+    // * Linkagem da foto de perfil para PC
     document.querySelector('#fotoPerfil').href = '/perfil/empresa';
     document.querySelector('#loginOuCadas').style.display = 'none';
     document.querySelector('#fotoPerfil').style.display = '';
-    document.querySelector('#fotoPerfilImg').src = infos.info.foto;
+    document.querySelector('#fotoPerfilImg').src = infos.foto;
+    // * Linkagem da foto de perfil para Mobile
+    document.querySelector('#mobileFotoPerfil').href = '/perfil/empresa';
+    document.querySelector('#mobileLoginOuCadas').style.display = 'none';
+    document.querySelector('#mobileFotoPerfil').style.display = '';
+    document.querySelector('#mobileFotoPerfilImg').src = infos.foto;
   }
 }
 
 export async function carregarInfo() {
-    try{
-      const tipo = await fetch('/get-tipo', {
-        method: 'GET',
-        credentials: 'include'
-      })
-      .then(async res=>{
-        const data = await res.json()
-        if(!res.ok) throw ({status: res.status, message: data.error})
-        const { tipo } = data;
+  try{
+    const tipo = await axiosWe.get('/get-tipo')
+      .then((response)=>{
+        const { tipo } = response.data;
         return tipo;
       })
-      .catch((erro)=>{
-        if(erro.status===403 && erro.message.includes('Sessão expirada')){
-          return 'expirado'
-        }else{
-          return 'visitante';
-        }
+      .catch(()=>{
+        return 'visitante';
       })
 
-      let data = null;
+    let data = null;
 
-      if(tipo==='candidato'){
-        const res = await fetch('/perfil/candidato/info', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        data = await res.json()
-        if (!res.ok) {
-          throw ({status: data.status, message: data.error});
-        }
-      }else
-      if(tipo==='empresa'){
-        const res = await fetch('/perfil/empresa/info', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        data = await res.json()
-        if (!res.ok){
-          throw ({status: data.status, message: data.error});
-        }
-      }
-      return {info: data, tipo: tipo};
+    if(tipo==='candidato'){
+      const response = await axiosWe.get('/perfil/candidato/info');
+      data = response.data;
     }
-    catch(erro){
-      console.log(erro.message)
-      return 'visitante'
+    else if(tipo==='empresa'){
+      const response = await axiosWe.get('/perfil/empresa/info');
+      data = response.data;
     }
+    return {info: data, tipo: tipo};
+  }
+  catch(erro){
+    console.error(erro.message)
+    return 'visitante'
+  }
+}
+
+export async function carregarFoto() {
+  try{
+    const tipo = await axiosWe.get('/get-tipo')
+      .then((response)=>{
+        const { tipo } = response.data;
+        return tipo;
+      })
+      .catch(()=>{
+        return 'visitante';
+      })
+
+    let foto = null;
+
+    if(tipo==='candidato'){
+      const response = await axiosWe('/perfil/candidato/foto');
+      foto = response.data;
+      console.log(response)
+    }
+    else if(tipo==='empresa'){
+      const response = await axiosWe('/perfil/empresa/foto');
+      foto = response.data;
+    }
+    return {foto, tipo: tipo};
+  }
+  catch(erro){
+    console.error(erro.message)
+    return 'visitante'
+  }
 }
 
 //Função pra deslogar
 export function logout(){
-  fetch('/logout', {
-    method: 'POST',
-    credentials: 'include'
-  }).then(() => {
-    alert('Você foi desconectado.');
+  axiosWe.post('/logout')
+  .then(()=>{
+    // ? alert('Você foi desconectado.'); Se achar necessario bota um alert pro logout
     window.location.href = '/';
-  });
+  })
 }

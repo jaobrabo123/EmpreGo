@@ -12,6 +12,17 @@ class FavoritosService {
         });
     }
 
+    static async candidatoDesfavoritarEmpresa(empresa, candidato){
+        await prisma.favoritos_empresas.deleteMany({
+            where: {
+                AND: [
+                    {cnpj_empresa: empresa},
+                    {id_candidato: candidato}
+                ]
+            }
+        });
+    }
+
 }
 
 module.exports = FavoritosService;

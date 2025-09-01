@@ -1,5 +1,5 @@
 // * Prisma
-const prisma = require('@config/db.js')
+const prisma = require('../config/db.js');
 
 class TagModel{
 
@@ -38,8 +38,8 @@ class TagModel{
         const resultadoEmailComAs = resultado.map(tag=>({
             id: tag.id,
             nome: tag.nome,
-            data_criacao: tag.data_criacao,
-            email_candidato: tag.candidatos.email
+            email_candidato: tag.candidatos.email,
+            data_criacao: tag.data_criacao
         }));
         return resultadoEmailComAs;
     }

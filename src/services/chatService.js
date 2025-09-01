@@ -1,5 +1,5 @@
 // * Prisma
-const prisma = require('@config/db.js');
+const prisma = require('../config/db.js');
 
 const Erros = require('../utils/erroClasses.js');
 

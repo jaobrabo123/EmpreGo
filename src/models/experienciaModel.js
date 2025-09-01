@@ -1,5 +1,5 @@
 // * Prisma
-const prisma = require('@config/db.js')
+const prisma = require('../config/db.js');
 
 class ExperienciaModel {
 
@@ -50,8 +50,8 @@ class ExperienciaModel {
             id: exp.id,
             titulo: exp.titulo,
             descricao: exp.descricao,
-            data_criacao: exp.data_criacao,
-            email_candidato: exp.candidatos.email
+            email_candidato: exp.candidatos.email,
+            data_criacao: exp.data_criacao
         }))
         return resultadoEmailComAS;
     }

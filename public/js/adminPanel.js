@@ -1,4 +1,5 @@
-import axiosWe from "./axiosConfig.js"
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
 
 document.querySelector('#selectTabelas').addEventListener('change', (option)=>{
     const tabela = option.target.value

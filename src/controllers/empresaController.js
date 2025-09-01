@@ -38,9 +38,34 @@ class EmpresaController{
         }
     }
 
+    static async cadastrarVarias(req, res){
+        try {
+            const data = req.body.data;
+            if(!data || !Array.isArray(data)){
+                return res.status(400).json({ error: "Informações faltando para o cadastro!" });
+            }
+            const empresasQuant = await EmpresaService.popularTabelaEmpresasMany(data);
+            res.status(201).json({ message: "Empresas criadas com sucesso: "+empresasQuant});
+        } catch (erro) {
+            if (erro instanceof Erros.ErroDeValidacao) {
+                return res.status(400).json({ error: erro.message });
+            }
+            return res.status(500).json({ error: "Erro ao cadastrar empresa: " + erro.message });
+        }
+    }
+
     static async listarTodas(req, res){
         try {
             const empresas = await EmpresaModel.buscarTodasEmpresas(req.query.limit, req.query.offset);
+            res.status(200).json(empresas);
+        } catch (erro) {
+            res.status(500).json({ error: `Erro ao buscar empresas: ${erro?.message || "erro desconhecido"}` });
+        }
+    }
+
+    static async listarTodasPublic(req, res){
+        try {
+            const empresas = await EmpresaModel.buscarTodasEmpresasPublic(req.query.page);
             res.status(200).json(empresas);
         } catch (erro) {
             res.status(500).json({ error: `Erro ao buscar empresas: ${erro?.message || "erro desconhecido"}` });

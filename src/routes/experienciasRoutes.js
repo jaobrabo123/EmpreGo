@@ -31,6 +31,7 @@ const router = express.Router();
 router.post('/experiencias', authenticateToken, apenasCandidatos, uploadExp.single("imagem"), ExperienciaController.adicionar);
 router.get('/experiencias/info', authenticateToken, ExperienciaController.listar);
 router.get('/experiencias/all', authenticateToken, apenasAdmins, ExperienciaController.listarTodos);
+router.get('/experiencias/public', authenticateToken, ExperienciaController.listarTodosPublic);
 router.delete('/experiencias/:xp', authenticateToken, apenasCandidatos, ExperienciaController.remover);
 
 module.exports = router;

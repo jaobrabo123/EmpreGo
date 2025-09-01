@@ -56,6 +56,42 @@ class EmpresaService{
 
   }
 
+  static async popularTabelaEmpresasMany(data){
+    const empresas = await Promise.all(data.map(async(emp)=>{
+      ValidarCampos.validarTamanhoMin(emp.senha, 8, 'Senha');
+      ValidarCampos.validarCnpj(emp.cnpj);
+      ValidarCampos.validarTamanhoMax(emp.nome_fant, 50, 'Nome Fantasia');
+      ValidarCampos.validarEmail(emp.email);
+      ValidarCampos.validarTamanhoMax(emp.razao_soci, 100, 'Razão Social');
+      ValidarCampos.validarCep(emp.cep);
+      if (emp.complemento!== '') ValidarCampos.validarTamanhoMax(emp.complemento, 100, 'Complemento');
+      ValidarCampos.validarTamanhoMin(emp.numero, 1, 'Número do Endereço');
+      ValidarCampos.validarTamanhoMax(emp.numero, 10, 'Número do Endereço');
+      ValidarCampos.validarTelefone(emp.telefone);
+      await ValidarCampos.validarCidadePorEstadoSigla(emp.cidade, emp.estado);
+
+      emp.cnpj = emp.cnpj.replace(/[^\d]/g, '').trim();
+      emp.nome_fant = emp.nome_fant.trim();
+      emp.email = emp.email.trim();
+      emp.razao_soci = emp.razao_soci.trim();
+      emp.cep = emp.cep.replace(/[^\d]/g, '').trim();
+      emp.complemento = emp.complemento.trim();
+      emp.numero = emp.numero.trim();
+      emp.telefone = emp.telefone.replace(/[^\d]/g, '').trim();
+      emp.cidade = emp.cidade.trim();
+      emp.senha = await bcrypt.hash(emp.senha.trim(), 10);
+
+      if(emp.complemento==='') emp.complemento = null;
+      return emp;
+    }));
+
+    const quant = await prisma.empresas.createMany({
+      data: empresas,
+      skipDuplicates: true
+    })
+    return quant.count;
+  }
+
   static async editarPerfilEmpresa(atributos, valores, cnpj){
     if (!atributos || !valores || !cnpj) {
       throw new Erros.ErroDeValidacao("Os atributos, valores e CNPJ da empresa devem ser fornecidos.");

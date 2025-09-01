@@ -1,0 +1,367 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+}
+
+html, body {
+  width: 100%; 
+  overflow-x: hidden; 
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    padding-top: 120px;
+}
+
+a {
+    font-size: 16px;
+}
+
+.input{
+    color: white;
+    background-color: #393053;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    border-radius: 20px;
+    width: 200px;
+}
+
+.inputImp{
+    margin-top: 20px;
+}
+
+.btn{
+    color: white;
+    background-color:#18122b;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    border-radius: 20px;
+    width: 200px;
+}
+
+#buttons{
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#nomUsuario {
+    font-size: 50px;
+    max-width: 1000px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#emailUsuario {
+    font-size: 25px;
+}
+
+#impInfo {
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+}
+
+#bodyLeft {
+    display: flex;
+    flex-direction: row;
+}
+
+#bodyMid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+    margin-bottom: 50px;
+}
+
+#enderecoInfo {
+    display: flex;
+    flex-direction: row;
+    width: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: -100px;
+}
+
+#cidadeEstado {
+   display: flex;
+    flex-direction: row;
+    padding-top: 15px;
+}
+
+.inputCidadeEstado{
+    margin-top: -10px;
+    border-style: solid;
+    justify-content: center;
+    display: flex;
+}
+
+
+#houseIcon {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+   
+}
+
+#estadoUsuario{
+    margin-left: 15px;
+}
+
+
+#tituloTags {
+    margin-top: 20px;
+    font-size: 50px;
+}
+
+#bodyTags {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#boxTags {
+    background-color: #393053;
+    width: 1000px;
+    height: 70px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    text-align: justify;
+    font-size: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+#btnAddTags {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+#btnAddTags:hover {
+    opacity: 80%;
+}
+
+.Tags button {
+    color: White;
+    font-weight: bold;
+    height: 50px;
+    min-width: 100px;
+    width: fit-content;
+    padding-right: 10px;
+    padding-left: 15px;
+    background-repeat: round;
+    margin-right: 15px;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 15px;
+    background-color: #18122b;
+}
+
+.Tags button:hover {
+    cursor: pointer;
+    opacity: 80%;
+}
+
+#tagLing {
+    border-color: #692785;
+}
+
+#tagHorario {
+    border-color: white;
+}
+
+.nomeRedeSoc {
+    font-size: 20px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+#inputDescricao{
+    margin-top: 20px;
+    width: 800px;
+    height: 200px;
+    background-color: #393053;
+    color: white;
+    text-align: justify;
+    text-overflow: initial;
+    font-size: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    resize: none;
+}
+
+.infoInput{
+    margin-right: 25px;
+    margin-left: 5px;
+    height: 50px;
+    width: 300px;
+    
+}
+
+#conexoesColumn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100x;
+    width: 200px;  
+}
+
+#conexoesUpper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#conexoesLower{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+#tituloExperiencias {
+    margin-bottom: 20px;
+    font-size: 50px;
+}
+
+.boxExemplo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 5px;
+}
+
+.imgExemplo {
+    width: 300px;
+    height: 275px;
+    max-width: 300px;
+    max-height: 275px;
+}
+
+.titExemplo {
+    padding-top: 5px;
+    margin-left: 65px;
+}
+
+.textExemplo {
+    max-width: 640px;
+    margin-left: 30px;
+}
+
+.containerExemplo {
+    width: 1000px;
+    height: 330px;
+    background-color: #393053;
+    margin-bottom: 25px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+}
+
+#boxCriar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #393053;
+    width: 1000px;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+    margin-bottom: 25px;
+}
+
+#fotoCriarBtn {
+    width: 310px;
+    height: 275px;
+    max-width: 320px;
+    max-height: 275px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#textCriar {
+    max-width: 640px;
+    margin-left: 30px;
+}
+
+#inputfotoPerfil {
+    width: 250px;
+    height:250px;
+    border-radius: 100%;
+    border-style: solid;
+    border-color: #635985;
+    border-width: 5px;
+}
+
+#fotoCriarBtn {
+    width: 500px;
+    height: 350px;
+}
+
+
+#fotoCriarBtn:hover {
+    opacity: 80%;
+}
+
+.btn-editar-perfil {
+    margin: 20px auto 0 auto;
+    display: block;
+    background: #635985;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-editar-perfil:hover {
+    background: #443C68;
+}

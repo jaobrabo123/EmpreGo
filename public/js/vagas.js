@@ -1,4 +1,296 @@
-document.addEventListener('DOMContentLoaded', function () {
+// * Importando nossa instância do axios
+import axiosWe from './axiosConfig.js';
+
+async function carregarInit() {
+  try {
+    const response = await axiosWe('/empresas/public');
+    const data = response.data;
+    data.forEach(emp => {
+    const html = `
+      <article
+        class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+        <div
+          class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+          <img src="${emp.foto}" alt="Logo Tech Solutions"
+            class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+          <button
+            class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+            aria-label="Marcar como favorito">
+            <i class='bx bx-star text-xl'></i>
+          </button>
+        </div>
+        <div class="card-body p-5 flex-1">
+          <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">${emp.nome_fant}</h3>
+          <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+            ${emp.descricao?emp.descricao:''}
+          </p>
+        </div>
+        <div
+          class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+          <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+            <div class="tag-chips flex flex-wrap gap-1">
+              <span
+                class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.setor}</span>
+              <span
+                class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.porte}</span>
+              <span
+                class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.estado}</span>
+            </div>
+          </div>
+          <button
+            class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+            mais</button>
+        </div>
+      </article>
+    `;
+    document.querySelector('#divEmpresas').innerHTML += html;
+  });
+  } catch (erro) {
+    console.error(erro)
+  }
+}
+
+let pagina = 1;
+let liberadoVerMais = true;
+document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
+  if(!liberadoVerMais) return;
+  try {
+    pagina ++;
+    liberadoVerMais = false;
+    const response = await axiosWe(`/empresas/public?page=${pagina}`);
+    const data = response.data;
+    data.forEach(emp => {
+      const html = `
+        <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="${emp.foto}" alt="Logo Tech Solutions"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
+            </button>
+          </div>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">${emp.nome_fant}</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              ${emp.descricao?emp.descricao:''}
+            </p>
+          </div>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.setor}</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.porte}</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.estado}</span>
+              </div>
+            </div>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
+          </div>
+        </article>
+      `;
+      document.querySelector('#divEmpresas').innerHTML += html;
+    });
+    if (data.length < 9){
+      document.querySelector("#ver-pagina-btn").style.display = "none"
+    }
+    setupFavoriteButtons()
+    setupCompanyChips()
+  } catch (erro) {
+    pagina--
+    console.error(erro)
+  } finally{
+    liberadoVerMais = true;
+  }
+})
+  
+function setupFavoriteButtons() {
+  const favoriteButtons = document.querySelectorAll('.favorite-btn');
+
+  favoriteButtons.forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Alterna a classe active
+      this.classList.toggle('active');
+
+      // Alterna o ícone e a cor
+      const icon = this.querySelector('i');
+      if (this.classList.contains('active')) {
+        icon.className = 'bx bxs-star';
+        this.style.color = '#fbbf24';
+        this.setAttribute('aria-label', 'Desmarcar favorito');
+
+        // Adiciona a empresa aos favoritos na sidebar
+        addToFavorites(this.closest('.empresa-card'));
+      } else {
+        icon.className = 'bx bx-star';
+        this.style.color = ''; // Reseta para a cor original
+        this.setAttribute('aria-label', 'Marcar como favorito');
+
+        // Remove a empresa dos favoritos na sidebar
+        removeFromFavorites(this.closest('.empresa-card'));
+      }
+
+      // Log para debug
+      const cardTitle = this.closest('.empresa-card').querySelector('.empresa-nome').textContent;
+      console.log(`Empresa ${this.classList.contains('active') ? 'adicionada aos' : 'removida dos'} favoritos: ${cardTitle}`);
+    });
+  });
+}
+
+function setupCompanyChips() {
+  const companyChips = document.querySelectorAll('.empresa-card .tag-chip');
+
+  companyChips.forEach(chip => {
+    chip.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // adiciona efeito visual de clique
+      this.classList.add('clicked');
+      setTimeout(() => {
+        this.classList.remove('clicked');
+      }, 300);
+
+      // obtém o valor do chip (texto dentro dele)
+      const chipValue = this.innerText.trim();
+
+      // Usa o valor do chip diretamente, sem processamento adicional
+      const filterValue = chipValue;
+
+      console.log(`Filtrando por: ${filterValue}`);
+
+      // encontra o chip no painel de filtros
+      const filterChips = document.querySelectorAll('.filter-chip');
+      let matchingChip = null;
+
+      filterChips.forEach(filterChip => {
+        // compara o texto do chip ou o valor do atributo data-value
+        const chipText = filterChip.innerText.trim();
+        const chipDataValue = filterChip.getAttribute('data-value');
+
+        if (chipText === filterValue || chipDataValue === filterValue.toLowerCase()) {
+          matchingChip = filterChip;
+        }
+      });
+
+      // se encontrou um chip correspondente, ele é selecionado
+      if (matchingChip) {
+        matchingChip.setAttribute('aria-pressed', 'true');
+        matchingChip.classList.add('selected');
+
+        // abre o painel de filtros
+        const filterContainer = document.getElementById('filter-chips-container');
+        if (filterContainer) {
+          filterContainer.classList.add('open');
+        }
+
+        // Rola até o chip selecionado
+        matchingChip.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // destaque do chip
+        matchingChip.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+          matchingChip.style.transform = '';
+        }, 300);
+
+        // automaticamente clica no botão de confirmar após um breve delay
+        setTimeout(() => {
+          const confirmBtn = document.querySelector('.filter-confirm');
+          if (confirmBtn) {
+            confirmBtn.click();
+          }
+        }, 800);
+      } else {
+        // Se não encontrou no filtro, podemos adicionar uma busca direta
+        const searchBar = document.querySelector('.search-bar input');
+        if (searchBar) {
+          searchBar.value = filterValue;
+          searchBar.dispatchEvent(new Event('input'));
+
+          searchBar.focus();
+
+          // efeito visual na barra de pesquisa
+          searchBar.parentElement.classList.add('highlight');
+          setTimeout(() => {
+            searchBar.parentElement.classList.remove('highlight');
+          }, 800);
+        }
+      }
+    });
+  });
+}
+
+// Função para adicionar empresa aos favoritos na sidebar
+function addToFavorites(card) {
+  const empresaNome = card.querySelector('.empresa-nome').textContent;
+  const empresaCategoria = card.querySelector('.tag-chip').textContent;
+  const empresaLogo = card.querySelector('.empresa-logo')?.getAttribute('src') || '/assets/imgs/default-logo.png';
+
+  const favoritosContainer = document.getElementById('favoritos-container');
+  const existingItems = favoritosContainer.querySelectorAll('.favorito-item');
+
+  // Verifica se já existe
+  let alreadyExists = false;
+  existingItems.forEach(item => {
+    if (item.querySelector('.favorito-nome').textContent === empresaNome) {
+      alreadyExists = true;
+    }
+  });
+  if (alreadyExists) return;
+
+  // Cria o item na sidebar
+  const newItem = document.createElement('div');
+  newItem.className = 'favorito-item flex items-center gap-3 p-2';
+  newItem.innerHTML = `
+<img src="${empresaLogo}" alt="Logo ${empresaNome}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
+<div class="favorito-info">
+<div class="favorito-nome">${empresaNome}</div>
+<div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
+</div>
+<div class="favorito-actions ml-auto">
+<button class="chat-btn" aria-label="Abrir chat">
+  <i class='bx bx-message-rounded'></i>
+</button>
+</div>
+`;
+
+  // Insere no container de favoritos
+  favoritosContainer.appendChild(newItem);
+
+  // chat
+  newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    alert(`Iniciar chat com ${empresaNome}`);
+  });
+}
+
+// Função para remover empresa dos favoritos
+function removeFromFavorites(card) {
+  const empresaNome = card.querySelector('.empresa-nome').textContent;
+  const favoritosContainer = document.getElementById('favoritos-container');
+  const existingItems = favoritosContainer.querySelectorAll('.favorito-item');
+
+  existingItems.forEach(item => {
+    if (item.querySelector('.favorito-nome').textContent === empresaNome) {
+      item.remove();
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+      await carregarInit();
+      // Inicialização do Swiper (mantido conforme original)
       const swiper = new Swiper('.recomendacoes-swiper', {
         loop: true,
         effect: 'fade',
@@ -200,189 +492,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
       setupFilterChips();
 
-      // -------------- Filtro de Chips/tags/empresa --------------
-      function setupCompanyChips() {
-        const companyChips = document.querySelectorAll('.empresa-card .tag-chip');
-
-        companyChips.forEach(chip => {
-          chip.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // adiciona efeito visual de clique
-            this.classList.add('clicked');
-            setTimeout(() => {
-              this.classList.remove('clicked');
-            }, 300);
-
-            // obtém o valor do chip (texto dentro dele)
-            const chipValue = this.innerText.trim();
-
-            // Usa o valor do chip diretamente, sem processamento adicional
-            const filterValue = chipValue;
-
-            console.log(`Filtrando por: ${filterValue}`);
-
-            // encontra o chip no painel de filtros
-            const filterChips = document.querySelectorAll('.filter-chip');
-            let matchingChip = null;
-
-            filterChips.forEach(filterChip => {
-              // compara o texto do chip ou o valor do atributo data-value
-              const chipText = filterChip.innerText.trim();
-              const chipDataValue = filterChip.getAttribute('data-value');
-
-              if (chipText === filterValue || chipDataValue === filterValue.toLowerCase()) {
-                matchingChip = filterChip;
-              }
-            });
-
-            // se encontrou um chip correspondente, ele é selecionado
-            if (matchingChip) {
-              matchingChip.setAttribute('aria-pressed', 'true');
-              matchingChip.classList.add('selected');
-
-              // abre o painel de filtros
-              const filterContainer = document.getElementById('filter-chips-container');
-              if (filterContainer) {
-                filterContainer.classList.add('open');
-              }
-
-              // Rola até o chip selecionado
-              matchingChip.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-              // destaque do chip
-              matchingChip.style.transform = 'scale(1.1)';
-              setTimeout(() => {
-                matchingChip.style.transform = '';
-              }, 300);
-
-              // automaticamente clica no botão de confirmar após um breve delay
-              setTimeout(() => {
-                const confirmBtn = document.querySelector('.filter-confirm');
-                if (confirmBtn) {
-                  confirmBtn.click();
-                }
-              }, 800);
-            } else {
-              // Se não encontrou no filtro, podemos adicionar uma busca direta
-              const searchBar = document.querySelector('.search-bar input');
-              if (searchBar) {
-                searchBar.value = filterValue;
-                searchBar.dispatchEvent(new Event('input'));
-
-                searchBar.focus();
-
-                // efeito visual na barra de pesquisa
-                searchBar.parentElement.classList.add('highlight');
-                setTimeout(() => {
-                  searchBar.parentElement.classList.remove('highlight');
-                }, 800);
-              }
-            }
-          });
-        });
-      }
-
+      // -------------- Favoritos nos cartões de empresas --------------
       setupCompanyChips();
 
       // -------------- Favoritos nos cartões de empresas --------------
-      let visibleLimit = 5;
-      let mostrandoTodos = false; // mostra todos os favoritos ou não
-
-      function setupFavoriteButtons() {
-        const favoriteButtons = document.querySelectorAll('.favorite-btn');
-
-        favoriteButtons.forEach(btn => {
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Alterna a classe active
-            this.classList.toggle('active');
-
-            // Alterna o ícone e a cor
-            const icon = this.querySelector('i');
-            if (this.classList.contains('active')) {
-              icon.className = 'bx bxs-star';
-              this.style.color = '#fbbf24';
-              this.setAttribute('aria-label', 'Desmarcar favorito');
-
-              // Adiciona a empresa aos favoritos na sidebar
-              addToFavorites(this.closest('.empresa-card'));
-            } else {
-              icon.className = 'bx bx-star';
-              this.style.color = ''; // Reseta para a cor original
-              this.setAttribute('aria-label', 'Marcar como favorito');
-
-              // Remove a empresa dos favoritos na sidebar
-              removeFromFavorites(this.closest('.empresa-card'));
-            }
-
-            // Log para debug
-            const cardTitle = this.closest('.empresa-card').querySelector('.empresa-nome').textContent;
-            console.log(`Empresa ${this.classList.contains('active') ? 'adicionada aos' : 'removida dos'} favoritos: ${cardTitle}`);
-          });
-        });
-      }
-
-      // Função para adicionar empresa aos favoritos na sidebar
-      function addToFavorites(card) {
-        const empresaNome = card.querySelector('.empresa-nome').textContent;
-        const empresaCategoria = card.querySelector('.tag-chip').textContent;
-        const empresaLogo = card.querySelector('.empresa-logo')?.getAttribute('src') || '/assets/imgs/default-logo.png';
-
-        const favoritosContainer = document.getElementById('favoritos-container');
-        const existingItems = favoritosContainer.querySelectorAll('.favorito-item');
-
-        // Verifica se já existe
-        let alreadyExists = false;
-        existingItems.forEach(item => {
-          if (item.querySelector('.favorito-nome').textContent === empresaNome) {
-            alreadyExists = true;
-          }
-        });
-        if (alreadyExists) return;
-
-        // Cria o item na sidebar
-        const newItem = document.createElement('div');
-        newItem.className = 'favorito-item flex items-center gap-3 p-2';
-        newItem.innerHTML = `
-    <img src="${empresaLogo}" alt="Logo ${empresaNome}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
-    <div class="favorito-info">
-      <div class="favorito-nome">${empresaNome}</div>
-      <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
-    </div>
-    <div class="favorito-actions ml-auto">
-      <button class="chat-btn" aria-label="Abrir chat">
-        <i class='bx bx-message-rounded'></i>
-      </button>
-    </div>
-  `;
-
-        // Insere no container de favoritos
-        favoritosContainer.appendChild(newItem);
-
-        // chat
-        newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
-          e.stopPropagation();
-          alert(`Iniciar chat com ${empresaNome}`);
-        });
-      }
-
-      // Função para remover empresa dos favoritos
-      function removeFromFavorites(card) {
-        const empresaNome = card.querySelector('.empresa-nome').textContent;
-        const favoritosContainer = document.getElementById('favoritos-container');
-        const existingItems = favoritosContainer.querySelectorAll('.favorito-item');
-
-        existingItems.forEach(item => {
-          if (item.querySelector('.favorito-nome').textContent === empresaNome) {
-            item.remove();
-          }
-        });
-      }
-
       setupFavoriteButtons();
 
       // -------------- Animações de entrada --------------

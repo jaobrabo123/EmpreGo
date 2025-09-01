@@ -8,28 +8,29 @@ datasource db {
 }
 
 model candidatos {
-  id           Int            @id @default(autoincrement())
-  nome         String         @db.VarChar(100)
-  email        String         @unique @db.VarChar(254)
-  senha        String
-  genero       String         @db.VarChar(30)
-  data_nasc    DateTime       @db.Date
-  foto         String?        @default("/assets/imgs/genPfp.png")
-  descricao    String?        @default("Sua descrição")
-  cpf          String?        @unique(map: "candidatos_cpf_idx")
-  estado       String?
-  cidade       String?
-  instagram    String?
-  github       String?
-  youtube      String?
-  twitter      String?
-  pronomes     String?
-  data_criacao DateTime?      @default(now()) @db.Timestamptz(6)
-  nivel        String         @default("comum") @db.VarChar(10)
-  chats        chats[]
-  experiencias experiencias[]
-  tags         tags[]
-  tokens       tokens[]
+  id                 Int                  @id @default(autoincrement())
+  nome               String               @db.VarChar(100)
+  email              String               @unique @db.VarChar(254)
+  senha              String
+  genero             String               @db.VarChar(30)
+  data_nasc          DateTime             @db.Date
+  foto               String?              @default("/assets/imgs/genPfp.png")
+  descricao          String?              @default("Sua descrição")
+  cpf                String?              @unique(map: "candidatos_cpf_idx")
+  estado             String?
+  cidade             String?
+  instagram          String?
+  github             String?
+  youtube            String?
+  twitter            String?
+  pronomes           String?
+  data_criacao       DateTime?            @default(now()) @db.Timestamptz(6)
+  nivel              String               @default("comum") @db.VarChar(10)
+  chats              chats[]
+  experiencias       experiencias[]
+  favoritos_empresas favoritos_empresas[]
+  tags               tags[]
+  tokens             tokens[]
 }
 
 model candidatos_pend {
@@ -41,7 +42,7 @@ model candidatos_pend {
   data_nasc DateTime  @db.Date
   confirmed Boolean?  @default(false)
   criado_em DateTime? @default(now()) @db.Timestamptz(6)
-  codigo    String    @unique(map: "codigo_unico_candidatos_pend")
+  codigo    String
   expira_em DateTime  @db.Timestamptz(6)
 }
 
@@ -56,31 +57,32 @@ model chats {
 }
 
 model empresas {
-  cnpj         String    @id
-  nome_fant    String
-  telefone     String
-  email        String    @unique
-  senha        String
-  razao_soci   String    @unique
-  cep          String
-  complemento  String?
-  numero       String
-  descricao    String?
-  setor        String?
-  porte        String?
-  data_fund    DateTime? @db.Date
-  contato      String?
-  site         String?
-  instagram    String?
-  github       String?
-  youtube      String?
-  twitter      String?
-  foto         String?   @default("../assets/imgs/genPfp.png")
-  data_criacao DateTime? @default(now()) @db.Timestamptz(6)
-  estado       String    @db.Char(2)
-  cidade       String    @db.VarChar(25)
-  chats        chats[]
-  tokens       tokens[]
+  cnpj               String               @id
+  nome_fant          String
+  telefone           String
+  email              String               @unique
+  senha              String
+  razao_soci         String               @unique
+  cep                String
+  complemento        String?
+  numero             String
+  descricao          String?
+  setor              String?
+  porte              String?
+  data_fund          DateTime?            @db.Date
+  contato            String?
+  site               String?
+  instagram          String?
+  github             String?
+  youtube            String?
+  twitter            String?
+  foto               String?              @default("/assets/imgs/genPfp.png")
+  data_criacao       DateTime?            @default(now()) @db.Timestamptz(6)
+  estado             String               @db.Char(2)
+  cidade             String               @db.VarChar(25)
+  chats              chats[]
+  favoritos_empresas favoritos_empresas[]
+  tokens             tokens[]
 }
 
 model experiencias {
@@ -122,4 +124,13 @@ model tokens {
   expira_em    DateTime    @db.Timestamp(6)
   candidatos   candidatos? @relation(fields: [candidato_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   empresas     empresas?   @relation(fields: [empresa_cnpj], references: [cnpj], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model favoritos_empresas {
+  id           Int         @id @default(autoincrement())
+  id_candidato Int?
+  cnpj_empresa String?
+  data_criacao DateTime?   @default(now()) @db.Timestamptz(6)
+  empresas     empresas?   @relation(fields: [cnpj_empresa], references: [cnpj], onDelete: Cascade, onUpdate: NoAction)
+  candidatos   candidatos? @relation(fields: [id_candidato], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

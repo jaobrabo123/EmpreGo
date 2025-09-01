@@ -56,6 +56,18 @@ class ExperienciaModel {
         return resultadoEmailComAS;
     }
 
+    static async buscarExperienciasPublic(){
+        const resultado = await prisma.$queryRaw`
+            select e.titulo, e.descricao, e.imagem,
+            c.nome as candidato_nome, c.data_nasc as candidato_nasc
+            from experiencias e join candidatos c
+            on e.candidato = c.id
+            order by random()
+            limit 4
+        `;
+        return resultado;
+    }
+
 }
 
 module.exports = ExperienciaModel;

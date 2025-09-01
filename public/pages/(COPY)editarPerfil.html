@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
+    <script type="module" src="/js/profile.js" defer></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/(Copy)profileStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Editando perfil...</title>
+</head>
+
+<body>
+    <header>
+        <div id="logo">
+            <a href="/" target="_self">
+                <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg">
+            </a>
+            <a href="/" target="_self" id="nomedosite">Empre<span>Go</span></a>
+
+        </div>
+        <nav class="links">
+            <a href="/">Inicio</a>
+            <a class="headerlink" href="/sobre" target="_self">Sobre</a>
+            <a class="headerlink" href="/suporte" target="_self">Suporte</a>
+            <a class="headerlink" href="/login" target="_self" id="loginOuCadas">Login / Cadastrar</a>
+            <a class="headerlink" href="/perfil/candidato" target="_self" style="display: none;" id="fotoPerfil"><img
+                    src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
+            <a href="#" id="logout">Sair</a>
+        </nav>
+    </header>
+
+    <div id="main">
+        <div id="bodyLeft">
+            <div id="impInfo">
+                <input type="image" id="inputfotoPerfil" src="/assets/imgs/plusBtn(circle).png" alt="AddPfp">
+                <input class="inputImp input" type="text" id="inputCpf" placeholder="Informe o seu CPF">
+                <select class="inputImp input" placeholder="Selecione seus pronomes." id="selectPronomes" onchange="handlePronounChange()" required>
+                <option value="Ela/Dela">Ela/Dela</option>
+                <option value="Ele/Dele">Ele/Dele</option>
+                <option value="Qualquer Pronome">Qualquer Pronome</option>
+                <option value="Outro">Outro (Especificar)</option>
+                <option value="Prefiro não informar">Prefiro não informar</option>
+                </select>
+
+                <input type="text" id="outroPronomeInput" class="inputImp input" placeholder="Informe seus pronomes." />
+            </div>
+
+            <div id="bodyMid">
+                <h1 id="nomUsuario">Nome de Usuário</h1>
+                <a id="emailUsuario">Edite o perfil para exibir E-mail</a>
+                <!--<p id="descUsuario"></p>-->
+                <textarea type="text" id="inputDescricao" name="descricao" maxlength="2000"
+                placeholder="Insira uma descrição aqui!"></textarea> 
+                    <div id="conexoesColumn">                        
+                            <div id="conexoesUpper">
+                                <img id="LogoInst" src="/assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
+                                <input class="infoInput input" type="text" id="inputInstagram" name="instagram" placeholder="Insira seu Instagram aqui" />
+                                
+                                <img id="LogoGit"src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
+                                <input class="infoInput input" type="text" id="inputGithub" name="github" placeholder="Insira seu GitHub aqui" />
+                            </div>
+                            <div id="conexoesLower">
+                                <img id="LogoYt" src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
+                                <input class="infoInput input" type="text" id="inputYoutube" name="youtube" placeholder="Insira seu YouTube aqui" />
+
+                                <img id="LogoTwt" src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
+                                <input class="infoInput input" type="text" id="inputTwitter" name="twitter" placeholder="Insira seu Twitter aqui" />
+                            </div>
+                            <div id="enderecoInfo">                             
+                        <img id="houseIcon" src="/assets/imgs/House.png" alt="HouseIcon">
+                        <div id="cidadeEstado">
+                            <h1 id="cidadeUsuario">Cidade: </h1>        
+                            <input class="inputCidadeEstado input" type="text" id="inputCidade" name="cidade" placeholder="Insira sua cidade" />
+                            
+                            <h1 id="estadoUsuario">Estado: </h1>
+                            <select class="inputCidadeEstado input" id="selectEstado" name="estado">
+                            <option value="NM" selected>Seu Estado</option>
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MT">MT</option>
+                            <option value="MS">MS</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <div id="buttons">
+                <button type="submit" class="btn" id="btnEnviar">Enviar</button>
+                <button type="button" class="btn" onclick="window.location.href='/perfil/candidato'" id="btnCancelar">
+                    Cancelar
+                </button>
+                </div>
+
+        <div id="bodyTags"> <!--Não existe método registro de tags ainda-->
+            <h1 id="tituloTags">Tags</h1>
+            <div id="boxTags">
+                <input type="image" id="btnAddTags" src="/assets/imgs/miniPlusBtn.png">
+                <div class="Tags">
+                    <button id="tagLing">C#</button>
+                    <!--Separar tags de diferentest tipos por cores (por exemplo, linguagens de programação são roxas, horas de trabalho branco, etc.)-->
+                    <button id="tagHorario">Manhã</button>
+                </div>
+            </div>
+        </div>
+
+        <h1 id="tituloExperiencias">Experiências</h1>
+        <div id="bodyBottom">
+            <div id="boxCriar">
+                <a href="/experiencias/criar"> 
+                    <input type="image" id="fotoCriarBtn" src="/assets/imgs/plusBtn.png" alt="plusBtn">
+                </a>
+                <a id="textCriar">"Adicione um texto para descrever sua experiência em projetos ou empresas anteriores."</a>
+            </div>
+        </div>
+</body>
+
+</html>

@@ -68,6 +68,7 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
             <img src="${emp.foto}" alt="Logo Tech Solutions"
               class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
             <button
+              id="${emp.cnpj}"
               class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
               aria-label="Marcar como favorito">
               <i class='bx bx-star text-xl'></i>
@@ -129,6 +130,7 @@ function setupFavoriteButtons() {
         icon.className = 'bx bxs-star';
         this.style.color = '#fbbf24';
         this.setAttribute('aria-label', 'Desmarcar favorito');
+        console.log("Id da empresa: "+this.id)
 
         // Adiciona a empresa aos favoritos na sidebar
         addToFavorites(this.closest('.empresa-card'));
@@ -253,17 +255,17 @@ function addToFavorites(card) {
   const newItem = document.createElement('div');
   newItem.className = 'favorito-item flex items-center gap-3 p-2';
   newItem.innerHTML = `
-<img src="${empresaLogo}" alt="Logo ${empresaNome}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
-<div class="favorito-info">
-<div class="favorito-nome">${empresaNome}</div>
-<div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
-</div>
-<div class="favorito-actions ml-auto">
-<button class="chat-btn" aria-label="Abrir chat">
-  <i class='bx bx-message-rounded'></i>
-</button>
-</div>
-`;
+    <img src="${empresaLogo}" alt="Logo ${empresaNome}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
+    <div class="favorito-info">
+    <div class="favorito-nome">${empresaNome}</div>
+    <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
+    </div>
+    <div class="favorito-actions ml-auto">
+    <button class="chat-btn" aria-label="Abrir chat">
+      <i class='bx bx-message-rounded'></i>
+    </button>
+    </div>
+  `;
 
   // Insere no container de favoritos
   favoritosContainer.appendChild(newItem);

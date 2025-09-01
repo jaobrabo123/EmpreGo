@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const prisma = require('@config/db.js');
+const prisma = require('../config/db.js');
 
 const limpezaDeCandidatosPendentes = cron.schedule('*/10 * * * *', async () => {
   try{

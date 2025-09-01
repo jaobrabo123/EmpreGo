@@ -2,7 +2,7 @@
 const express = require("express");
 const CandidatoController = require('../controllers/candidatoController.js');
 const { authenticateToken, apenasAdmins, apenasCandidatos } = require("../middlewares/auth.js");
-const { limiteNodemailer, limiteValidarCodigo } = require('../middlewares/rateLimit.js')
+const { limiteNodemailer, limiteValidarCodigo } = require('../middlewares/rateLimit.js');
 
 //router
 const router = express.Router();

@@ -1,10 +1,10 @@
 // * Imports
-const CandidatoService = require("../services/candidatoService.js");
+const CandidatoService = require('../services/candidatoService.js');
 const CandidatoModel = require('../models/candidatoModel.js');
 const Erros = require("../utils/erroClasses.js");
 const TokenService = require('../services/tokenService.js');
 const { salvarCookieToken, validarCookieToken, salvarCookieRefreshToken, salvarCookieFoto } = require('../utils/cookieUtils.js');
-const transporter = require('@config/nodemailer.js');
+const transporter = require('../config/nodemailer.js');
 
 // * Variáveis de ambiente
 const EMAIL_SERVER = process.env.EMAIL;

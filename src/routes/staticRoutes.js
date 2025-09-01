@@ -71,9 +71,9 @@ router.get('/empresas', (req,res)=>{
 })
 
 //Página de ver os candidatos
-/*router.get('/candidatos', (req,res)=>{
-  res.sendFile(path.join(pages, '?.html'))
-})*/
+router.get('/candidatos', (req,res)=>{
+  res.sendFile(path.join(pages, 'viewCompany.html'))
+})
 
 //Página de esperando confirmar a conta
 router.get('/confirmar', (req, res)=>{

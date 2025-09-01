@@ -39,6 +39,15 @@ class ExperienciaController {
         }
     }
 
+    static async listarTodosPublic(req, res){
+        try {
+            const experiencias = await ExperienciaModel.buscarExperienciasPublic();
+            res.status(200).json(experiencias);
+        } catch (erro) {
+            res.status(500).json({ error: `Erro ao buscar experiências: ${erro.message}`});
+        }
+    }
+
     static async remover(req, res){
         try {
             const { xp } = req.params;

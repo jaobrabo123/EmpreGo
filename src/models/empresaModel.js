@@ -44,9 +44,10 @@ class EmpresaModel {
                 estado: true,
                 foto: true
             },
-            orderBy: {
-                data_criacao: 'desc'
-            },
+            orderBy: [
+                { data_criacao: 'desc' },
+                { nome_fant: 'asc' }
+            ],
             skip: (pagina-1)*9,
             take: 9
         });

@@ -11,6 +11,34 @@ async function carregarInit() {
     ]);
     const dataEmp = responseEmp.data;
     const dataFav = responseFav.data;
+    const favoritosContainer = document.getElementById('favoritos-container');
+    console.log(dataFav)
+    dataFav.forEach(fav => {
+      empresasJaFavoritadas.push(fav.cnpj_empresa);
+      const newItem = document.createElement('div');
+      newItem.className = 'favorito-item flex items-center gap-3 p-2';
+      newItem.innerHTML = `
+        <img src="${fav.empresas.foto}" alt="Logo ${fav.empresas.nome_fant}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
+        <div class="favorito-info">
+        <div class="favorito-nome">${fav.empresas.nome_fant}</div>
+        <div class="favorito-categoria text-sm text-gray-400">${fav.empresas.setor}</div>
+        </div>
+        <div class="favorito-actions ml-auto">
+        <button class="chat-btn" aria-label="Abrir chat">
+          <i class='bx bx-message-rounded'></i>
+        </button>
+        </div>
+      `;
+
+      // Insere no container de favoritos
+      favoritosContainer.appendChild(newItem);
+
+      // chat
+      newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        alert(`Iniciar chat com ${empresaNome}`);
+      });
+    })
     dataEmp.forEach(emp => {
       const html = `
         <article
@@ -21,7 +49,7 @@ async function carregarInit() {
               class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
             <button
               id="${emp.cnpj}"
-              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110 ${empresasJaFavoritadas.includes(emp.cnpj)?' active':""}"
               aria-label="Marcar como favorito">
               <i class='bx bx-star text-xl'></i>
             </button>
@@ -52,33 +80,6 @@ async function carregarInit() {
       `;
       document.querySelector('#divEmpresas').innerHTML += html;
     });
-    const favoritosContainer = document.getElementById('favoritos-container');
-    console.log(dataFav)
-    dataFav.forEach(fav => {
-      const newItem = document.createElement('div');
-      newItem.className = 'favorito-item flex items-center gap-3 p-2';
-      newItem.innerHTML = `
-        <img src="${fav.empresas.foto}" alt="Logo ${fav.empresas.nome_fant}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
-        <div class="favorito-info">
-        <div class="favorito-nome">${fav.empresas.nome_fant}</div>
-        <div class="favorito-categoria text-sm text-gray-400">${fav.empresas.setor}</div>
-        </div>
-        <div class="favorito-actions ml-auto">
-        <button class="chat-btn" aria-label="Abrir chat">
-          <i class='bx bx-message-rounded'></i>
-        </button>
-        </div>
-      `;
-
-      // Insere no container de favoritos
-      favoritosContainer.appendChild(newItem);
-
-      // chat
-      newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
-        e.stopPropagation();
-        alert(`Iniciar chat com ${empresaNome}`);
-      });
-    })
   } catch (erro) {
     console.error(erro)
   }
@@ -103,7 +104,7 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
               class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
             <button
               id="${emp.cnpj}"
-              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110"
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110 ${empresasJaFavoritadas.includes(emp.cnpj)?' active':""}"
               aria-label="Marcar como favorito">
               <i class='bx bx-star text-xl'></i>
             </button>
@@ -155,6 +156,14 @@ function setupFavoriteButtons() {
       e.preventDefault();
       e.stopPropagation();
 
+      const empresaId = this.id;
+
+      // Verifica limite antes de favoritar
+      if (!this.classList.contains('active') && empresasJaFavoritadas.length >= 10) {
+        alert("Você só pode favoritar no maximo 10 empresas!");
+        return;
+      }
+
       // Alterna a classe active
       this.classList.toggle('active');
 
@@ -165,24 +174,29 @@ function setupFavoriteButtons() {
         this.style.color = '#fbbf24';
         this.setAttribute('aria-label', 'Desmarcar favorito');
 
+        // Adiciona ao array
+        empresasJaFavoritadas.push(empresaId);
+
         // Adiciona a empresa aos favoritos na sidebar
-        await addToFavorites(this.closest('.empresa-card'),this.id);
+        await addToFavorites(this.closest('.empresa-card'), empresaId);
       } else {
         icon.className = 'bx bx-star';
-        this.style.color = ''; // Reseta para a cor original
+        this.style.color = '';
         this.setAttribute('aria-label', 'Marcar como favorito');
-        console.log("Id da empresa: "+this.id)
+        
+        //Remove do Array 
+        empresasJaFavoritadas = empresasJaFavoritadas.filter(emp => emp != empresaId)
 
         // Remove a empresa dos favoritos na sidebar
-        await removeFromFavorites(this.closest('.empresa-card'),this.id);
+        await removeFromFavorites(this.closest('.empresa-card'), empresaId);
+        
       }
 
-      // Log para debug
-      const cardTitle = this.closest('.empresa-card').querySelector('.empresa-nome').textContent;
-      console.log(`Empresa ${this.classList.contains('active') ? 'adicionada aos' : 'removida dos'} favoritos: ${cardTitle}`);
+      console.log(`Empresa ${this.classList.contains('active') ? 'adicionada aos' : 'removida dos'} favoritos: ${this.closest('.empresa-card').querySelector('.empresa-nome').textContent}`);
     });
   });
 }
+
 
 function setupCompanyChips() {
   const companyChips = document.querySelectorAll('.empresa-card .tag-chip');
@@ -291,11 +305,11 @@ async function addToFavorites(card, cnpj) {
   newItem.innerHTML = `
     <img src="${empresaLogo}" alt="Logo ${empresaNome}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
     <div class="favorito-info">
-    <div class="favorito-nome">${empresaNome}</div>
-    <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
-    </div>
-    <div class="favorito-actions ml-auto">
-    <button class="chat-btn" aria-label="Abrir chat">
+      <div class="favorito-nome">${empresaNome}</div>
+        <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
+      </div>
+      <div class="favorito-actions ml-auto">
+        <button class="chat-btn" aria-label="Abrir chat">
       <i class='bx bx-message-rounded'></i>
     </button>
     </div>

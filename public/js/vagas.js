@@ -1,7 +1,7 @@
 // * Importando nossa instância do axios
 import axiosWe from './axiosConfig.js';
 
-let empresasJaFavoritadas = []; // TODO Armazenar as empresas ja favoritadas
+let empresasJaFavoritadas = [];
 
 async function carregarInit() {
   try {
@@ -619,7 +619,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Fecha o dropdown com a tecla ESC
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Eescape' && profileDropdownElement.style.display === 'flex') {
+          if (e.key === 'Escape' && profileDropdownElement.style.display === 'flex') {
             profileDropdownElement.style.display = 'none';
           }
         });

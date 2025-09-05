@@ -1,4 +1,4 @@
-//Imports
+// Imports
 const express = require('express');
 const { authenticateToken, apenasEmpresa, apenasCandidatos } = require('../middlewares/auth.js');
 const PerfilController = require('../controllers/perfilController.js');

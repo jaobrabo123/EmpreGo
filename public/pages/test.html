@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carregando...</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Anime.js via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<body class="m-0 p-0">
+
+  <!-- Tela de Carregamento -->
+  <div id="loader" class="fixed inset-0 bg-gray-900 flex flex-col items-center justify-center z-50">
+    <div class="text-white text-4xl font-bold mb-4">
+      Carregando...
+    </div>
+    <div id="loader-circle" class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"></div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div id="content" class="hidden p-10 text-center">
+    <h1 class="text-3xl font-bold">Conteúdo carregado com sucesso!</h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // Animação circular com Anime.js
+    anime({
+      targets: '#loader-circle',
+      rotate: '360',
+      duration: 1000,
+      easing: 'linear',
+      loop: true
+    });
+
+    // Simula carregamento (2 segundos)
+    window.addEventListener('load', async () => {
+        try {
+            const ajdgjasjsda = await axios("http://localhost:3001/empresas/public")
+            console.log(ajdgjasjsda.data)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('content').classList.remove('hidden');
+        }
+    });
+  </script>
+
+</body>
+</html>

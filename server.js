@@ -40,6 +40,7 @@ app.use(require('@routes/empresasRoutes.js'));
 app.use(require('@routes/tipoRoutes.js'));
 app.use(require('@routes/chatsRoutes.js'));
 app.use(require('@routes/mensagensRoutes.js'));
+app.use(require('@routes/favoritosRoutes.js'))
 
 // * Porta do servidor
 server.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

@@ -21,6 +21,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -29,9 +30,15 @@
                             600: '#7C3AED',
                         },
                         dark: {
-                            900: '#111827',
-                            800: '#1F2937',
-                            700: '#374151',
+                            900: '#000000',
+                            800: '#0A0A0A',
+                            700: '#141414',
+                        },
+                        light: {
+                            100: '#FFFFFF',
+                            200: '#F9FAFB',
+                            300: '#F3F4F6',
+                            400: '#E5E7EB',
                         }
                     },
                     fontFamily: {
@@ -73,25 +80,57 @@
         <!-- particulas flutuando -->
         <div class="absolute top-20 left-20 w-32 h-32 rounded-full bg-primary-500 opacity-10 animate-float"></div>
         <div class="absolute bottom-40 right-32 w-40 h-40 rounded-full bg-primary-600 opacity-10 animate-float" style="animation-delay: 2s;"></div>
-        <div class="container mx-auto px-6 py-20">
-    
-        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-10" id="hero-title">
-            Código de verificação <span class="text-gradient">enviado!</span>
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-400 mb-2" id="hero-subtitle">
-            Um email com um código de verificação foi enviado para <span class="text-gradient" id="email">"email"</span>
-        </p>
-        <p class="text-xl md:text-1x4 text-gray-400 mb-8" id="hero-subtitle">
-            <span class="text-gradient">O Código expira em 15 minutos.</span>
-        </p>
-        <input name="inputCodigo" id="inputCodigo" type="text" placeholder="Digite aqui o seu código" maxlength="4">
-        <p>Não recebeu o email? Clique <a id="reenvio" style="color: blue; cursor: pointer; text-decoration: underline;">aqui</a> para reenviar.</p>
+        
+        <!-- Formulário Container -->
+        <div class="container mx-auto px-6 py-20 relative z-10">
+            <!-- Formulário -->
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-10" id="hero-title">
+                Código de verificação <span class="text-gradient">enviado!</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mb-2" id="hero-subtitle">
+                Um email com um código de verificação foi enviado para <span class="text-gradient" id="email">"email"</span>
+            </p>            
+            <p class="text-xl md:text-1x4 text-gray-400 mb-4" id="hero-subtitle">
+                O Código expira em <span class="text-gradient"id="timer">15:00</span>.
+            </p>
 
-        <p id="mensagem"></p>
+            <input name="inputCodigo" id="inputCodigo" type="text" placeholder="Digite aqui o seu código" maxlength="4" class="relative z-10 mb-4 p-2 border rounded text-black">
+
+
+            <p><a id="reenvio" class="text-gradient" style="cursor: pointer; text-decoration: underline;">Não recebeu o email? Clique aqui para reenviar.</a></p>
+            <p id="mensagem"></p>
+        </div>
     </section>
 
     <!-- * SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="/js/waitingConfirm.js"></script>
+
+    <script>
+        // Tempo inicial em segundos
+        /*let timeLeft = 15 * 60; 
+    
+        const timerElement = document.getElementById("timer");
+    
+        function updateTimer() {
+            const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+            const seconds = String(timeLeft % 60).padStart(2, '0');
+            timerElement.textContent = `${minutes}:${seconds}`;
+    
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                clearInterval(timerInterval);
+                timerElement.textContent = "Expirado";
+            }
+        }
+    
+        // Atualiza a cada 1 segundo
+        const timerInterval = setInterval(updateTimer, 1000);
+    
+        // Inicializa imediatamente para não esperar 1s
+        updateTimer();
+    </script>
+    
 </body>
 </html>

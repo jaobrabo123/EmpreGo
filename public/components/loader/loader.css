@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+    
+.orb {
+    background: radial-gradient(circle at 30% 30%, #8B5CF6, #7C3AED);
+    box-shadow: 0 0 40px 15px rgba(139, 92, 246, 0.6);
+}
+
+.grid-pattern {
+    background-image: 
+    linear-gradient(rgba(20, 20, 20, 0.7) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 20, 20, 0.7) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.neon-text {
+    text-shadow: 0 0 7px #8B5CF6, 0 0 10px #8B5CF6, 0 0 21px #8B5CF6;
+}
+
+.hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.loader-content {
+    position: relative;
+    z-index: 10;
+}
+
+/* Estilo para os pontos de carregamento */
+.loading-dots span {
+    display: inline-block;
+    opacity: 0;
+}
+
+/* Container para a animação 3D */
+#sphere-3d-container {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+    position: relative;
+    cursor: grab;
+    z-index: 20; /* Adicionado para garantir que fique acima das partículas */
+}
+
+#sphere-3d-container:active {
+    cursor: grabbing;
+}
+
+/* Instruções para interação 3D */
+.interaction-hint {
+    margin-top: 10px;
+    color: #E5E7EB;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Garantir que o canvas 3D tenha prioridade de interação */
+#sphere-3d-container canvas {
+    position: relative;
+    z-index: 21;
+}

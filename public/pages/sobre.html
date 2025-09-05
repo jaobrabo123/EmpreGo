@@ -16,6 +16,10 @@
     <!-- Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -64,322 +68,338 @@
     </script>
 
     <link rel="stylesheet" href="/css/stylesSobre.css">
+    <link rel="stylesheet" href="/components/loader/loader.css">
 </head>
 
 <body class="font-sans antialiased">
-    <!-- Header -->
-    <header class="fixed w-full bg-black bg-opacity-90 backdrop-blur-md z-20 border-b border-gray-800">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <!-- Efeito de glitch -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center group" id="logo-container">
-                        <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo"
-                            class="h-10 w-10 transition-transform group-hover:scale-110">
-                        <span class="ml-2 text-2xl font-bold group-hover:animate-text-glitch">
-                            Empre<span class="text-primary-500">Go</span>
-                        </span>
-                    </a>
+    <div id="loader-container"></div>
+    <script>
+        fetch("/components/loader/loader.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("loader-container").innerHTML = html;
+
+            // Só carrega o JS do loader depois que o HTML foi injetado
+            const script = document.createElement("script");
+            script.src = "/components/loader/loader.js";
+            document.body.appendChild(script);
+        });
+    </script>
+    <div id="content" style="display: none;">
+        <!-- Header -->
+        <header class="fixed w-full bg-black bg-opacity-90 backdrop-blur-md z-20 border-b border-gray-800">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <!-- Efeito de glitch -->
+                    <div class="flex items-center space-x-3">
+                        <a href="/" class="flex items-center group" id="logo-container">
+                            <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo"
+                                class="h-10 w-10 transition-transform group-hover:scale-110">
+                            <span class="ml-2 text-2xl font-bold group-hover:animate-text-glitch">
+                                Empre<span class="text-primary-500">Go</span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <!-- Naveção  -->
+                    <nav class="links hidden md:flex items-center space-x-8">
+                        <a href="/#home"
+                            class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Início</a>
+                        <a href="/#servicos"
+                            class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Serviços</a>
+                        <a href="/#testperfis"
+                            class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Biografias</a>
+                        <a href="/sobre"
+                            class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Sobre</a>
+                        <a href="/suporte"
+                            class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Suporte</a>
+
+                        <!-- Login / Cadastrar -->
+                        <a href="/login"
+                            class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center animate-pulse-glow"
+                            id="loginOuCadas">
+                            <i class='bx bx-log-in mr-2'></i> Login / Cadastrar
+                        </a>
+
+                        <!-- Foto de Perfil (inicialmente oculta) -->
+                        <a href="/perfil/candidato" class="rounded-full w-10 h-10 border-2 border-primary-500"
+                            id="fotoPerfil">
+                            <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"
+                                class="w-full h-full rounded-full object-cover">
+                        </a>
+
+                        <!-- Botão de Logout (inicialmente oculto) -->
+                        <a href="#" class="text-gray-300 hover:text-primary-400 transition-colors" id="logout">Sair</a>
+                    </nav>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
+                        <i class='bx bx-menu text-3xl'></i>
+                    </button>
                 </div>
 
-                <!-- Naveção  -->
-                <nav class="links hidden md:flex items-center space-x-8">
-                    <a href="/#home"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Início</a>
-                    <a href="/#servicos"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Serviços</a>
+                <!-- Mobile Menu -->
+                <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-4 pb-4">
+                    <a href="/#home" class="block text-gray-300 hover:text-primary-400 transition-colors">Início</a>
+                    <a href="/#servicos" class="block text-gray-300 hover:text-primary-400 transition-colors">Serviços</a>
                     <a href="/#testperfis"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Biografias</a>
-                    <a href="/sobre"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Sobre</a>
-                    <a href="/suporte"
-                        class="text-gray-300 hover:text-primary-400 transition-colors link-underline">Suporte</a>
+                        class="block text-gray-300 hover:text-primary-400 transition-colors">Biografias</a>
+                    <a href="/sobre" class="block text-gray-300 hover:text-primary-400 transition-colors">Sobre</a>
+                    <a href="/suporte" class="block text-gray-300 hover:text-primary-400 transition-colors">Suporte</a>
 
                     <!-- Login / Cadastrar -->
                     <a href="/login"
-                        class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center animate-pulse-glow"
-                        id="loginOuCadas">
-                        <i class='bx bx-log-in mr-2'></i> Login / Cadastrar
+                        class="block px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-center animate-pulse-glow"
+                        id="mobileLoginOuCadas">
+                        Login / Cadastrar
                     </a>
 
                     <!-- Foto de Perfil (inicialmente oculta) -->
-                    <a href="/perfil/candidato" class="rounded-full w-10 h-10 border-2 border-primary-500"
-                        id="fotoPerfil">
-                        <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"
+                    <a href="/perfil/candidato"
+                        class="block w-12 h-12 mx-auto rounded-full overflow-hidden border-2 border-primary-500"
+                        style="display: none;" id="mobileFotoPerfil">
+                        <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="mobileFotoPerfilImg"
                             class="w-full h-full rounded-full object-cover">
                     </a>
 
                     <!-- Botão de Logout (inicialmente oculto) -->
-                    <a href="#" class="text-gray-300 hover:text-primary-400 transition-colors" id="logout">Sair</a>
-                </nav>
-
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
-                    <i class='bx bx-menu text-3xl'></i>
-                </button>
+                    <a href="#" class="block text-gray-300 hover:text-primary-400 text-center transition-colors"
+                        id="mobileLogout">Sair</a>
+                </div>
             </div>
+        </header>
 
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-4 pb-4">
-                <a href="/#home" class="block text-gray-300 hover:text-primary-400 transition-colors">Início</a>
-                <a href="/#servicos" class="block text-gray-300 hover:text-primary-400 transition-colors">Serviços</a>
-                <a href="/#testperfis"
-                    class="block text-gray-300 hover:text-primary-400 transition-colors">Biografias</a>
-                <a href="/sobre" class="block text-gray-300 hover:text-primary-400 transition-colors">Sobre</a>
-                <a href="/suporte" class="block text-gray-300 hover:text-primary-400 transition-colors">Suporte</a>
+        <main class="pt-32 pb-20 bg-grid-pattern min-h-screen">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto opacity-0" id="about-content">
+                    <!-- Historia -->
+                    <div class="mb-20">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center">
+                            Sobre <span class="text-gradient">Nós</span> 
+                        </h1>
 
-                <!-- Login / Cadastrar -->
-                <a href="/login"
-                    class="block px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-center animate-pulse-glow"
-                    id="mobileLoginOuCadas">
-                    Login / Cadastrar
-                </a>
+                        <div class="bg-dark-900 rounded-xl p-8 shadow-lg border border-gray-800 mb-12">
+                            <p class="text-gray-400 mb-6">
+                                O EmpreGo nasceu dentro das salas de aula do SENAI/SE, a partir da união de amigos de turma que decidiram transformar um simples trabalho 
+                                de conclusão de curso em um projeto com propósito real: aproximar empresas e candidatos de maneira inovadora e humana.
+                            </p>
 
-                <!-- Foto de Perfil (inicialmente oculta) -->
-                <a href="/perfil/candidato"
-                    class="block w-12 h-12 mx-auto rounded-full overflow-hidden border-2 border-primary-500"
-                    style="display: none;" id="mobileFotoPerfil">
-                    <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="mobileFotoPerfilImg"
-                        class="w-full h-full rounded-full object-cover">
-                </a>
+                            <p class="text-gray-400 mb-6">
+                                Durante a nossa jornada, enfrentamos muitos desafios técnicos e pessoais. Tivemos contato com novas tecnologias e frameworks que, até então,
+                                eram pouco explorados por nós, como Prisma, Node.js, CSS, HTML e JavaScript. Cada linha de código representou não apenas aprendizado técnico,
+                                mas também a consolidação de valores como perseverança, trabalho em equipe, resiliência e profissionalismo. Aprendemos que inovar exige coragem, 
+                                disciplina e, acima de tudo, colaboração.
+                            </p>
 
-                <!-- Botão de Logout (inicialmente oculto) -->
-                <a href="#" class="block text-gray-300 hover:text-primary-400 text-center transition-colors"
-                    id="mobileLogout">Sair</a>
-            </div>
-        </div>
-    </header>
+                            <p class="text-gray-400  mb-6">
+                                O EmpreGo foi pensado para ser mais do que uma simples plataforma de vagas: queremos construir um espaço onde empresas e profissionais
+                                encontrem não apenas oportunidades, mas também a realização de seus sonhos. Para isso, desenvolvemos um sistema com filtros inteligentes,
+                                ferramentas de compatibilidade e até mesmo um fórum colaborativo, onde usuários poderão compartilhar experiências, trocar ideias e se apoiar 
+                                mutuamente na busca pelo crescimento.
+                            </p>
 
-    <main class="pt-32 pb-20 bg-grid-pattern min-h-screen">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto opacity-0" id="about-content">
-                <!-- Historia -->
-                <div class="mb-20">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center">
-                        Sobre <span class="text-gradient">Nós</span> 
-                    </h1>
+                            <p class="text-gray-400  mb-6">
+                                Nosso compromisso é entregar um site que una inovação tecnológica com impacto social, oferecendo soluções modernas e funcionais, mas sempre 
+                                colocando as pessoas no centro da experiência. Acreditamos que cada vaga publicada e cada perfil cadastrado carregam histórias, expectativas e 
+                                futuros possíveis — e o EmpreGo está aqui para ser a ponte entre esses caminhos.
+                            </p>
 
-                    <div class="bg-dark-900 rounded-xl p-8 shadow-lg border border-gray-800 mb-12">
-                        <p class="text-gray-400 mb-6">
-                            O EmpreGo nasceu dentro das salas de aula do SENAI/SE, a partir da união de amigos de turma que decidiram transformar um simples trabalho 
-                            de conclusão de curso em um projeto com propósito real: aproximar empresas e candidatos de maneira inovadora e humana.
-                        </p>
-
-                        <p class="text-gray-400 mb-6">
-                            Durante a nossa jornada, enfrentamos muitos desafios técnicos e pessoais. Tivemos contato com novas tecnologias e frameworks que, até então,
-                            eram pouco explorados por nós, como Prisma, Node.js, CSS, HTML e JavaScript. Cada linha de código representou não apenas aprendizado técnico,
-                            mas também a consolidação de valores como perseverança, trabalho em equipe, resiliência e profissionalismo. Aprendemos que inovar exige coragem, 
-                            disciplina e, acima de tudo, colaboração.
-                        </p>
-
-                        <p class="text-gray-400  mb-6">
-                            O EmpreGo foi pensado para ser mais do que uma simples plataforma de vagas: queremos construir um espaço onde empresas e profissionais
-                             encontrem não apenas oportunidades, mas também a realização de seus sonhos. Para isso, desenvolvemos um sistema com filtros inteligentes,
-                              ferramentas de compatibilidade e até mesmo um fórum colaborativo, onde usuários poderão compartilhar experiências, trocar ideias e se apoiar 
-                              mutuamente na busca pelo crescimento.
-                        </p>
-
-                        <p class="text-gray-400  mb-6">
-                            Nosso compromisso é entregar um site que una inovação tecnológica com impacto social, oferecendo soluções modernas e funcionais, mas sempre 
-                            colocando as pessoas no centro da experiência. Acreditamos que cada vaga publicada e cada perfil cadastrado carregam histórias, expectativas e 
-                            futuros possíveis — e o EmpreGo está aqui para ser a ponte entre esses caminhos.
-                        </p>
-
-                        <p class="text-gray-400">
-                            Esse projeto é, ao mesmo tempo, um reflexo da nossa trajetória acadêmica e um símbolo do que acreditamos: que com dedicação, criatividade e
-                            espírito de equipe, é possível transformar desafios em oportunidades e construir algo que realmente faça a diferença.
-                        </p>
-                    </div>
-
-                    <h2 class="text-3xl font-bold mb-8 text-center">
-                        Nossa <span class="text-gradient">Equipe</span>
-                    </h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- membro 1 -->
-                        <div
-                            class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Alec Vinícius</h3>
-                            <p class="text-gray-400 mb-4">Desenvolvedor Front-end</p>
-                            <div class="flex items-center text-gray-500">
-                                <i class='bx bx-code-alt mr-2'></i>
-                                <span>HTML, CSS, tailwindcss, anime.js, JavaScript</span>
-                            </div>
-                        </div>
-
-                        <!-- membro 2 -->
-                        <div
-                            class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">João Pedro Azevedo</h3>
-                            <p class="text-gray-400 mb-4">Desenvolvedor Back-end</p>
-                            <div class="flex items-center text-gray-500">
-                                <i class='bx bx-server mr-2'></i>
-                                <span>Node.js, Axios, PostegreSQL, Prisma, Tailwind, HTML, JavaScript</span>
-                            </div>
-                        </div>
-
-                        <!-- Membro 3 -->
-                        <div
-                            class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Mateus Ricardo</h3>
-                            <p class="text-gray-400 mb-4">Designer</p>
-                            <div class="flex items-center text-gray-500">
-                                <i class='bx bx-palette mr-2'></i>
-                                <span>Krita, HTML, CSS, Node.js, Prisma, Tailwind, JavaScript</span>
-                            </div>
-                        </div>
-
-                        <!-- Membro 4 -->
-                        <div
-                            class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">João Souza</h3>
-                            <p class="text-gray-400 mb-4">Tester</p>
-                            <div class="flex items-center text-gray-500">
-                                <i class='bx bx-clipboard mr-2'></i>
-                                <span>Testes, Documentação, HTML, CSS</span>
-                            </div>
-                        </div>
-
-                        <!-- membro 5 -->
-                        <div
-                            class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Carolina Kaippert</h3>
-                            <p class="text-gray-400 mb-4">Desenvolvedora Back-end</p>
-                            <div class="flex items-center text-gray-500">
-                                <i class='bx bx-code-curly mr-2'></i>
-                                <span>JavaScript, Tailwind, Prisma, Node.js</span>
-                            </div>
-                        </div>
-
-                        <!-- membro 6 -->
-                        <div
-                            class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Athon Fernandes</h3>
-                            <p class="text-gray-400 mb-4">Influencer</p>
-                            <div class="flex items-center text-gray-500">
-                                <i class='bx bx-palette mr-2'></i>
-                                <span>Tiktok, Youtube, Instagram, X</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- Mentor -->
-                    <div class="bg-dark-900 rounded-xl pb-8 pt-8 border border-gray-800 mt-5 ">
-                        <h2 class="text-3xl font-bold mb-6 text-center">
-                            Nossos <span class="text-gradient">Mentores</span>
-                        </h2>
-
-                        <div class="flex flex-col items-center">
-                            <div
-                                class="w-24 h-24 rounded-full bg-primary-500 bg-opacity-20 flex items-center justify-center mb-6">
-                                <i class='bx bx-user text-4xl text-primary-400'></i>
-                            </div>
-
-                            <h3 class="text-2xl font-bold text-primary-400 mb-2">Wallace Oliveira dos Santos</h3>
-                            <p class="text-gray-400 mb-6">Educador e Orientador</p>
-
-                            <p class="text-gray-400 text-center max-w-2xl">
-                                Tudo graças a supervisão do educador "Wallace Oliveira dos Santos" que nos guiou e
-                                apoiou durante todo o desenvolvimento deste projeto.
+                            <p class="text-gray-400">
+                                Esse projeto é, ao mesmo tempo, um reflexo da nossa trajetória acadêmica e um símbolo do que acreditamos: que com dedicação, criatividade e
+                                espírito de equipe, é possível transformar desafios em oportunidades e construir algo que realmente faça a diferença.
                             </p>
                         </div>
+
+                        <h2 class="text-3xl font-bold mb-8 text-center">
+                            Nossa <span class="text-gradient">Equipe</span>
+                        </h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- membro 1 -->
+                            <div
+                                class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                                <h3 class="text-2xl font-bold text-primary-400 mb-2">Alec Vinícius</h3>
+                                <p class="text-gray-400 mb-4">Desenvolvedor Front-end</p>
+                                <div class="flex items-center text-gray-500">
+                                    <i class='bx bx-code-alt mr-2'></i>
+                                    <span>HTML, CSS, tailwindcss, anime.js, JavaScript</span>
+                                </div>
+                            </div>
+
+                            <!-- membro 2 -->
+                            <div
+                                class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                                <h3 class="text-2xl font-bold text-primary-400 mb-2">João Pedro Azevedo</h3>
+                                <p class="text-gray-400 mb-4">Desenvolvedor Back-end</p>
+                                <div class="flex items-center text-gray-500">
+                                    <i class='bx bx-server mr-2'></i>
+                                    <span>Node.js, Axios, PostegreSQL, Prisma, Tailwind, HTML, JavaScript</span>
+                                </div>
+                            </div>
+
+                            <!-- Membro 3 -->
+                            <div
+                                class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                                <h3 class="text-2xl font-bold text-primary-400 mb-2">Mateus Ricardo</h3>
+                                <p class="text-gray-400 mb-4">Designer</p>
+                                <div class="flex items-center text-gray-500">
+                                    <i class='bx bx-palette mr-2'></i>
+                                    <span>Krita, HTML, CSS, Node.js, Prisma, Tailwind, JavaScript</span>
+                                </div>
+                            </div>
+
+                            <!-- Membro 4 -->
+                            <div
+                                class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                                <h3 class="text-2xl font-bold text-primary-400 mb-2">João Souza</h3>
+                                <p class="text-gray-400 mb-4">Tester</p>
+                                <div class="flex items-center text-gray-500">
+                                    <i class='bx bx-clipboard mr-2'></i>
+                                    <span>Testes, Documentação, HTML, CSS</span>
+                                </div>
+                            </div>
+
+                            <!-- membro 5 -->
+                            <div
+                                class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                                <h3 class="text-2xl font-bold text-primary-400 mb-2">Carolina Kaippert</h3>
+                                <p class="text-gray-400 mb-4">Desenvolvedora Back-end</p>
+                                <div class="flex items-center text-gray-500">
+                                    <i class='bx bx-code-curly mr-2'></i>
+                                    <span>JavaScript, Tailwind, Prisma, Node.js</span>
+                                </div>
+                            </div>
+
+                            <!-- membro 6 -->
+                            <div
+                                class="bg-dark-900 rounded-xl p-6 border border-gray-800 hover:border-primary-500 transition-colors">
+                                <h3 class="text-2xl font-bold text-primary-400 mb-2">Athon Fernandes</h3>
+                                <p class="text-gray-400 mb-4">Influencer</p>
+                                <div class="flex items-center text-gray-500">
+                                    <i class='bx bx-palette mr-2'></i>
+                                    <span>Tiktok, Youtube, Instagram, X</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Mentor -->
+                        <div class="bg-dark-900 rounded-xl pb-8 pt-8 border border-gray-800 mt-5 ">
+                            <h2 class="text-3xl font-bold mb-6 text-center">
+                                Nossos <span class="text-gradient">Mentores</span>
+                            </h2>
+
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="w-24 h-24 rounded-full bg-primary-500 bg-opacity-20 flex items-center justify-center mb-6">
+                                    <i class='bx bx-user text-4xl text-primary-400'></i>
+                                </div>
+
+                                <h3 class="text-2xl font-bold text-primary-400 mb-2">Wallace Oliveira dos Santos</h3>
+                                <p class="text-gray-400 mb-6">Educador e Orientador</p>
+
+                                <p class="text-gray-400 text-center max-w-2xl">
+                                    Tudo graças a supervisão do educador "Wallace Oliveira dos Santos" que nos guiou e
+                                    apoiou durante todo o desenvolvimento deste projeto.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-    </main>
+        </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark-900 py-12 border-t border-gray-800">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <!-- Coluna 1 -->
-                <div>
-                    <div class="flex items-center mb-4">
-                        <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" class="h-10 w-10">
-                        <span class="ml-2 text-2xl font-bold">
-                            Empre<span class="text-primary-500">Go</span>
-                        </span>
+        <!-- Footer -->
+        <footer class="bg-dark-900 py-12 border-t border-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <!-- Coluna 1 -->
+                    <div>
+                        <div class="flex items-center mb-4">
+                            <img src="/assets/imgs/BIGSlogo.png" alt="Logo EmpreGo" class="h-10 w-10">
+                            <span class="ml-2 text-2xl font-bold">
+                                Empre<span class="text-primary-500">Go</span>
+                            </span>
+                        </div>
+                        <p class="text-gray-400 mb-4">
+                            A mais nova plataforma para encontrar e divulgar trabalho no Brasil.
+                        </p>
+                        <div class="flex space-x-4">
+                            <a href="https://x.com" class="text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class='bx bxl-twitter text-xl'></i>
+                            </a>
+                            <a href="https://www.tiktok.com" class="text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class='bx bxl-tiktok text-xl'></i>
+                            </a>
+                            <a href="https://www.instagram.com/"
+                                class="text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class='bx bxl-instagram text-xl'></i>
+                            </a>
+                            <a href="https://www.youtube.com/"
+                                class="text-gray-400 hover:text-primary-400 transition-colors">
+                                <i class='bx bxl-youtube text-xl'></i>
+                            </a>
+                        </div>
                     </div>
-                    <p class="text-gray-400 mb-4">
-                        A mais nova plataforma para encontrar e divulgar trabalho no Brasil.
+
+                    <!-- coluna 2 -->
+                    <div>
+                        <h3 class="text-lg font--semibold text-white mb-4">Links Rápidos</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#home" class="text-gray-400 hover:text-primary-400 transition-colors">Início</a>
+                            </li>
+                            <li><a href="#servicos"
+                                    class="text-gray-400 hover:text-primary-400 transition-colors">Serviços</a></li>
+                            <li><a href="#testperfis"
+                                    class="text-gray-400 hover:text-primary-400 transition-colors">Biografias</a></li>
+                            <li><a href="/sobre" class="text-gray-400 hover:text-primary-400 transition-colors">Sobre</a>
+                            </li>
+                            <li><a href="/suporte"
+                                    class="text-gray-400 hover:text-primary-400 transition-colors">Suporte</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- coluna 3 -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-4">Recursos</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">FAQ</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Termos de
+                                    Serviço</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Política de
+                                    Privacidade</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Coluna 4 -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-4">Contato</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#emprego.contato22@gmail.com" class="text-gray-400 cursor: pointer;"><i
+                                        class='bx bx-envelope mr-2'></i> emprego.contato22@gmail.com</a></li>
+                            <li class="text-gray-400"><i class='bx bx-phone mr-2'></i> (XX) XXXX-XXXX</li>
+                            <li class="text-gray-400"><i class='bx bx-map mr-2'></i> Cidade, Estado - Brasil</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-800 pt-8 text-center">
+                    <p class="text-gray-500">
+                        &copy; 2025 EmpreGo. Todos os direitos reservados.
                     </p>
-                    <div class="flex space-x-4">
-                        <a href="https://x.com" class="text-gray-400 hover:text-primary-400 transition-colors">
-                            <i class='bx bxl-twitter text-xl'></i>
-                        </a>
-                        <a href="https://www.tiktok.com" class="text-gray-400 hover:text-primary-400 transition-colors">
-                            <i class='bx bxl-tiktok text-xl'></i>
-                        </a>
-                        <a href="https://www.instagram.com/"
-                            class="text-gray-400 hover:text-primary-400 transition-colors">
-                            <i class='bx bxl-instagram text-xl'></i>
-                        </a>
-                        <a href="https://www.youtube.com/"
-                            class="text-gray-400 hover:text-primary-400 transition-colors">
-                            <i class='bx bxl-youtube text-xl'></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- coluna 2 -->
-                <div>
-                    <h3 class="text-lg font--semibold text-white mb-4">Links Rápidos</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-400 hover:text-primary-400 transition-colors">Início</a>
-                        </li>
-                        <li><a href="#servicos"
-                                class="text-gray-400 hover:text-primary-400 transition-colors">Serviços</a></li>
-                        <li><a href="#testperfis"
-                                class="text-gray-400 hover:text-primary-400 transition-colors">Biografias</a></li>
-                        <li><a href="/sobre" class="text-gray-400 hover:text-primary-400 transition-colors">Sobre</a>
-                        </li>
-                        <li><a href="/suporte"
-                                class="text-gray-400 hover:text-primary-400 transition-colors">Suporte</a></li>
-                    </ul>
-                </div>
-
-                <!-- coluna 3 -->
-                <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Recursos</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">FAQ</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Termos de
-                                Serviço</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Política de
-                                Privacidade</a></li>
-                    </ul>
-                </div>
-
-                <!-- Coluna 4 -->
-                <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Contato</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#emprego.contato22@gmail.com" class="text-gray-400 cursor: pointer;"><i
-                                    class='bx bx-envelope mr-2'></i> emprego.contato22@gmail.com</a></li>
-                        <li class="text-gray-400"><i class='bx bx-phone mr-2'></i> (XX) XXXX-XXXX</li>
-                        <li class="text-gray-400"><i class='bx bx-map mr-2'></i> Cidade, Estado - Brasil</li>
-                    </ul>
                 </div>
             </div>
+        </footer>
 
-            <div class="border-t border-gray-800 pt-8 text-center">
-                <p class="text-gray-500">
-                    &copy; 2025 EmpreGo. Todos os direitos reservados.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Back to Top Button -->
-    <button id="back-to-top"
-        class="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 opacity-0 invisible transform hover:scale-110">
-        <i class='bx bx-chevron-up text-xl'></i>
-    </button>
+        <!-- Back to Top Button -->
+        <button id="back-to-top"
+            class="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 opacity-0 invisible transform hover:scale-110">
+            <i class='bx bx-chevron-up text-xl'></i>
+        </button>
+    </div>
+    
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script type="module" src="/js/link.js"></script>
     <script src="/js/sobre.js"></script>
 </body>

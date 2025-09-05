@@ -287,27 +287,27 @@ const ctx = canvas.getContext("2d");
 
 // Perfil de usuario (PC/CELL)
 
-function setUserLoggedIn(user) {
-    document.getElementById('loginOuCadas').style.display = 'none';
-    document.getElementById('fotoPerfil').style.display = 'inline-block';
-    document.getElementById('logout').style.display = 'inline-block';
-    document.getElementById('fotoPerfilImg').src = user.avatarUrl || '/assets/imgs/genPfp.png';
+// function setUserLoggedIn(user) {
+//     document.getElementById('loginOuCadas').style.display = 'none';
+//     document.getElementById('fotoPerfil').style.display = 'inline-block';
+//     document.getElementById('logout').style.display = 'inline-block';
+//     document.getElementById('fotoPerfilImg').src = user.avatarUrl || '/assets/imgs/genPfp.png';
 
 
-    document.getElementById('mobileLoginOuCadas').style.display = 'none';
-    document.getElementById('mobileFotoPerfil').style.display = 'block';
-    document.getElementById('mobileLogout').style.display = 'block';
-    document.getElementById('mobileFotoPerfilImg').src = user.avatarUrl || '/assets/imgs/genPfp.png';
-}
+//     document.getElementById('mobileLoginOuCadas').style.display = 'none';
+//     document.getElementById('mobileFotoPerfil').style.display = 'block';
+//     document.getElementById('mobileLogout').style.display = 'block';
+//     document.getElementById('mobileFotoPerfilImg').src = user.avatarUrl || '/assets/imgs/genPfp.png';
+// }
 
-function logout() {
-    document.getElementById('loginOuCadas').style.display = 'inline-flex';
-    document.getElementById('fotoPerfil').style.display = 'none';
-    document.getElementById('logout').style.display = 'none';
+// function logout() {
+//     document.getElementById('loginOuCadas').style.display = 'inline-flex';
+//     document.getElementById('fotoPerfil').style.display = 'none';
+//     document.getElementById('logout').style.display = 'none';
 
-    document.getElementById('mobileLoginOuCadas').style.display = 'block';
-    document.getElementById('mobileFotoPerfil').style.display = 'none';
-    document.getElementById('mobileLogout').style.display = 'none';
-}
+//     document.getElementById('mobileLoginOuCadas').style.display = 'block';
+//     document.getElementById('mobileFotoPerfil').style.display = 'none';
+//     document.getElementById('mobileLogout').style.display = 'none';
+// }
 
 

@@ -22,6 +22,7 @@ export function mostrarErroTopo(mensagem) {
 
 export async function carregarLinks() {
   const infos = await carregarFoto();
+  console.log(infos)
   if(infos === 'visitante' || infos.tipo==='visitante' || infos.tipo==='expirado'){
     document.querySelector('#loginOuCadas').style.display = '';
     document.querySelector('#logout').style.display = 'none';
@@ -109,7 +110,6 @@ export async function carregarFoto() {
     if(tipo==='candidato'){
       const response = await axiosWe('/perfil/candidato/foto');
       foto = response.data;
-      console.log(response)
     }
     else if(tipo==='empresa'){
       const response = await axiosWe('/perfil/empresa/foto');
@@ -130,4 +130,23 @@ export function logout(){
     // ? alert('Você foi desconectado.'); Se achar necessario bota um alert pro logout
     window.location.href = '/';
   })
+}
+
+export function finalizarLoader(){
+  gsap.to('#loader', {
+    duration: 0.5,
+    opacity: 0,
+    onComplete: () => {
+    document.getElementById('loader').classList.add('hidden');
+    document.getElementById('content').classList.remove('hidden');
+    
+    // Animação de entrada do conteúdo
+    // gsap.from('#content', {
+    //     duration: 0.5,
+    //     opacity: 0,
+    //     y: 20
+    // });
+    }
+  });
+  document.querySelector('#content').style.display = 'block'
 }

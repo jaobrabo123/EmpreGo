@@ -432,7 +432,7 @@
     window.addEventListener('load', async () => {
         try {
             // adiciona so um leve atraso para ver a animação
-            await new Promise(resolve => setTimeout(resolve, loadingTime));
+            //await new Promise(resolve => setTimeout(resolve, loadingTime));
             
             const ajdgjasjsda = await axios.get("http://localhost:3001/empresas/public")
             console.log(ajdgjasjsda.data)
@@ -441,7 +441,7 @@
         } finally {
             // Animação de saída do loader
             gsap.to('#loader', {
-              duration: 1,
+              duration: 0.5,
               opacity: 0,
               onComplete: () => {
                 document.getElementById('loader').classList.add('hidden');
@@ -449,7 +449,7 @@
                 
                 // Animação de entrada do conteúdo
                 gsap.from('#content', {
-                  duration: 1,
+                  duration: 0.5,
                   opacity: 0,
                   y: 20
                 });

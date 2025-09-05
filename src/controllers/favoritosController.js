@@ -10,7 +10,7 @@ class FavoritosController {
             const empresasFav = await FavoritosModels.listarEmpresasFavoritadasPorCandidatoId(id);
             res.status(200).json(empresasFav);
         } catch (erro) {
-            res.status(500).json({ error: "Erro ao favoritar empresa: " + erro.message });
+            res.status(500).json({ error: "Erro ao listar empresas favoritadas: " + erro.message });
         }
     }
 
@@ -38,6 +38,43 @@ class FavoritosController {
             res.status(200).json({ message: "Empresa desfavoritada com sucesso." });
         } catch (erro) {
             res.status(500).json({ error: "Erro ao desfavoritar empresa: " + erro.message });
+        }
+    }
+
+    static async listarCandidatosFavoritados(req, res){
+        try {
+            const cnpj = req.user.id;
+            const candidatosFav = await FavoritosModels.listarCandidatosFavoritadosPorEmpresaCnpj(cnpj);
+            res.status(200).json(candidatosFav);
+        } catch (erro) {
+            res.status(500).json({ error: "Erro ao listar candidatos favoritados: " + erro.message });
+        }
+    }
+
+    static async favoritarCandidato(req, res){
+        try {
+            const { cd } = req.body;
+            const cnpj = req.user.id;
+            if(!cd) return res.status(400).json({ error: "O ID do candidato deve ser fornecido." });
+            await FavoritosService.empresaFavoritarCandidato(cnpj, cd);
+            res.status(201).json({ message: "Candidato favoritado com sucesso." });
+        } catch (erro) {
+            if(erro instanceof Erros.ErroDeValidacao) {
+                return res.status(400).json({ error: erro.message });
+            };
+            res.status(500).json({ error: "Erro ao favoritar candidato: " + erro.message });
+        }
+    }
+
+    static async desfavoritarCandidato(req, res){
+        try {
+            const { cd } = req.params;
+            const cnpj = req.user.id;
+            if(!cd) return res.status(400).json({ error: "O ID do candidato deve ser fornecido." });
+            await FavoritosService.empresaDesfavoritarCandidato(cnpj, cd);
+            res.status(200).json({ message: "Candidato desfavoritado com sucesso." });
+        } catch (erro) {
+            res.status(500).json({ error: "Erro ao desfavoritar candidato: " + erro.message });
         }
     }
 

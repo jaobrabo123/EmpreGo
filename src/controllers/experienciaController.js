@@ -9,7 +9,7 @@ class ExperienciaController {
         try {
             const { titulo, descricao } = req.body;
             const id = req.user.id;
-            const imagem = req.file?.path || "imagem padrão";
+            const imagem = req.file?.path || false;
             await ExperienciaService.popularTabelaExperiencias(titulo, descricao, imagem, id);
             res.status(201).json({ message: "Experiência cadastrada com sucesso!" });
         } catch (error) {

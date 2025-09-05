@@ -62,6 +62,7 @@ class ExperienciaModel {
             c.nome as candidato_nome, c.data_nasc as candidato_nasc
             from experiencias e join candidatos c
             on e.candidato = c.id
+            where e.data_criacao > now() - interval '7 days'
             order by random()
             limit 4
         `;

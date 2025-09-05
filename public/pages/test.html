@@ -115,7 +115,6 @@
   </script>
 </head>
 <body class="bg-dark-900 overflow-hidden">
-  <!-- Tela de Carregamento com múltiplas animações -->
   <div id="loader" class="fixed inset-0 flex items-center justify-center z-50 bg-dark-900">
     <!-- Partículas de fundo -->
     <div id="particles-js"></div>
@@ -132,14 +131,14 @@
           <div class="ring-1 ring-primary-600 rounded-full absolute" style="width: 220px; height: 220px;"></div>
         </div>
         
-        <!-- Hexágonos giratórios -->
+        <!-- Hexágonos -->
         <div class="hexagon-container absolute inset-0 flex items-center justify-center">
           <div class="hexagon w-48 h-48 border-2 border-primary-500 absolute opacity-40"></div>
           <div class="hexagon w-60 h-60 border-2 border-primary-600 absolute opacity-20"></div>
         </div>
       </div>
       
-      <!-- Texto estilizado com animação de pontos -->
+      <!-- animação de pontos -->
       <div class="text-center">
         <h1 class="font-orbitron text-light-100 text-3xl md:text-4xl neon-text mb-4">
           Carregando<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
@@ -153,7 +152,7 @@
       <div class="absolute right-24 top-20 w-7 h-7 rounded-full bg-primary-600 opacity-50"></div>
     </div>
     
-    <!-- Padrão de grade de fundo -->
+    <!-- grade de fundo -->
     <div class="grid-pattern absolute inset-0 opacity-20"></div>
   </div>
 
@@ -169,7 +168,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     // Variáveis para controle do carregamento
-    let loadingTime = 2000; // Tempo base de carregamento
+    let loadingTime = 2000;
     let progress = 0;
 
     // Variáveis para a animação 3D
@@ -221,19 +220,19 @@
 
     // Inicializar a esfera 3D
     function init3DSphere() {
-      // Configurar cena, câmera e renderizador
+      // Configuração da cena, câmera e renderizador
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
       renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       renderer.setSize(200, 200);
       
-      // Garantir que o canvas seja interativo
+      // Garantir que o 3d seja interativo
       const canvas = renderer.domElement;
       canvas.style.pointerEvents = 'auto';
       
       document.getElementById('sphere-3d-container').appendChild(canvas);
       
-      // Adicionar luzes
+      // Adicionar luzes para modelo 3d
       const ambientLight = new THREE.AmbientLight(0x888888);
       scene.add(ambientLight);
       
@@ -428,7 +427,6 @@
       }
     }, 300);
 
-    // Simula carregamento
     window.addEventListener('load', async () => {
         try {
             // adiciona so um leve atraso para ver a animação

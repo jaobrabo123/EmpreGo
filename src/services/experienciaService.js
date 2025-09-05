@@ -9,23 +9,23 @@ class ExperienciaService {
 
   static async popularTabelaExperiencias(titulo, descricao, imagem, id){
 
+    const data = {
+      titulo,
+      descricao,
+      candidato: id
+    }
+
     ValidarCampos.validarTamanhoMax(titulo, 30, 'Título');
     ValidarCampos.validarTamanhoMax(descricao, 1500, 'Descrição');
-    if (imagem !== "imagem padrão") {
+    if (imagem) {
       ValidarCampos.validarImagemNoCloudinary(imagem);
+      data.imagem = imagem;
     }
 
     titulo = titulo.trim();
     descricao = descricao.trim();   
-
-    await prisma.experiencias.create({
-      data: {
-        titulo,
-        descricao,
-        imagem,
-        candidato: id
-      }
-    });
+    
+    await prisma.experiencias.create({ data });
 
   }
 

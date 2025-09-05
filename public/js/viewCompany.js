@@ -5,14 +5,16 @@ let candidatosJaFavoritados = [];
 
 async function carregarInit() {
   try {
-    const [responseCand, responseFav] = await Promise.all([
+    const [responseCand, responseFav, responseExp] = await Promise.all([
       axiosWe('/candidatos/public'),
-      axiosWe('/favoritos/candidato')
+      axiosWe('/favoritos/candidato'),
+      axiosWe('/experiencias/public')
     ]);
     const dataCand = responseCand.data;
     const dataFav = responseFav.data;
+    const dataExp = responseExp.data;
+    console.log(dataExp)
     const favoritosContainer = document.getElementById('favoritos-container');
-    console.log(dataFav)
     dataFav.forEach(fav => {
       candidatosJaFavoritados.push(fav.id_candidato);
       const newItem = document.createElement('div');
@@ -95,6 +97,9 @@ async function carregarInit() {
         </article>
       `;
       document.querySelector('#divEmpresas').innerHTML += html;
+    });
+    dataExp.forEach(exp =>{
+
     });
   } catch (erro) {
     console.error(erro)

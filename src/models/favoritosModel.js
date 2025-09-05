@@ -25,6 +25,36 @@ class FavoritosModels {
         return resultado;
     }
 
+    static async listarCandidatosFavoritadosPorEmpresaCnpj(cnpj){
+        const resultado = await prisma.favoritos_candidatos.findMany({
+            select: {
+                id_candidato: true,
+                candidatos: {
+                    select: {
+                        nome: true,
+                        foto: true,
+                        tags: {
+                            select: {
+                                nome: true
+                            },
+                            orderBy: {
+                                data_criacao: 'desc'
+                            },
+                            take: 1
+                        }
+                    }
+                }
+            },
+            where: {
+                cnpj_empresa: cnpj
+            },
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        });
+        return resultado;
+    }
+
 }
 
 module.exports = FavoritosModels;

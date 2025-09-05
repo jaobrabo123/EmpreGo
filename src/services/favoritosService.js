@@ -32,6 +32,34 @@ class FavoritosService {
         });
     }
 
+    static async empresaFavoritarCandidato(empresa, candidato){
+        const favoritadasCount = await prisma.favoritos_candidatos.count({
+            where: {
+                cnpj_empresa: empresa
+            }
+        });
+
+        if(favoritadasCount>=30) throw new Erros.ErroDeValidacao("Você não pode favoritar mais de 30 candidatos.");
+
+        await prisma.favoritos_candidatos.create({
+            data: {
+                cnpj_empresa: empresa,
+                id_candidato: Number(candidato)
+            }
+        });
+    }
+
+    static async empresaDesfavoritarCandidato(empresa, candidato){
+        await prisma.favoritos_candidatos.deleteMany({
+            where: {
+                AND: [
+                    {cnpj_empresa: empresa},
+                    {id_candidato: Number(candidato)}
+                ]
+            }
+        });
+    }
+
 }
 
 module.exports = FavoritosService;

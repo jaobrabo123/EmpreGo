@@ -52,5 +52,6 @@ router.post('/perfil/candidato', authenticateToken, apenasCandidatos, uploadPerf
 router.get('/perfil/empresa/info', authenticateToken, apenasEmpresa, PerfilController.buscarEmpresa);
 router.get('/perfil/empresa/foto', authenticateToken, apenasEmpresa, PerfilController.buscarFotoEmpresa);
 router.post('/perfil/empresa', authenticateToken, apenasEmpresa , uploadEmpresaPerfil.single('foto'), PerfilController.editarEmpresa);
+router.get('/perfil/link', authenticateToken, PerfilController.buscarInfoLinks);
 
 module.exports = router;

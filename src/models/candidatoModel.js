@@ -81,7 +81,8 @@ class CandidatoModel{
                 id: true,
                 senha: true,
                 nivel: true,
-                foto: true
+                foto: true,
+                nome: true
             },
             where: {
                 email

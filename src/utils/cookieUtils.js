@@ -18,8 +18,8 @@ function limparCookieRefreshToken(res) {
   });
 }
 
-function salvarCookieToken(res, id, tipo, nivel){
-  const token = jwt.sign({ id: id, tipo: tipo, nivel: nivel }, SECRET_KEY, { expiresIn: '1h' });
+function salvarCookieToken(res, id, tipo, nivel, nome){
+  const token = jwt.sign({ id: id, tipo: tipo, nivel: nivel, nome: nome }, SECRET_KEY, { expiresIn: '1h' });
   res.cookie('token', token, {
     httpOnly: true,
     secure: true,

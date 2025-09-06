@@ -14,7 +14,29 @@ async function carregarInit() {
     const dataFav = responseFav.data;
     const dataExp = responseExp.data;
     console.log(dataExp)
+
+    const swiperWrapper = document.querySelector('.recomendacoes-swiper .swiper-wrapper');
+    dataExp.forEach(exp => {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      slide.innerHTML = `
+      <div class="slide-content">
+        <span class="slide-empresa">${exp.empresa || "Empresa não informada"}</span>
+        <h3 class="slide-titulo">${exp.titulo}</h3>
+        <blockquote class="slide-texto">
+          "${exp.descricao}"
+        </blockquote>
+        <div class="slide-meta">
+          <span class="slide-autor">${exp.candidato_nome || "Usuário Anônimo"}</span>
+          <span class="slide-data">${exp.data_criacao ? new Date(exp.data_criacao).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }) 
+      : ""}</span>
+        </div>
+      `;
+      swiperWrapper.appendChild(slide);
+    })
+
     const favoritosContainer = document.getElementById('favoritos-container');
+
     dataFav.forEach(fav => {
       candidatosJaFavoritados.push(fav.id_candidato);
       const newItem = document.createElement('div');

@@ -906,26 +906,28 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
         id="profile-toggle">
         <div
           class="user-avatar bg-twitch-purple text-white font-bold text-base w-9 h-9 rounded-full flex justify-center items-center select-none shadow-x1">
-          A</div>
+          <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="FotoDePerfil" class="w-full h-full object-cover rounded-full"/>
+          </div>
+          
         <div
           class="profile-dropdown fixed top-16 right-4 bg-twitch-gray text-white w-60 rounded-lg shadow-xl flex flex-col p-2 z-50 hidden"
           id="profile-dropdown">
           <div class="profile-info p-3">
             <p class="profile-name font-bold m-0">nome VISIVEL</p>
-            <p class="profile-username text-sm m-0 text-gray-400">nome do perfil</p>
-            <a href="#" class="text-twitch-purple text-sm no-underline">Acessar perfil</a>
+            <!-- <p class="profile-username text-sm m-0 text-gray-400">nome do perfil</p> -->
+            <a href="/perfil/candidato" class="text-twitch-purple text-sm no-underline">Acessar perfil</a>
           </div>
           <hr class="border-t border-gray-700 my-1">
           <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Editar
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" onclick="window.location.href='/perfil/candidato/editar'">Editar
             perfil</button>
           <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Sair</button>
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" id="logoutButton">Sair</button>
           <hr class="border-t border-gray-700 my-1">
           <button
             class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Notificações</button>
           <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Chats</button>
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" onclick="window.location.href='/chats'">Chats</button>
           <hr class="border-t border-gray-700 my-1">
           <button
             class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Configurações</button>
@@ -933,7 +935,7 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
             class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Modo:
             claro</button>
           <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Ajuda</button>
+            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" onclick="window.location.href='/suporte'">Ajuda</button>
         </div>
       </div>
     </div>
@@ -1402,7 +1404,7 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script type="module" src="/js/vagas.js"></script>
-
+  <script type="module" src="/js/link2.js"></script>
 </body>
 
 </html>

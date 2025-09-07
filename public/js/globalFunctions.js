@@ -64,6 +64,20 @@ export async function carregarLinks() {
   }
 }
 
+export async function carregarLinks2() {
+  try {
+    const infos = await carregarInfosLinks();
+    console.log(infos);
+    if(infos==='visitante'){
+      return;
+    }
+    document.querySelector('.profile-name').textContent = infos.nome;
+    document.querySelector('#FotoDePerfil').src = infos.foto;
+  } catch (erro) {
+    console.error(erro.message)
+  }
+}
+
 export async function carregarInfo() {
   try{
     const tipo = await axiosWe.get('/get-tipo')
@@ -109,7 +123,6 @@ export async function carregarFoto() {
     if(tipo==='candidato'){
       const response = await axiosWe('/perfil/candidato/foto');
       foto = response.data;
-      console.log(response)
     }
     else if(tipo==='empresa'){
       const response = await axiosWe('/perfil/empresa/foto');
@@ -120,6 +133,17 @@ export async function carregarFoto() {
   catch(erro){
     console.error(erro.message)
     return 'visitante'
+  }
+}
+
+export async function carregarInfosLinks(){
+  try {
+    const response = await axiosWe('/perfil/link');
+    const data = response.data;
+    return data;
+  } catch (erro) {
+    console.error(erro.message);
+    return 'visitante';
   }
 }
 

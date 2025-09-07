@@ -1,22 +1,26 @@
 //Importações
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const path = require('path');
 const router = express.Router();
 
 const pages = path.join(__dirname, '..', '..', 'public', 'pages');
 
 //Página Inicial
-router.get('/', (req, res) => {
-  res.sendFile(path.join(pages, 'index.html'))
+router.get('/', (req, res)=>{
+  const token = req.cookies.token;
+  let pagina = 'index.html';
+  if(token) pagina =  jwt.decode(token).tipo === 'candidato' ? 'vagas.html' : 'viewCompany.html';
+  res.sendFile(path.join(pages, pagina));
 })
 
 //Página de login e cadastro
-router.get('/login', (req, res) => {
+router.get('/login', (req, res)=>{
   res.sendFile(path.join(pages, 'login.html'));
-});
+})
 
 //Página do painel de ADMINS
-router.get('/painel', (req, res) =>{
+router.get('/painel', (req, res)=>{
   res.sendFile(path.join(pages, 'adminPanel.html'))
 })
 
@@ -33,6 +37,11 @@ router.get('/suporte', (req, res)=>{
 //Páginas dos chats
 router.get('/chats', (req, res)=>{
   res.sendFile(path.join(pages, 'chat.html'))
+})
+
+//Páginas dos chats teste
+router.get('/chatstest', (req, res)=>{
+  res.sendFile(path.join(pages, 'chatTest.html'))
 })
 
 //Página para vizualizar perfil de um usuário

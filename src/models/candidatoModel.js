@@ -121,7 +121,7 @@ class CandidatoModel{
                 id
             }
         });
-        const {senha, ...resultadoSemSenha } = resultado;
+        const { senha, nivel, ...resultadoSemSenha } = resultado;
         return resultadoSemSenha;
     }
 

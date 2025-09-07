@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssistenteIA</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Anime.js para animações -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#8B5CF6',
+                            600: '#7C3AED',
+                        },
+                        dark: {
+                            900: '#000000',
+                            800: '#0A0A0A',
+                            700: '#141414',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        /* Estilização da scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(156, 163, 175, 0.7);
+        }
+        
+        /* Animações para mensagens */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        /* Ajuste para textarea */
+        .message-input {
+            resize: none;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        
+        /* Transição para troca de conversas */
+        .conversation-transition {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-900 text-white h-screen flex overflow-hidden">
+    <!-- Sidebar de conversas -->
+    <aside class="w-1/3 bg-dark-800 border-r border-gray-800 flex flex-col h-full max-w-md">
+        <div class="p-4 border-b border-gray-800 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
+                    AI
+                </div>
+                <h2 class="text-lg font-semibold">Conversas</h2>
+            </div>
+            <button class="p-2 rounded-full hover:bg-gray-700 transition-colors" aria-label="Nova conversa">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Lista de conversas -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar" id="conversations-list">
+            <!-- As conversas serão inseridas aqui via JavaScript -->
+        </div>
+    </aside>
+
+    <!-- Área principal do chat -->
+    <main class="flex-1 flex flex-col h-full bg-dark-900">
+        <header class="bg-dark-800 px-6 py-4 border-b border-gray-800 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
+                    AI
+                </div>
+                <div>
+                    <h2 class="font-semibold" id="current-chat-name">AssistenteIA</h2>
+                    <p class="text-sm text-gray-400 flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                        <span id="current-chat-status">Online - IA Avançada</span>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="p-2 rounded-full hover:bg-gray-700 transition-colors" aria-label="Pesquisar conversa">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+                <button class="p-2 rounded-full hover:bg-gray-700 transition-colors" aria-label="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Área de mensagens -->
+        <div class="flex-1 overflow-y-auto p-6 custom-scrollbar bg-dark-900 bg-opacity-50" id="messages-container">
+            <!-- As mensagens serão inseridas aqui via JavaScript -->
+        </div>
+        
+        <div class="bg-dark-800 p-4 border-t border-gray-800">
+            <div class="flex items-end space-x-3">
+                <button class="p-2 rounded-full hover:bg-gray-700 transition-colors mb-2" aria-label="Anexar arquivo">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                    </svg>
+                </button>
+                
+                <div class="flex-1 bg-dark-700 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-primary-500">
+                    <textarea 
+                        id="message-input" 
+                        class="w-full bg-transparent border-0 outline-none text-white message-input py-2" 
+                        placeholder="Digite sua mensagem..."
+                        rows="1"
+                    ></textarea>
+                </div>
+                
+                <button 
+                    id="send-button" 
+                    class="bg-primary-500 text-white p-3 rounded-full hover:bg-primary-600 transition-colors mb-2" 
+                    aria-label="Enviar mensagem"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="flex justify-between items-center mt-2 text-xs text-gray-500 px-2">
+                <span>Pressione Enter para enviar • Ctrl+N para nova conversa</span>
+                <span id="message-counter">0 mensagens nesta conversa</span>
+            </div>
+        </div>
+    </main>
+
+    <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+        <div class="bg-dark-800 rounded-lg p-6 w-96">
+            <h3 class="text-lg font-semibold mb-2" id="modal-title">Confirmar ação</h3>
+            <p class="text-gray-300 mb-6" id="modal-message">Tem certeza que deseja executar esta ação?</p>
+            <div class="flex justify-end space-x-3">
+                <button id="modal-cancel" class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">Cancelar</button>
+                <button id="modal-confirm" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 transition-colors">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados de exemplo para as conversas
+        const conversationsData = [
+            {
+                id: 1,
+                name: "Suporte Técnico",
+                lastMessage: "Como posso ajudar com seu problema?",
+                time: "10:30",
+                unread: 0,
+                avatar: "ST",
+                messages: [
+                    { text: "Olá, preciso de ajuda com meu login.", sender: "user", time: "10:25" },
+                    { text: "Claro, posso ajudar com isso. Qual é o problema?", sender: "them", time: "10:26" },
+                    { text: "Não consigo acessar minha conta.", sender: "user", time: "10:28" },
+                    { text: "Como posso ajudar com seu problema?", sender: "them", time: "10:30" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Amanda Silva",
+                lastMessage: "Ok, combinado então!",
+                time: "Ontem",
+                unread: 2,
+                avatar: "AS",
+                messages: [
+                    { text: "E aí, tudo bem?", sender: "them", time: "09:15" },
+                    { text: "Tudo sim, e com você?", sender: "user", time: "09:20" },
+                    { text: "Também! Vamos sair amanhã?", sender: "them", time: "09:22" },
+                    { text: "Claro, que horas?", sender: "user", time: "09:25" },
+                    { text: "Às 19h?", sender: "them", time: "09:30" },
+                    { text: "Perfeito!", sender: "user", time: "09:32" },
+                    { text: "Ok, combinado então!", sender: "them", time: "09:35" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Grupo Família",
+                lastMessage: "Maria: Feliz aniversário!",
+                time: "12:45",
+                unread: 0,
+                avatar: "GF",
+                messages: [
+                    { text: "João: Alguém vai no almoço de domingo?", sender: "them", time: "11:00" },
+                    { text: "Eu vou!", sender: "user", time: "11:05" },
+                    { text: "Ana: Eu também!", sender: "them", time: "11:10" },
+                    { text: "Maria: Feliz aniversário!", sender: "them", time: "12:45" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Carlos Santos",
+                lastMessage: "Enviou uma imagem",
+                time: "Ter",
+                unread: 0,
+                avatar: "CS",
+                messages: [
+                    { text: "Você viu o novo filme?", sender: "them", time: "20:15" },
+                    { text: "Ainda não, é bom?", sender: "user", time: "20:20" },
+                    { text: "Muito! Recomendo.", sender: "them", time: "20:25" },
+                    { text: "Imagem", sender: "them", time: "20:30" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Luciana Ferreira",
+                lastMessage: "Obrigada pela ajuda!",
+                time: "Seg",
+                unread: 0,
+                avatar: "LF",
+                messages: [
+                    { text: "Você tem um minuto?", sender: "them", time: "14:10" },
+                    { text: "Claro, o que precisa?", sender: "user", time: "14:15" },
+                    { text: "Preciso de uma opinião sobre o projeto.", sender: "them", time: "14:20" },
+                    { text: "Pode me enviar que dou uma olhada.", sender: "user", time: "14:25" },
+                    { text: "Obrigada pela ajuda!", sender: "them", time: "14:30" }
+                ]
+            }
+        ];
+
+        // Estado da aplicação
+        let state = {
+            currentConversationId: 1,
+            conversations: [],
+            messageCount: 0
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar conversas
+            loadConversations();
+            
+            // Carregar conversa ativa
+            loadConversation(state.currentConversationId);
+            
+            // Configurar event listeners
+            setupEventListeners();
+            
+            // Atualizar contador de mensagens
+            updateMessageCounter();
+        });
+
+        // Carregar lista de conversas
+        function loadConversations() {
+            state.conversations = conversationsData;
+            const conversationsList = document.getElementById('conversations-list');
+            conversationsList.innerHTML = '';
+            
+            state.conversations.forEach(conversation => {
+                const conversationElement = createConversationElement(conversation);
+                conversationsList.appendChild(conversationElement);
+            });
+        }
+
+        // Criar elemento de conversa para a sidebar
+        function createConversationElement(conversation) {
+            const isActive = conversation.id === state.currentConversationId;
+            
+            const div = document.createElement('div');
+            div.className = `flex items-center p-4 hover:bg-gray-700 cursor-pointer transition-colors ${isActive ? 'bg-gray-700' : ''}`;
+            div.dataset.id = conversation.id;
+            
+            div.innerHTML = `
+                <div class="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold flex-shrink-0">
+                    ${conversation.avatar}
+                </div>
+                <div class="ml-3 flex-1 min-w-0">
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="font-semibold truncate">${conversation.name}</h3>
+                        <span class="text-xs text-gray-400 ml-2">${conversation.time}</span>
+                    </div>
+                    <p class="text-sm text-gray-400 truncate">${conversation.lastMessage}</p>
+                </div>
+                ${conversation.unread > 0 ? `
+                    <div class="ml-2 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        ${conversation.unread}
+                    </div>
+                ` : ''}
+            `;
+            
+            div.addEventListener('click', () => switchConversation(conversation.id));
+            
+            return div;
+        }
+
+        // Trocar de conversa
+        function switchConversation(conversationId) {
+            // Animação de transição
+            const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+                state.currentConversationId = conversationId;
+                loadConversation(conversationId);
+                updateConversationsList();
+                messagesContainer.style.opacity = '1';
+            }, 300);
+        }
+
+        // Carregar conversa ativa
+        function loadConversation(conversationId) {
+            const conversation = state.conversations.find(c => c.id === conversationId);
+            if (!conversation) return;
+            
+            // Atualizar header
+            document.getElementById('current-chat-name').textContent = conversation.name;
+            
+            // Carregar mensagens
+            const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.innerHTML = '';
+            
+            conversation.messages.forEach(message => {
+                const messageElement = createMessageElement(message);
+                messagesContainer.appendChild(messageElement);
+            });
+            
+            // Scroll para o final
+            scrollToBottom();
+            
+            // Atualizar contador
+            state.messageCount = conversation.messages.length;
+            updateMessageCounter();
+        }
+
+        // Criar elemento de mensagem
+        function createMessageElement(message) {
+            const div = document.createElement('div');
+            const isUser = message.sender === 'user';
+            
+            div.className = `mb-4 flex ${isUser ? 'justify-end' : 'justify-start'} fade-in`;
+            
+            div.innerHTML = `
+                <div class="max-w-xs lg:max-w-md xl:max-w-lg rounded-2xl px-4 py-2 ${isUser ? 'bg-primary-500 rounded-br-none' : 'bg-dark-700 rounded-bl-none'}">
+                    <p class="text-white">${message.text}</p>
+                    <div class="text-xs mt-1 ${isUser ? 'text-primary-200' : 'text-gray-400'} text-right">${message.time}</div>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        // Enviar mensagem
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const messageText = input.value.trim();
+            
+            if (!messageText) return;
+            
+            // Encontrar conversa atual
+            const conversation = state.conversations.find(c => c.id === state.currentConversationId);
+            if (!conversation) return;
+            
+            // Criar nova mensagem
+            const now = new Date();
+            const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            const newMessage = {
+                text: messageText,
+                sender: 'user',
+                time: time
+            };
+            
+            // Adicionar à conversa
+            conversation.messages.push(newMessage);
+            conversation.lastMessage = messageText;
+            conversation.time = time;
+            conversation.unread = 0;
+            
+            // Atualizar UI
+            const messagesContainer = document.getElementById('messages-container');
+            const messageElement = createMessageElement(newMessage);
+            messagesContainer.appendChild(messageElement);
+            
+            // Limpar input
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // Scroll para o final
+            scrollToBottom();
+            
+            // Atualizar contador
+            state.messageCount++;
+            updateMessageCounter();
+            
+            // Atualizar lista de conversas
+            updateConversationsList();
+            
+            // Simular resposta após um tempo
+            setTimeout(() => simulateResponse(conversation), 1000 + Math.random() * 2000);
+        }
+
+        // Simular resposta do assistente
+        function simulateResponse(conversation) {
+            const responses = [
+                "Entendi, como posso ajudar?",
+                "Interessante, conte-me mais.",
+                "Estou processando sua solicitação...",
+                "Hmm, preciso verificar isso.",
+                "Ok, anotado!",
+                "Ótima pergunta! Deixe-me pensar...",
+                "Obrigado por compartilhar isso.",
+                "Estou aqui para ajudar no que precisar."
+            ];
+            
+            const now = new Date();
+            const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            const responseMessage = {
+                text: responses[Math.floor(Math.random() * responses.length)],
+                sender: 'them',
+                time: time
+            };
+            
+            // Adicionar à conversa
+            conversation.messages.push(responseMessage);
+            conversation.lastMessage = responseMessage.text;
+            conversation.time = time;
+            
+            // Atualizar UI
+            const messagesContainer = document.getElementById('messages-container');
+            const messageElement = createMessageElement(responseMessage);
+            messagesContainer.appendChild(messageElement);
+            
+            // Scroll para o final
+            scrollToBottom();
+            
+            // Atualizar contador
+            state.messageCount++;
+            updateMessageCounter();
+            
+            // Atualizar lista de conversas
+            updateConversationsList();
+        }
+
+        // Scroll para o final das mensagens
+        function scrollToBottom() {
+            const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Atualizar lista de conversas na sidebar
+        function updateConversationsList() {
+            const conversationsList = document.getElementById('conversations-list');
+            conversationsList.innerHTML = '';
+            
+            state.conversations.forEach(conversation => {
+                const conversationElement = createConversationElement(conversation);
+                conversationsList.appendChild(conversationElement);
+            });
+        }
+
+        // Atualizar contador de mensagens
+        function updateMessageCounter() {
+            document.getElementById('message-counter').textContent = 
+                `${state.messageCount} mensagens nesta conversa`;
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Enviar mensagem ao clicar no botão
+            document.getElementById('send-button').addEventListener('click', sendMessage);
+            
+            // Enviar mensagem ao pressionar Enter
+            document.getElementById('message-input').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+                
+                // Auto-ajustar altura do textarea
+                setTimeout(() => {
+                    this.style.height = 'auto';
+                    this.style.height = this.scrollHeight + 'px';
+                }, 0);
+            });
+            
+            // Nova conversa com Ctrl+N
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'N') {
+                    e.preventDefault();
+                    // Implementar criação de nova conversa
+                    showModal(
+                        "Nova Conversa", 
+                        "Funcionalidade de nova conversa será implementada em breve."
+                    );
+                }
+            });
+            
+            // Modal de confirmação
+            document.getElementById('modal-cancel').addEventListener('click', hideModal);
+            document.getElementById('modal-confirm').addEventListener('click', function() {
+                hideModal();
+                // Aqui viria a ação de confirmação
+            });
+        }
+
+        // Mostrar modal
+        function showModal(title, message) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('confirmation-modal').classList.remove('hidden');
+        }
+
+        // Esconder modal
+        function hideModal() {
+            document.getElementById('confirmation-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

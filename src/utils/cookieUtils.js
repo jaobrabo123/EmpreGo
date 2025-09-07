@@ -19,7 +19,7 @@ function limparCookieRefreshToken(res) {
 }
 
 function salvarCookieToken(res, id, tipo, nivel, nome){
-  const token = jwt.sign({ id: id, tipo: tipo, nivel: nivel, nome: nome }, SECRET_KEY, { expiresIn: '5s' });
+  const token = jwt.sign({ id: id, tipo: tipo, nivel: nivel, nome: nome }, SECRET_KEY, { expiresIn: '1h' });
   res.cookie('token', token, {
     httpOnly: true,
     secure: true,

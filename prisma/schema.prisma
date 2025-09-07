@@ -91,7 +91,7 @@ model experiencias {
   id           Int        @id @default(autoincrement())
   titulo       String
   descricao    String
-  imagem       String?    @default("../assets/imgs/SalsaHire.png")
+  imagem       String?    @default("/assets/imgs/SalsaHire.png")
   data_criacao DateTime?  @default(now()) @db.Timestamptz(6)
   candidato    Int
   candidatos   candidatos @relation(fields: [candidato], references: [id], onDelete: Cascade, onUpdate: NoAction)

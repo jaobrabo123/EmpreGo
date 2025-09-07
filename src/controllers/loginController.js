@@ -24,7 +24,7 @@ class LoginController {
                 await TokenService.removerToken(tkn);
             }
 
-            const token = salvarCookieToken(res, candidato.id, 'candidato', candidato.nivel);
+            const token = salvarCookieToken(res, candidato.id, 'candidato', candidato.nivel, candidato.nome);
             let expira_em = new Date(Date.now() + 60 * 60 * 1000);
             if(lembreMe) {
                 salvarCookieRefreshToken(res, token);
@@ -64,7 +64,7 @@ class LoginController {
 
             if(!await bcrypt.compare(senha, empresa.senha)) return res.status(401).json({ error: 'Credenciais inválidas.' });
 
-            const token = salvarCookieToken(res, cnpj, 'empresa', 'comum')
+            const token = salvarCookieToken(res, cnpj, 'empresa', 'comum', empresa.nome_fant)
             const expira_em = new Date(Date.now() + 60 * 60 * 1000);
             await TokenService.adicionarToken(cnpj, 'empresa', token, expira_em);
 

@@ -59,7 +59,7 @@ class ExperienciaModel {
     static async buscarExperienciasPublic(){
         const resultado = await prisma.$queryRaw`
             select e.titulo, e.descricao, e.imagem,
-            c.nome as candidato_nome, c.data_nasc as candidato_nasc
+            c.nome as candidato_nome, e.data_criacao
             from experiencias e join candidatos c
             on e.candidato = c.id
             where e.data_criacao > now() - interval '7 days'

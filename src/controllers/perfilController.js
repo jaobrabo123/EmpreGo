@@ -116,6 +116,21 @@ class PerfilController {
         }
     }
 
+    static async buscarInfoLinks(req, res){
+        try {
+            const { tipo, nivel, nome } = req.user;
+            let foto = req.cookies.foto_perfil;
+            if(!foto) {
+                const foto_perfil = tipo === 'candidato' ? await CandidatoModel.buscarFotoPorId(id) : await EmpresaModel.buscarFotoPorCnpj(cnpj);
+                salvarCookieFoto(res, foto_perfil);
+                foto = foto_perfil;
+            }
+            res.status(200).json({tipo, nivel, nome, foto});
+        } catch (erro) {
+            res.status(500).json({ error: 'Erro ao pegar dados do usuário.' + erro.message });
+        }
+    }
+
 }
 
 module.exports = PerfilController;

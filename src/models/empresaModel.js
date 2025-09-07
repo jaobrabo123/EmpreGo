@@ -58,7 +58,8 @@ class EmpresaModel {
         const resultado = await prisma.empresas.findUniqueOrThrow({
             select: {
                 senha: true,
-                foto: true
+                foto: true,
+                nome_fant: true
             },
             where: {
                 cnpj

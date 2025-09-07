@@ -6,7 +6,7 @@
     "start": "node server.js",
     "postinstall": "prisma generate"
   },
-  "author": "João Pedro Azevedo, João Pedro Souza, Alec Vinícius, Mateus Ricardo e Lucas",
+  "author": "João Pedro Azevedo, João Pedro Souza, Alec Vinícius, Mateus Ricardo, Athon e Carol Kaippert",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.14.0",

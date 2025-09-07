@@ -1,5 +1,6 @@
 // * Importando nossa instância do axios
 import axiosWe from './axiosConfig.js';
+import socket from './notfSocketsConfig.js';
 
 export function mostrarErroTopo(mensagem) {
   const old = document.querySelector('.erro-mensagem-geral');
@@ -74,6 +75,7 @@ export async function carregarLinks2() {
     }
     document.querySelector('.profile-name').textContent = infos.nome;
     document.querySelector('#FotoDePerfil').src = infos.foto;
+    socket.emit('joinNotifications', {tipo: infos.tipo, id: infos.id});
   } catch (erro) {
     console.error(erro.message)
   }

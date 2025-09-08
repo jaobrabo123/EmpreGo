@@ -444,7 +444,55 @@ body, input {
     color: white;
 }
 
-
+/* Container do checkbox */
+.remember-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    position: relative;
+  }
+  
+  /* Esconde o checkbox padrão */
+  .remember-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  /* Caixa customizada */
+  .checkmark {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background-color: #2c2c2c; 
+    border: 2px solid #a855f7; 
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+  
+  /* Estado marcado */
+  .remember-label input:checked ~ .checkmark {
+    background-color: #a855f7; 
+    border-color: #9333ea;
+    box-shadow: 0 0 5px #9333ea;
+  }
+  
+  /* Check estilizado dentro */
+  .remember-label input:checked ~ .checkmark::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
 
 /* Ajustes para telas pequenas */
 @media (max-width: 480px) {

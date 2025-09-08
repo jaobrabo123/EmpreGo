@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AssistenteIA</title>
-    <!-- Tailwind CSS via CDN -->
+    <title>ChatApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Anime.js para animações -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -31,405 +30,475 @@
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-        
-        /* Estilização da scrollbar */
+
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
-        
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background-color: rgba(156, 163, 175, 0.5);
             border-radius: 3px;
         }
-        
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background-color: rgba(156, 163, 175, 0.7);
         }
-        
-        /* Animações para mensagens */
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .fade-in {
             animation: fadeIn 0.3s ease-out forwards;
         }
-        
-        /* Ajuste para textarea */
+
         .message-input {
             resize: none;
             max-height: 120px;
             overflow-y: auto;
         }
-        
-        /* Transição para troca de conversas */
+
         .conversation-transition {
             transition: opacity 0.3s ease;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #8B5CF6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .sidebar-icon {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .search-h {
+            background-color: rgba(139, 92, 246, 0.3);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        .active-search-result {
+            background-color: rgba(139, 92, 246, 0.7);
+            border: 1px solid #8B5CF6;
         }
     </style>
 </head>
 
 <body class="bg-dark-900 text-white h-screen flex overflow-hidden">
-    <!-- Sidebar de conversas -->
-    <aside class="w-1/3 bg-dark-800 border-r border-gray-800 flex flex-col h-full max-w-md">
-        <div class="p-4 border-b border-gray-800 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
-                    AI
-                </div>
-                <h2 class="text-lg font-semibold">Conversas</h2>
-            </div>
-            <button class="p-2 rounded-full hover:bg-gray-700 transition-colors" aria-label="Nova conversa">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-            </button>
+    <!-- Sidebar reduzida -->
+    <aside class="w-16 bg-dark-800 border-r border-gray-800 flex flex-col h-full items-center py-4">
+        <!-- Foto de perfil do usuário -->
+        <div class="relative mb-8">
+            <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="FotoDePerfil"
+                class="w-8 h-8 object-cover rounded-full" />
+            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800"></div>
         </div>
-        
+
+        <!-- Ícones de navegação -->
+        <nav class="flex-1 flex flex-col space-y-8 items-center">
+            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-house"></i>
+            </a>
+            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-users text-xl"></i>
+            </a>
+            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-bell text-xl"></i>
+                <span class="notification-badge">3</span>
+            </a>
+            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-star"></i>
+            </a>
+        </nav>
+
+        <!-- Configurações e logout -->
+        <div class="mt-auto flex flex-col space-y-6 items-center">
+            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-gear text-xl"></i>
+            </a>
+            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-reply"></i>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Lista de conversas (mais estreita) -->
+    <aside class="w-80 bg-dark-800 border-r border-gray-800 flex flex-col h-full">
+        <div class="p-4 border-b border-gray-800">
+            <h2 class="text-lg font-semibold">Conversas</h2>
+        </div>
+
         <!-- Lista de conversas -->
         <div class="flex-1 overflow-y-auto custom-scrollbar" id="conversations-list">
             <!-- As conversas serão inseridas aqui via JavaScript -->
         </div>
+
     </aside>
 
     <!-- Área principal do chat -->
     <main class="flex-1 flex flex-col h-full bg-dark-900">
         <header class="bg-dark-800 px-6 py-4 border-b border-gray-800 flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
-                    AI
+                <div
+                    class="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
+                    <span id="current-chat-avatar">ST</span>
                 </div>
                 <div>
-                    <h2 class="font-semibold" id="current-chat-name">AssistenteIA</h2>
+                    <h2 class="font-semibold" id="current-chat-name">Name</h2>
                     <p class="text-sm text-gray-400 flex items-center">
                         <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        <span id="current-chat-status">Online - IA Avançada</span>
+                        <span id="current-chat-status">Online</span>
                     </p>
                 </div>
             </div>
             <div class="flex items-center space-x-4">
-                <button class="p-2 rounded-full hover:bg-gray-700 transition-colors" aria-label="Pesquisar conversa">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+                <button id="search-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors"
+                    aria-label="Pesquisar conversa">
+                    <i class="fa-solid fa-search"></i>
                 </button>
                 <button class="p-2 rounded-full hover:bg-gray-700 transition-colors" aria-label="Menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                    </svg>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>
             </div>
         </header>
-        
+
+        <!-- Barra de pesquisa (inicialmente oculta) -->
+        <div id="search-bar" class="bg-dark-800 p-3 border-b border-gray-800 hidden">
+            <div class="flex items-center">
+                <input type="text" id="search-input" placeholder="Pesquisar nesta conversa..."
+                    class="flex-1 bg-dark-700 text-white rounded-lg px-4 py-2 outline-none">
+                <button id="search-prev" class="ml-2 p-2 rounded-full hover:bg-gray-700 transition-colors"
+                    aria-label="Resultado anterior">
+                    <i class="fa-solid fa-chevron-up"></i>
+                </button>
+                <button id="search-next" class="ml-2 p-2 rounded-full hover:bg-gray-700 transition-colors"
+                    aria-label="Próximo resultado">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <button id="search-close" class="ml-2 p-2 rounded-full hover:bg-gray-700 transition-colors"
+                    aria-label="Fechar pesquisa">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+        </div>
+
         <!-- Área de mensagens -->
         <div class="flex-1 overflow-y-auto p-6 custom-scrollbar bg-dark-900 bg-opacity-50" id="messages-container">
             <!-- As mensagens serão inseridas aqui via JavaScript -->
         </div>
-        
+
         <div class="bg-dark-800 p-4 border-t border-gray-800">
             <div class="flex items-end space-x-3">
-                <button class="p-2 rounded-full hover:bg-gray-700 transition-colors mb-2" aria-label="Anexar arquivo">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                    </svg>
-                </button>
-                
                 <div class="flex-1 bg-dark-700 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-primary-500">
-                    <textarea 
-                        id="message-input" 
-                        class="w-full bg-transparent border-0 outline-none text-white message-input py-2" 
-                        placeholder="Digite sua mensagem..."
-                        rows="1"
-                    ></textarea>
+                    <textarea id="message-input"
+                        class="w-full bg-transparent border-0 outline-none text-white message-input py-2"
+                        placeholder="Digite sua mensagem..." rows="1"></textarea>
                 </div>
-                
-                <button 
-                    id="send-button" 
-                    class="bg-primary-500 text-white p-3 rounded-full hover:bg-primary-600 transition-colors mb-2" 
-                    aria-label="Enviar mensagem"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                    </svg>
+
+                <button id="send-button"
+                    class="bg-primary-500 text-white p-3 rounded-full hover:bg-primary-600 transition-colors mb-2"
+                    aria-label="Enviar mensagem">
+                    <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
-            
+
             <div class="flex justify-between items-center mt-2 text-xs text-gray-500 px-2">
-                <span>Pressione Enter para enviar • Ctrl+N para nova conversa</span>
+                <span>Pressione Enter para enviar</span>
                 <span id="message-counter">0 mensagens nesta conversa</span>
             </div>
         </div>
     </main>
 
-    <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
-        <div class="bg-dark-800 rounded-lg p-6 w-96">
-            <h3 class="text-lg font-semibold mb-2" id="modal-title">Confirmar ação</h3>
-            <p class="text-gray-300 mb-6" id="modal-message">Tem certeza que deseja executar esta ação?</p>
-            <div class="flex justify-end space-x-3">
-                <button id="modal-cancel" class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">Cancelar</button>
-                <button id="modal-confirm" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 transition-colors">Confirmar</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Dados de exemplo para as conversas
-        const conversationsData = [
+        const dadosConversas = [
             {
                 id: 1,
-                name: "Suporte Técnico",
-                lastMessage: "Como posso ajudar com seu problema?",
-                time: "10:30",
-                unread: 0,
+                nome: "Azevedo",
+                ultimaMensagem: "Como posso ajudar com seu problema?",
+                hora: "10:30",
+                naoLidas: 0,
                 avatar: "ST",
-                messages: [
-                    { text: "Olá, preciso de ajuda com meu login.", sender: "user", time: "10:25" },
-                    { text: "Claro, posso ajudar com isso. Qual é o problema?", sender: "them", time: "10:26" },
-                    { text: "Não consigo acessar minha conta.", sender: "user", time: "10:28" },
-                    { text: "Como posso ajudar com seu problema?", sender: "them", time: "10:30" }
+                favoritada: false,
+                mensagens: [
+                    { texto: "Olá, preciso de ajuda com meu login.", remetente: "usuario", hora: "10:25" },
+                    { texto: "Claro, posso ajudar com isso. Qual é o problema?", remetente: "eles", hora: "10:26" },
+                    { texto: "Não consigo acessar minha conta.", remetente: "usuario", hora: "10:28" },
+                    { texto: "Como posso ajudar com seu problema?", remetente: "eles", hora: "10:30" }
                 ]
             },
             {
                 id: 2,
-                name: "Amanda Silva",
-                lastMessage: "Ok, combinado então!",
-                time: "Ontem",
-                unread: 2,
-                avatar: "AS",
-                messages: [
-                    { text: "E aí, tudo bem?", sender: "them", time: "09:15" },
-                    { text: "Tudo sim, e com você?", sender: "user", time: "09:20" },
-                    { text: "Também! Vamos sair amanhã?", sender: "them", time: "09:22" },
-                    { text: "Claro, que horas?", sender: "user", time: "09:25" },
-                    { text: "Às 19h?", sender: "them", time: "09:30" },
-                    { text: "Perfeito!", sender: "user", time: "09:32" },
-                    { text: "Ok, combinado então!", sender: "them", time: "09:35" }
+                nome: "Carol",
+                ultimaMensagem: "Ok, combinado então!",
+                hora: "Ontem",
+                naoLidas: 2,
+                avatar: "C",
+                favoritada: false,
+                mensagens: [
+                    { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
+                    { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
+                    { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
+                    { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
+                    { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
+                    { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
+                    { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
                 ]
             },
             {
                 id: 3,
-                name: "Grupo Família",
-                lastMessage: "Maria: Feliz aniversário!",
-                time: "12:45",
-                unread: 0,
-                avatar: "GF",
-                messages: [
-                    { text: "João: Alguém vai no almoço de domingo?", sender: "them", time: "11:00" },
-                    { text: "Eu vou!", sender: "user", time: "11:05" },
-                    { text: "Ana: Eu também!", sender: "them", time: "11:10" },
-                    { text: "Maria: Feliz aniversário!", sender: "them", time: "12:45" }
+                nome: "Jhon black",
+                ultimaMensagem: "tudo bem!",
+                hora: "Ontem",
+                naoLidas: 2,
+                avatar: "JB",
+                favoritada: false,
+                mensagens: [
+                    { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
+                    { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
+                    { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
+                    { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
+                    { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
+                    { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
+                    { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
                 ]
             },
             {
                 id: 4,
-                name: "Carlos Santos",
-                lastMessage: "Enviou uma imagem",
-                time: "Ter",
-                unread: 0,
-                avatar: "CS",
-                messages: [
-                    { text: "Você viu o novo filme?", sender: "them", time: "20:15" },
-                    { text: "Ainda não, é bom?", sender: "user", time: "20:20" },
-                    { text: "Muito! Recomendo.", sender: "them", time: "20:25" },
-                    { text: "Imagem", sender: "them", time: "20:30" }
+                nome: "Mateus",
+                ultimaMensagem: "inaceitavel",
+                hora: "Ontem",
+                naoLidas: 2,
+                avatar: "M",
+                favoritada: false,
+                mensagens: [
+                    { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
+                    { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
+                    { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
+                    { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
+                    { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
+                    { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
+                    { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
                 ]
             },
-            {
-                id: 5,
-                name: "Luciana Ferreira",
-                lastMessage: "Obrigada pela ajuda!",
-                time: "Seg",
-                unread: 0,
-                avatar: "LF",
-                messages: [
-                    { text: "Você tem um minuto?", sender: "them", time: "14:10" },
-                    { text: "Claro, o que precisa?", sender: "user", time: "14:15" },
-                    { text: "Preciso de uma opinião sobre o projeto.", sender: "them", time: "14:20" },
-                    { text: "Pode me enviar que dou uma olhada.", sender: "user", time: "14:25" },
-                    { text: "Obrigada pela ajuda!", sender: "them", time: "14:30" }
-                ]
-            }
         ];
 
         // Estado da aplicação
-        let state = {
-            currentConversationId: 1,
-            conversations: [],
-            messageCount: 0
+        let estado = {
+            conversaAtualId: 1,
+            conversas: [],
+            contadorMensagens: 0,
+            contadorFavoritos: 0,
+            resultadosPesquisa: [],
+            indicePesquisaAtual: -1
         };
 
         // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            // Carregar conversas
-            loadConversations();
-            
-            // Carregar conversa ativa
-            loadConversation(state.currentConversationId);
-            
-            // Configurar event listeners
-            setupEventListeners();
-            
-            // Atualizar contador de mensagens
-            updateMessageCounter();
+        document.addEventListener('DOMContentLoaded', function () {
+            carregarConversas();
+            carregarConversa(estado.conversaAtualId);
+            configurarEventos();
+            atualizarContadorMensagens();
         });
 
         // Carregar lista de conversas
-        function loadConversations() {
-            state.conversations = conversationsData;
-            const conversationsList = document.getElementById('conversations-list');
-            conversationsList.innerHTML = '';
-            
-            state.conversations.forEach(conversation => {
-                const conversationElement = createConversationElement(conversation);
-                conversationsList.appendChild(conversationElement);
-            });
+        function carregarConversas() {
+            estado.conversas = dadosConversas;
+            atualizarListaConversas();
         }
 
         // Criar elemento de conversa para a sidebar
-        function createConversationElement(conversation) {
-            const isActive = conversation.id === state.currentConversationId;
-            
+        function criarElementoConversa(conversa) {
+            const ativa = conversa.id === estado.conversaAtualId;
             const div = document.createElement('div');
-            div.className = `flex items-center p-4 hover:bg-gray-700 cursor-pointer transition-colors ${isActive ? 'bg-gray-700' : ''}`;
-            div.dataset.id = conversation.id;
-            
+            div.className = `flex items-center p-3 hover:bg-gray-700 cursor-pointer transition-colors mb-1 rounded-lg ${ativa ? 'bg-gray-700' : ''}`;
+            div.dataset.id = conversa.id;
+
             div.innerHTML = `
+            <div class="flex items-center w-full">
                 <div class="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold flex-shrink-0">
-                    ${conversation.avatar}
+                    ${conversa.avatar}
                 </div>
                 <div class="ml-3 flex-1 min-w-0">
                     <div class="flex justify-between items-baseline">
-                        <h3 class="font-semibold truncate">${conversation.name}</h3>
-                        <span class="text-xs text-gray-400 ml-2">${conversation.time}</span>
+                        <h3 class="font-semibold truncate">${conversa.nome}</h3>
+                        <span class="text-xs text-gray-400 ml-2">${conversa.hora}</span>
                     </div>
-                    <p class="text-sm text-gray-400 truncate">${conversation.lastMessage}</p>
+                    <p class="text-sm text-gray-400 truncate">${conversa.ultimaMensagem}</p>
                 </div>
-                ${conversation.unread > 0 ? `
+                ${conversa.naoLidas > 0 ? `
                     <div class="ml-2 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        ${conversation.unread}
+                        ${conversa.naoLidas}
                     </div>
                 ` : ''}
-            `;
-            
-            div.addEventListener('click', () => switchConversation(conversation.id));
-            
+                <button class="ml-2 botao-favorito p-1 rounded-full ${conversa.favoritada ? 'text-yellow-400' : 'text-gray-400 hover:text-yellow-300'}" 
+                        data-id="${conversa.id}">
+                    <i class="fa-star ${conversa.favoritada ? 'fa-solid' : 'fa-regular'}"></i>
+                </button>
+            </div>
+        `;
+
+            // estrela de favorito
+            div.addEventListener('click', (e) => {
+                if (!e.target.closest('.botao-favorito')) {
+                    if (conversa.naoLidas > 0) {
+                        conversa.naoLidas = 0;
+                        mudarConversa(conversa.id);
+                        atualizarListaConversas();
+                    } else {
+                        mudarConversa(conversa.id);
+                    }
+                }
+            });
+
+            const botaoFavorito = div.querySelector('.botao-favorito');
+            botaoFavorito.addEventListener('click', (e) => {
+                e.stopPropagation();
+                alternarFavorito(conversa.id);
+            });
+
             return div;
         }
 
-        // Trocar de conversa
-        function switchConversation(conversationId) {
-            // Animação de transição
-            const messagesContainer = document.getElementById('messages-container');
-            messagesContainer.style.opacity = '0';
-            
+        // Favoritar mensagem
+        function alternarFavorito(conversaId) {
+            const conversa = estado.conversas.find(c => c.id === conversaId);
+            if (!conversa) return;
+
+            if (conversa.favoritada) {
+                conversa.favoritada = false;
+                estado.contadorFavoritos--;
+            } else {
+                if (estado.contadorFavoritos >= 3) {
+                    alert('Você só pode favoritar no máximo 3 conversas.');
+                    return;
+                }
+                conversa.favoritada = true;
+                estado.contadorFavoritos++;
+            }
+
+            atualizarListaConversas();
+        }
+
+        // Mudar de conversa
+        function mudarConversa(conversaId) {
+            const containerMensagens = document.getElementById('messages-container');
+            containerMensagens.style.opacity = '0';
+
             setTimeout(() => {
-                state.currentConversationId = conversationId;
-                loadConversation(conversationId);
-                updateConversationsList();
-                messagesContainer.style.opacity = '1';
+                estado.conversaAtualId = conversaId;
+                carregarConversa(conversaId);
+                atualizarListaConversas();
+                containerMensagens.style.opacity = '1';
             }, 300);
         }
 
         // Carregar conversa ativa
-        function loadConversation(conversationId) {
-            const conversation = state.conversations.find(c => c.id === conversationId);
-            if (!conversation) return;
-            
-            // Atualizar header
-            document.getElementById('current-chat-name').textContent = conversation.name;
-            
-            // Carregar mensagens
-            const messagesContainer = document.getElementById('messages-container');
-            messagesContainer.innerHTML = '';
-            
-            conversation.messages.forEach(message => {
-                const messageElement = createMessageElement(message);
-                messagesContainer.appendChild(messageElement);
+        function carregarConversa(conversaId) {
+            const conversa = estado.conversas.find(c => c.id === conversaId);
+            if (!conversa) return;
+
+            document.getElementById('current-chat-name').textContent = conversa.nome;
+
+            const containerMensagens = document.getElementById('messages-container');
+            containerMensagens.innerHTML = '';
+
+            conversa.mensagens.forEach(mensagem => {
+                const elemento = criarElementoMensagem(mensagem);
+                containerMensagens.appendChild(elemento);
             });
-            
-            // Scroll para o final
-            scrollToBottom();
-            
-            // Atualizar contador
-            state.messageCount = conversation.messages.length;
-            updateMessageCounter();
+
+            rolarParaFim();
+            estado.contadorMensagens = conversa.mensagens.length;
+            atualizarContadorMensagens();
         }
 
         // Criar elemento de mensagem
-        function createMessageElement(message) {
+        function criarElementoMensagem(mensagem) {
             const div = document.createElement('div');
-            const isUser = message.sender === 'user';
-            
-            div.className = `mb-4 flex ${isUser ? 'justify-end' : 'justify-start'} fade-in`;
-            
+            const ehUsuario = mensagem.remetente === 'usuario';
+
+            div.className = `mb-2 flex ${ehUsuario ? 'justify-end' : 'justify-start'} fade-in`;
+            div.dataset.mensagem = mensagem.texto.toLowerCase();
+
             div.innerHTML = `
-                <div class="max-w-xs lg:max-w-md xl:max-w-lg rounded-2xl px-4 py-2 ${isUser ? 'bg-primary-500 rounded-br-none' : 'bg-dark-700 rounded-bl-none'}">
-                    <p class="text-white">${message.text}</p>
-                    <div class="text-xs mt-1 ${isUser ? 'text-primary-200' : 'text-gray-400'} text-right">${message.time}</div>
-                </div>
-            `;
+        <div class="max-w-md px-3 py-2 text-sm shadow-md flex items-end gap-2
+            ${ehUsuario
+                    ? 'bg-purple-900 text-white rounded-2xl rounded-br-sm'
+                    : 'bg-gray-700 text-gray-100 rounded-2xl rounded-bl-sm'}">
             
+            <p class="whitespace-pre-wrap break-words">${mensagem.texto}</p>
+            <span class="text-[10px] opacity-80">${mensagem.hora}</span>
+        </div>
+    `;
             return div;
         }
 
+
+
         // Enviar mensagem
-        function sendMessage() {
+        function enviarMensagem() {
             const input = document.getElementById('message-input');
-            const messageText = input.value.trim();
-            
-            if (!messageText) return;
-            
-            // Encontrar conversa atual
-            const conversation = state.conversations.find(c => c.id === state.currentConversationId);
-            if (!conversation) return;
-            
-            // Criar nova mensagem
-            const now = new Date();
-            const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-            
-            const newMessage = {
-                text: messageText,
-                sender: 'user',
-                time: time
-            };
-            
-            // Adicionar à conversa
-            conversation.messages.push(newMessage);
-            conversation.lastMessage = messageText;
-            conversation.time = time;
-            conversation.unread = 0;
-            
-            // Atualizar UI
-            const messagesContainer = document.getElementById('messages-container');
-            const messageElement = createMessageElement(newMessage);
-            messagesContainer.appendChild(messageElement);
-            
-            // Limpar input
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            const conversa = estado.conversas.find(c => c.id === estado.conversaAtualId);
+            if (!conversa) return;
+
+            const agora = new Date();
+            const hora = `${agora.getHours()}:${agora.getMinutes().toString().padStart(2, '0')}`;
+
+            const novaMensagem = { texto: texto, remetente: 'usuario', hora: hora };
+
+            conversa.mensagens.push(novaMensagem);
+            conversa.ultimaMensagem = texto;
+            conversa.hora = hora;
+
+            const containerMensagens = document.getElementById('messages-container');
+            containerMensagens.appendChild(criarElementoMensagem(novaMensagem));
+
             input.value = '';
             input.style.height = 'auto';
-            
-            // Scroll para o final
-            scrollToBottom();
-            
-            // Atualizar contador
-            state.messageCount++;
-            updateMessageCounter();
-            
-            // Atualizar lista de conversas
-            updateConversationsList();
-            
-            // Simular resposta após um tempo
-            setTimeout(() => simulateResponse(conversation), 1000 + Math.random() * 2000);
+
+            rolarParaFim();
+            estado.contadorMensagens++;
+            atualizarContadorMensagens();
+            atualizarListaConversas();
+
+            setTimeout(() => simularResposta(conversa), 1000 + Math.random() * 2000);
         }
 
-        // Simular resposta do assistente
-        function simulateResponse(conversation) {
-            const responses = [
+        // Simular resposta automática (pode apagar)
+        function simularResposta(conversa) {
+            const respostas = [
                 "Entendi, como posso ajudar?",
                 "Interessante, conte-me mais.",
                 "Estou processando sua solicitação...",
@@ -439,110 +508,169 @@
                 "Obrigado por compartilhar isso.",
                 "Estou aqui para ajudar no que precisar."
             ];
-            
-            const now = new Date();
-            const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-            
-            const responseMessage = {
-                text: responses[Math.floor(Math.random() * responses.length)],
-                sender: 'them',
-                time: time
-            };
-            
-            // Adicionar à conversa
-            conversation.messages.push(responseMessage);
-            conversation.lastMessage = responseMessage.text;
-            conversation.time = time;
-            
-            // Atualizar UI
-            const messagesContainer = document.getElementById('messages-container');
-            const messageElement = createMessageElement(responseMessage);
-            messagesContainer.appendChild(messageElement);
-            
-            // Scroll para o final
-            scrollToBottom();
-            
-            // Atualizar contador
-            state.messageCount++;
-            updateMessageCounter();
-            
-            // Atualizar lista de conversas
-            updateConversationsList();
+
+            const agora = new Date();
+            const hora = `${agora.getHours()}:${agora.getMinutes().toString().padStart(2, '0')}`;
+
+            const resposta = { texto: respostas[Math.floor(Math.random() * respostas.length)], remetente: 'eles', hora: hora };
+
+            conversa.mensagens.push(resposta);
+            conversa.ultimaMensagem = resposta.texto;
+            conversa.hora = hora;
+
+            const containerMensagens = document.getElementById('messages-container');
+            containerMensagens.appendChild(criarElementoMensagem(resposta));
+
+            rolarParaFim();
+            estado.contadorMensagens++;
+            atualizarContadorMensagens();
+            atualizarListaConversas();
         }
 
-        // Scroll para o final das mensagens
-        function scrollToBottom() {
-            const messagesContainer = document.getElementById('messages-container');
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        // Rolar para o fim
+        function rolarParaFim() {
+            const containerMensagens = document.getElementById('messages-container');
+            containerMensagens.scrollTop = containerMensagens.scrollHeight;
         }
 
-        // Atualizar lista de conversas na sidebar
-        function updateConversationsList() {
-            const conversationsList = document.getElementById('conversations-list');
-            conversationsList.innerHTML = '';
-            
-            state.conversations.forEach(conversation => {
-                const conversationElement = createConversationElement(conversation);
-                conversationsList.appendChild(conversationElement);
+        // Atualizar lista de conversas
+        function atualizarListaConversas() {
+            estado.conversas.sort((a, b) => {
+                if (a.favoritada === b.favoritada) return b.id - a.id;
+                return a.favoritada ? -1 : 1;
             });
+
+            const lista = document.getElementById('conversations-list');
+            lista.innerHTML = '';
+
+            const favoritas = estado.conversas.filter(c => c.favoritada);
+            favoritas.forEach(c => lista.appendChild(criarElementoConversa(c)));
+
+            if (favoritas.length > 0 && favoritas.length < estado.conversas.length) {
+                const separador = document.createElement('div');
+                separador.className = 'px-4 py-2 text-xs text-gray-500 uppercase font-semibold';
+                separador.textContent = 'Conversas';
+                lista.appendChild(separador);
+            }
+
+            const naoFavoritas = estado.conversas.filter(c => !c.favoritada);
+            naoFavoritas.forEach(c => lista.appendChild(criarElementoConversa(c)));
         }
 
         // Atualizar contador de mensagens
-        function updateMessageCounter() {
-            document.getElementById('message-counter').textContent = 
-                `${state.messageCount} mensagens nesta conversa`;
+        function atualizarContadorMensagens() {
+            document.getElementById('message-counter').textContent = `${estado.contadorMensagens} mensagens nesta conversa`;
         }
 
-        // Configurar event listeners
-        function setupEventListeners() {
-            // Enviar mensagem ao clicar no botão
-            document.getElementById('send-button').addEventListener('click', sendMessage);
-            
-            // Enviar mensagem ao pressionar Enter
-            document.getElementById('message-input').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
+        // Pesquisa
+        function realizarPesquisa() {
+            const termo = document.getElementById('search-input').value.trim().toLowerCase();
+            const elementos = document.querySelectorAll('#messages-container > div');
+
+            // Limpa destaques antigos
+            elementos.forEach(el => {
+                const divMsg = el.querySelector('p');
+                divMsg.innerHTML = divMsg.textContent;
+            });
+
+            if (!termo) {
+                estado.resultadosPesquisa = [];
+                estado.indicePesquisaAtual = -1;
+                return;
+            }
+
+            estado.resultadosPesquisa = [];
+
+            // Do mais recente para o mais antigo
+            for (let i = elementos.length - 1; i >= 0; i--) {
+                const el = elementos[i];
+                const texto = el.dataset.mensagem;
+                if (texto && texto.includes(termo)) {
+                    estado.resultadosPesquisa.push(i); // apenas push
+                    const divMsg = el.querySelector('p');
+
+                    // Destaca todas as ocorrências do termo
+                    const regex = new RegExp(`(${termo})`, 'gi');
+                    divMsg.innerHTML = divMsg.textContent.replace(regex, '<span class="search-h">$1</span>');
                 }
-                
-                // Auto-ajustar altura do textarea
-                setTimeout(() => {
-                    this.style.height = 'auto';
-                    this.style.height = this.scrollHeight + 'px';
-                }, 0);
-            });
-            
-            // Nova conversa com Ctrl+N
-            document.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.key === 'N') {
-                    e.preventDefault();
-                    // Implementar criação de nova conversa
-                    showModal(
-                        "Nova Conversa", 
-                        "Funcionalidade de nova conversa será implementada em breve."
-                    );
+            }
+
+            if (estado.resultadosPesquisa.length > 0) {
+                estado.indicePesquisaAtual = 0; // primeira mensagem = mais recente
+                destacarResultadoAtual();
+            } else {
+                estado.indicePesquisaAtual = -1;
+                alert('Nenhum resultado encontrado para: ' + termo);
+            }
+        }
+
+        function destacarResultadoAtual() {
+            const elementos = document.querySelectorAll('#messages-container > div');
+            elementos.forEach(el => { el.classList.remove('active-search-result'); el.style.border = 'none'; });
+
+            if (estado.indicePesquisaAtual >= 0 && estado.indicePesquisaAtual < estado.resultadosPesquisa.length) {
+                const idx = estado.resultadosPesquisa[estado.indicePesquisaAtual];
+                const el = elementos[idx];
+                if (el) {
+                    el.classList.add('active-search-result');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            });
-            
-            // Modal de confirmação
-            document.getElementById('modal-cancel').addEventListener('click', hideModal);
-            document.getElementById('modal-confirm').addEventListener('click', function() {
-                hideModal();
-                // Aqui viria a ação de confirmação
-            });
+            }
         }
 
-        // Mostrar modal
-        function showModal(title, message) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-message').textContent = message;
-            document.getElementById('confirmation-modal').classList.remove('hidden');
+        function limparPesquisa() {
+            estado.resultadosPesquisa = [];
+            estado.indicePesquisaAtual = -1;
+
+            const elementos = document.querySelectorAll('#messages-container > div');
+            elementos.forEach(el => {
+                el.classList.remove('active-search-result');
+                const divMsg = el.querySelector('p');
+                if (divMsg) divMsg.innerHTML = divMsg.textContent;
+            });
+
+            document.getElementById('search-bar').classList.add('hidden');
         }
 
-        // Esconder modal
-        function hideModal() {
-            document.getElementById('confirmation-modal').classList.add('hidden');
+        function proximoResultado() {
+            if (estado.resultadosPesquisa.length === 0) return;
+            estado.indicePesquisaAtual++;
+            if (estado.indicePesquisaAtual >= estado.resultadosPesquisa.length) estado.indicePesquisaAtual = 0;
+            destacarResultadoAtual();
+        }
+
+        function resultadoAnterior() {
+            if (estado.resultadosPesquisa.length === 0) return;
+            estado.indicePesquisaAtual--;
+            if (estado.indicePesquisaAtual < 0) estado.indicePesquisaAtual = estado.resultadosPesquisa.length - 1;
+            destacarResultadoAtual();
+        }
+
+        // Configuração de eventos
+        function configurarEventos() {
+            document.getElementById('send-button').addEventListener('click', enviarMensagem);
+
+            document.getElementById('message-input').addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviarMensagem(); }
+                setTimeout(() => { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; }, 0);
+            });
+
+            document.getElementById('search-toggle').addEventListener('click', function () {
+                const barra = document.getElementById('search-bar');
+                barra.classList.toggle('hidden');
+                if (!barra.classList.contains('hidden')) document.getElementById('search-input').focus();
+                else limparPesquisa();
+            });
+
+            document.getElementById('search-close').addEventListener('click', limparPesquisa);
+            document.getElementById('search-input').addEventListener('input', realizarPesquisa);
+            document.getElementById('search-input').addEventListener('keydown', function (e) { if (e.key === 'Enter') realizarPesquisa(); });
+
+            document.getElementById('search-next').addEventListener('click', resultadoAnterior);
+            document.getElementById('search-prev').addEventListener('click', proximoResultado);
         }
     </script>
+
 </body>
+
 </html>

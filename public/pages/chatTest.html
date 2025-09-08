@@ -116,15 +116,15 @@
     <!-- Sidebar -->
     <aside class="w-16 bg-dark-800 border-r border-gray-800 flex flex-col h-full items-center py-4">
         <!-- Foto de perfil do usuário -->
-        <div class="relative mb-8">
+        <a href="/perfil/candidato" class="relative mb-8">
             <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="FotoDePerfil"
-                class="w-8 h-8 object-cover rounded-full" />
-            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800"></div>
-        </div>
+                class="w-8 h-8 object-cover rounded-full cursor-pointer"/>
+            <div  class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800 "></div>
+        </a >
 
         <!-- Ícones de navegação -->
         <nav class="flex-1 flex flex-col space-y-8 items-center">
-            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+            <a href="/" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
                 <i class="fa-solid fa-house"></i>
             </a>
             <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
@@ -134,7 +134,7 @@
                 <i class="fa-solid fa-bell text-xl"></i>
                 <span class="notification-badge">3</span>
             </a>
-            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+            <a href="/perfil/candidato" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
                 <i class="fa-solid fa-star"></i>
             </a>
         </nav>
@@ -144,9 +144,9 @@
             <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
                 <i class="fa-solid fa-gear text-xl"></i>
             </a>
-            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
+            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors" onclick="history.back(); return false;">
                 <i class="fa-solid fa-reply"></i>
-            </a>
+            </a>   
         </div>
     </aside>
 
@@ -181,11 +181,11 @@
                 </div>
             </div>
             <div class="flex items-center space-x-4">
-                <button id="search-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors"
+                <button id="search-toggle" class="p-2 rounded-full w-12 h-12 hover:bg-gray-700 transition-colors"
                     aria-label="Pesquisar conversa">
                     <i class="fa-solid fa-search"></i>
                 </button>
-                <button class="p-2 rounded-full hover:bg-gray-700 transition-colors" aria-label="Menu">
+                <button class="p-2 rounded-full hover:bg-gray-700 w-12 h-12 transition-colors" aria-label="Menu">
                     <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>
             </div>
@@ -225,7 +225,7 @@
                 </div>
 
                 <button id="send-button"
-                    class="bg-primary-500 text-white p-3 rounded-full hover:bg-primary-600 transition-colors mb-2"
+                    class="bg-primary-500 text-white p-3 w-12 h-12 rounded-full hover:bg-primary-600 transition-colors mb-2"
                     aria-label="Enviar mensagem">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
@@ -247,7 +247,7 @@
                 ultimaMensagem: "Como posso ajudar com seu problema?",
                 hora: "10:30",
                 naoLidas: 0,
-                avatar: "ST",
+                avatar: "A",
                 favoritada: false,
                 mensagens: [
                     { texto: "Olá, preciso de ajuda com meu login.", remetente: "usuario", hora: "10:25" },
@@ -276,11 +276,11 @@
             },
             {
                 id: 3,
-                nome: "Jhon black",
+                nome: "Souza",
                 ultimaMensagem: "tudo bem!",
                 hora: "Ontem",
                 naoLidas: 2,
-                avatar: "JB",
+                avatar: "S",
                 favoritada: false,
                 mensagens: [
                     { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },

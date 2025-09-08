@@ -1,4 +1,5 @@
 const NotificacaoModel = require("../models/notificacaoModel");
+const NotificacaoService = require("../services/notificacaoService");
 
 module.exports = (io, socket) => {
     socket.on('joinNotifications', async (usua, callback) =>{
@@ -18,18 +19,28 @@ module.exports = (io, socket) => {
             console.error(erro)
             if (callback) callback({ 
                 status: 'error',
-                message: 'Erro ao carregar notificações'
+                message: `Erro ao carregar notificações: ${erro.message}`
             });
         }
     });
 
 
-    socket.on('sendNotification', data =>{
-        const roomName = `${data.usua.tipo}:${data.usua.id}`;
-        
-        // TODO Salvar no banco de dados antes de emitir
+    socket.on('sendNotification', async (data, callback) =>{
+        try {
+            const { tipo, id } = data.usua;
+            const roomName = `${tipo}:${id}`;
+            const notificacao = tipo === 'empresa' ? 
+                await NotificacaoService.enviarNotificacaoParaEmpresa(data.notificacao.tipo, data.notificacao.titulo, data.notificacao.texto, data.notificacao.fvtd)
+                : false;
 
-        io.to(roomName).emit('receivedNotification', data.notificacao);
+            io.to(roomName).emit('receivedNotification', notificacao);
+            if (callback) callback({ status: 'success' });
+        } catch (erro) {
+            console.error(erro)
+            if (callback) callback({ 
+                status: 'error',
+                message: `Erro ao enviar notificação: ${erro.message}`
+            });
+        }
     });
-
 }

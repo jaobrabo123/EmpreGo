@@ -57,7 +57,7 @@ async function authenticateToken(req, res, next) {
         };
 
         const acessTokenDecoded = jwt.decode(acessToken);
-        token = salvarCookieToken(res, acessTokenDecoded.id, acessTokenDecoded.tipo, acessTokenDecoded.nivel);
+        token = salvarCookieToken(res, acessTokenDecoded.id, acessTokenDecoded.tipo, acessTokenDecoded.nivel, acessTokenDecoded.nome);
         user = jwt.decode(token);
         salvarCookieRefreshToken(res, token);
         const expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);

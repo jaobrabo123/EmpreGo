@@ -1,7 +1,20 @@
 // * Importando nossa instância do axios
 import axiosWe from './axiosConfig.js';
+import socket from './notfSocketsConfig.js';
+import carregarInfosUsuario from './infosUsuarios.js';
+import { carregarLinks2, logout } from "/js/globalFunctions.js";
+
+document.querySelector('#logoutButton').addEventListener('click', () => logout());
 
 let candidatosJaFavoritados = [];
+
+socket.on('previousNotifications', (notf)=>{
+  console.log(notf);
+})
+
+socket.on('receivedNotification', (notf)=>{
+  console.log(notf);
+})
 
 async function carregarInit() {
   try {
@@ -408,6 +421,7 @@ async function removeFromFavorites(card, cd) {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+      await carregarLinks2();
       await carregarInit();
       // Inicialização do Swiper (mantido conforme original)
       const swiper = new Swiper('.recomendacoes-swiper', {

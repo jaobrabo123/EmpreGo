@@ -59,7 +59,8 @@ class CandidatoService{
         },
         select: {
           id: true,
-          foto: true
+          foto: true,
+          nome: true
         }
       }),
       prisma.candidatos_pend.delete({

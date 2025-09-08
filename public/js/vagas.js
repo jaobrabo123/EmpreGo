@@ -1,8 +1,16 @@
 // * Importando nossa instância do axios
 import axiosWe from './axiosConfig.js';
 import socket from './notfSocketsConfig.js';
+import carregarInfosUsuario from './infosUsuarios.js';
+import { carregarLinks2, logout } from "/js/globalFunctions.js";
+
+document.querySelector('#logoutButton').addEventListener('click', () => logout());
 
 socket.on('previousNotifications', (notf)=>{
+  console.log(notf);
+})
+
+socket.on('receivedNotification', (notf)=>{
   console.log(notf);
 })
 
@@ -330,7 +338,26 @@ async function addToFavorites(card, cnpj) {
   });
 
   try {
+    const infosUsuario = await carregarInfosUsuario();
     await axiosWe.post('/favoritos/empresa', {cnpj});
+    const notificationObjetc = {
+      usua: {
+        tipo: 'empresa',
+        id: cnpj
+      },
+      notificacao: {
+        tipo: 'favoritado',
+        titulo: 'Sua empresa foi favoritada!',
+        texto: `O candidato ${infosUsuario.nome} acabou de favoritar a sua empresa!`,
+        fvtd: cnpj
+      }
+    }
+    console.log(notificationObjetc);
+    socket.emit('sendNotification', notificationObjetc, (response) =>{
+      if (response.status==='error') {
+        console.log(response.message)
+      }
+    })
   } catch (erro) {
     console.error("Erro ao favoritar empresa: ", erro);
   }
@@ -355,6 +382,7 @@ async function removeFromFavorites(card, cnpj) {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+  await carregarLinks2();
   await carregarInit();
   // Inicialização do Swiper (mantido conforme original)
   const swiper = new Swiper('.recomendacoes-swiper', {

@@ -64,7 +64,7 @@ class CandidatoController {
                 await TokenService.removerToken(tkn);
             }
 
-            const token = salvarCookieToken(res, newCand.id, 'candidato', 'comum');
+            const token = salvarCookieToken(res, newCand.id, 'candidato', 'comum', newCand.nome);
             salvarCookieRefreshToken(res, token);
             const expira_em = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             await TokenService.adicionarToken(newCand.id, 'candidato', token, expira_em);

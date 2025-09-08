@@ -113,7 +113,7 @@
 </head>
 
 <body class="bg-dark-900 text-white h-screen flex overflow-hidden">
-    <!-- Sidebar reduzida -->
+    <!-- Sidebar -->
     <aside class="w-16 bg-dark-800 border-r border-gray-800 flex flex-col h-full items-center py-4">
         <!-- Foto de perfil do usuário -->
         <div class="relative mb-8">
@@ -139,7 +139,7 @@
             </a>
         </nav>
 
-        <!-- Configurações e logout -->
+        <!-- Configurações e voltar -->
         <div class="mt-auto flex flex-col space-y-6 items-center">
             <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
                 <i class="fa-solid fa-gear text-xl"></i>
@@ -150,21 +150,22 @@
         </div>
     </aside>
 
-    <!-- Lista de conversas (mais estreita) -->
+    <!-- conversas (1 pra N) -->
     <aside class="w-80 bg-dark-800 border-r border-gray-800 flex flex-col h-full">
         <div class="p-4 border-b border-gray-800">
             <h2 class="text-lg font-semibold">Conversas</h2>
         </div>
 
-        <!-- Lista de conversas -->
+        <!-- Lista das conversas -->
         <div class="flex-1 overflow-y-auto custom-scrollbar" id="conversations-list">
-            <!-- As conversas serão inseridas aqui via JavaScript -->
+            <!-- As conversas serão inseridas aqui via JavaScript (O código todo está lá) -->
         </div>
 
     </aside>
 
-    <!-- Área principal do chat -->
+    <!-- início do chat principal (1 pra 1)-->
     <main class="flex-1 flex flex-col h-full bg-dark-900">
+<!-- estrutura do header da conversa (1 pra 1)-->
         <header class="bg-dark-800 px-6 py-4 border-b border-gray-800 flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <div
@@ -190,7 +191,7 @@
             </div>
         </header>
 
-        <!-- Barra de pesquisa (inicialmente oculta) -->
+        <!-- Barra de pesquisa (inicialmente oculta, (melhorar o estilo!!!!)) -->
         <div id="search-bar" class="bg-dark-800 p-3 border-b border-gray-800 hidden">
             <div class="flex items-center">
                 <input type="text" id="search-input" placeholder="Pesquisar nesta conversa..."
@@ -210,7 +211,7 @@
             </div>
         </div>
 
-        <!-- Área de mensagens -->
+        <!-- Área das mensagens -->
         <div class="flex-1 overflow-y-auto p-6 custom-scrollbar bg-dark-900 bg-opacity-50" id="messages-container">
             <!-- As mensagens serão inseridas aqui via JavaScript -->
         </div>
@@ -311,7 +312,7 @@
             },
         ];
 
-        // Estado da aplicação
+        // Estado dos perfis 
         let estado = {
             conversaAtualId: 1,
             conversas: [],
@@ -366,7 +367,7 @@
             </div>
         `;
 
-            // estrela de favorito
+            // Estrela de favorito
             div.addEventListener('click', (e) => {
                 if (!e.target.closest('.botao-favorito')) {
                     if (conversa.naoLidas > 0) {
@@ -388,7 +389,7 @@
             return div;
         }
 
-        // Favoritar mensagem
+        // Favoritar conversa 
         function alternarFavorito(conversaId) {
             const conversa = estado.conversas.find(c => c.id === conversaId);
             if (!conversa) return;
@@ -562,12 +563,12 @@
             document.getElementById('message-counter').textContent = `${estado.contadorMensagens} mensagens nesta conversa`;
         }
 
-        // Pesquisa
+        // Pesquisa por filtragem de mensagem 
         function realizarPesquisa() {
             const termo = document.getElementById('search-input').value.trim().toLowerCase();
             const elementos = document.querySelectorAll('#messages-container > div');
 
-            // Limpa destaques antigos
+            // Limpa destaques antigos (não está funcionando direito)
             elementos.forEach(el => {
                 const divMsg = el.querySelector('p');
                 divMsg.innerHTML = divMsg.textContent;
@@ -586,7 +587,7 @@
                 const el = elementos[i];
                 const texto = el.dataset.mensagem;
                 if (texto && texto.includes(termo)) {
-                    estado.resultadosPesquisa.push(i); // apenas push
+                    estado.resultadosPesquisa.push(i);
                     const divMsg = el.querySelector('p');
 
                     // Destaca todas as ocorrências do termo

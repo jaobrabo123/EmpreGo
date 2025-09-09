@@ -1,5 +1,7 @@
 // * Importando nossa instância do axios
 import axiosWe from './axiosConfig.js';
+import socket from './notfSocketsConfig.js';
+import carregarInfosUsuario from './infosUsuarios.js';
 
 export function mostrarErroTopo(mensagem) {
   const old = document.querySelector('.erro-mensagem-geral');
@@ -67,13 +69,18 @@ export async function carregarLinks() {
 
 export async function carregarLinks2() {
   try {
-    const infos = await carregarInfosLinks();
+    const infos = await carregarInfosUsuario();
     console.log(infos);
     if(infos==='visitante'){
       return;
     }
     document.querySelector('.profile-name').textContent = infos.nome;
     document.querySelector('#FotoDePerfil').src = infos.foto;
+    socket.emit('joinNotifications', {tipo: infos.tipo, id: infos.id}, (response) =>{
+      if (response.status==='error') {
+        console.log(response.message)
+      }
+    })
   } catch (erro) {
     console.error(erro.message)
   }
@@ -137,16 +144,16 @@ export async function carregarFoto() {
   }
 }
 
-export async function carregarInfosLinks(){
-  try {
-    const response = await axiosWe('/perfil/link');
-    const data = response.data;
-    return data;
-  } catch (erro) {
-    console.error(erro.message);
-    return 'visitante';
-  }
-}
+// export async function carregarInfosLinks(){
+//   try {
+//     const response = await axiosWe('/perfil/link');
+//     const data = response.data;
+//     return data;
+//   } catch (erro) {
+//     console.error(erro.message);
+//     return 'visitante';
+//   }
+// }
 
 //Função pra deslogar
 export function logout(){

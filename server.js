@@ -6,7 +6,7 @@ const express = require('express'); // É a mesma coisa que: import express from
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const { limiteGeral } = require('@middlewares/rateLimit.js');
-const setupChat = require('@sockets/chatSocket.js');
+const setupSockets = require('@sockets/connection.js');
 
 // * Inicialização do servidor
 const app = express();
@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(limiteGeral);
 
 // * Sockets
-setupChat(io);
+setupSockets(io);
 
 // * Cron Tasks
 require('@tasks/cronLimpezaMensagens.js');

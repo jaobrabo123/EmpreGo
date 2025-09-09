@@ -36,6 +36,11 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector("#twtUsuario").href = data.info.twitter;
         // ? console.log(data.info) Usa esse log se precisar verificar oq vem no data.info
 
+        //Verifica a existência de informação de estado/cidade
+        if(!data.info.cidade || !data.info.estado){
+            document.querySelector("#houseIcon").style.display="none"
+        }
+
         // * Validação Tags Sociais
         if(!data.info.instagram) {
             document.querySelector("#instUsuario").style.display="none"

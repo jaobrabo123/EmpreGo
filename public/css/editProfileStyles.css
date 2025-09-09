@@ -49,6 +49,13 @@ a {
     border-width: 5px;
     border-radius: 20px;
     width: 200px;
+    margin-right: 5px;
+    margin-left:5px
+}
+
+.btn:hover{
+    background-color: #393053;
+    cursor:pointer
 }
 
 #buttons{
@@ -165,10 +172,6 @@ a {
     margin-right: 20px;
 }
 
-#btnAddTags:hover {
-    opacity: 80%;
-}
-
 .Tags button {
     color: White;
     font-weight: bold;
@@ -183,11 +186,6 @@ a {
     border-width: 4px;
     border-radius: 15px;
     background-color: #18122b;
-}
-
-.Tags button:hover {
-    cursor: pointer;
-    opacity: 80%;
 }
 
 #tagLing {
@@ -341,11 +339,6 @@ a {
 #fotoCriarBtn {
     width: 500px;
     height: 350px;
-}
-
-
-#fotoCriarBtn:hover {
-    opacity: 80%;
 }
 
 .btn-editar-perfil {

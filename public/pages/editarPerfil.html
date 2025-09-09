@@ -5,8 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
-    <script type="module" src="/js/profile.js" defer></script>
-    <script type="module" src="/js/editarPerfil.js" defer></script>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/js/profile.js"></script>
+    <script type="module" src="/js/link.js"></script>
+    <script type="module" src="/js/editarPerfil.js"></script>
+
+    <!-- STYLES -->
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/editProfileStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -37,9 +43,37 @@
     <div id="main">
         <div id="bodyLeft">
             <div id="impInfo">
-                <input type="image" id="inputfotoPerfil" src="/assets/imgs/plusBtn(circle).png" alt="AddPfp">
+                <!-- IMAGEM DE PERFIL -->
+                <input type="file" id="inputFotoPerfil" accept="image/*" style="display: none;">
+                <img id="btnUpload" src="/assets/imgs/plusBtn(circle).png" alt="AddPfp" style="cursor: pointer;">
+
+                <script>
+                    const btnUpload = document.getElementById('btnUpload');
+                    const inputFotoPerfil = document.getElementById('inputFotoPerfil');
+
+                    // Quando a imagem for clicada, dispara o input de arquivo
+                    btnUpload.addEventListener('click', () => {
+                        inputFotoPerfil.click();
+                    });
+
+                    // Quando o arquivo for selecionado
+                    inputFotoPerfil.addEventListener('change', (event) => {
+                        const file = event.target.files[0];
+                        if (file) {
+                            // opcional: mostrar a imagem selecionada
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                btnUpload.src = e.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                </script>
+
+                <!-- CPF -->
                 <input class="inputImp input" type="text" id="inputCpf" placeholder="Informe o seu CPF">
 
+                <!-- PRONOMES -->
                 <select id="selectPronomes" class="inputImp input" onchange="handlePronounChange()" required>
                     <option value="" disabled selected>Selecione os pronomes</option>
                     <option value="Ela/Dela">Ela/Dela</option>
@@ -48,23 +82,24 @@
                     <option value="Outro">Outro (Especificar)</option>
                     <option value="Prefiro não informar">Prefiro não informar</option>
                 </select>
-                
-                <input type="text" id="outroPronomeInput" class="inputImp input" placeholder="Informe seus pronomes" style="display:none;">
+
+                <input type="text" id="outroPronomeInput" class="inputImp input" placeholder="Informe seus pronomes"
+                    style="display:none;">
             </div>
 
             <script>
                 const outroInput = document.getElementById('outroPronomeInput');
                 outroInput.style.display = 'none';
-            
+
                 function handlePronounChange() {
                     const select = document.getElementById('selectPronomes');
-            
+
                     if (select.value === 'Outro') {
-                        outroInput.style.display = 'block';  
-                        outroInput.required = true;          
+                        outroInput.style.display = 'block';
+                        outroInput.required = true;
                     } else {
-                        outroInput.style.display = 'none';   
-                        outroInput.required = false;         
+                        outroInput.style.display = 'none';
+                        outroInput.required = false;
                     }
                 }
             </script>
@@ -74,58 +109,63 @@
                 <a id="emailUsuario">Edite o perfil para exibir E-mail</a>
                 <!--<p id="descUsuario"></p>-->
                 <textarea type="text" id="inputDescricao" name="descricao" maxlength="2000"
-                placeholder="Insira uma descrição aqui!"></textarea> 
-                    <div id="conexoesColumn">                        
-                            <div id="conexoesUpper">
-                                <img id="LogoInst" src="/assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
-                                <input class="infoInput input" type="text" id="inputInstagram" name="instagram" placeholder="Insira seu Instagram aqui" />
-                                
-                                <img id="LogoGit"src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
-                                <input class="infoInput input" type="text" id="inputGithub" name="github" placeholder="Insira seu GitHub aqui" />
-                            </div>
-                            <div id="conexoesLower">
-                                <img id="LogoYt" src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
-                                <input class="infoInput input" type="text" id="inputYoutube" name="youtube" placeholder="Insira seu YouTube aqui" />
+                    placeholder="Insira uma descrição aqui!"></textarea>
+                <div id="conexoesColumn">
+                    <div id="conexoesUpper">
+                        <img id="LogoInst" src="/assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
+                        <input class="infoInput input" type="text" id="inputInstagram" name="instagram"
+                            placeholder="Insira seu Instagram aqui" />
 
-                                <img id="LogoTwt" src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
-                                <input class="infoInput input" type="text" id="inputTwitter" name="twitter" placeholder="Insira seu Twitter aqui" />
-                            </div>
-                            <div id="enderecoInfo">                             
+                        <img id="LogoGit" src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
+                        <input class="infoInput input" type="text" id="inputGithub" name="github"
+                            placeholder="Insira seu GitHub aqui" />
+                    </div>
+                    <div id="conexoesLower">
+                        <img id="LogoYt" src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
+                        <input class="infoInput input" type="text" id="inputYoutube" name="youtube"
+                            placeholder="Insira seu YouTube aqui" />
+
+                        <img id="LogoTwt" src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
+                        <input class="infoInput input" type="text" id="inputTwitter" name="twitter"
+                            placeholder="Insira seu Twitter aqui" />
+                    </div>
+                    <div id="enderecoInfo">
                         <img id="houseIcon" src="/assets/imgs/House.png" alt="HouseIcon">
                         <div id="cidadeEstado">
-                            <h1 id="cidadeUsuario">Cidade: </h1>        
-                            <input class="inputCidadeEstado input" type="text" id="inputCidade" name="cidade" placeholder="Insira sua cidade" />
-                            
+                            <h1 id="cidadeUsuario">Cidade: </h1>
+                            <input class="inputCidadeEstado input" type="text" id="inputCidade" name="cidade"
+                                placeholder="Insira sua cidade" />
+
                             <h1 id="estadoUsuario">Estado: </h1>
                             <select class="inputCidadeEstado input" id="selectEstado" name="estado">
-                            <option value="NM" selected>Seu Estado</option>
-                            <option value="AC">AC</option>
-                            <option value="AL">AL</option>
-                            <option value="AP">AP</option>
-                            <option value="AM">AM</option>
-                            <option value="BA">BA</option>
-                            <option value="CE">CE</option>
-                            <option value="DF">DF</option>
-                            <option value="ES">ES</option>
-                            <option value="GO">GO</option>
-                            <option value="MA">MA</option>
-                            <option value="MT">MT</option>
-                            <option value="MS">MS</option>
-                            <option value="MG">MG</option>
-                            <option value="PA">PA</option>
-                            <option value="PB">PB</option>
-                            <option value="PR">PR</option>
-                            <option value="PE">PE</option>
-                            <option value="PI">PI</option>
-                            <option value="RJ">RJ</option>
-                            <option value="RN">RN</option>
-                            <option value="RS">RS</option>
-                            <option value="RO">RO</option>
-                            <option value="RR">RR</option>
-                            <option value="SC">SC</option>
-                            <option value="SP">SP</option>
-                            <option value="SE">SE</option>
-                            <option value="TO">TO</option>
+                                <option value="NM" selected>Seu Estado</option>
+                                <option value="AC">AC</option>
+                                <option value="AL">AL</option>
+                                <option value="AP">AP</option>
+                                <option value="AM">AM</option>
+                                <option value="BA">BA</option>
+                                <option value="CE">CE</option>
+                                <option value="DF">DF</option>
+                                <option value="ES">ES</option>
+                                <option value="GO">GO</option>
+                                <option value="MA">MA</option>
+                                <option value="MT">MT</option>
+                                <option value="MS">MS</option>
+                                <option value="MG">MG</option>
+                                <option value="PA">PA</option>
+                                <option value="PB">PB</option>
+                                <option value="PR">PR</option>
+                                <option value="PE">PE</option>
+                                <option value="PI">PI</option>
+                                <option value="RJ">RJ</option>
+                                <option value="RN">RN</option>
+                                <option value="RS">RS</option>
+                                <option value="RO">RO</option>
+                                <option value="RR">RR</option>
+                                <option value="SC">SC</option>
+                                <option value="SP">SP</option>
+                                <option value="SE">SE</option>
+                                <option value="TO">TO</option>
                             </select>
 
                         </div>
@@ -133,12 +173,12 @@
                 </div>
             </div>
         </div>
-                <div id="buttons">
-                <button type="submit" class="btn" id="btnEnviar">Enviar</button>
-                <button type="button" class="btn" onclick="window.location.href='/perfil/candidato'" id="btnCancelar">
-                    Cancelar
-                </button>
-                </div>
+        <div id="buttons">
+            <button type="submit" class="btn" id="btnEnviar">Enviar</button>
+            <button type="button" class="btn" onclick="window.location.href='/perfil/candidato'" id="btnCancelar">
+                Cancelar
+            </button>
+        </div>
 </body>
 
 </html>

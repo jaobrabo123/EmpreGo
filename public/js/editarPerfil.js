@@ -45,17 +45,6 @@ function validarCPF(cpf) {
   return true;
 }
 
-document.querySelector('#selectPronomes').addEventListener('change', handlePronounChange);
-function handlePronounChange() {
-  const select = document.getElementById("selectPronomes");
-  const outroPronomeInput = document.getElementById("outroPronomeInput").parentElement;
-  if (select.value === "Outro") {
-    outroPronomeInput.style.display = "flex";
-  }
-  else {
-    outroPronomeInput.style.display = "none";
-  }
-}
 
 async function enviarEdicao() {
   limparErro();

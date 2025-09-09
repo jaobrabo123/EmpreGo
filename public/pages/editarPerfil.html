@@ -38,19 +38,36 @@
         <div id="bodyLeft">
             <div id="impInfo">
                 <input type="image" id="inputfotoPerfil" src="/assets/imgs/plusBtn(circle).png" alt="AddPfp">
-
-                
                 <input class="inputImp input" type="text" id="inputCpf" placeholder="Informe o seu CPF">
-                <select class="inputImp input" placeholder="Selecione seus pronomes." id="selectPronomes" onchange="handlePronounChange()" required>
-                <option value="Ela/Dela">Ela/Dela</option>
-                <option value="Ele/Dele">Ele/Dele</option>
-                <option value="Qualquer Pronome">Qualquer Pronome</option>
-                <option value="Outro">Outro (Especificar)</option>
-                <option value="Prefiro não informar">Prefiro não informar</option>
-                </select>
 
-                <input type="text" id="outroPronomeInput" class="inputImp input" placeholder="Informe seus pronomes." />
+                <select id="selectPronomes" class="inputImp input" onchange="handlePronounChange()" required>
+                    <option value="" disabled selected>Selecione os pronomes</option>
+                    <option value="Ela/Dela">Ela/Dela</option>
+                    <option value="Ele/Dele">Ele/Dele</option>
+                    <option value="Qualquer Pronome">Qualquer Pronome</option>
+                    <option value="Outro">Outro (Especificar)</option>
+                    <option value="Prefiro não informar">Prefiro não informar</option>
+                </select>
+                
+                <input type="text" id="outroPronomeInput" class="inputImp input" placeholder="Informe seus pronomes" style="display:none;">
             </div>
+
+            <script>
+                const outroInput = document.getElementById('outroPronomeInput');
+                outroInput.style.display = 'none';
+            
+                function handlePronounChange() {
+                    const select = document.getElementById('selectPronomes');
+            
+                    if (select.value === 'Outro') {
+                        outroInput.style.display = 'block';  
+                        outroInput.required = true;          
+                    } else {
+                        outroInput.style.display = 'none';   
+                        outroInput.required = false;         
+                    }
+                }
+            </script>
 
             <div id="bodyMid">
                 <h1 id="nomUsuario">Nome de Usuário</h1>

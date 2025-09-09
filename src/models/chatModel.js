@@ -27,9 +27,7 @@ class ChatModel {
         return resultado;
     }
 
-    static async buscarChatsInfo(id, tipo){
-        const where = tipo==='candidato' ? { candidato: id } 
-            : { empresa: id };
+    static async buscarChatsInfoPorCandidatoId(id){
         const resultado = await prisma.chats.findMany({
             select: {
                 id: true,
@@ -38,12 +36,6 @@ class ChatModel {
                 empresas: {
                     select: {
                         nome_fant: true,
-                        foto: true
-                    }
-                },
-                candidatos: {
-                    select: {
-                        nome: true,
                         foto: true
                     }
                 },
@@ -59,7 +51,9 @@ class ChatModel {
                     }
                 }
             },
-            where,
+            where: {
+                candidato: id
+            },
             orderBy: {
                 data_criacao: 'desc'
             }

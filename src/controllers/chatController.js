@@ -20,11 +20,9 @@ class ChatController {
 
     static async listarCand(req, res){
         try{
-            const tipo = req.user.tipo;
             const id = req.user.id;
-            if(tipo!=='candidato' && tipo!=='empresa') return res.status(401).json({ error: 'Tipo de usuário não reconhecido.'});
-            const chats = await ChatModel.buscarChatsInfo(id, tipo);
-            return res.status(200).json({ chats: chats, tipo: tipo });
+            const chats = await ChatModel.buscarChatsInfoPorCandidatoId(id);
+            return res.status(200).json(chats);
         }
         catch(erro){
             return res.status(500).json({ error: 'Erro ao pegar chats: ' + erro.message})

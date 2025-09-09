@@ -1,10 +1,47 @@
 // * Importando nossa instância do axios
 import axiosWe from './axiosConfig.js';
 
+import carregarInfosUsuario from './infosUsuarios.js';
+
+let usuarioTipo;
+
 async function carregarConversasBack() {
-    const response =  await axiosWe('/chats/candidato');
+    const infosUsuario = await carregarInfosUsuario();
+    console.log(infosUsuario)
+    if(infosUsuario==='visitante'){ 
+        usuarioTipo = infosUsuario; 
+        return
+    };
+    usuarioTipo = infosUsuario.tipo;
+    const response = usuarioTipo === 'candidato' ? await axiosWe('/chats/candidato'): await axiosWe('/chats/empresa')
     const data = response.data;
     console.log(data)
+    const conversas = data.map(chat=>{
+        const ct = {
+            id: chat.id,
+            nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
+            ultimaMensagem: chat.mensagens.toReversed()[0]?.mensagem || '',
+            hora: (() => {
+                const msg = chat.mensagens.toReversed()[0]?.data_criacao
+                if(!msg) return '';
+                const horario = new Date(msg);
+                return `${horario.getHours()}:${horario.getMinutes()}`;
+            })(),
+            naoLidas: (()=>{
+                const naoLidas = chat.mensagens.map(msg=>
+                    !msg.status
+                )
+                return naoLidas.length
+            })(),
+            avatar: usuarioTipo === 'candidato' ? chat.empresas.foto : chat.candidatos.foto,
+            favoritada: false,
+            mensagens: chat.mensagens.map(msg=>{
+                
+            })
+        };
+        return ct;
+    })
+    console.log(conversas)
 }
 
 document.addEventListener('DOMContentLoaded', async ()=>{

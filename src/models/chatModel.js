@@ -37,12 +37,25 @@ class ChatModel {
                 candidato: true,
                 empresas: {
                     select: {
-                        nome_fant: true
+                        nome_fant: true,
+                        foto: true
                     }
                 },
                 candidatos: {
                     select: {
-                        nome: true
+                        nome: true,
+                        foto: true
+                    }
+                },
+                mensagens: {
+                    select: {
+                        mensagem: true,
+                        de: true,
+                        status: true,
+                        data_criacao: true
+                    },
+                    orderBy: {
+                        data_criacao: 'asc'
                     }
                 }
             },

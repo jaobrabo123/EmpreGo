@@ -18,7 +18,7 @@ class ChatController {
         }
     }
 
-    static async listar(req, res){
+    static async listarCand(req, res){
         try{
             const tipo = req.user.tipo;
             const id = req.user.id;

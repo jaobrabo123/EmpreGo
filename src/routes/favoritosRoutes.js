@@ -10,5 +10,7 @@ router.delete('/favoritos/empresa/:cnpj', authenticateToken, apenasCandidatos, F
 router.get('/favoritos/candidato', authenticateToken, apenasEmpresa, FavoritosController.listarCandidatosFavoritados);
 router.post('/favoritos/candidato', authenticateToken, apenasEmpresa, FavoritosController.favoritarCandidato);
 router.delete('/favoritos/candidato/:cd', authenticateToken, apenasEmpresa, FavoritosController.desfavoritarCandidato);
+router.post('/favoritos/chat', authenticateToken, FavoritosController.favoritarChat);
+router.delete('/favoritos/chat/:ct', authenticateToken, FavoritosController.desfavoritarChat);
 
 module.exports = router;

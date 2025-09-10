@@ -8,5 +8,6 @@ const router = express.Router();
 
 //Rotas
 router.post('/mensagens', authenticateToken, MensagemController.criar);
+router.patch('/mensagens/vizualizar', authenticateToken, MensagemController.vizualizar);
 
 module.exports = router;

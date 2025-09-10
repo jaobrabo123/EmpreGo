@@ -9,6 +9,7 @@ class FavoritosModels {
                 cnpj_empresa: true,
                 empresas: {
                     select: {
+                        cnpj: true,
                         nome_fant: true,
                         foto: true,
                         setor: true
@@ -31,6 +32,7 @@ class FavoritosModels {
                 id_candidato: true,
                 candidatos: {
                     select: {
+                        id: true,
                         nome: true,
                         foto: true,
                         tags: {

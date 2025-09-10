@@ -179,6 +179,18 @@
                 Cancelar
             </button>
         </div>
+        <div id="mensagemErro" style="display:none; color:#ff6b6b; font-size:1.3rem; margin-bottom:10px;"></div>
+        <button type="submit">Enviar</button>
+        <button type="button" class="btn-voltar-perfil" onclick="window.location.href='/perfil/candidato'">
+          Cancelar
+        </button>
+    </form>
+  </div>
+  <!-- * SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
+  <script type="module" src="/js/link.js"></script>
+  <script type="module" src="/js/editarPerfil.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,48 @@
+.chat{
+    display: flex;
+    flex-direction: column;
+    background-color: gray;
+    max-width: 500px;
+}
+
+.messages{
+    background-color: aqua;
+}
+
+/* Oculta todos os elementos com apenas a classe .message */
+.message {
+    display: none;
+}
+
+/* Mostra apenas os elementos que têm .message + .direita ou .message + .esquerda */
+.message.direita,
+.message.esquerda {
+    display: block;
+}
+
+/* Estilos de alinhamento (opcional) */
+.direita {
+    text-align: right;
+}
+
+.esquerda {
+    text-align: left;
+}
+
+.nomeEMinimize{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.msgsEEnviar{
+    display: none;
+}
+
+.msgsEEnviar.expandido{
+    display: block;
+}
+
+.messages{
+    min-height: 200px;
+}

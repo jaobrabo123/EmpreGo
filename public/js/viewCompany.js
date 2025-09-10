@@ -1,7 +1,20 @@
 // * Importando nossa instância do axios
 import axiosWe from './axiosConfig.js';
+import socket from './notfSocketsConfig.js';
+import carregarInfosUsuario from './infosUsuarios.js';
+import { carregarLinks2, logout } from "/js/globalFunctions.js";
+
+document.querySelector('#logoutButton').addEventListener('click', () => logout());
 
 let candidatosJaFavoritados = [];
+
+socket.on('previousNotifications', (notf)=>{
+  console.log(notf);
+})
+
+socket.on('receivedNotification', (notf)=>{
+  console.log(notf);
+})
 
 async function carregarInit() {
   try {
@@ -38,6 +51,7 @@ async function carregarInit() {
     const favoritosContainer = document.getElementById('favoritos-container');
 
     dataFav.forEach(fav => {
+      console.log(fav.candidatos)
       candidatosJaFavoritados.push(fav.id_candidato);
       const newItem = document.createElement('div');
       newItem.className = 'favorito-item flex items-center gap-3 p-2';
@@ -48,7 +62,7 @@ async function carregarInit() {
         <div class="favorito-categoria text-sm text-gray-400">${fav.candidatos.tags[0]?.nome||"Candidato"}</div>
         </div>
         <div class="favorito-actions ml-auto">
-        <button class="chat-btn" aria-label="Abrir chat">
+        <button class="chat-btn" aria-label="Abrir chat" onclick="window.location.href='/chats?id=${fav.candidatos.id}'">
           <i class='bx bx-message-rounded'></i>
         </button>
         </div>
@@ -58,10 +72,10 @@ async function carregarInit() {
       favoritosContainer.appendChild(newItem);
 
       // chat
-      newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
-        e.stopPropagation();
-        alert(`Iniciar chat com ${empresaNome}`);
-      });
+      // newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
+      //   e.stopPropagation();
+      //   alert(`Iniciar chat com ${empresaNome}`);
+      // });
     })
     console.log(dataCand)
     dataCand.forEach(cand => {
@@ -119,9 +133,6 @@ async function carregarInit() {
         </article>
       `;
       document.querySelector('#divEmpresas').innerHTML += html;
-    });
-    dataExp.forEach(exp =>{
-
     });
   } catch (erro) {
     console.error(erro)
@@ -344,6 +355,7 @@ async function addToFavorites(card, cd) {
   const empresaNome = card.querySelector('.empresa-nome').textContent;
   const empresaCategoria = card.querySelector('.tag-chip')?.textContent || "Candidato";
   const empresaLogo = card.querySelector('.empresa-logo')?.getAttribute('src') || '/assets/imgs/default-logo.png';
+  const empresaCnpj = card.querySelector('.favorite-btn').id;
 
   const favoritosContainer = document.getElementById('favoritos-container');
   const existingItems = favoritosContainer.querySelectorAll('.favorito-item');
@@ -367,7 +379,7 @@ async function addToFavorites(card, cd) {
         <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
       </div>
       <div class="favorito-actions ml-auto">
-        <button class="chat-btn" aria-label="Abrir chat">
+        <button class="chat-btn" aria-label="Abrir chat" onclick="window.location.href='/chats?id=${empresaCnpj}'">
       <i class='bx bx-message-rounded'></i>
     </button>
     </div>
@@ -408,6 +420,7 @@ async function removeFromFavorites(card, cd) {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+      await carregarLinks2();
       await carregarInit();
       // Inicialização do Swiper (mantido conforme original)
       const swiper = new Swiper('.recomendacoes-swiper', {

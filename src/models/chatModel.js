@@ -27,9 +27,7 @@ class ChatModel {
         return resultado;
     }
 
-    static async buscarChatsInfo(id, tipo){
-        const where = tipo==='candidato' ? { candidato: id } 
-            : { empresa: id };
+    static async buscarChatsInfoPorCandidatoId(id){
         const resultado = await prisma.chats.findMany({
             select: {
                 id: true,
@@ -37,16 +35,71 @@ class ChatModel {
                 candidato: true,
                 empresas: {
                     select: {
-                        nome_fant: true
+                        cnpj: true,
+                        nome_fant: true,
+                        foto: true
                     }
                 },
-                candidatos: {
+                mensagens: {
                     select: {
-                        nome: true
+                        mensagem: true,
+                        de: true,
+                        status: true,
+                        data_criacao: true
+                    },
+                    orderBy: {
+                        data_criacao: 'asc'
+                    }
+                },
+                favoritos_chats_cand: {
+                    select: {
+                        id: true
                     }
                 }
             },
-            where,
+            where: {
+                candidato: id
+            },
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        });
+        return resultado;
+    }
+
+    static async buscarChatsInfoPorEmpresaCnpj(cnpj){
+        const resultado = await prisma.chats.findMany({
+            select: {
+                id: true,
+                empresa: true,
+                candidato: true,
+                candidatos: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        foto: true
+                    }
+                },
+                mensagens: {
+                    select: {
+                        mensagem: true,
+                        de: true,
+                        status: true,
+                        data_criacao: true
+                    },
+                    orderBy: {
+                        data_criacao: 'asc'
+                    }
+                },
+                favoritos_chats_emp: {
+                    select: {
+                        id: true
+                    }
+                }
+            },
+            where: {
+                empresa: cnpj
+            },
             orderBy: {
                 data_criacao: 'desc'
             }

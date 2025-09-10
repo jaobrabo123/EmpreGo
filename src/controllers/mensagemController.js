@@ -27,6 +27,17 @@ class MensagemController {
         }
     }
 
+    static async vizualizar(req, res){
+        try {
+            const { chatId } = req.body;
+            const { tipo } = req.user;
+            await MensagemService.vizualizarMensagens(chatId, tipo);
+            res.status(201).json({ message: 'Mensagens vizualizadas com sucesso!' });
+        } catch (erro) {
+            return res.status(500).json({ error: 'Erro ao enviar mensagem: ' + erro.message})
+        }
+    }
+
 }
 
 module.exports = MensagemController;

@@ -5,9 +5,9 @@ module.exports = (io, socket) => {
         try{
             socket.join(roomId);
             console.log(`Socket ${socket.id} entrou na sala ${roomId}`);
-            const mensagens = await MensagemModel.buscarMensagensPorChat(roomId);
+            // const mensagens = await MensagemModel.buscarMensagensPorChat(roomId);
 
-            socket.emit('previousMessages', mensagens);
+            // socket.emit('previousMessages', mensagens);
 
             if (callback) callback({ status: 'success' });
         }
@@ -23,7 +23,6 @@ module.exports = (io, socket) => {
 
     socket.on('sendMessage', data =>{
         const roomId = data.room;
-        
         io.to(roomId).emit('receivedMessage', data)
     });
 

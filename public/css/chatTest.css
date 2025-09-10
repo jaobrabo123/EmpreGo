@@ -1,82 +1,48 @@
-body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5);
-    border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(156, 163, 175, 0.7);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.fade-in {
-    animation: fadeIn 0.3s ease-out forwards;
-}
-
-.message-input {
-    resize: none;
-    max-height: 120px;
-    overflow-y: auto;
-}
-
-.conversation-transition {
-    transition: opacity 0.3s ease;
-}
-
-.notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #8B5CF6;
-    color: white;
+.chat{
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
+    flex-direction: column;
+    background-color: gray;
+    max-width: 500px;
 }
 
-.sidebar-icon {
-    position: relative;
-    transition: all 0.3s ease;
+.messages{
+    background-color: aqua;
 }
 
-.sidebar-icon:hover {
-    transform: scale(1.1);
+/* Oculta todos os elementos com apenas a classe .message */
+.message {
+    display: none;
 }
 
-.search-h {
-    background-color: rgba(139, 92, 246, 0.3);
-    border-radius: 2px;
-    padding: 0 2px;
+/* Mostra apenas os elementos que têm .message + .direita ou .message + .esquerda */
+.message.direita,
+.message.esquerda {
+    display: block;
 }
 
-.active-search-result {
-    background-color: rgba(139, 92, 246, 0.7);
-    border: 1px solid #8B5CF6;
+/* Estilos de alinhamento (opcional) */
+.direita {
+    text-align: right;
+}
+
+.esquerda {
+    text-align: left;
+}
+
+.nomeEMinimize{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.msgsEEnviar{
+    display: none;
+}
+
+.msgsEEnviar.expandido{
+    display: block;
+}
+
+.messages{
+    min-height: 200px;
 }

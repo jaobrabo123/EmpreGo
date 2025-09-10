@@ -1,162 +1,32 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatApp</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            500: '#8B5CF6',
-                            600: '#7C3AED',
-                        },
-                        dark: {
-                            900: '#000000',
-                            800: '#0A0A0A',
-                            700: '#141414',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link rel="stylesheet" href="/css/chatTest.css">
+    <link rel="stylesheet" href="/css/chat.css">
+    <title>Chats</title>
 </head>
-
-<body class="bg-dark-900 text-white h-screen flex overflow-hidden">
-    <!-- Sidebar -->
-    <aside class="w-16 bg-dark-800 border-r border-gray-800 flex flex-col h-full items-center py-4">
-        <!-- Foto de perfil do usuário -->
-        <a href="/perfil/candidato" class="relative mb-8">
-            <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="FotoDePerfil"
-                class="w-8 h-8 object-cover rounded-full cursor-pointer"/>
-            <div  class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800 "></div>
-        </a >
-
-        <!-- Ícones de navegação -->
-        <nav class="flex-1 flex flex-col space-y-8 items-center">
-            <a href="/" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
-                <i class="fa-solid fa-house"></i>
-            </a>
-            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
-                <i class="fa-solid fa-users text-xl"></i>
-            </a>
-            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
-                <i class="fa-solid fa-bell text-xl"></i>
-                <span class="notification-badge">3</span>
-            </a>
-            <a href="/perfil/candidato" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
-                <i class="fa-solid fa-star"></i>
-            </a>
-        </nav>
-
-        <!-- Configurações e voltar -->
-        <div class="mt-auto flex flex-col space-y-6 items-center">
-            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors">
-                <i class="fa-solid fa-gear text-xl"></i>
-            </a>
-            <a href="#" class="sidebar-icon text-gray-400 hover:text-white transition-colors" onclick="history.back(); return false;">
-                <i class="fa-solid fa-reply"></i>
-            </a>   
-        </div>
-    </aside>
-
-    <!-- conversas (1 pra N) -->
-    <aside class="w-80 bg-dark-800 border-r border-gray-800 flex flex-col h-full">
-        <div class="p-4 border-b border-gray-800">
-            <h2 class="text-lg font-semibold">Conversas</h2>
-        </div>
-
-        <!-- Lista das conversas -->
-        <div class="flex-1 overflow-y-auto custom-scrollbar" id="conversations-list">
-            <!-- As conversas serão inseridas aqui via JavaScript (O código todo está lá) -->
-        </div>
-
-    </aside>
-
-    <!-- início do chat principal (1 pra 1)-->
-    <main class="flex-1 flex flex-col h-full bg-dark-900">
-<!-- estrutura do header da conversa (1 pra 1)-->
-        <header class="bg-dark-800 px-6 py-4 border-b border-gray-800 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div
-                    class="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
-                    <span id="current-chat-avatar">ST</span>
+<body>
+    <div id="main">
+        <h1>Seus Chats</h1>
+        <div id="chats">
+            <div class="chat">
+                <!--<div class="nomeEMinimize">
+                    <p class="nomeRemetente">Nome da Empresa</p>
+                    <button class="minimize">➡️</button>
                 </div>
-                <div>
-                    <h2 class="font-semibold" id="current-chat-name">Name</h2>
-                    <p class="text-sm text-gray-400 flex items-center">
-                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        <span id="current-chat-status">Online</span>
-                    </p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button id="search-toggle" class="p-2 rounded-full w-12 h-12 hover:bg-gray-700 transition-colors"
-                    aria-label="Pesquisar conversa">
-                    <i class="fa-solid fa-search"></i>
-                </button>
-                <button class="p-2 rounded-full hover:bg-gray-700 w-12 h-12 transition-colors" aria-label="Menu">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Barra de pesquisa (inicialmente oculta, (melhorar o estilo!!!!)) -->
-        <div id="search-bar" class="bg-dark-800 p-3 border-b border-gray-800 hidden">
-            <div class="flex items-center">
-                <input type="text" id="search-input" placeholder="Pesquisar nesta conversa..."
-                    class="flex-1 bg-dark-700 text-white rounded-lg px-4 py-2 outline-none">
-                <button id="search-prev" class="ml-2 p-2 rounded-full hover:bg-gray-700 transition-colors"
-                    aria-label="Resultado anterior">
-                    <i class="fa-solid fa-chevron-up"></i>
-                </button>
-                <button id="search-next" class="ml-2 p-2 rounded-full hover:bg-gray-700 transition-colors"
-                    aria-label="Próximo resultado">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
-                <button id="search-close" class="ml-2 p-2 rounded-full hover:bg-gray-700 transition-colors"
-                    aria-label="Fechar pesquisa">
-                    <i class="fa-solid fa-times"></i>
-                </button>
+                <div class="msgsEEnviar">
+                    <div class="messages" id="idChatBackteste">
+                    </div>
+                    <input type="text" class="messageInput" id="message" placeholder="Digite aqui sua mensagem">
+                    <button class="send" id="send">Enviar</button>
+                </div>-->
             </div>
         </div>
-
-        <!-- Área das mensagens -->
-        <div class="flex-1 overflow-y-auto p-6 custom-scrollbar bg-dark-900 bg-opacity-50" id="messages-container">
-            <!-- As mensagens serão inseridas aqui via JavaScript -->
-        </div>
-
-        <div class="bg-dark-800 p-4 border-t border-gray-800">
-            <div class="flex items-end space-x-3">
-                <div class="flex-1 bg-dark-700 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-primary-500">
-                    <textarea id="message-input"
-                        class="w-full bg-transparent border-0 outline-none text-white message-input py-2"
-                        placeholder="Digite sua mensagem..." rows="1"></textarea>
-                </div>
-
-                <button id="send-button"
-                    class="bg-primary-500 text-white p-3 w-12 h-12 rounded-full hover:bg-primary-600 transition-colors mb-2"
-                    aria-label="Enviar mensagem">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
-            </div>
-
-            <div class="flex justify-between items-center mt-2 text-xs text-gray-500 px-2">
-                <span>Pressione Enter para enviar</span>
-                <span id="message-counter">0 mensagens nesta conversa</span>
-            </div>
-        </div>
-    </main>
+    </div>
+    <!-- * SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
-    <script src="/js/chatTest.js" type="module"></script>
+    <script type="module" src="/js/chat.js"></script>
 </body>
-
 </html>

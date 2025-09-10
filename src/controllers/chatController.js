@@ -29,6 +29,17 @@ class ChatController {
         }
     }
 
+    static async listarEmp(req, res){
+        try{
+            const cnpj = req.user.id;
+            const chats = await ChatModel.buscarChatsInfoPorEmpresaCnpj(cnpj);
+            return res.status(200).json(chats);
+        }
+        catch(erro){
+            return res.status(500).json({ error: 'Erro ao pegar chats: ' + erro.message})
+        }
+    }
+
 }
 
 module.exports = ChatController;

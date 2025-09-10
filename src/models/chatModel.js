@@ -61,6 +61,40 @@ class ChatModel {
         return resultado;
     }
 
+    static async buscarChatsInfoPorEmpresaCnpj(cnpj){
+        const resultado = await prisma.chats.findMany({
+            select: {
+                id: true,
+                empresa: true,
+                candidato: true,
+                candidatos: {
+                    select: {
+                        nome: true,
+                        foto: true
+                    }
+                },
+                mensagens: {
+                    select: {
+                        mensagem: true,
+                        de: true,
+                        status: true,
+                        data_criacao: true
+                    },
+                    orderBy: {
+                        data_criacao: 'asc'
+                    }
+                }
+            },
+            where: {
+                empresa: cnpj
+            },
+            orderBy: {
+                data_criacao: 'desc'
+            }
+        });
+        return resultado;
+    }
+
 }
 
 module.exports = ChatModel;

@@ -16,6 +16,20 @@ class MensagemService {
 
   }
 
+  static async vizualizarMensagens(chatId, tipo){
+    const where = {
+      status: false,
+      chat: chatId,
+      de: tipo === 'candidato' ? 'empresa' : 'candidato'
+    };
+    await prisma.mensagens.updateMany({
+      where,
+      data: {
+        status: true
+      }
+    })
+  }
+
 }
 
 module.exports = MensagemService;

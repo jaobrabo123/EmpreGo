@@ -35,6 +35,7 @@ class ChatModel {
                 candidato: true,
                 empresas: {
                     select: {
+                        cnpj: true,
                         nome_fant: true,
                         foto: true
                     }
@@ -48,6 +49,11 @@ class ChatModel {
                     },
                     orderBy: {
                         data_criacao: 'asc'
+                    }
+                },
+                favoritos_chats_cand: {
+                    select: {
+                        id: true
                     }
                 }
             },
@@ -69,6 +75,7 @@ class ChatModel {
                 candidato: true,
                 candidatos: {
                     select: {
+                        id: true,
                         nome: true,
                         foto: true
                     }
@@ -82,6 +89,11 @@ class ChatModel {
                     },
                     orderBy: {
                         data_criacao: 'asc'
+                    }
+                },
+                favoritos_chats_emp: {
+                    select: {
+                        id: true
                     }
                 }
             },

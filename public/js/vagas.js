@@ -37,7 +37,7 @@ async function carregarInit() {
         <div class="favorito-categoria text-sm text-gray-400">${fav.empresas.setor}</div>
         </div>
         <div class="favorito-actions ml-auto">
-        <button class="chat-btn" aria-label="Abrir chat">
+        <button class="chat-btn" aria-label="Abrir chat" onclick="window.location.href='/chats?id=${fav.empresas.cnpj}'">
           <i class='bx bx-message-rounded'></i>
         </button>
         </div>
@@ -299,6 +299,7 @@ async function addToFavorites(card, cnpj) {
   const empresaNome = card.querySelector('.empresa-nome').textContent;
   const empresaCategoria = card.querySelector('.tag-chip').textContent;
   const empresaLogo = card.querySelector('.empresa-logo')?.getAttribute('src') || '/assets/imgs/default-logo.png';
+  const empresaCnpj = card.querySelector('.favorite-btn').id;
 
   const favoritosContainer = document.getElementById('favoritos-container');
   const existingItems = favoritosContainer.querySelectorAll('.favorito-item');
@@ -322,7 +323,7 @@ async function addToFavorites(card, cnpj) {
         <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
       </div>
       <div class="favorito-actions ml-auto">
-        <button class="chat-btn" aria-label="Abrir chat">
+        <button class="chat-btn" aria-label="Abrir chat" onclick="window.location.href='/chats?id=${empresaCnpj}'">
       <i class='bx bx-message-rounded'></i>
     </button>
     </div>
@@ -334,7 +335,7 @@ async function addToFavorites(card, cnpj) {
   // chat
   newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
     e.stopPropagation();
-    alert(`Iniciar chat com ${empresaNome}`);
+    //alert(`Iniciar chat com ${empresaNome}`);
   });
 
   try {

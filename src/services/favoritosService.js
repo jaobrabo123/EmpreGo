@@ -52,12 +52,58 @@ class FavoritosService {
     static async empresaDesfavoritarCandidato(empresa, candidato){
         await prisma.favoritos_candidatos.deleteMany({
             where: {
-                AND: [
-                    {cnpj_empresa: empresa},
-                    {id_candidato: Number(candidato)}
-                ]
+                cnpj_empresa: empresa,
+                id_candidato: Number(candidato)
             }
         });
+    }
+
+    static async candidatoFavoritarChat(id_chat, id_candidato){
+        const chatsFav = await prisma.favoritos_chats_cand.count({
+            where: {
+                id_candidato
+            }
+        })
+        if(chatsFav>=3) throw new Erros.ErroDeValidacao('Você não pode favoritar mais de 3 chats.')
+        await prisma.favoritos_chats_cand.create({
+            data: {
+                id_chat,
+                id_candidato
+            }
+        })
+    }
+
+    static async empresaFavoritarChat(id_chat, cnpj_empresa){
+        const chatsFav = await prisma.favoritos_chats_emp.count({
+            where: {
+                cnpj_empresa
+            }
+        })
+        if(chatsFav>=3) throw new Erros.ErroDeValidacao('Você não pode favoritar mais de 3 chats.')
+        await prisma.favoritos_chats_emp.create({
+            data: {
+                id_chat,
+                cnpj_empresa
+            }
+        })
+    }
+
+    static async candidatoDesfavoritarChat(id_chat, id_candidato){
+        await prisma.favoritos_chats_cand.deleteMany({
+            where: {
+                id_chat,
+                id_candidato
+            }
+        })
+    }
+
+    static async empresaDesfavoritarChat(id_chat, cnpj_empresa){
+        await prisma.favoritos_chats_emp.deleteMany({
+            where: {
+                id_chat,
+                cnpj_empresa
+            }
+        })
     }
 
 }

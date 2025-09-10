@@ -9,9 +9,9 @@ class ChatController {
             const { empresa, candidato } = req.body;
             if(!empresa || !candidato) return res.status(400).json({ error: 'Empresa e candidato precisam ser fornecidos.'})
 
-            await ChatService.criarChat(empresa, candidato)
+            const newChat = await ChatService.criarChat(empresa, candidato);
 
-            res.status(201).json({ message: 'Chat criado com sucesso!' });
+            res.status(201).json(newChat);
         }
         catch(erro){
             return res.status(500).json({ error: 'Erro ao criar chat: ' + erro.message})

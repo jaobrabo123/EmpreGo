@@ -6,6 +6,8 @@ import carregarInfosUsuario from './infosUsuarios.js';
 const params = new URLSearchParams(window.location.search)
 let usuarioTipo;
 let usuarioNome;
+let usuarioId;
+let conversas = [];
 
 async function carregarConversasBack() {
     const infosUsuario = await carregarInfosUsuario();
@@ -16,13 +18,15 @@ async function carregarConversasBack() {
     };
     usuarioTipo = infosUsuario.tipo;
     usuarioNome = infosUsuario.nome;
+    usuarioId = infosUsuario.id;
     const response = usuarioTipo === 'candidato' ? await axiosWe('/chats/candidato'): await axiosWe('/chats/empresa')
     const data = response.data;
     console.log(data)
-    const conversas = data.map(chat=>{
+    conversas = data.map(chat=>{
         socket.emit('joinRoom', chat.id);
         const ct = {
             id: chat.id,
+            remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
             nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
             ultimaMensagem: chat.mensagens.toReversed()[0]?.mensagem || '',
             hora: (() => {
@@ -41,7 +45,7 @@ async function carregarConversasBack() {
                 return naoLidas;
             })(),
             avatar: usuarioTipo === 'candidato' ? chat.empresas.foto : chat.candidatos.foto,
-            favoritada: false,
+            favoritada: (usuarioTipo === 'candidato' ? chat.favoritos_chats_cand[0] : chat.favoritos_chats_emp[0]) ? true : false,
             mensagens: chat.mensagens.map(msg=>{
                 return {
                     texto: msg.mensagem,
@@ -71,13 +75,80 @@ let dadosConversas;
 
 document.addEventListener('DOMContentLoaded', async ()=>{
     dadosConversas = await carregarConversasBack();
+    console.log(dadosConversas)
+    const chatAtual = await (async()=>{
+            const id = params.get('id');
+            if(id){
+                const atual = dadosConversas.find(cvs => cvs.remetente === id)?.id
+                if(!atual){
+                    try {
+                        console.log("Criando novo chat")
+                        const obj = {
+                            empresa: usuarioTipo === 'candidato' ? id : usuarioId,
+                            candidato: usuarioTipo === 'candidato' ? usuarioId : Number(id)
+                        }
+                        const response = await axiosWe.post('/chats', obj);
+                        const chat = response.data
+                        console.log(chat)
+                        socket.emit('joinRoom', chat.id);
+                        conversas.push({
+                            id: chat.id,
+                            remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
+                            nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
+                            ultimaMensagem: chat.mensagens.toReversed()[0]?.mensagem || '',
+                            hora: (() => {
+                                const msg = chat.mensagens.toReversed()[0]?.data_criacao
+                                if(!msg) return '';
+                                const horario = new Date(msg);
+                                return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`;
+                            })(),
+                            naoLidas: (()=>{
+                                const naoLidas = chat.mensagens.reduce((ac, msg)=>{
+                                    if(msg.de !== usuarioTipo && !msg.status){
+                                        ac++
+                                    }
+                                    return ac;
+                                }, 0);
+                                return naoLidas;
+                            })(),
+                            avatar: usuarioTipo === 'candidato' ? chat.empresas.foto : chat.candidatos.foto,
+                            favoritada: (usuarioTipo === 'candidato' ? chat.favoritos_chats_cand[0] : chat.favoritos_chats_emp[0]) ? true : false,
+                            mensagens: chat.mensagens.map(msg=>{
+                                return {
+                                    texto: msg.mensagem,
+                                    remetente: msg.de === usuarioTipo ? 'usuario' : 'eles',
+                                    hora: (()=>{
+                                        const horario = new Date(msg.data_criacao);
+                                        return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`
+                                    })()
+                                }
+                            })
+                        })
+                        return chat.id;
+                    } catch (erro) {
+                        console.error(erro)
+                        return 0;
+                    }
+                    
+                }
+                return atual;
+            }
+            else return 0;
+        })();
     
     // Estado dos perfis 
     estado = {
-        conversaAtualId: Number(params.get('id')) || 1,
+        conversaAtualId: chatAtual,
         conversas: [],
         contadorMensagens: 0,
-        contadorFavoritos: 0,
+        contadorFavoritos: (()=>
+            dadosConversas.reduce((acc, dado)=>{
+                if(dado.favoritada){
+                    acc++
+                }
+                return acc;
+            }, 0)
+        )(),
         resultadosPesquisa: [],
         indicePesquisaAtual: -1
     };
@@ -139,29 +210,40 @@ function criarElementoConversa(conversa) {
     });
 
     const botaoFavorito = div.querySelector('.botao-favorito');
-    botaoFavorito.addEventListener('click', (e) => {
+    botaoFavorito.addEventListener('click', async (e) => {
         e.stopPropagation();
-        alternarFavorito(conversa.id);
+        await alternarFavorito(conversa.id);
     });
 
     return div;
 }
 
 // Favoritar conversa 
-function alternarFavorito(conversaId) {
+async function alternarFavorito(conversaId) {
     const conversa = estado.conversas.find(c => c.id === conversaId);
     if (!conversa) return;
 
     if (conversa.favoritada) {
         conversa.favoritada = false;
         estado.contadorFavoritos--;
+        try {
+            await axiosWe.delete(`/favoritos/chat/${conversaId}`);
+        } catch (erro) {
+            console.error(erro);
+        }
     } else {
+        console.log(estado.contadorFavoritos)
         if (estado.contadorFavoritos >= 3) {
             alert('Você só pode favoritar no máximo 3 conversas.');
             return;
         }
         conversa.favoritada = true;
         estado.contadorFavoritos++;
+        try {
+            await axiosWe.post('/favoritos/chat', {chatId: conversaId});
+        } catch (erro) {
+            console.error(erro);
+        }
     }
 
     atualizarListaConversas();

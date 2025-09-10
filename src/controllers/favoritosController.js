@@ -78,6 +78,39 @@ class FavoritosController {
         }
     }
 
+    static async favoritarChat(req, res){
+        try {
+            const {id, tipo} = req.user;
+            const {chatId} = req.body;
+            if(tipo==='candidato'){
+                await FavoritosService.candidatoFavoritarChat(chatId, id);
+            } else{
+                await FavoritosService.empresaFavoritarChat(chatId, id)
+            }
+            res.status(201).json({ message: "Chat favoritado com sucesso." });
+        } catch (erro) {
+            if(erro instanceof Erros.ErroDeValidacao){
+                return res.status(400).json({error: erro.message})
+            }
+            res.status(500).json({ error: "Erro ao favoritar chat: " + erro.message });
+        }
+    }
+
+    static async desfavoritarChat(req, res){
+        try {
+            const { id, tipo } = req.user;
+            const { ct } = req.params;
+            if(tipo==='candidato'){
+                await FavoritosService.candidatoDesfavoritarChat(Number(ct), id);
+            } else{
+                await FavoritosService.empresaDesfavoritarChat(Number(ct), id)
+            }
+            res.status(201).json({ message: "Chat desfavoritado com sucesso." });
+        } catch (erro) {
+            res.status(500).json({ error: "Erro ao desfavoritar chat: " + erro.message });
+        }
+    }
+
 }
 
 module.exports = FavoritosController;

@@ -25,7 +25,7 @@ async function carregarConversasBack() {
                 const msg = chat.mensagens.toReversed()[0]?.data_criacao
                 if(!msg) return '';
                 const horario = new Date(msg);
-                return `${horario.getHours()}:${horario.getMinutes()}`;
+                return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`;
             })(),
             naoLidas: (()=>{
                 const naoLidas = chat.mensagens.map(msg=>
@@ -36,87 +36,94 @@ async function carregarConversasBack() {
             avatar: usuarioTipo === 'candidato' ? chat.empresas.foto : chat.candidatos.foto,
             favoritada: false,
             mensagens: chat.mensagens.map(msg=>{
-                
+                return {
+                    texto: msg.mensagem,
+                    remetente: msg.de === usuarioTipo ? 'usuario' : 'eles',
+                    hora: (()=>{
+                        const horario = new Date(msg.data_criacao);
+                        return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`
+                    })()
+                }
             })
         };
         return ct;
     })
-    console.log(conversas)
+    return conversas;
 }
 
 document.addEventListener('DOMContentLoaded', async ()=>{
-    await carregarConversasBack();
-    const dadosConversas = [
-        {
-            id: 1,
-            nome: "Azevedo",
-            ultimaMensagem: "Como posso ajudar com seu problema?",
-            hora: "10:30",
-            naoLidas: 0,
-            avatar: "A",
-            favoritada: false,
-            mensagens: [
-                { texto: "Olá, preciso de ajuda com meu login.", remetente: "usuario", hora: "10:25" },
-                { texto: "Claro, posso ajudar com isso. Qual é o problema?", remetente: "eles", hora: "10:26" },
-                { texto: "Não consigo acessar minha conta.", remetente: "usuario", hora: "10:28" },
-                { texto: "Como posso ajudar com seu problema?", remetente: "eles", hora: "10:30" }
-            ]
-        },
-        {
-            id: 2,
-            nome: "Carol",
-            ultimaMensagem: "Ok, combinado então!",
-            hora: "Ontem",
-            naoLidas: 2,
-            avatar: "C",
-            favoritada: false,
-            mensagens: [
-                { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
-                { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
-                { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
-                { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
-                { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
-                { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
-                { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
-            ]
-        },
-        {
-            id: 3,
-            nome: "Souza",
-            ultimaMensagem: "tudo bem!",
-            hora: "Ontem",
-            naoLidas: 2,
-            avatar: "S",
-            favoritada: false,
-            mensagens: [
-                { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
-                { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
-                { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
-                { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
-                { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
-                { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
-                { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
-            ]
-        },
-        {
-            id: 4,
-            nome: "Mateus",
-            ultimaMensagem: "inaceitavel",
-            hora: "Ontem",
-            naoLidas: 2,
-            avatar: "M",
-            favoritada: false,
-            mensagens: [
-                { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
-                { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
-                { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
-                { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
-                { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
-                { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
-                { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
-            ]
-        },
-    ];
+    const dadosConversas = await carregarConversasBack();
+    // [
+    //     {
+    //         id: 1,
+    //         nome: "Azevedo",
+    //         ultimaMensagem: "Como posso ajudar com seu problema?",
+    //         hora: "10:30",
+    //         naoLidas: 0,
+    //         avatar: "A",
+    //         favoritada: false,
+    //         mensagens: [
+    //             { texto: "Olá, preciso de ajuda com meu login.", remetente: "usuario", hora: "10:25" },
+    //             { texto: "Claro, posso ajudar com isso. Qual é o problema?", remetente: "eles", hora: "10:26" },
+    //             { texto: "Não consigo acessar minha conta.", remetente: "usuario", hora: "10:28" },
+    //             { texto: "Como posso ajudar com seu problema?", remetente: "eles", hora: "10:30" }
+    //         ]
+    //     },
+    //     {
+    //         id: 2,
+    //         nome: "Carol",
+    //         ultimaMensagem: "Ok, combinado então!",
+    //         hora: "Ontem",
+    //         naoLidas: 2,
+    //         avatar: "C",
+    //         favoritada: false,
+    //         mensagens: [
+    //             { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
+    //             { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
+    //             { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
+    //             { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
+    //             { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
+    //             { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
+    //             { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
+    //         ]
+    //     },
+    //     {
+    //         id: 3,
+    //         nome: "Souza",
+    //         ultimaMensagem: "tudo bem!",
+    //         hora: "Ontem",
+    //         naoLidas: 2,
+    //         avatar: "S",
+    //         favoritada: false,
+    //         mensagens: [
+    //             { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
+    //             { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
+    //             { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
+    //             { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
+    //             { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
+    //             { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
+    //             { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
+    //         ]
+    //     },
+    //     {
+    //         id: 4,
+    //         nome: "Mateus",
+    //         ultimaMensagem: "inaceitavel",
+    //         hora: "Ontem",
+    //         naoLidas: 2,
+    //         avatar: "M",
+    //         favoritada: false,
+    //         mensagens: [
+    //             { texto: "E aí, tudo bem?", remetente: "eles", hora: "09:15" },
+    //             { texto: "Tudo sim, e com você?", remetente: "usuario", hora: "09:20" },
+    //             { texto: "Também! Vamos sair amanhã?", remetente: "eles", hora: "09:22" },
+    //             { texto: "Claro, que horas?", remetente: "usuario", hora: "09:25" },
+    //             { texto: "Às 19h?", remetente: "eles", hora: "09:30" },
+    //             { texto: "Perfeito!", remetente: "usuario", hora: "09:32" },
+    //             { texto: "Ok, combinado então!", remetente: "eles", hora: "09:35" }
+    //         ]
+    //     },
+    // ];
     
     // Estado dos perfis 
     let estado = {
@@ -149,7 +156,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         div.innerHTML = `
         <div class="flex items-center w-full">
             <div class="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold flex-shrink-0">
-                ${conversa.avatar}
+                <img src="${conversa.avatar}" class="rounded-full">
             </div>
             <div class="ml-3 flex-1 min-w-0">
                 <div class="flex justify-between items-baseline">

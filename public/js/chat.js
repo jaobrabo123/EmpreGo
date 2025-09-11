@@ -27,6 +27,7 @@ async function carregarConversasBack() {
         const ct = {
             id: chat.id,
             remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
+            statusRemetente: 'offline',
             nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
             ultimaMensagem: chat.mensagens.toReversed()[0]?.mensagem || '',
             hora: (() => {
@@ -62,15 +63,35 @@ async function carregarConversasBack() {
     return conversas;
 }
 
-socket.on('receivedMessage', (message)=>{
+socket.on('receivedMessage', async (message)=>{
     console.log(message)
     if(message.type === usuarioTipo) return;
     const conversa = estado.conversas.find(c => c.id === message.room);
     carregarMsgRecebida(conversa, message)
     if (!conversa) return;
+    if(conversa.id===message.room){
+        try {
+            console.log('lendo msgs...')
+            await axiosWe.patch('/mensagens/vizualizar', { chatId: message.room })
+        } catch (erro) {
+            console.error(erro)
+        }
+    }
 })
 
 let estado;
+
+socket.on('userStatus', (user)=>{
+    if(user.socket===socket.id) return;
+    const conversa = estado.conversas.find(c => c.id === user.room);
+    conversa.statusRemetente = user.status;
+    if(user.room===estado.conversaAtualId){
+        document.getElementById('current-chat-status').textContent = conversa.statusRemetente;
+        document.getElementById('bolaStatus').className = user.status === 'online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
+    }
+    console.log(user)
+})
+
 let dadosConversas;
 
 document.addEventListener('DOMContentLoaded', async ()=>{
@@ -94,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
                         conversas.push({
                             id: chat.id,
                             remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
+                            statusRemetente: 'offline',
                             nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
                             ultimaMensagem: chat.mensagens.toReversed()[0]?.mensagem || '',
                             hora: (() => {
@@ -157,6 +179,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     carregarConversa(estado.conversaAtualId);
     configurarEventos();
     atualizarContadorMensagens();
+    setInterval(()=>{
+        socket.emit('refreshStatus');
+    }, 5000)
 })
 
 // Carregar lista de conversas
@@ -277,6 +302,8 @@ function carregarConversa(conversaId) {
     console.log(conversa)
     document.getElementById('current-chat-name').textContent = conversa.nome;
     document.getElementById('current-chat-avatar').src = conversa.avatar;
+    document.getElementById('current-chat-status').textContent = conversa.statusRemetente;
+    document.getElementById('bolaStatus').className = conversa.statusRemetente === 'online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
 
     const containerMensagens = document.getElementById('messages-container');
     containerMensagens.innerHTML = '';

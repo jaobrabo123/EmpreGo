@@ -24,6 +24,7 @@ module.exports = (io, socket) => {
     socket.on('sendMessage', data =>{
         const roomId = data.room;
         io.to(roomId).emit('receivedMessage', data);
+        io.to(roomId).emit("userStatus", { status: 'online', socket: socket.id, room: roomId});
     });
 
     socket.on('refreshStatus', ()=>{
@@ -34,10 +35,10 @@ module.exports = (io, socket) => {
         });
     })
 
-    socket.on('leaveRoom', (roomId) => {
-        socket.leave(roomId);
-        console.log(`${socket.id} saiu da sala ${roomId}`)
-    });
+    // socket.on('leaveRoom', (roomId) => {
+    //     socket.leave(roomId);
+    //     console.log(`${socket.id} saiu da sala ${roomId}`)
+    // });
 
     socket.on("disconnecting", () => {
         console.log(`Usuário desconectou: ${socket.id}`);

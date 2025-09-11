@@ -34,7 +34,7 @@ async function carregarInit() {
         <img src="${fav.empresas.foto}" alt="Logo ${fav.empresas.nome_fant}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
         <div class="favorito-info">
         <div class="favorito-nome">${fav.empresas.nome_fant}</div>
-        <div class="favorito-categoria text-sm text-gray-400">${fav.empresas.setor}</div>
+        <div class="favorito-categoria text-sm text-gray-400">${fav.empresas.setor?fav.empresas.setor:'Empresa'}</div>
         </div>
         <div class="favorito-actions ml-auto">
         <button class="chat-btn" aria-label="Abrir chat" onclick="window.location.href='/chats?id=${fav.empresas.cnpj}'">
@@ -320,7 +320,7 @@ async function addToFavorites(card, cnpj) {
     <img src="${empresaLogo}" alt="Logo ${empresaNome}" class="favorito-logo w-10 h-10 rounded-full object-cover border border-gray-600 bg-white shadow-sm">
     <div class="favorito-info">
       <div class="favorito-nome">${empresaNome}</div>
-        <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria}</div>
+        <div class="favorito-categoria text-sm text-gray-400">${empresaCategoria==='null'?'Empresa':empresaCategoria}</div>
       </div>
       <div class="favorito-actions ml-auto">
         <button class="chat-btn" aria-label="Abrir chat" onclick="window.location.href='/chats?id=${empresaCnpj}'">

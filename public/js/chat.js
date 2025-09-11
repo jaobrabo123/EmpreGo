@@ -69,7 +69,7 @@ socket.on('receivedMessage', async (message)=>{
     const conversa = estado.conversas.find(c => c.id === message.room);
     carregarMsgRecebida(conversa, message)
     if (!conversa) return;
-    if(conversa.id===message.room){
+    if(estado.conversaAtualId===message.room){
         try {
             console.log('lendo msgs...')
             await axiosWe.patch('/mensagens/vizualizar', { chatId: message.room })

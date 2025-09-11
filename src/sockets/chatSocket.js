@@ -1,4 +1,4 @@
-const MensagemModel = require('../models/mensagemModel.js');
+//const MensagemModel = require('../models/mensagemModel.js');
 
 module.exports = (io, socket) => {
     socket.on('joinRoom', async (roomId, callback) =>{
@@ -24,11 +24,6 @@ module.exports = (io, socket) => {
     socket.on('sendMessage', data =>{
         const roomId = data.room;
         io.to(roomId).emit('receivedMessage', data);
-        socket.rooms.forEach((room) => {
-            if (room !== socket.id) {
-                io.to(room).emit("userStatus", { status: 'online', socket: socket.id, room});
-            }
-        });
     });
 
     socket.on('refreshStatus', ()=>{

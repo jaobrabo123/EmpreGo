@@ -476,7 +476,7 @@ function realizarPesquisa() {
         destacarResultadoAtual();
     } else {
         estado.indicePesquisaAtual = -1;
-        alert('Nenhum resultado encontrado para: ' + termo);
+        //alert('Nenhum resultado encontrado para: ' + termo);
     }
 }
 

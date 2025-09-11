@@ -12,8 +12,7 @@ function limparErro() {
   erroDiv.style.display = "none";
 }
 
-document.getElementById("formEditarPerfil").addEventListener("submit", function (e) {
-  e.preventDefault();
+document.getElementById("btnEnviar").addEventListener("click", function () {
   enviarEdicao();
 });
 

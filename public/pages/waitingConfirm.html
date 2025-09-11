@@ -91,11 +91,10 @@
                 Um email com um código de verificação foi enviado para <span class="text-gradient" id="email">"email"</span>
             </p>            
             <p class="text-xl md:text-1x4 text-gray-400 mb-4" id="hero-subtitle">
-                O Código expira em <span class="text-gradient"id="timer">15:00</span>.
+                O Código expira em <span class="text-gradient" id="timer">15 minutos</span>.
             </p>
 
             <input name="inputCodigo" id="inputCodigo" type="text" placeholder="Digite aqui o seu código" maxlength="4" class="relative z-10 mb-4 p-2 border rounded text-black">
-
 
             <p><a id="reenvio" class="text-gradient" style="cursor: pointer; text-decoration: underline;">Não recebeu o email? Clique aqui para reenviar.</a></p>
             <p id="mensagem"></p>
@@ -104,6 +103,7 @@
 
     <!-- * SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
     <script type="module" src="/js/waitingConfirm.js"></script>
 
     <script>

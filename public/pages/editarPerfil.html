@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
 
-    <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="/js/profile.js"></script>
-    <script type="module" src="/js/link.js"></script>
-    <script type="module" src="/js/editarPerfil.js"></script>
-
     <!-- STYLES -->
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/editProfileStyles.css">
@@ -174,17 +168,16 @@
             </div>
         </div>
         <div id="buttons">
-            <button type="submit" class="btn" id="btnEnviar">Enviar</button>
+            <button class="btn" id="btnEnviar">Enviar</button>
             <button type="button" class="btn" onclick="window.location.href='/perfil/candidato'" id="btnCancelar">
                 Cancelar
             </button>
         </div>
         <div id="mensagemErro" style="display:none; color:#ff6b6b; font-size:1.3rem; margin-bottom:10px;"></div>
-        <button type="submit">Enviar</button>
+        <!-- <button type="submit">Enviar</button>
         <button type="button" class="btn-voltar-perfil" onclick="window.location.href='/perfil/candidato'">
           Cancelar
-        </button>
-    </form>
+        </button> -->
   </div>
   <!-- * SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

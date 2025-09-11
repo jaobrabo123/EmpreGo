@@ -43,7 +43,7 @@ class CandidatoController {
             if(erro instanceof Erros.ErroDeConflito) {
                 return res.status(409).json({ error: erro.message });
             }
-            if(erro.code==='23505'){
+            if(erro.code==='P2002'){
                 return res.status(409).json({ error: "Email aguardando confirmação." });
             }
 

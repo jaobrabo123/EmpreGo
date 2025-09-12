@@ -15,6 +15,11 @@ socket.on('receivedNotification', (notf)=>{
 })
 
 let empresasJaFavoritadas = [];
+let selectedFilters = [];
+let empresasCached = new Set();
+let verMais = true;
+let paginaFiltro = 1;
+let queryAtual = '/empresas/public';
 
 async function carregarInit() {
   try {
@@ -91,6 +96,7 @@ async function carregarInit() {
           </div>
         </article>
       `;
+      empresasCached.add(html);
       document.querySelector('#divEmpresas').innerHTML += html;
     });
   } catch (erro) {
@@ -103,10 +109,103 @@ let liberadoVerMais = true;
 document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
   if(!liberadoVerMais) return;
   try {
-    pagina ++;
+    let pagagr;
+    if(queryAtual !== '/empresas/public'){
+      paginaFiltro++;
+      pagagr = `&page=${paginaFiltro}`;
+    } else{
+      pagina++;
+      pagagr = `?page=${pagina}`;
+    }
+    
     liberadoVerMais = false;
-    const response = await axiosWe(`/empresas/public?page=${pagina}`);
+    const response = await axiosWe(`${queryAtual}${pagagr}`);
     const data = response.data;
+    data.forEach(emp => {
+      const html = `
+        <article
+          class="empresa-card bg-twitch-gray rounded-lg overflow-hidden shadow-md transition-all relative border border-gray-700 h-full flex flex-col hover:-translate-y-1 hover:shadow-lg hover:border-twitch-purple">
+          <div
+            class="card-header relative h-32 bg-gray-800 flex items-center justify-center overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-br before:from-twitch-purple/30 before:to-transparent">
+            <img src="${emp.foto}" alt="Logo Tech Solutions"
+              class="empresa-logo w-20 h-20 rounded-full object-cover border-4 border-gray-800 bg-white shadow-md z-10 transition-transform">
+            <button
+              id="${emp.cnpj}"
+              class="favorite-btn absolute top-3 right-3 bg-black/40 border-none w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-gray-300 transition-all z-20 backdrop-blur-sm hover:bg-black/60 hover:scale-110 ${empresasJaFavoritadas.includes(emp.cnpj)?' active':""}"
+              aria-label="Marcar como favorito">
+              <i class='bx bx-star text-xl'></i>
+            </button>
+          </div>
+          <div class="card-body p-5 flex-1">
+            <h3 class="empresa-nome text-xl font-semibold mb-2 text-white">${emp.nome_fant}</h3>
+            <p class="empresa-descricao text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+              ${emp.descricao?emp.descricao:''}
+            </p>
+          </div>
+          <div
+            class="card-footer flex justify-between items-center p-4 border-t border-gray-700 bg-black/10 flex-wrap gap-2">
+            <div class="card-meta flex items-center gap-2 flex-1 min-w-[150px]">
+              <div class="tag-chips flex flex-wrap gap-1">
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.setor}</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.porte}</span>
+                <span
+                  class="tag-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer transition-all">${emp.estado}</span>
+              </div>
+            </div>
+            <button
+              class="ver-mais-btn bg-twitch-purple btn-primary text-white border-none px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all hover:bg-twitch-lightpurple hover:-translate-y-0.5 hover:shadow">Ver
+              mais</button>
+          </div>
+        </article>
+      `;
+      empresasCached.add(html);
+      document.querySelector('#divEmpresas').innerHTML += html;
+    });
+    if (data.length < 9){
+      verMais = false;
+      document.querySelector("#ver-pagina-btn").style.display = "none"
+    }
+    setupFavoriteButtons()
+    setupCompanyChips()
+  } catch (erro) {
+    pagina--
+    console.error(erro)
+  } finally{
+    liberadoVerMais = true;
+  }
+})
+
+document.querySelector("#buttonPesquisar").addEventListener('click', async()=>{
+  console.log(selectedFilters)
+  const keyword = document.querySelector('#inputPesquisa').value;
+  const categorias = selectedFilters.filter(f => f.categoria === 'porte').map(f => f.nome).join(',');
+  const setores = selectedFilters.filter(f => f.categoria === 'setor').map(f => f.nome).join(',');
+  const estados = selectedFilters.filter(f => f.categoria === 'estado').map(f => f.nome).join(',');
+  if(!keyword && !categorias && !setores && !estados) {
+    document.querySelector('#divEmpresas').innerHTML = [...empresasCached].join('');
+    document.querySelector("#ver-pagina-btn").style.display = verMais ? '':'none';
+    queryAtual = '/empresas/public';
+    return;
+  }
+  console.log('pesquisandoconfirmed')
+  let queryParts = [];
+  paginaFiltro = 1;
+
+  if (keyword) queryParts.push(`keyword=${encodeURIComponent(keyword)}`);
+  if (categorias) queryParts.push(`porte=${encodeURIComponent(categorias)}`);
+  if (setores) queryParts.push(`setor=${encodeURIComponent(setores)}`);
+  if (estados) queryParts.push(`estado=${encodeURIComponent(estados)}`);
+
+  const query = queryParts.join('&'); 
+  if(queryAtual===`/empresas/search?${query}`) return;
+  queryAtual = `/empresas/search?${query}`;
+  try {
+    console.log('query: '+query)
+    const response = await axiosWe(`/empresas/search?${query}`);
+    const data = response.data;
+    document.querySelector('#divEmpresas').innerHTML = '';
     data.forEach(emp => {
       const html = `
         <article
@@ -149,15 +248,16 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
       document.querySelector('#divEmpresas').innerHTML += html;
     });
     if (data.length < 9){
+
       document.querySelector("#ver-pagina-btn").style.display = "none"
+    }
+    else{
+      document.querySelector("#ver-pagina-btn").style.display = ""
     }
     setupFavoriteButtons()
     setupCompanyChips()
   } catch (erro) {
-    pagina--
     console.error(erro)
-  } finally{
-    liberadoVerMais = true;
   }
 })
   
@@ -547,7 +647,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (confirmBtn) {
       confirmBtn.addEventListener('click', function () {
         const selectedChips = document.querySelectorAll('.filter-chip[aria-pressed="true"]');
-        const selectedFilters = Array.from(selectedChips).map(chip => chip.dataset.value);
+        selectedFilters = Array.from(selectedChips).map(chip => ({nome: chip.dataset.value, categoria: chip.parentElement.dataset.value}));
 
         // Mostra feedback visual dos filtros aplicados
         const filterCount = selectedFilters.length;

@@ -95,6 +95,20 @@ class EmpresaController{
         }
     }
 
+    static async pesquisar(req, res){
+        try {
+            const keyword = req.query.keyword;
+            const setor = req.query.setor?.split(',');
+            const estado = req.query.estado?.split(',');
+            const porte = req.query.porte?.split(',');
+            if(!keyword && !setor && !estado && !porte) return res.status(400).json({ error: "Pelo menos uma informação deve ser fornecida para pesquisa." });
+            const empresas = await EmpresaModel.buscarEmpresasPorFiltro(keyword, setor, estado, porte, req.query.page);
+            res.status(200).json(empresas);
+        } catch (erro) {
+            res.status(500).json({ error: erro.message });
+        }
+    }
+
 }
 
 module.exports = EmpresaController;

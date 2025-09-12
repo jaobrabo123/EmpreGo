@@ -90,6 +90,66 @@ class EmpresaModel {
         return resultado.foto;
     }
 
+    static async buscarEmpresasPorFiltro(keyword, setor, estado, porte, page){
+        let where = { OR: [], AND: []};
+        const pagina = page && Number(page)>1 ? Number(page) : 1;
+        if(keyword){ 
+            where.OR.push({
+                nome_fant: {
+                    contains: keyword,
+                    mode: 'insensitive'
+                }
+            });
+            where.OR.push({
+                descricao: {
+                    contains: keyword,
+                    mode: 'insensitive'
+                }
+            });
+            where.OR.push({
+                setor: {
+                    contains: keyword,
+                    mode: 'insensitive'
+                }
+            });
+        };
+        if(setor){
+            where.AND.push({
+                setor: { in: setor }
+            });
+        }
+        if(estado){
+            where.AND.push({
+                estado: { in: estado }
+            });
+        }
+        if(porte){
+            where.AND.push({
+                porte: { in: porte }
+            });
+        }
+        
+        if (where.OR.length === 0) delete where.OR;
+        if (where.AND.length === 0) delete where.AND;
+
+        const empresas = await prisma.empresas.findMany({
+            select: {
+                cnpj: true,
+                nome_fant: true,
+                descricao: true,
+                setor: true,
+                porte: true,
+                estado: true,
+                foto: true
+            },
+            where,
+            orderBy: [{ data_criacao: 'desc'}, {nome_fant: 'asc' }],
+            skip: (pagina-1)*9,
+            take: 9
+        })
+        return empresas;
+    }
+
 }
 
 module.exports = EmpresaModel;

@@ -573,7 +573,6 @@
     .empresas-container {
       grid-template-columns: repeat(3, 1fr);
     }
-
   </style>
   <title>EmpreGo - Encontre sua vaga ideal</title>
 </head>
@@ -598,20 +597,31 @@
 
       <!-- Barra de pesquisa -->
       <div
-class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-full overflow-hidden mr-4 ml-auto justify-between transition-all duration-300 border border-gray-700 focus-within:ring-2 focus-within:ring-twitch-purple focus-within:border-twitch-purple"
+        class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-full overflow-hidden mr-4 ml-auto transition-all duration-300 border border-gray-700 focus-within:ring-2 focus-within:ring-twitch-purple focus-within:border-twitch-purple"
         role="search" aria-label="Barra de pesquisa de vagas">
+
+        <!-- Campo de texto -->
         <input type="text" placeholder="Pesquisar empresas..."
           class="flex-1 border-none px-4 py-3 bg-transparent text-white text-sm outline-none placeholder:text-gray-500" />
+
+        <!-- Botão de filtro -->
         <button
-          class="filter-dropdown-toggle bg-twitch-purple btn-primary border-none text-white p-2 cursor-pointer mx-1 rounded-full flex items-center justify-center transition-colors hover:bg-twitch-lightpurple"
+          class="filter-btn bg-twitch-purple border-none text-white p-2 cursor-pointer mx-1 rounded-full flex items-center justify-center transition-colors hover:bg-twitch-lightpurple"
           id="filter-toggle" aria-label="Abrir filtros" aria-expanded="false" aria-controls="filter-chips-container">
-          <img src="/assets/imgs/lupa.png" alt="Pesquisar" height="20" width="20" class="mr-1"
-            style="filter: brightness(0) invert(1);" />
           <img src="/assets/imgs/filtro.png" alt="Filtrar" height="20" width="20"
             style="filter: brightness(0) invert(1);" />
           <span class="filter-label text-white text-sm ml-1 select-none hidden lg:block">Filtragem</span>
         </button>
+
+        <!-- Botão de pesquisa -->
+        <button
+          class="search-btn bg-twitch-purple border-none text-white p-2 cursor-pointer mx-1 rounded-full flex items-center justify-center transition-colors hover:bg-twitch-lightpurple"
+          aria-label="Pesquisar">
+          <img src="/assets/imgs/lupa.png" alt="Pesquisar" height="20" width="20"
+            style="filter: brightness(0) invert(1);" />
+        </button>
       </div>
+
 
       <!-- filtragem -->
       <div class="filters relative -right-10 ml-auto mr-4">
@@ -764,7 +774,8 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
         id="profile-toggle">
         <div
           class="user-avatar bg-twitch-purple text-white font-bold text-base w-9 h-9 rounded-full flex justify-center items-center select-none shadow-x1">
-          <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="FotoDePerfil" class="w-full h-full object-cover rounded-full"/>  
+          <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="FotoDePerfil"
+            class="w-full h-full object-cover rounded-full" />
         </div>
         <div
           class="profile-dropdown fixed top-16 right-4 bg-twitch-gray text-white w-60 rounded-lg shadow-xl flex flex-col p-2 z-50 hidden"
@@ -775,24 +786,24 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
             <a href="/perfil/empresa" class="text-twitch-purple text-sm no-underline">Acessar perfil</a>
           </div>
           <hr class="border-t border-gray-700 my-1">
-          <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" onclick="window.location.href='/perfil/empresa/editar'">Editar
+          <button class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700"
+            onclick="window.location.href='/perfil/empresa/editar'">Editar
             perfil</button>
-          <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" id="logoutButton">Sair</button>
+          <button class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700"
+            id="logoutButton">Sair</button>
           <hr class="border-t border-gray-700 my-1">
           <button
             class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Notificações</button>
-          <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" onclick="window.location.href='/chats'">Chats</button>
+          <button class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700"
+            onclick="window.location.href='/chats'">Chats</button>
           <hr class="border-t border-gray-700 my-1">
           <button
             class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Configurações</button>
           <button
             class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700">Modo:
             claro</button>
-          <button
-            class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700" onclick="window.location.href = '/suporte'">Ajuda</button>
+          <button class="bg-transparent border-none text-white text-left p-2 text-sm cursor-pointer hover:bg-gray-700"
+            onclick="window.location.href = '/suporte'">Ajuda</button>
         </div>
       </div>
     </div>
@@ -933,7 +944,7 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
                   </button>
                 </div>
               </div> -->
-              
+
             </div>
           </li>
         </ul>
@@ -948,7 +959,7 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
       <div class="swiper-wrapper">
 
         <!-- Slide 1 -->
-        
+
 
         <!-- Slide 2 -->
         <!-- <div class="swiper-slide">
@@ -1001,12 +1012,12 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
         </div>
       </div> -->
 
-      <!-- Navegação -->
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+        <!-- Navegação -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
 
-      <!-- Paginação (dots) -->
-      <div class="swiper-pagination"></div>
+        <!-- Paginação (dots) -->
+        <div class="swiper-pagination"></div>
     </section>
 
     <section class="empresas-section w-full px-5 py-6 mt-8">
@@ -1241,7 +1252,9 @@ class="search-bar flex items-center w-[40rem] max-w-5xl bg-twitch-gray rounded-f
         </article> -->
       </div>
       <div class="ver-todas text-center mt-8 w-full">
-        <a id="ver-pagina-btn" class="ver-todas-btn btn-outline-primary text-white inline-block px-8 py-3 rounded-full text-base font-medium cursor-pointer transition-all no-underline">Ver mais</a>
+        <a id="ver-pagina-btn"
+          class="ver-todas-btn btn-outline-primary text-white inline-block px-8 py-3 rounded-full text-base font-medium cursor-pointer transition-all no-underline">Ver
+          mais</a>
       </div>
     </section>
   </main>

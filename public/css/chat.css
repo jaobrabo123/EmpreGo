@@ -72,11 +72,11 @@ body {
 
 .search-h {
     background-color: rgba(139, 92, 246, 0.3);
-    border-radius: 2px;
+    border-radius: 12px;
     padding: 0 2px;
 }
 
 .active-search-result {
-    background-color: rgba(139, 92, 246, 0.7);
-    border: 1px solid #8B5CF6;
+    border: 20px solid #fdfdfd;
+    border-radius: 50px;
 }

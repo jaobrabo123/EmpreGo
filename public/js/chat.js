@@ -509,17 +509,23 @@ function realizarPesquisa() {
 
 function destacarResultadoAtual() {
     const elementos = document.querySelectorAll('#messages-container > div');
-    elementos.forEach(el => { el.classList.remove('active-search-result'); el.style.border = 'none'; });
+    elementos.forEach(el => {
+        const msgDiv = el.querySelector('div');
+        if(msgDiv) msgDiv.style.border = 'none';
+        el.classList.remove('active-search-result');
+    });
 
     if (estado.indicePesquisaAtual >= 0 && estado.indicePesquisaAtual < estado.resultadosPesquisa.length) {
         const idx = estado.resultadosPesquisa[estado.indicePesquisaAtual];
         const el = elementos[idx];
         if (el) {
-            el.classList.add('active-search-result');
+            const msgDiv = el.querySelector('div'); 
+            if(msgDiv) msgDiv.style.border = '2px solid white';
             el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
 }
+
 
 function limparPesquisa() {
     estado.resultadosPesquisa = [];

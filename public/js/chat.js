@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         resultadosPesquisa: [],
         indicePesquisaAtual: -1
     };
+    console.log(estado.contadorFavoritos)
     
     carregarConversas(dadosConversas);
     carregarConversa(estado.conversaAtualId);

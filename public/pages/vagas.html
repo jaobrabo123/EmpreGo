@@ -602,7 +602,7 @@
         role="search" aria-label="Barra de pesquisa de vagas">
 
         <!-- Campo de texto -->
-        <input type="text" placeholder="Pesquisar empresas..."
+        <input type="text" placeholder="Pesquisar empresas..." id="inputPesquisa"
           class="flex-1 border-none px-4 py-3 bg-transparent text-white text-sm outline-none placeholder:text-gray-500" />
 
         <!-- Botão de filtro -->
@@ -617,6 +617,7 @@
         <!-- Botão de pesquisa -->
         <button
           class="search-btn bg-twitch-purple border-none text-white p-2 cursor-pointer mx-1 rounded-full flex items-center justify-center transition-colors hover:bg-twitch-lightpurple"
+          id="buttonPesquisar"
           aria-label="Pesquisar">
           <img src="/assets/imgs/lupa.png" alt="Pesquisar" height="20" width="20"
             style="filter: brightness(0) invert(1);" />
@@ -635,25 +636,25 @@
               <i class='bx bx-chevron-down text-sm'></i>
             </div>
             <div class="filter-category-content" id="category-setor">
-              <div class="filter-category-chips">
+              <div class="filter-category-chips" data-value="setor">
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="junior" aria-pressed="false" title="Nível Júnior">Alimentício</button>
+                  data-value="Alimentício" aria-pressed="false" title="Nível Júnior">Alimentício</button>
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="pleno" aria-pressed="false">Varejo</button>
+                  data-value="Varejo" aria-pressed="false">Varejo</button>
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="senior" aria-pressed="false">Turismo</button>
+                  data-value="Turismo" aria-pressed="false">Turismo</button>
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="estagiario" aria-pressed="false">Energia</button>
+                  data-value="Energia" aria-pressed="false">Energia</button>
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="trainee" aria-pressed="false">Agronegócio</button>
+                  data-value="Agronegócio" aria-pressed="false">Agronegócio</button>
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Saúde</button>
+                  data-value="Saúde" aria-pressed="false">Saúde</button>
               </div>
             </div>
           </div>
@@ -665,88 +666,35 @@
               <i class='bx bx-chevron-down text-sm'></i>
             </div>
             <div class="filter-category-content" id="category-estado">
-              <div class="filter-category-chips">
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="junior" aria-pressed="false" title="Nível Júnior">Acre</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="pleno" aria-pressed="false">Alagoas</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="senior" aria-pressed="false">Amapá</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="estagiario" aria-pressed="false">Amazonas</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="trainee" aria-pressed="false">Bahia</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Ceará</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Distrito Federal</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Espírito Santo</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Goiás</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Maranhão</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Mato Grosso</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Mato Grosso do Sul</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Minas Gerais</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Pará</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Paraíba</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Paraná</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Pernambuco</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Piauí</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Rio de Janeiro</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Rio Grande do Norte</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Rio Grande do Sul</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Rondônia</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Roraima</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Santa Catarina</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">São Paulo</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Sergipe</button>
-                <button type="button"
-                  class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="tecnico" aria-pressed="false">Tocantins</button>
+              <div class="filter-category-chips" data-value="estado">
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="AC" aria-pressed="false">Acre</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="AL" aria-pressed="false">Alagoas</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="AP" aria-pressed="false">Amapá</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="AM" aria-pressed="false">Amazonas</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="BA" aria-pressed="false">Bahia</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="CE" aria-pressed="false">Ceará</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="DF" aria-pressed="false">Distrito Federal</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="ES" aria-pressed="false">Espírito Santo</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="GO" aria-pressed="false">Goiás</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="MA" aria-pressed="false">Maranhão</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="MT" aria-pressed="false">Mato Grosso</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="MS" aria-pressed="false">Mato Grosso do Sul</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="MG" aria-pressed="false">Minas Gerais</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="PA" aria-pressed="false">Pará</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="PB" aria-pressed="false">Paraíba</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="PR" aria-pressed="false">Paraná</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="PE" aria-pressed="false">Pernambuco</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="PI" aria-pressed="false">Piauí</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="RJ" aria-pressed="false">Rio de Janeiro</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="RN" aria-pressed="false">Rio Grande do Norte</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="RS" aria-pressed="false">Rio Grande do Sul</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="RO" aria-pressed="false">Rondônia</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="RR" aria-pressed="false">Roraima</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="SC" aria-pressed="false">Santa Catarina</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="SP" aria-pressed="false">São Paulo</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="SE" aria-pressed="false">Sergipe</button>
+                <button type="button" class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none" data-value="TO" aria-pressed="false">Tocantins</button>
+
               </div>
             </div>
           </div>
@@ -758,16 +706,16 @@
               <i class='bx bx-chevron-down text-sm'></i>
             </div>
             <div class="filter-category-content" id="category-porte">
-              <div class="filter-category-chips">
+              <div class="filter-category-chips" data-value="porte">
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="junior" aria-pressed="false" title="Nível Júnior">Pequeno</button>
+                  data-value="Pequeno" aria-pressed="false" title="Nível Júnior">Pequeno</button>
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="pleno" aria-pressed="false">Médio</button>
+                  data-value="Médio" aria-pressed="false">Médio</button>
                 <button type="button"
                   class="filter-chip text-white px-2.5 py-1 rounded-full text-xs cursor-pointer border-none transition-colors select-none"
-                  data-value="senior" aria-pressed="false">Grande</button>
+                  data-value="Grande" aria-pressed="false">Grande</button>
               </div>
             </div>
           </div>

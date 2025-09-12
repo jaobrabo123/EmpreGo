@@ -8,7 +8,7 @@ module.exports = (io, socket) => {
             // const mensagens = await MensagemModel.buscarMensagensPorChat(roomId);
 
             // socket.emit('previousMessages', mensagens);
-            io.to(roomId).emit("userStatus", { status: 'online', socket: socket.id, room: roomId});
+            io.to(roomId).emit("userStatus", { status: 'Online', socket: socket.id, room: roomId});
 
             if (callback) callback({ status: 'success' });
         }
@@ -24,13 +24,13 @@ module.exports = (io, socket) => {
     socket.on('sendMessage', data =>{
         const roomId = data.room;
         io.to(roomId).emit('receivedMessage', data);
-        io.to(roomId).emit("userStatus", { status: 'online', socket: socket.id, room: roomId});
+        io.to(roomId).emit("userStatus", { status: 'Online', socket: socket.id, room: roomId});
     });
 
     socket.on('refreshStatus', ()=>{
         socket.rooms.forEach((room) => {
             if (room !== socket.id) {
-                io.to(room).emit("userStatus", { status: 'online', socket: socket.id, room});
+                io.to(room).emit("userStatus", { status: 'Online', socket: socket.id, room});
             }
         });
     })
@@ -44,7 +44,7 @@ module.exports = (io, socket) => {
         console.log(`Usuário desconectou: ${socket.id}`);
         socket.rooms.forEach((room) => {
             if (room !== socket.id) {
-                io.to(room).emit("userStatus", { status: 'offline', socket: socket.id, room});
+                io.to(room).emit("userStatus", { status: 'Offline', socket: socket.id, room});
             }
         });
     })

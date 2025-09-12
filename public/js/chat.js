@@ -27,7 +27,7 @@ async function carregarConversasBack() {
         const ct = {
             id: chat.id,
             remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
-            statusRemetente: 'offline',
+            statusRemetente: 'Offline',
             nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
             ultimaMensagem: chat.mensagens.toReversed()[0]?.mensagem || '',
             hora: (() => {
@@ -87,7 +87,7 @@ socket.on('userStatus', (user)=>{
     conversa.statusRemetente = user.status;
     if(user.room===estado.conversaAtualId){
         document.getElementById('current-chat-status').textContent = conversa.statusRemetente;
-        document.getElementById('bolaStatus').className = user.status === 'online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
+        document.getElementById('bolaStatus').className = user.status === 'Online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
     }
     console.log(user)
 })
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
                         conversas.push({
                             id: chat.id,
                             remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
-                            statusRemetente: 'offline',
+                            statusRemetente: 'Offline',
                             nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
                             ultimaMensagem: chat.mensagens.toReversed()[0]?.mensagem || '',
                             hora: (() => {
@@ -304,7 +304,7 @@ function carregarConversa(conversaId) {
     document.getElementById('current-chat-name').textContent = conversa.nome;
     document.getElementById('current-chat-avatar').src = conversa.avatar;
     document.getElementById('current-chat-status').textContent = conversa.statusRemetente;
-    document.getElementById('bolaStatus').className = conversa.statusRemetente === 'online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
+    document.getElementById('bolaStatus').className = conversa.statusRemetente === 'Online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
 
     const containerMensagens = document.getElementById('messages-container');
     containerMensagens.innerHTML = '';

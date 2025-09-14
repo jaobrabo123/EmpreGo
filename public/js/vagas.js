@@ -169,7 +169,7 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
       verMais = false;
       document.querySelector("#ver-pagina-btn").style.display = "none"
     }
-    setupFilterChips()
+    //setupFilterChips()
     setupCompanyChips()
     setupFavoriteButtons()
   } catch (erro) {
@@ -258,7 +258,7 @@ document.querySelector("#buttonPesquisar").addEventListener('click', async()=>{
       document.querySelector("#ver-pagina-btn").style.display = ""
     }
     if(data.length===0) document.querySelector('#divEmpresas').innerHTML = 'Sem resultados'
-    setupFilterChips()
+    //setupFilterChips()
     setupCompanyChips()
     setupFavoriteButtons()
   } catch (erro) {

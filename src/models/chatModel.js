@@ -1,5 +1,6 @@
 // * Prisma
 const prisma = require('../config/db.js');
+const { descriptografarMensagem } = require('../utils/cryptoMsgs.js');
 
 class ChatModel {
 
@@ -64,7 +65,16 @@ class ChatModel {
                 data_criacao: 'desc'
             }
         });
-        return resultado;
+        const resultadoComMensagensDescriptografadas = resultado.map(({mensagens, ...resto})=>({
+            ...resto,
+            mensagens: mensagens.map(msg => ({
+                data_criacao: msg.data_criacao,
+                mensagem: descriptografarMensagem(msg.mensagem),
+                de: msg.de,
+                status: msg.status
+            }))
+        }))
+        return resultadoComMensagensDescriptografadas;
     }
 
     static async buscarChatsInfoPorEmpresaCnpj(cnpj){
@@ -104,7 +114,16 @@ class ChatModel {
                 data_criacao: 'desc'
             }
         });
-        return resultado;
+        const resultadoComMensagensDescriptografadas = resultado.map(({mensagens, ...resto})=>({
+            ...resto,
+            mensagens: mensagens.map(msg => ({
+                data_criacao: msg.data_criacao,
+                mensagem: descriptografarMensagem(msg.mensagem),
+                de: msg.de,
+                status: msg.status
+            }))
+        }))
+        return resultadoComMensagensDescriptografadas;
     }
 
 }

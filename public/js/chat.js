@@ -2,6 +2,7 @@
 import axiosWe from './axiosConfig.js';
 import socket from './notfSocketsConfig.js';
 import carregarInfosUsuario from './infosUsuarios.js';
+import { finalizarLoader } from '/js/globalFunctions.js';
 
 const params = new URLSearchParams(window.location.search)
 let usuarioTipo;
@@ -183,6 +184,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     carregarConversa(estado.conversaAtualId);
     configurarEventos();
     atualizarContadorMensagens();
+    //finalizarLoader()
     setInterval(()=>{
         socket.emit('refreshStatus');
     }, 5000)

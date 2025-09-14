@@ -4,7 +4,7 @@ module.exports = (io, socket) => {
     socket.on('joinRoom', async (roomId, callback) =>{
         try{
             socket.join(roomId);
-            console.log(`Socket ${socket.id} entrou na sala ${roomId}`);
+            // console.log(`Socket ${socket.id} entrou na sala ${roomId}`);
             // const mensagens = await MensagemModel.buscarMensagensPorChat(roomId);
 
             // socket.emit('previousMessages', mensagens);

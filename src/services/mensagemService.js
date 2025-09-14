@@ -1,18 +1,24 @@
 // * Prisma
 const prisma = require('../config/db.js');
+const { criptografarMensagem } = require('../utils/cryptoMsgs.js');
+const ValidarCampos = require('../utils/validarCampos.js');
 
 class MensagemService {
 
   static async enviarMensagem(autor, mensagem, de, chat){
+    ValidarCampos.validarTamanhoMax(mensagem, 500, 'Mensagem');
+    mensagem = mensagem.trim();
+    
+    const mensagemCriptografada = criptografarMensagem(mensagem);
 
     await prisma.mensagens.create({
       data: {
-        mensagem,
+        mensagem: mensagemCriptografada,
         de,
         chat,
         autor
       }
-    })
+    });
 
   }
 

@@ -65,7 +65,9 @@ class EmpresaController{
 
     static async listarTodasPublic(req, res){
         try {
-            const empresas = await EmpresaModel.buscarTodasEmpresasPublic(req.query.page);
+            const empresas = req.query.tipo === 'main' ? 
+                await EmpresaModel.buscarTodasEmpresasPrincipais(req.query.page)
+                : await EmpresaModel.buscarTodasEmpresasPublic(req.query.page);
             res.status(200).json(empresas);
         } catch (erro) {
             res.status(500).json({ error: `Erro ao buscar empresas: ${erro?.message || "erro desconhecido"}` });

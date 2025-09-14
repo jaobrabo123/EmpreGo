@@ -4,6 +4,8 @@ import socket from './notfSocketsConfig.js';
 import carregarInfosUsuario from './infosUsuarios.js';
 import { carregarLinks2, logout } from "/js/globalFunctions.js";
 
+let infosUsuario;
+
 document.querySelector('#logoutButton').addEventListener('click', () => logout());
 
 socket.on('previousNotifications', (notf)=>{
@@ -54,7 +56,7 @@ async function carregarInit() {
       // chat
       newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
         e.stopPropagation();
-        alert(`Iniciar chat com ${empresaNome}`);
+        //alert(`Iniciar chat com ${empresaNome}`);
       });
     })
     dataEmp.forEach(emp => {
@@ -167,8 +169,9 @@ document.querySelector("#ver-pagina-btn").addEventListener("click", async() =>{
       verMais = false;
       document.querySelector("#ver-pagina-btn").style.display = "none"
     }
-    setupFavoriteButtons()
+    setupFilterChips()
     setupCompanyChips()
+    setupFavoriteButtons()
   } catch (erro) {
     pagina--
     console.error(erro)
@@ -254,8 +257,10 @@ document.querySelector("#buttonPesquisar").addEventListener('click', async()=>{
     else{
       document.querySelector("#ver-pagina-btn").style.display = ""
     }
-    setupFavoriteButtons()
+    if(data.length===0) document.querySelector('#divEmpresas').innerHTML = 'Sem resultados'
+    setupFilterChips()
     setupCompanyChips()
+    setupFavoriteButtons()
   } catch (erro) {
     console.error(erro)
   }
@@ -394,6 +399,110 @@ function setupCompanyChips() {
   });
 }
 
+function setupFilterChips() {
+  const chips = document.querySelectorAll('.filter-chip, .tag-chip');
+  const confirmBtn = document.querySelector('.filter-confirm');
+  const clearBtn = document.querySelector('.filter-clear');
+
+  // Adiciona evento de clique para cada chip
+  chips.forEach(chip => {
+    chip.addEventListener('click', function () {
+      const isPressed = this.getAttribute('aria-pressed') === 'true';
+      this.setAttribute('aria-pressed', !isPressed);
+
+      // Adiciona/remove classe visual
+      this.classList.toggle('selected', !isPressed);
+    });
+
+    chip.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Botão Confirmar - aplica os filtros selecionados
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', function () {
+      const selectedChips = document.querySelectorAll('.filter-chip[aria-pressed="true"]');
+      selectedFilters = Array.from(selectedChips).map(chip => ({nome: chip.dataset.value, categoria: chip.parentElement.dataset.value}));
+
+      // Mostra feedback visual dos filtros aplicados
+      const filterCount = selectedFilters.length;
+      const filterLabel = document.querySelector('.filter-label');
+      if (filterLabel) {
+        filterLabel.textContent = filterCount > 0 ? `Filtros (${filterCount})` : 'Filtragem';
+      }
+
+      console.log('Filtros selecionados:', selectedFilters);
+      //@azevedo back
+      // Aqui você pode adicionar a lógica para aplicar os filtros
+      // Por exemplo: filtrarVagas(selectedFilters);
+
+      // Fecha o painel de filtros
+      toggleFilterPanel(false);
+    });
+  }
+
+  // Botão Limpar - desmarca todos os chips
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      chips.forEach(chip => {
+        chip.setAttribute('aria-pressed', 'false');
+        chip.classList.remove('selected');
+      });
+
+      // Atualiza o contador de filtros 
+      const filterLabel = document.querySelector('.filter-label');
+      if (filterLabel) {
+        filterLabel.textContent = 'Filtragem';
+      }
+
+      console.log('Filtros limpos');
+    });
+  }
+}
+
+const filterToggle = document.getElementById('filter-toggle');
+const filterChipsContainer = document.getElementById('filter-chips-container');
+
+function toggleFilterPanel(show) {
+  if (show === undefined) {
+    filterChipsContainer.classList.toggle('open');
+  } else if (show) {
+    filterChipsContainer.classList.add('open');
+  } else {
+    filterChipsContainer.classList.remove('open');
+  }
+
+  // Acessibilidade
+  filterToggle.setAttribute('aria-expanded', filterChipsContainer.classList.contains('open'));
+}
+
+// Abre/fecha o painel de filtros
+if (filterToggle && filterChipsContainer) {
+  filterToggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    toggleFilterPanel();
+  });
+
+  // Fecha o painel ao clicar fora
+  document.addEventListener('click', function (e) {
+    if (filterChipsContainer.classList.contains('open')) {
+      if (!filterChipsContainer.contains(e.target) && e.target !== filterToggle) {
+        toggleFilterPanel(false);
+      }
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && filterChipsContainer.classList.contains('open')) {
+      toggleFilterPanel(false);
+    }
+  });
+}
+
 // Função para adicionar empresa aos favoritos na sidebar
 async function addToFavorites(card, cnpj) {
   const empresaNome = card.querySelector('.empresa-nome').textContent;
@@ -439,7 +548,7 @@ async function addToFavorites(card, cnpj) {
   });
 
   try {
-    const infosUsuario = await carregarInfosUsuario();
+    infosUsuario = infosUsuario ? infosUsuario : await carregarInfosUsuario();
     await axiosWe.post('/favoritos/empresa', {cnpj});
     const notificationObjetc = {
       usua: {
@@ -580,111 +689,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 
   // -------------- Filtro de Chips --------------
-  const filterToggle = document.getElementById('filter-toggle');
-  const filterChipsContainer = document.getElementById('filter-chips-container');
-
-  function toggleFilterPanel(show) {
-    if (show === undefined) {
-      filterChipsContainer.classList.toggle('open');
-    } else if (show) {
-      filterChipsContainer.classList.add('open');
-    } else {
-      filterChipsContainer.classList.remove('open');
-    }
-
-    // Acessibilidade
-    filterToggle.setAttribute('aria-expanded', filterChipsContainer.classList.contains('open'));
-  }
-
-  // Abre/fecha o painel de filtros
-  if (filterToggle && filterChipsContainer) {
-    filterToggle.addEventListener('click', function (e) {
-      e.stopPropagation();
-      toggleFilterPanel();
-    });
-
-    // Fecha o painel ao clicar fora
-    document.addEventListener('click', function (e) {
-      if (filterChipsContainer.classList.contains('open')) {
-        if (!filterChipsContainer.contains(e.target) && e.target !== filterToggle) {
-          toggleFilterPanel(false);
-        }
-      }
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && filterChipsContainer.classList.contains('open')) {
-        toggleFilterPanel(false);
-      }
-    });
-  }
-
+  
   // Configuração dos chips 
-  function setupFilterChips() {
-    const chips = document.querySelectorAll('.filter-chip, .tag-chip');
-    const confirmBtn = document.querySelector('.filter-confirm');
-    const clearBtn = document.querySelector('.filter-clear');
-
-    // Adiciona evento de clique para cada chip
-    chips.forEach(chip => {
-      chip.addEventListener('click', function () {
-        const isPressed = this.getAttribute('aria-pressed') === 'true';
-        this.setAttribute('aria-pressed', !isPressed);
-
-        // Adiciona/remove classe visual
-        this.classList.toggle('selected', !isPressed);
-      });
-
-      chip.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          this.click();
-        }
-      });
-    });
-
-    // Botão Confirmar - aplica os filtros selecionados
-    if (confirmBtn) {
-      confirmBtn.addEventListener('click', function () {
-        const selectedChips = document.querySelectorAll('.filter-chip[aria-pressed="true"]');
-        selectedFilters = Array.from(selectedChips).map(chip => ({nome: chip.dataset.value, categoria: chip.parentElement.dataset.value}));
-
-        // Mostra feedback visual dos filtros aplicados
-        const filterCount = selectedFilters.length;
-        const filterLabel = document.querySelector('.filter-label');
-        if (filterLabel) {
-          filterLabel.textContent = filterCount > 0 ? `Filtros (${filterCount})` : 'Filtragem';
-        }
-
-        console.log('Filtros selecionados:', selectedFilters);
-        //@azevedo back
-        // Aqui você pode adicionar a lógica para aplicar os filtros
-        // Por exemplo: filtrarVagas(selectedFilters);
-
-        // Fecha o painel de filtros
-        toggleFilterPanel(false);
-      });
-    }
-
-    // Botão Limpar - desmarca todos os chips
-    if (clearBtn) {
-      clearBtn.addEventListener('click', function () {
-        chips.forEach(chip => {
-          chip.setAttribute('aria-pressed', 'false');
-          chip.classList.remove('selected');
-        });
-
-        // Atualiza o contador de filtros 
-        const filterLabel = document.querySelector('.filter-label');
-        if (filterLabel) {
-          filterLabel.textContent = 'Filtragem';
-        }
-
-        console.log('Filtros limpos');
-      });
-    }
-  }
-
   setupFilterChips();
 
   // -------------- Favoritos nos cartões de empresas --------------

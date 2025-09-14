@@ -391,7 +391,7 @@ async function addToFavorites(card, cd) {
   // chat
   newItem.querySelector('.chat-btn').addEventListener('click', function (e) {
     e.stopPropagation();
-    alert(`Iniciar chat com ${empresaNome}`);
+    //alert(`Iniciar chat com ${empresaNome}`);
   });
 
   try {

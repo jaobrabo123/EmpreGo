@@ -174,6 +174,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         resultadosPesquisa: [],
         indicePesquisaAtual: -1
     };
+    if(estado.conversaAtualId===0){
+        console.log('opa')
+    }
     console.log(estado.contadorFavoritos)
     
     carregarConversas(dadosConversas);

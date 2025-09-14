@@ -175,10 +175,16 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         resultadosPesquisa: [],
         indicePesquisaAtual: -1
     };
-    if(estado.conversaAtualId===0){
-        console.log('opa')
-    }
-    console.log(estado.contadorFavoritos)
+if (estado.conversaAtualId === 0) {
+    document.getElementById("TelaBoasVindas").style.display = "flex";
+    console.log("Mostrando tela de boas-vindas");
+} else {
+    document.getElementById("TelaBoasVindas").style.display = "none";
+    console.log("Já existe conversa, escondendo tela de boas-vindas");
+}
+
+console.log(estado.conversaAtualId);
+
     
     carregarConversas(dadosConversas);
     carregarConversa(estado.conversaAtualId);
@@ -305,6 +311,8 @@ async function mudarConversa(conversaId) {
 function carregarConversa(conversaId) {
     const conversa = estado.conversas.find(c => c.id === conversaId);
     if (!conversa) return;
+    document.getElementById("TelaBoasVindas").style.display = "none";
+    console.log("Já existe conversa, escondendo tela de boas-vindas");
     console.log(conversa)
     document.getElementById('current-chat-name').textContent = conversa.nome;
     document.getElementById('current-chat-avatar').src = conversa.avatar;
@@ -584,3 +592,18 @@ function configurarEventos() {
     document.getElementById('search-next').addEventListener('click', resultadoAnterior);
     document.getElementById('search-prev').addEventListener('click', proximoResultado);
 }
+
+
+  // Configurações de conversa--------------------------------------------MAIS TRABALHO AZEVEDO!!!!!!!!!
+const menuToggle = document.getElementById("menu-toggle");
+  const menuDropdown = document.getElementById("menu-dropdown");
+
+  menuToggle.addEventListener("click", () => {
+    menuDropdown.classList.toggle("hidden");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menuToggle.contains(e.target) && !menuDropdown.contains(e.target)) {
+      menuDropdown.classList.add("hidden");
+    }
+});

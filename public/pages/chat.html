@@ -8,6 +8,10 @@
     <title>EmpreGo | Chat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -28,16 +32,30 @@
         }
     </script>
     <link rel="stylesheet" href="/css/chat.css">
+    
 </head>
 
 <body class="bg-dark-900 text-white h-screen flex overflow-hidden">
+    <div id="loader-container"></div>
+    <script>
+        fetch("/components/loader/loader.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("loader-container").innerHTML = html;
+
+            // Só carrega o JS do loader depois que o HTML foi injetado
+            const script = document.createElement("script");
+            script.src = "/components/loader/loader.js";
+            document.body.appendChild(script);
+        });
+    </script>
     <!-- Sidebar -->
     <aside class="w-16 bg-dark-800 border-r border-gray-800 flex flex-col h-full items-center py-4">
         <!-- Foto de perfil do usuário -->
         <a href="/perfil/candidato" class="relative mb-8">
             <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="FotoDePerfil"
                 class="w-8 h-8 object-cover rounded-full cursor-pointer" />
-            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800 "></div>
+            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800" id="bolaSemMexer"></div>
         </a>
 
         <!-- Ícones de navegação -->
@@ -231,6 +249,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
     <script src="/js/chat.js" type="module"></script>
+    <link rel="stylesheet" href="/components/loader/loader.css">
 </body>
 
 </html>

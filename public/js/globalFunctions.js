@@ -152,20 +152,23 @@ export function logout(){
 }
 
 export function finalizarLoader(){
-  gsap.to('#loader', {
-    duration: 0.5,
-    opacity: 0,
-    onComplete: () => {
-    document.getElementById('loader').classList.add('hidden');
-    document.getElementById('content').classList.remove('hidden');
-    
-    // Animação de entrada do conteúdo
-    // gsap.from('#content', {
-    //     duration: 0.5,
-    //     opacity: 0,
-    //     y: 20
-    // });
-    }
-  });
-  document.querySelector('#content').style.display = 'block'
+  setTimeout(()=>{
+    gsap.to('#loader', {
+      duration: 0.5,
+      opacity: 0,
+      onComplete: () => {
+      document.getElementById('loader').classList.add('hidden');
+      if(document.getElementById('content')) document.getElementById('content').classList.remove('hidden');
+      
+      // Animação de entrada do conteúdo
+      // gsap.from('#content', {
+      //     duration: 0.5,
+      //     opacity: 0,
+      //     y: 20
+      // });
+      }
+    });
+    if(document.querySelector('#content')) document.querySelector('#content').style.display = 'block'
+  }, 300)
+  
 }

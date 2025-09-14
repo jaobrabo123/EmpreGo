@@ -228,7 +228,7 @@ anime({
 
 // Animação dos elementos flutuantes
 anime({
-    targets: '.absolute.rounded-full',
+    targets: '.absolute.rounded-full:not(#bolaSemMexer)',
     translateY: () => anime.random(-20, 20),
     translateX: () => anime.random(-15, 15),
     duration: () => anime.random(2000, 5000),

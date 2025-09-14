@@ -80,3 +80,8 @@ body {
     border: 20px solid #fdfdfd;
     border-radius: 50px;
 }
+
+::-webkit-scrollbar-thumb {
+    background: #6B21A8;
+    border-radius: 4px;
+}

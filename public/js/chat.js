@@ -175,21 +175,21 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         resultadosPesquisa: [],
         indicePesquisaAtual: -1
     };
-if (estado.conversaAtualId === 0) {
-    document.getElementById("TelaBoasVindas").style.display = "flex";
-    console.log("Mostrando tela de boas-vindas");
-} else {
-    document.getElementById("TelaBoasVindas").style.display = "none";
-    console.log("Já existe conversa, escondendo tela de boas-vindas");
-}
+    if (estado.conversaAtualId === 0) {
+        document.getElementById("TelaBoasVindas").style.display = "flex";
+        console.log("Mostrando tela de boas-vindas");
+    } else {
+        document.getElementById("TelaBoasVindas").style.display = "none";
+        console.log("Já existe conversa, escondendo tela de boas-vindas");
+    }
 
-console.log(estado.conversaAtualId);
-
+    console.log(estado.conversaAtualId);
     
     carregarConversas(dadosConversas);
     carregarConversa(estado.conversaAtualId);
     configurarEventos();
     atualizarContadorMensagens();
+    finalizarLoader();
     //finalizarLoader()
     setInterval(()=>{
         socket.emit('refreshStatus');

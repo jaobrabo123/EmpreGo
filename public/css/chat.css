@@ -85,3 +85,22 @@ body {
     background: #6B21A8;
     border-radius: 4px;
 }
+
+ /* Estiliza o scroll do textarea */
+.message-input::-webkit-scrollbar {
+  width: 8px; /* largura da barra */
+}
+
+.message-input::-webkit-scrollbar-track {
+  background: #1e1e1e; /* cor de fundo da área do scroll */
+  border-radius: 10px;
+}
+
+.message-input::-webkit-scrollbar-thumb {
+  background: #8B5CF6; /* cor da barra */
+  border-radius: 10px;
+}
+
+.message-input::-webkit-scrollbar-thumb:hover {
+  background: #7C3AED; /* cor ao passar o mouse */
+}

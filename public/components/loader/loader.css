@@ -1,69 +1,158 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-    
-.orb {
-    background: radial-gradient(circle at 30% 30%, #8B5CF6, #7C3AED);
-    box-shadow: 0 0 40px 15px rgba(139, 92, 246, 0.6);
-}
+ @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-.grid-pattern {
-    background-image: 
-    linear-gradient(rgba(20, 20, 20, 0.7) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 20, 20, 0.7) 1px, transparent 1px);
-    background-size: 40px 40px;
-}
+ .orb {
+     background: radial-gradient(circle at 30% 30%, #8B5CF6, #7C3AED);
+     box-shadow: 0 0 40px 15px rgba(139, 92, 246, 0.6);
+ }
 
-.neon-text {
-    text-shadow: 0 0 7px #8B5CF6, 0 0 10px #8B5CF6, 0 0 21px #8B5CF6;
-}
+ .grid-pattern {
+     background-image:
+         linear-gradient(rgba(20, 20, 20, 0.7) 1px, transparent 1px),
+         linear-gradient(90deg, rgba(20, 20, 20, 0.7) 1px, transparent 1px);
+     background-size: 40px 40px;
+ }
 
-.hexagon {
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-}
+ .neon-text {
+     text-shadow: 0 0 7px #8B5CF6, 0 0 10px #8B5CF6, 0 0 21px #8B5CF6;
+ }
 
-#particles-js {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 0;
-}
+ .hexagon {
+     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+ }
 
-.loader-content {
-    position: relative;
-    z-index: 10;
-}
+ #particles-js {
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     top: 0;
+     left: 0;
+     z-index: 0;
+ }
 
-/* Estilo para os pontos de carregamento */
-.loading-dots span {
-    display: inline-block;
-    opacity: 0;
-}
+ .loader-content {
+     position: relative;
+     z-index: 10;
+ }
 
-/* Container para a animação 3D */
-#sphere-3d-container {
-    width: 200px;
-    height: 200px;
-    margin: 20px auto;
-    position: relative;
-    cursor: grab;
-    z-index: 20; /* Adicionado para garantir que fique acima das partículas */
-}
+ /* Estilo para os pontos de carregamento */
+ .loading-dots span {
+     display: inline-block;
+     opacity: 0;
+ }
 
-#sphere-3d-container:active {
-    cursor: grabbing;
-}
+ /* Container para a animação 3D */
+ #sphere-3d-container {
+     width: 200px;
+     height: 200px;
+     margin: 20px auto;
+     position: relative;
+     cursor: grab;
+     z-index: 20;
+     /* Adicionado para garantir que fique acima das partículas */
+ }
 
-/* Instruções para interação 3D */
-.interaction-hint {
-    margin-top: 10px;
-    color: #E5E7EB;
-    font-size: 0.9rem;
-    text-align: center;
-}
+ #sphere-3d-container:active {
+     cursor: grabbing;
+ }
 
-/* Garantir que o canvas 3D tenha prioridade de interação */
-#sphere-3d-container canvas {
-    position: relative;
-    z-index: 21;
-}
+ /* Instruções para interação 3D */
+ .interaction-hint {
+     margin-top: 10px;
+     color: #E5E7EB;
+     font-size: 0.9rem;
+     text-align: center;
+ }
+
+ /* Garantir que o canvas 3D tenha prioridade de interação */
+ #sphere-3d-container canvas {
+     position: relative;
+     z-index: 21;
+ }
+
+ body {
+     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+ }
+
+ .custom-scrollbar::-webkit-scrollbar {
+     width: 6px;
+ }
+
+ .custom-scrollbar::-webkit-scrollbar-track {
+     background: transparent;
+ }
+
+ .custom-scrollbar::-webkit-scrollbar-thumb {
+     background-color: rgba(156, 163, 175, 0.5);
+     border-radius: 3px;
+ }
+
+ .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+     background-color: rgba(156, 163, 175, 0.7);
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ .fade-in {
+     animation: fadeIn 0.3s ease-out forwards;
+ }
+
+ .message-input {
+     resize: none;
+     max-height: 120px;
+     overflow-y: auto;
+ }
+
+ .conversation-transition {
+     transition: opacity 0.3s ease;
+ }
+
+ .notification-badge {
+     position: absolute;
+     top: -5px;
+     right: -5px;
+     width: 20px;
+     height: 20px;
+     border-radius: 50%;
+     background-color: #8B5CF6;
+     color: white;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 12px;
+     font-weight: bold;
+ }
+
+ .sidebar-icon {
+     position: relative;
+     transition: all 0.3s ease;
+ }
+
+ .sidebar-icon:hover {
+     transform: scale(1.1);
+ }
+
+ .search-h {
+     background-color: rgba(139, 92, 246, 0.3);
+     border-radius: 12px;
+     padding: 0 2px;
+ }
+
+ .active-search-result {
+     border: 20px solid #fdfdfd;
+     border-radius: 50px;
+ }
+
+ ::-webkit-scrollbar-thumb {
+     background: #6B21A8;
+     border-radius: 4px;
+ }

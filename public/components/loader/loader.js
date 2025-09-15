@@ -8,82 +8,165 @@ let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 let sphereRotation = { x: 0, y: 0 };
 
-// Configuração do Particles.js para o loader
-document.addEventListener('DOMContentLoaded', function() {
-    particlesJS('particles-js', {
-    particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: "#8B5CF6" },
-        shape: { type: "circle" },
-        opacity: { value: 0.5, random: true },
-        size: { value: 3, random: true },
-        line_linked: {
-        enable: true,
-        distance: 150,
-        color: "#7C3AED",
-        opacity: 0.4,
-        width: 1
-        },
-        move: {
-        enable: true,
-        speed: 2,
-        direction: "none",
-        random: true,
-        straight: false,
-        out_mode: "out",
-        bounce: false
-        }
-    },
-    interactivity: {
-        detect_on: "canvas",
-        events: {
-        onhover: { enable: true, mode: "repulse" },
-        onclick: { enable: true, mode: "push" },
-        resize: true
-        }
-    },
-    retina_detect: true
-    });
+// Função para inicializar o loader
+function initLoader() {
+    // Configuração do Particles.js para o loader
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#8B5CF6" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#7C3AED",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+    }
 
     // Inicializar a animação 3D
     init3DSphere();
-});
+
+    // Animação da esfera central com GSAP
+    if (typeof gsap !== 'undefined') {
+        gsap.to('.orb', {
+            duration: 2,
+            scale: 1.1,
+            repeat: -1,
+            yoyo: true,
+            ease: "power1.inOut"
+        });
+
+        // Animação dos anéis com GSAP
+        gsap.to('.ring-1', {
+            duration: 3,
+            scale: 1.2,
+            opacity: 0,
+            repeat: -1,
+            ease: "power1.out"
+        });
+    }
+
+    // Animação dos hexágonos com Anime.js
+    if (typeof anime !== 'undefined') {
+        anime({
+            targets: '.hexagon',
+            rotate: '360',
+            duration: 18000,
+            easing: 'linear',
+            loop: true
+        });
+
+        // Animação dos elementos flutuantes
+        anime({
+            targets: '.absolute.rounded-full:not(#bolaSemMexer)',
+            translateY: () => anime.random(-20, 20),
+            translateX: () => anime.random(-15, 15),
+            duration: () => anime.random(2000, 5000),
+            easing: 'easeInOutQuad',
+            direction: 'alternate',
+            loop: true
+        });
+
+        // Animação dos pontos de "carregando..."
+        anime({
+            targets: '.loading-dots span',
+            opacity: [0, 1],
+            duration: 800,
+            delay: anime.stagger(400),
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutQuad'
+        });
+    }
+
+    // Simulação de progresso
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 5;
+        if (progress > 100) progress = 100;
+
+        if (progress === 100) {
+            clearInterval(progressInterval);
+            // Esconder o loader quando o carregamento estiver completo
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+            }, 500);
+        }
+    }, 300);
+}
 
 // Inicializar a esfera 3D
 function init3DSphere() {
+    // Verificar se THREE está disponível
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js não está carregado.');
+        return;
+    }
+
+    // Verificar se o container existe
+    const container = document.getElementById('sphere-3d-container');
+    if (!container) {
+        console.error('Container da esfera 3D não encontrado.');
+        return;
+    }
+
     // Configurar cena, câmera e renderizador
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(200, 200);
-    
+
     // Garantir que o canvas seja interativo
     const canvas = renderer.domElement;
     canvas.style.pointerEvents = 'auto';
-    
-    document.getElementById('sphere-3d-container').appendChild(canvas);
-    
+
+    container.appendChild(canvas);
+
     // Adicionar luzes
     const ambientLight = new THREE.AmbientLight(0x888888);
     scene.add(ambientLight);
-    
+
     const directionalLight = new THREE.DirectionalLight(0x8B5CF6, 1);
     directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
-    
+
     // Criar esfera com material especial
     const geometry = new THREE.SphereGeometry(2, 32, 32);
     const material = new THREE.MeshPhongMaterial({
-    color: 0x7C3AED,
-    shininess: 100,
-    specular: 0x8B5CF6,
-    emissive: 0x4A1DCD,
-    emissiveIntensity: 0.2
+        color: 0x7C3AED,
+        shininess: 100,
+        specular: 0x8B5CF6,
+        emissive: 0x4A1DCD,
+        emissiveIntensity: 0.2
     });
-    
+
     sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
-    
+
     // Adicionar wireframe para efeito tecnológico
     const wireframe = new THREE.WireframeGeometry(geometry);
     const line = new THREE.LineSegments(wireframe);
@@ -91,13 +174,13 @@ function init3DSphere() {
     line.material.opacity = 0.3;
     line.material.transparent = true;
     sphere.add(line);
-    
+
     // Posicionar a câmera
     camera.position.z = 5;
-    
+
     // Adicionar eventos de interação
     setupInteraction();
-    
+
     // Iniciar animação
     animate();
 }
@@ -105,8 +188,11 @@ function init3DSphere() {
 // Configurar interação com a esfera
 function setupInteraction() {
     const container = document.getElementById('sphere-3d-container');
+    if (!container) return;
+
     const canvas = container.querySelector('canvas');
-    
+    if (!canvas) return;
+
     // Adicionar eventos diretamente ao canvas
     canvas.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mouseup', onMouseUp);
@@ -119,8 +205,8 @@ function setupInteraction() {
 function onMouseDown(event) {
     isDragging = true;
     previousMousePosition = {
-    x: event.clientX,
-    y: event.clientY
+        x: event.clientX,
+        y: event.clientY
     };
     event.stopPropagation(); // Impede que o evento se propague para outras camadas
 }
@@ -131,30 +217,30 @@ function onMouseUp() {
 
 function onMouseMove(event) {
     if (!isDragging) return;
-    
+
     const deltaMove = {
-    x: event.clientX - previousMousePosition.x,
-    y: event.clientY - previousMousePosition.y
+        x: event.clientX - previousMousePosition.x,
+        y: event.clientY - previousMousePosition.y
     };
-    
+
     sphereRotation.x += deltaMove.y * 0.01;
     sphereRotation.y += deltaMove.x * 0.01;
-    
+
     previousMousePosition = {
-    x: event.clientX,
-    y: event.clientY
+        x: event.clientX,
+        y: event.clientY
     };
 }
 
 function onTouchStart(event) {
     if (event.touches.length === 1) {
-    event.preventDefault();
-    isDragging = true;
-    previousMousePosition = {
-        x: event.touches[0].clientX,
-        y: event.touches[0].clientY
-    };
-    event.stopPropagation(); // Impede que o evento se propague para outras camadas
+        event.preventDefault();
+        isDragging = true;
+        previousMousePosition = {
+            x: event.touches[0].clientX,
+            y: event.touches[0].clientY
+        };
+        event.stopPropagation(); // Impede que o evento se propague para outras camadas
     }
 }
 
@@ -164,98 +250,46 @@ function onTouchEnd() {
 
 function onTouchMove(event) {
     if (!isDragging || event.touches.length !== 1) return;
-    
+
     event.preventDefault();
-    
+
     const deltaMove = {
-    x: event.touches[0].clientX - previousMousePosition.x,
-    y: event.touches[0].clientY - previousMousePosition.y
+        x: event.touches[0].clientX - previousMousePosition.x,
+        y: event.touches[0].clientY - previousMousePosition.y
     };
-    
+
     sphereRotation.x += deltaMove.y * 0.01;
     sphereRotation.y += deltaMove.x * 0.01;
-    
+
     previousMousePosition = {
-    x: event.touches[0].clientX,
-    y: event.touches[0].clientY
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY
     };
 }
 
 // Animação da esfera 3D
 function animate() {
+    if (!renderer) return;
+
     requestAnimationFrame(animate);
-    
+
     // Aplicar rotação suave mesmo quando não está sendo arrastada
     if (!isDragging) {
-    sphereRotation.y += 0.005;
+        sphereRotation.y += 0.005;
     }
-    
+
     // Limitar rotação no eixo X para não virar de cabeça para baixo
-    sphereRotation.x = Math.max(-Math.PI/3, Math.min(Math.PI/3, sphereRotation.x));
-    
-    sphere.rotation.x = sphereRotation.x;
-    sphere.rotation.y = sphereRotation.y;
-    
+    sphereRotation.x = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, sphereRotation.x));
+
+    if (sphere) {
+        sphere.rotation.x = sphereRotation.x;
+        sphere.rotation.y = sphereRotation.y;
+    }
+
     renderer.render(scene, camera);
 }
 
-// Animação da esfera central com GSAP
-gsap.to('.orb', {
-    duration: 2,
-    scale: 1.1,
-    repeat: -1,
-    yoyo: true,
-    ease: "power1.inOut"
+// Inicializar o loader quando a página estiver carregada
+document.addEventListener('DOMContentLoaded', function () {
+    initLoader();
 });
-
-// Animação dos anéis com GSAP
-gsap.to('.ring-1', {
-    duration: 3,
-    scale: 1.2,
-    opacity: 0,
-    repeat: -1,
-    ease: "power1.out"
-});
-
-// Animação dos hexágonos com Anime.js
-anime({
-    targets: '.hexagon',
-    rotate: '360',
-    duration: 18000,
-    easing: 'linear',
-    loop: true
-});
-
-// Animação dos elementos flutuantes
-anime({
-    targets: '.absolute.rounded-full:not(#bolaSemMexer)',
-    translateY: () => anime.random(-20, 20),
-    translateX: () => anime.random(-15, 15),
-    duration: () => anime.random(2000, 5000),
-    easing: 'easeInOutQuad',
-    direction: 'alternate',
-    loop: true
-});
-
-// Animação dos pontos de "carregando..."
-anime({
-    targets: '.loading-dots span',
-    opacity: [0, 1],
-    duration: 800,
-    delay: anime.stagger(400),
-    loop: true,
-    direction: 'alternate',
-    easing: 'easeInOutQuad'
-});
-
-// Simulação de progresso
-const progressInterval = setInterval(() => {
-    progress += Math.random() * 5;
-    if (progress > 100) progress = 100;
-    
-    if (progress === 100) {
-    clearInterval(progressInterval);
-    }
-}, 300);
-
-// Simula carregamento

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmpreGo | Fórum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Cores da Twitch
+            twitch: {
+              dark: '#0E0E10',
+              gray: '#18181B',
+              purple: '#9146FF',
+              lightpurple: '#AF78FF',
+              text: '#EFEFF1'
+            },
+            primary: {
+              50: '#faf5ff',
+              100: '#f3e8ff',
+              200: '#e9d5ff',
+              300: '#d8b4fe',
+              400: '#c084fc',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
+              800: '#6b21a8',
+              900: '#581c87',
+            },
+            dark: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            'inter': ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+    <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
+      <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style type="text/css">
+    /* Cores da Twitch */
+    body {
+      background-color: #0E0E10;
+      color: #EFEFF1;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #18181B;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #9146FF;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #AF78FF;
+    }
+
+
+    /* Estilos de animação para os filtros */
+    .filter-chips-container {
+      display: none;
+    }
+
+    .filter-chips-container.open {
+      display: block;
+      animation: dropdown-fade-in 0.18s;
+    }
+
+    @keyframes dropdown-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .profile-dropdown {
+      display: none;
+      animation: dropdown-fade-in 0.18s;
+    }
+
+    .profile-dropdown.show {
+      display: flex;
+    }
+
+    /* Ajustes específicos para melhorar a acessibilidade visual */
+    .filter-chip:focus,
+    .favorite-btn:focus,
+    .ver-mais-btn:focus,
+    .ver-todas-btn:focus {
+      outline: 2px solid #9146FF;
+      outline-offset: 2px;
+    }
+
+    /* Melhorar contraste para acessibilidade */
+    .text-dark-400 {
+      color: #94a3b8;
+    }
+
+    /* Efeito de pulso para os chips quando clicados */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .tag-chip.clicked {
+      animation: pulse 0.3s ease;
+    }
+
+    /* Classe para sidebar aberta */
+    .sidebar-open {
+      transform: translateX(0) !important;
+    }
+
+    /* Estilo para estrela ativa */
+    .favorite-btn.active {
+      color: #fbbf24 !important;
+    }
+
+    /* Estilos para botões roxos com animação */
+    .btn-primary {
+      background-color: #9146FF;
+      /* Roxo da Twitch */
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #AF78FF;
+      /* Roxo claro da Twitch */
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-primary {
+      background-color: transparent;
+      border: 2px solid #9146FF;
+      color: #9146FF;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: #9146FF;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Novos estilos para os filtros categorizados */
+    .filter-category {
+      margin-bottom: 0.5rem;
+    }
+
+    .filter-category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      cursor: pointer;
+      background-color: #18181B;
+      border-radius: 0.25rem;
+      transition: background-color 0.2s;
+    }
+
+    .filter-category-header:hover {
+      background-color: #252529;
+    }
+
+    .filter-category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .filter-category-content.open {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .filter-category-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 0.5rem;
+    }
+
+    /* Container de filtros com tamanho fixo e scroll */
+    .filter-chips-container {
+      max-height: 400px;
+      overflow-y: auto;
+      width: 350px;
+    }
+
+    /* NOVOS ESTILOS PARA OS CHIPS - CINZA ESCURO E ROXO AO CLICAR */
+    .filter-chip,
+    .tag-chip {
+      background-color: #2D2D2D !important;
+      /* Cinza escuro */
+      color: #EFEFF1 !important;
+      transition: all 0.3s ease;
+    }
+
+    .filter-chip.selected,
+    .tag-chip.selected,
+    .filter-chip[aria-pressed="true"],
+    .tag-chip[aria-pressed="true"] {
+      background-color: #9146FF !important;
+      /* Roxo quando selecionado */
+    }
+
+    .filter-chip:hover,
+    .tag-chip:hover {
+      background-color: #3D3D3D !important;
+      /* Cinza um pouco mais claro no hover */
+    }
+
+    .filter-chip.selected:hover,
+    .tag-chip.selected:hover,
+    .filter-chip[aria-pressed="true"]:hover,
+    .tag-chip[aria-pressed="true"]:hover {
+      background-color: #AF78FF !important;
+      /* Roxo claro no hover quando selecionado */
+    }
+
+    /* NOVOS ESTILOS PARA FAVORITOS NA SIDEBAR */
+    .favoritos-container {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      max-height: 300px;
+      /* Altura máxima antes de aparecer o scroll */
+      overflow-y: auto;
+    }
+
+    .favoritos-container.scrollable {
+      overflow-y: scroll;
+    }
+
+    /* Estilizar a scrollbar para combinar com o tema */
+    .favoritos-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      border-radius: 3px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-thumb {
+      background: #9146FF;
+      border-radius: 3px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-thumb:hover {
+      background: #AF78FF;
+    }
+
+    .favorito-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.25rem;
+      transition: background-color 0.2s;
+    }
+
+    .favorito-item:hover {
+      background-color: #252529;
+    }
+
+    .favorito-info {
+      flex-grow: 1;
+      margin-left: 0.5rem;
+      overflow: hidden;
+    }
+
+    .favorito-nome {
+      font-size: 0.9rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .favorito-categoria {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .favorito-actions {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .chat-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: #9146FF;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chat-btn:hover {
+      background-color: #AF78FF;
+      transform: scale(1.1);
+    }
+
+    .favorito-star {
+      color: #fbbf24;
+      margin-right: 0.25rem;
+    }
+
+    .ver-mais-favoritos {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      background-color: #252529;
+      border-radius: 0.25rem;
+      color: #EFEFF1;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: background-color 0.2s;
+    }
+
+    .ver-mais-favoritos:hover {
+      background-color: #9146FF;
+    }
+
+    .favoritos-select {
+      width: 100%;
+      background-color: #18181B;
+      color: #EFEFF1;
+      border: 1px solid #3D3D3D;
+      border-radius: 0.25rem;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .favoritos-select:focus {
+      outline: none;
+      border-color: #9146FF;
+    }
+
+    .favoritos-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-thumb {
+      background-color: #9147ff;
+      /* twitch-purple */
+      border-radius: 3px;
+    }
+
+    .favoritos-container::-webkit-scrollbar-track {
+      background-color: #1f1f1f;
+      /* fundo da sidebar */
+    }
+
+    /* AJUSTES DE LAYOUT PARA EMPRESAS */
+    .empresas-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+  </style>
+</head>
+<body>
+    
+</body>
+</html>

@@ -5,130 +5,527 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/profileStyles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                // Cores da Twitch
+                twitch: {
+                  dark: '#0E0E10',
+                  gray: '#18181B',
+                  purple: '#9146FF',
+                  lightpurple: '#AF78FF',
+                  text: '#EFEFF1'
+                },
+                primary: {
+                  50: '#faf5ff',
+                  100: '#f3e8ff',
+                  200: '#e9d5ff',
+                  300: '#d8b4fe',
+                  400: '#c084fc',
+                  500: '#a855f7',
+                  600: '#9333ea',
+                  700: '#7e22ce',
+                  800: '#6b21a8',
+                  900: '#581c87',
+                },
+                dark: {
+                  50: '#f8fafc',
+                  100: '#f1f5f9',
+                  200: '#e2e8f0',
+                  300: '#cbd5e1',
+                  400: '#94a3b8',
+                  500: '#64748b',
+                  600: '#475569',
+                  700: '#334155',
+                  800: '#1e293b',
+                  900: '#0f172a',
+                }
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+              },
+            }
+          }
+        }
+      </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <title>EmpreGo | Perfil</title>
+    <style>
+        .tags {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z'%3E%3C/path%3E%3Cline x1='7' y1='7' x2='7.01' y2='7'%3E%3C/line%3E%3C/svg%3E");
+            background-position: 5px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-left: 28px;
+        }
+        
+        .tab-active {
+            position: relative;
+            color: #a855f7;
+        }
+        
+        .tab-active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #a855f7;
+            border-radius: 3px;
+        }
+        
+        .notification-dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background-color: #ef4444;
+            border-radius: 50%;
+        }
+        
+        .experience-card {
+            transition: all 0.3s ease;
+        }
+        
+        .experience-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Estilos para os modais */
+        #modalInput, #modalDelete {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #modalInput-content, #modalDelete-content {
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+        }
+    </style>
 </head>
 
-<body>
-    <header>
-        <div id="logo">
-            <a href="/" target="_self">
-                <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg">
-            </a>
-            <a href="/" target="_self" id="nomedosite">Empre<span>Go</span></a>
-
+<body class="bg-dark-900 text-twitch-text font-inter min-h-screen">
+    <header class="fixed top-0 left-0 right-0 bg-dark-800 shadow-lg z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div id="logo" class="flex items-center">
+                <a href="/" target="_self" class="flex items-center">
+                    <img src="/assets/imgs/BIGSlogo.png" alt="Logo" id="logoimg" class="h-10 mr-2">
+                    <span id="nomedosite" class="text-xl font-bold text-white">Empre<span class="text-primary-500">Go</span></span>
+                </a>
+            </div>
+            <nav class="links flex items-center space-x-6">
+                <a href="/" class="text-gray-300 hover:text-white transition-colors">Inicio</a>
+                <a class="headerlink text-gray-300 hover:text-white transition-colors" href="/sobre" target="_self">Sobre</a>
+                <a class="headerlink text-gray-300 hover:text-white transition-colors" href="/suporte" target="_self">Suporte</a>
+                <a class="headerlink bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-md transition-colors" href="/login" target="_self" id="loginOuCadas">Login / Cadastrar</a>
+                <a class="headerlink hidden" href="/perfil/candidato" target="_self" id="fotoPerfil">
+                    <img src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg" class="w-10 h-10 rounded-full">
+                </a>
+                <a href="#" id="logout" class="text-gray-300 hover:text-white transition-colors hidden">Sair</a>
+            </nav>
         </div>
-        <nav class="links">
-            <a href="/">Inicio</a>
-            <a class="headerlink" href="/sobre" target="_self">Sobre</a>
-            <a class="headerlink" href="/suporte" target="_self">Suporte</a>
-            <a class="headerlink" href="/login" target="_self" id="loginOuCadas">Login / Cadastrar</a>
-            <a class="headerlink" href="/perfil/candidato" target="_self" style="display: none;" id="fotoPerfil"><img
-              src="/assets/imgs/genPfp.png" alt="Foto de perfil do usuário" id="fotoPerfilImg"></a>
-            <a href="#" id="logout">Sair</a>
-        </nav>
     </header>
 
-    <div id="main">
-        <div id="bodyLeft">
-            <div id="impInfo">
-                <img id="fotoUsuario" src="../assets/imgs/genPfp.png" alt="genPfp">
-                <h1 id="nascUsuario">XX/XX/19XX</h1>
-                <h1 id="cpfUsuario">Edite o perfil para exibir CPF</h1>
-                <h1 id="pronUsuario">Elx/Delx</h1>
-                <button id="btnEditarPerfil" onclick="window.location.href='../pages/editarPerfil.html'"
-                    class="btn-editar-perfil">
-                    Editar Perfil
-                </button>
-            </div>
-
-            <div id="bodyMid">
-                <h1 id="nomUsuario">Nome de Usuário</h1>
-                <a id="emailUsuario">Edite o perfil para exibir E-mail</a>
-                <p id="descUsuario"></p>
-                <div id="conexoes">
-                    <img id="LogoInst" src="/assets/imgs/instagramLogo.png" alt="instLogo" class="logo">
-                    <a id="instUsuario" href="https://youtu.be/ua_DSJAD7gc?si=O3y6hQHb0lpgrBmo" class="nomeRedeSoc"
-                        target="_blank">
-                        Instagram
-                    </a>
-                    <img id="LogoGit"src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo">
-                    <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc"
-                        target="_blank">
-                        GitHub
-                    </a>
-
-                    <img id="LogoYt" src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo">
-                    <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc"
-                        target="_blank">
-                        Youtube
-                    </a>
-
-                    <img id="LogoTwt" src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo">
-                    <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc"
-                        target="_blank">
-                        Twitter/X
-                    </a>
+    <div id="main" class="container mx-auto px-4 pt-28 pb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Coluna esquerda - Informações principais -->
+            <div id="bodyLeft" class="lg:col-span-8 flex flex-col lg:flex-row gap-6">
+                <!-- Informações importantes -->
+                <div id="impInfo" class="bg-dark-800 rounded-xl p-6 shadow-lg lg:w-1/3 flex flex-col items-center">
+                    <img id="fotoUsuario" src="../assets/imgs/genPfp.png" alt="genPfp" class="w-40 h-40 rounded-full border-4 border-primary-600 object-cover mb-4">
+                    <div class="w-full space-y-2 mb-6">
+                        <div class="bg-dark-700 rounded-lg p-3">
+                            <i class="fas fa-birthday-cake text-primary-500 mr-2"></i>
+                            <span id="nascUsuario" class="text-sm">XX/XX/19XX</span>
+                        </div>
+                        <div class="bg-dark-700 rounded-lg p-3">
+                            <i class="fas fa-id-card text-primary-500 mr-2"></i>
+                            <span id="cpfUsuario" class="text-sm">Edite o perfil para exibir CPF</span>
+                        </div>
+                        <div class="bg-dark-700 rounded-lg p-3">
+                            <i class="fas fa-user text-primary-500 mr-2"></i>
+                            <span id="pronUsuario" class="text-sm">Elx/Delx</span>
+                        </div>
+                    </div>
+                    <button id="btnEditarPerfil" onclick="window.location.href='../pages/editarPerfil.html'" class="btn-editar-perfil w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                        Editar Perfil
+                    </button>
                 </div>
 
-                <div id="enderecoInfo">
-                    <img id="houseIcon" src="/assets/imgs/House.png" alt="HouseIcon">
-                    <div id="alignEndereco">
-                        <div id="cidadeEstado">
-                            <h1 id="cidadeUsuario">Cidade: (Nenhuma)</h1>
-                            <h1 id="estadoUsuario"> (Estado: (XX))</h1>
+                <!-- Informações centrais -->
+                <div id="bodyMid" class="bg-dark-800 rounded-xl p-6 shadow-lg lg:w-2/3 flex flex-col">
+                    <h1 id="nomUsuario" class="text-3xl font-bold mb-2 text-center lg:text-left">Nome de Usuário</h1>
+                    <div class="flex items-center justify-center lg:justify-start mb-6">
+                        <i class="fas fa-envelope text-primary-500 mr-2"></i>
+                        <a id="emailUsuario" class="text-lg text-gray-400">Edite o perfil para exibir E-mail</a>
+                    </div>
+                    
+                    <div class="bg-dark-700 rounded-lg p-4 mb-6">
+                        <h2 class="text-lg font-semibold mb-2 text-primary-400">Sobre</h2>
+                        <p id="descUsuario" class="text-gray-300 text-justify">Adicione uma descrição sobre você, suas habilidades e experiências profissionais.</p>
+                    </div>
+                    
+                    <div id="conexoes" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="flex items-center bg-dark-700 rounded-lg p-3">
+                            <img id="LogoInst" src="/assets/imgs/instagramLogo.png" alt="instLogo" class="logo w-6 h-6 mr-3">
+                            <a id="instUsuario" href="https://youtu.be/ua_DSJAD7gc?si=O3y6hQHb0lpgrBmo" class="nomeRedeSoc text-gray-300 hover:text-primary-400 transition-colors" target="_blank">
+                                Instagram
+                            </a>
+                        </div>
+                        
+                        <div class="flex items-center bg-dark-700 rounded-lg p-3">
+                            <img id="LogoGit" src="/assets/imgs/gitLogo.png" alt="gitLogo" class="logo w-6 h-6 mr-3">
+                            <a id="gitUsuario" href="https://youtu.be/HkSUnEiSVYM?si=hsN34T4gxI8P_-Wp" class="nomeRedeSoc text-gray-300 hover:text-primary-400 transition-colors" target="_blank">
+                                GitHub
+                            </a>
+                        </div>
+
+                        <div class="flex items-center bg-dark-700 rounded-lg p-3">
+                            <img id="LogoYt" src="/assets/imgs/ytLogo.png" alt="ytLogo" class="logo w-6 h-6 mr-3">
+                            <a id="ytUsuario" href="https://www.youtube.com/watch?v=0DUMm3KjfWQ" class="nomeRedeSoc text-gray-300 hover:text-primary-400 transition-colors" target="_blank">
+                                Youtube
+                            </a>
+                        </div>
+
+                        <div class="flex items-center bg-dark-700 rounded-lg p-3">
+                            <img id="LogoTwt" src="/assets/imgs/twitterLogo.png" alt="twitterLogo" class="logo w-6 h-6 mr-3">
+                            <a id="twtUsuario" href="https://youtu.be/7e9JxMUM_O8?si=vqnviU6GHhM7szyP" class="nomeRedeSoc text-gray-300 hover:text-primary-400 transition-colors" target="_blank">
+                                Twitter/X
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="enderecoInfo" class="bg-dark-700 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <img id="houseIcon" src="/assets/imgs/House.png" alt="HouseIcon" class="w-8 h-8 mr-3">
+                            <div id="alignEndereco">
+                                <div id="cidadeEstado" class="flex flex-col sm:flex-row sm:items-center">
+                                    <h1 id="cidadeUsuario" class="text-gray-300 mb-1 sm:mb-0 sm:mr-4">Cidade: (Nenhuma)</h1>
+                                    <h1 id="estadoUsuario" class="text-gray-300">Estado: (XX)</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna direita - Tags e Estatísticas -->
+            <div id="bodyTags" class="lg:col-span-4 space-y-6">
+                <div class="bg-dark-800 rounded-xl p-6 shadow-lg">
+                    <h1 id="tituloTags" class="text-2xl font-bold mb-4 text-primary-400">Tags</h1>
+                    <div id="boxTags" class="bg-dark-700 rounded-lg p-4 border border-dark-600 min-h-[120px]">
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <div id="Tags">
+                                <!-- Tags serão adicionadas aqui dinamicamente -->
+                                <button class="tags bg-primary-800 text-white text-sm font-medium py-2 px-3 rounded-full hover:bg-primary-700 transition-colors" id="maisTags">...</button>
+                            </div>
+                        </div>
+                        <button id="btnAddTags" class="flex items-center text-primary-500 hover:text-primary-400 transition-colors">
+                            <i class="fas fa-plus-circle mr-2"></i>
+                            Adicionar tag
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Estatísticas -->
+                <div class="bg-dark-800 rounded-xl p-6 shadow-lg">
+                    <h2 class="text-xl font-bold mb-4 text-primary-400">Estatísticas</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-dark-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary-500 mb-1">12</div>
+                            <div class="text-sm text-gray-400">Visualizações</div>
+                        </div>
+                        <div class="bg-dark-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary-500 mb-1">5</div>
+                            <div class="text-sm text-gray-400">Conexões</div>
+                        </div>
+                        <div class="bg-dark-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary-500 mb-1">8</div>
+                            <div class="text-sm text-gray-400">Experiências</div>
+                        </div>
+                        <div class="bg-dark-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary-500 mb-1">3</div>
+                            <div class="text-sm text-gray-400">Projetos</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="bodyTags"> <!--Não existe método registro de tags ainda-->
-            <h1 id="tituloTags">Tags</h1>
-            <div id="boxTags">
-                <input type="image" id="btnAddTags" src="/assets/imgs/miniPlusBtn.png">
-                <div id="Tags">
-                    
-                    <button class="tags" id="maisTags">...</button>
+        <!-- Dashboard com abas -->
+        <div class="mt-10">
+            <!-- Navegação por abas -->
+            <div class="border-b border-dark-700 mb-6">
+                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="dashboard-tabs">
+                    <li class="mr-2">
+                        <button class="tab-button inline-block p-4 tab-active" data-tab="experiencias">
+                            <i class="fas fa-briefcase mr-2"></i>Experiências
+                        </button>
+                    </li>
+                    <li class="mr-2">
+                        <button class="tab-button inline-block p-4 text-gray-400 hover:text-gray-300" data-tab="favoritos">
+                            <i class="fas fa-star mr-2"></i>Favoritos
+                        </button>
+                    </li>
+                    <li class="mr-2">
+                        <button class="tab-button inline-block p-4 text-gray-400 hover:text-gray-300" data-tab="solicitacoes">
+                            <div class="relative">
+                                <i class="fas fa-handshake mr-2"></i>Solicitações
+                                <span class="notification-dot"></span>
+                            </div>
+                        </button>
+                    </li>
+                    <li class="mr-2">
+                        <button class="tab-button inline-block p-4 text-gray-400 hover:text-gray-300" data-tab="notificacoes">
+                            <div class="relative">
+                                <i class="fas fa-bell mr-2"></i>Notificações
+                                <span class="notification-dot"></span>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Conteúdo das abas -->
+            <div id="tab-content">
+                <!-- Aba Experiências -->
+                <div id="experiencias" class="tab-pane active">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="bodyBottom">
+                        <div id="boxCriar" class="bg-dark-800 rounded-xl p-5 shadow-lg flex flex-col items-center justify-center border-2 border-dashed border-dark-600 hover:border-primary-500 transition-colors cursor-pointer h-full">
+                            <a href="/experiencias/criar" class="flex flex-col items-center text-center">
+                                <i class="fas fa-plus-circle text-5xl text-primary-500 mb-3"></i>
+                                <p id="textCriar" class="text-gray-400">"Adicione um texto para descrever sua experiência em projetos ou empresas anteriores."</p>
+                            </a>
+                        </div>
+                        
+                        <!-- Experiências adicionadas aparecerão aqui -->
+                    </div>
+                </div>
+                
+                <!-- Aba Favoritos -->
+                <div id="favoritos" class="tab-pane hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-dark-800 rounded-xl p-5 shadow-lg border border-dark-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-lg font-semibold text-white">Vaga: Desenvolvedor Full-stack</h3>
+                                <button class="text-gray-400 hover:text-red-500">
+                                    <i class="fas fa-heart text-red-500"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-400 mb-4">Empresa: Tech Innovations • São Paulo, SP</p>
+                            <div class="flex justify-between items-center">
+                                <span class="bg-primary-900 text-primary-300 text-xs font-medium px-2.5 py-0.5 rounded">Remoto</span>
+                                <span class="text-xs text-gray-400">Salário: R$ 8.000 - R$ 12.000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-dark-800 rounded-xl p-5 shadow-lg border border-dark-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-lg font-semibold text-white">Vaga: Product Designer</h3>
+                                <button class="text-gray-400 hover:text-red-500">
+                                    <i class="fas fa-heart text-red-500"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-400 mb-4">Empresa: DesignHub • Rio de Janeiro, RJ</p>
+                            <div class="flex justify-between items-center">
+                                <span class="bg-primary-900 text-primary-300 text-xs font-medium px-2.5 py-0.5 rounded">Híbrido</span>
+                                <span class="text-xs text-gray-400">Salário: R$ 7.000 - R$ 10.000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-dark-800 rounded-xl p-5 shadow-lg border border-dark-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-lg font-semibold text-white">Curso: React Avançado</h3>
+                                <button class="text-gray-400 hover:text-red-500">
+                                    <i class="fas fa-heart text-red-500"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-400 mb-4">Plataforma: Udemy • 42 horas</p>
+                            <div class="flex justify-between items-center">
+                                <span class="bg-primary-900 text-primary-300 text-xs font-medium px-2.5 py-0.5 rounded">Online</span>
+                                <span class="text-xs text-gray-400">Promoção: R$ 39,90</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Aba Solicitações -->
+                <div id="solicitacoes" class="tab-pane hidden">
+                    <div class="bg-dark-800 rounded-xl shadow-lg overflow-hidden">
+                        <div class="border-b border-dark-700 px-6 py-4">
+                            <h3 class="text-lg font-semibold text-white">Solicitações de Conexão</h3>
+                        </div>
+                        <div class="divide-y divide-dark-700">
+                            <div class="p-6 flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <img src="/assets/imgs/genPfp.png" alt="User" class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <h4 class="font-medium text-white">Carlos Silva</h4>
+                                        <p class="text-gray-400">Desenvolvedor Sênior na ABC Tech</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium">Aceitar</button>
+                                    <button class="bg-dark-600 hover:bg-dark-500 text-gray-300 px-4 py-2 rounded-lg text-sm font-medium">Recusar</button>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <img src="/assets/imgs/genPfp.png" alt="User" class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <h4 class="font-medium text-white">Amanda Oliveira</h4>
+                                        <p class="text-gray-400">Recrutadora na TechRecruit</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium">Aceitar</button>
+                                    <button class="bg-dark-600 hover:bg-dark-500 text-gray-300 px-4 py-2 rounded-lg text-sm font-medium">Recusar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Aba Notificações -->
+                <div id="notificacoes" class="tab-pane hidden">
+                    <div class="bg-dark-800 rounded-xl shadow-lg overflow-hidden">
+                        <div class="border-b border-dark-700 px-6 py-4 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-white">Suas Notificações</h3>
+                            <button class="text-primary-500 hover:text-primary-400 text-sm font-medium">Marcar todas como lidas</button>
+                        </div>
+                        <div class="divide-y divide-dark-700">
+                            <div class="p-6 flex">
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center">
+                                        <i class="fas fa-briefcase text-primary-400"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium text-white">Nova vaga compatível</h4>
+                                    <p class="text-gray-400">Uma vaga de Desenvolvedor Front-end na Empresa XYZ corresponde ao seu perfil.</p>
+                                    <p class="text-xs text-gray-500 mt-1">Há 2 horas</p>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 flex">
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center">
+                                        <i class="fas fa-user-plus text-primary-400"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium text-white">Pedro Santos visualizou seu perfil</h4>
+                                    <p class="text-gray-400">Recrutador sênior na Tech Company.</p>
+                                    <p class="text-xs text-gray-500 mt-1">Há 1 dia</p>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 flex">
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 rounded-full bg-primary-900 flex items-center justify-center">
+                                        <i class="fas fa-calendar-check text-primary-400"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium text-white">Evento da comunidade</h4>
+                                    <p class="text-gray-400">Não perca o meetup de ReactJS na próxima sexta-feira às 19h.</p>
+                                    <p class="text-xs text-gray-500 mt-1">Há 3 dias</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <h1 id="tituloExperiencias">Experiências</h1>
-        <div id="bodyBottom">
-            <div id="boxCriar">
-                <a href="/experiencias/criar"> 
-                    <input type="image" id="fotoCriarBtn" src="/assets/imgs/plusBtn.png" alt="plusBtn">
-                </a>
-                <a id="textCriar">"Adicione um texto para descrever sua experiência em projetos ou empresas anteriores."</a>
-            </div>
-        </div>
-        <div id="modalInput">
-            <div id="modalInput-content">
-                <p>Digite a tag que você deseja adicionar:</p>
-                <input type="text" id="inputTag" placeholder="Digite aqui o nome da Tag">
-                <button id="btnConfirmar">Confirmar</button>
-                <button id="btnCancelar">Cancelar</button>
+        <!-- Modais -->
+        <div id="modalInput" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+            <div id="modalInput-content" class="bg-dark-800 rounded-xl p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold mb-4">Digite a tag que você deseja adicionar:</h3>
+                <input type="text" id="inputTag" placeholder="Digite aqui o nome da Tag" class="w-full bg-dark-700 border border-dark-600 rounded-lg px-4 py-3 mb-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <div class="flex justify-end space-x-3">
+                    <button id="btnCancelar" class="px-4 py-2 rounded-lg bg-dark-600 text-gray-300 hover:bg-dark-500 transition-colors">Cancelar</button>
+                    <button id="btnConfirmar" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors">Confirmar</button>
+                </div>
             </div>
         </div>
 
-
-        <div id="modalDelete">
-            <div id="modalDelete-content">
-                <p><strong>Você tem certeza de que quer deletar a tag?</strong></p>
-                <button id="btnConfirmarDel">Confirmar</button>
-                <button id="btnCancelarDel">Cancelar</button>
+        <div id="modalDelete" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+            <div id="modalDelete-content" class="bg-dark-800 rounded-xl p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold mb-4 text-center"><strong>Você tem certeza de que quer deletar a tag?</strong></h3>
+                <div class="flex justify-center space-x-3">
+                    <button id="btnCancelarDel" class="px-4 py-2 rounded-lg bg-dark-600 text-gray-300 hover:bg-dark-500 transition-colors">Cancelar</button>
+                    <button id="btnConfirmarDel" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">Confirmar</button>
+                </div>
             </div>
         </div>
-
-
     </div>
-    <!-- * SCRIPTS -->
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
+    <script>
+        // Script para alternar entre as abas
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Atualizar botões
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('tab-active', 'text-primary-500');
+                        btn.classList.add('text-gray-400');
+                    });
+                    this.classList.add('tab-active', 'text-primary-500');
+                    this.classList.remove('text-gray-400');
+                    
+                    // Atualizar conteúdo
+                    tabPanes.forEach(pane => {
+                        pane.classList.remove('active');
+                        pane.classList.add('hidden');
+                    });
+                    document.getElementById(tabId).classList.remove('hidden');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Script para os modais (simplificado)
+            const btnAddTags = document.getElementById('btnAddTags');
+            const modalInput = document.getElementById('modalInput');
+            const btnCancelar = document.getElementById('btnCancelar');
+            
+            if (btnAddTags && modalInput && btnCancelar) {
+                btnAddTags.addEventListener('click', () => {
+                    modalInput.classList.remove('hidden');
+                });
+                
+                btnCancelar.addEventListener('click', () => {
+                    modalInput.classList.add('hidden');
+                });
+            }
+        });
+    </script>
     <script type="module" src="/js/profile.js"></script>
 </body>
 

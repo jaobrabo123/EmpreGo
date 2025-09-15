@@ -1,460 +1,115 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carregamento Extraordinário</title>
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Anime.js via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-  <!-- GSAP (GreenSock Animation Platform) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <!-- Particles.js -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <!-- Three.js para gráficos 3D -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-    
-    .orb {
-      background: radial-gradient(circle at 30% 30%, #8B5CF6, #7C3AED);
-      box-shadow: 0 0 40px 15px rgba(139, 92, 246, 0.6);
-    }
-    
-    .grid-pattern {
-      background-image: 
-        linear-gradient(rgba(20, 20, 20, 0.7) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(20, 20, 20, 0.7) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-    
-    .neon-text {
-      text-shadow: 0 0 7px #8B5CF6, 0 0 10px #8B5CF6, 0 0 21px #8B5CF6;
-    }
-    
-    .hexagon {
-      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    }
-    
-    #particles-js {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-    
-    .loader-content {
-      position: relative;
-      z-index: 10;
-    }
-    
-    /* Estilo para os pontos de carregamento */
-    .loading-dots span {
-      display: inline-block;
-      opacity: 0;
-    }
-    
-    /* Container para a animação 3D */
-    #sphere-3d-container {
-      width: 200px;
-      height: 200px;
-      margin: 20px auto;
-      position: relative;
-      cursor: grab;
-      z-index: 20; /* Adicionado para garantir que fique acima das partículas */
-    }
-    
-    #sphere-3d-container:active {
-      cursor: grabbing;
-    }
-    
-    /* Instruções para interação 3D */
-    .interaction-hint {
-      margin-top: 10px;
-      color: #E5E7EB;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-    
-    /* Garantir que o canvas 3D tenha prioridade de interação */
-    #sphere-3d-container canvas {
-      position: relative;
-      z-index: 21;
-    }
-  </style>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              500: '#8B5CF6',
-              600: '#7C3AED',
-            },
-            dark: {
-              900: '#000000',
-              800: '#0A0A0A',
-              700: '#141414',
-            },
-            light: {
-              100: '#FFFFFF',
-              200: '#F9FAFB',
-              300: '#F3F4F6',
-              400: '#E5E7EB',
-            }
-          },
-          fontFamily: {
-            'orbitron': ['Orbitron', 'sans-serif']
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensagem de Erro Estilizada</title>
+    <!-- Tailwind CSS via CDN (para desenvolvimento) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Anime.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .erro-mensagem-geral {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            pointer-events: none;
         }
-      }
-    }
-  </script>
+        
+        .erro-mensagem-contraste {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+    </style>
 </head>
-<body class="bg-dark-900 overflow-hidden">
-  <div id="loader" class="fixed inset-0 flex items-center justify-center z-50 bg-dark-900">
-    <!-- Partículas de fundo -->
-    <div id="particles-js"></div>
-    
-    <!-- Conteúdo principal do loader -->
-    <div class="loader-content flex flex-col items-center justify-center">
-      <!-- Esfera central pulsante -->
-      <div class="relative mb-12">
-        <div id="sphere-3d-container" class="relative"></div>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8">Sistema de Mensagens de Erro</h1>
         
-        <!-- Anéis concêntricos ao redor da esfera -->
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="ring-1 ring-primary-500 rounded-full absolute animate-ping" style="width: 180px; height: 180px;"></div>
-          <div class="ring-1 ring-primary-600 rounded-full absolute" style="width: 220px; height: 220px;"></div>
-        </div>
-        
-        <!-- Hexágonos -->
-        <div class="hexagon-container absolute inset-0 flex items-center justify-center">
-          <div class="hexagon w-48 h-48 border-2 border-primary-500 absolute opacity-40"></div>
-          <div class="hexagon w-60 h-60 border-2 border-primary-600 absolute opacity-20"></div>
-        </div>
-      </div>
-      
-      <!-- animação de pontos -->
-      <div class="text-center">
-        <h1 class="font-orbitron text-light-100 text-3xl md:text-4xl neon-text mb-4">
-          Carregando<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
-        </h1>
-      </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <p class="text-gray-700 mb-4">Clique no botão abaixo para simular uma mensagem de erro que aparecerá no topo da página.</p>
             
-      <!-- Elementos decorativos flutuantes -->
-      <div class="absolute -left-10 top-1/4 w-8 h-8 rounded-full bg-primary-500 opacity-60"></div>
-      <div class="absolute -right-12 bottom-1/3 w-10 h-10 rounded-full bg-primary-600 opacity-40"></div>
-      <div class="absolute left-20 bottom-20 w-6 h-6 rounded-full bg-primary-500 opacity-30"></div>
-      <div class="absolute right-24 top-20 w-7 h-7 rounded-full bg-primary-600 opacity-50"></div>
-    </div>
-    
-    <!-- grade de fundo -->
-    <div class="grid-pattern absolute inset-0 opacity-20"></div>
-  </div>
-
-  <!-- Conteúdo principal -->
-  <div id="content" class="hidden p-10 text-center min-h-screen bg-dark-900 text-light-100 flex items-center justify-center">
-    <div>
-      <h1 class="text-4xl font-bold font-orbitron text-primary-500 mb-4">CONTEÚDO PRINCIPAL</h1>
-      <p class="text-light-400">Bem-vindo ao sistema totalmente carregado!</p>
-      <!-- aqui seria o site. -->
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    // Variáveis para controle do carregamento
-    let loadingTime = 2000;
-    let progress = 0;
-
-    // Variáveis para a animação 3D
-    let scene, camera, renderer, sphere;
-    let isDragging = false;
-    let previousMousePosition = { x: 0, y: 0 };
-    let sphereRotation = { x: 0, y: 0 };
-
-    // Configuração do Particles.js para o loader
-    document.addEventListener('DOMContentLoaded', function() {
-      particlesJS('particles-js', {
-        particles: {
-          number: { value: 80, density: { enable: true, value_area: 800 } },
-          color: { value: "#8B5CF6" },
-          shape: { type: "circle" },
-          opacity: { value: 0.5, random: true },
-          size: { value: 3, random: true },
-          line_linked: {
-            enable: true,
-            distance: 150,
-            color: "#7C3AED",
-            opacity: 0.4,
-            width: 1
-          },
-          move: {
-            enable: true,
-            speed: 2,
-            direction: "none",
-            random: true,
-            straight: false,
-            out_mode: "out",
-            bounce: false
-          }
-        },
-        interactivity: {
-          detect_on: "canvas",
-          events: {
-            onhover: { enable: true, mode: "repulse" },
-            onclick: { enable: true, mode: "push" },
-            resize: true
-          }
-        },
-        retina_detect: true
-      });
-
-      // Inicializar a animação 3D
-      init3DSphere();
-    });
-
-    // Inicializar a esfera 3D
-    function init3DSphere() {
-      // Configuração da cena, câmera e renderizador
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setSize(200, 200);
-      
-      // Garantir que o 3d seja interativo
-      const canvas = renderer.domElement;
-      canvas.style.pointerEvents = 'auto';
-      
-      document.getElementById('sphere-3d-container').appendChild(canvas);
-      
-      // Adicionar luzes para modelo 3d
-      const ambientLight = new THREE.AmbientLight(0x888888);
-      scene.add(ambientLight);
-      
-      const directionalLight = new THREE.DirectionalLight(0x8B5CF6, 1);
-      directionalLight.position.set(5, 5, 5);
-      scene.add(directionalLight);
-      
-      // Criar esfera com material especial
-      const geometry = new THREE.SphereGeometry(2, 32, 32);
-      const material = new THREE.MeshPhongMaterial({
-        color: 0x7C3AED,
-        shininess: 100,
-        specular: 0x8B5CF6,
-        emissive: 0x4A1DCD,
-        emissiveIntensity: 0.2
-      });
-      
-      sphere = new THREE.Mesh(geometry, material);
-      scene.add(sphere);
-      
-      // Adicionar wireframe para efeito tecnológico
-      const wireframe = new THREE.WireframeGeometry(geometry);
-      const line = new THREE.LineSegments(wireframe);
-      line.material.color.setHex(0x8B5CF6);
-      line.material.opacity = 0.3;
-      line.material.transparent = true;
-      sphere.add(line);
-      
-      // Posicionar a câmera
-      camera.position.z = 5;
-      
-      // Adicionar eventos de interação
-      setupInteraction();
-      
-      // Iniciar animação
-      animate();
-    }
-
-    // Configurar interação com a esfera
-    function setupInteraction() {
-      const container = document.getElementById('sphere-3d-container');
-      const canvas = container.querySelector('canvas');
-      
-      // Adicionar eventos diretamente ao canvas
-      canvas.addEventListener('mousedown', onMouseDown);
-      document.addEventListener('mouseup', onMouseUp);
-      document.addEventListener('mousemove', onMouseMove);
-      canvas.addEventListener('touchstart', onTouchStart, { passive: false });
-      document.addEventListener('touchend', onTouchEnd);
-      document.addEventListener('touchmove', onTouchMove, { passive: false });
-    }
-
-    function onMouseDown(event) {
-      isDragging = true;
-      previousMousePosition = {
-        x: event.clientX,
-        y: event.clientY
-      };
-      event.stopPropagation(); // Impede que o evento se propague para outras camadas
-    }
-
-    function onMouseUp() {
-      isDragging = false;
-    }
-
-    function onMouseMove(event) {
-      if (!isDragging) return;
-      
-      const deltaMove = {
-        x: event.clientX - previousMousePosition.x,
-        y: event.clientY - previousMousePosition.y
-      };
-      
-      sphereRotation.x += deltaMove.y * 0.01;
-      sphereRotation.y += deltaMove.x * 0.01;
-      
-      previousMousePosition = {
-        x: event.clientX,
-        y: event.clientY
-      };
-    }
-
-    function onTouchStart(event) {
-      if (event.touches.length === 1) {
-        event.preventDefault();
-        isDragging = true;
-        previousMousePosition = {
-          x: event.touches[0].clientX,
-          y: event.touches[0].clientY
-        };
-        event.stopPropagation(); // Impede que o evento se propague para outras camadas
-      }
-    }
-
-    function onTouchEnd() {
-      isDragging = false;
-    }
-
-    function onTouchMove(event) {
-      if (!isDragging || event.touches.length !== 1) return;
-      
-      event.preventDefault();
-      
-      const deltaMove = {
-        x: event.touches[0].clientX - previousMousePosition.x,
-        y: event.touches[0].clientY - previousMousePosition.y
-      };
-      
-      sphereRotation.x += deltaMove.y * 0.01;
-      sphereRotation.y += deltaMove.x * 0.01;
-      
-      previousMousePosition = {
-        x: event.touches[0].clientX,
-        y: event.touches[0].clientY
-      };
-    }
-
-    // Animação da esfera 3D
-    function animate() {
-      requestAnimationFrame(animate);
-      
-      // Aplicar rotação suave mesmo quando não está sendo arrastada
-      if (!isDragging) {
-        sphereRotation.y += 0.005;
-      }
-      
-      // Limitar rotação no eixo X para não virar de cabeça para baixo
-      sphereRotation.x = Math.max(-Math.PI/3, Math.min(Math.PI/3, sphereRotation.x));
-      
-      sphere.rotation.x = sphereRotation.x;
-      sphere.rotation.y = sphereRotation.y;
-      
-      renderer.render(scene, camera);
-    }
-
-    // Animação da esfera central com GSAP
-    gsap.to('.orb', {
-      duration: 2,
-      scale: 1.1,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut"
-    });
-
-    // Animação dos anéis com GSAP
-    gsap.to('.ring-1', {
-      duration: 3,
-      scale: 1.2,
-      opacity: 0,
-      repeat: -1,
-      ease: "power1.out"
-    });
-
-    // Animação dos hexágonos com Anime.js
-    anime({
-      targets: '.hexagon',
-      rotate: '360',
-      duration: 18000,
-      easing: 'linear',
-      loop: true
-    });
-
-    // Animação dos elementos flutuantes
-    anime({
-      targets: '.absolute.rounded-full',
-      translateY: () => anime.random(-20, 20),
-      translateX: () => anime.random(-15, 15),
-      duration: () => anime.random(2000, 5000),
-      easing: 'easeInOutQuad',
-      direction: 'alternate',
-      loop: true
-    });
-
-    // Animação dos pontos de "carregando..."
-    anime({
-      targets: '.loading-dots span',
-      opacity: [0, 1],
-      duration: 800,
-      delay: anime.stagger(400),
-      loop: true,
-      direction: 'alternate',
-      easing: 'easeInOutQuad'
-    });
-
-    // Simulação de progresso
-    const progressInterval = setInterval(() => {
-      progress += Math.random() * 5;
-      if (progress > 100) progress = 100;
-      
-      if (progress === 100) {
-        clearInterval(progressInterval);
-      }
-    }, 300);
-
-    window.addEventListener('load', async () => {
-        try {
-            // adiciona so um leve atraso para ver a animação
-            //await new Promise(resolve => setTimeout(resolve, loadingTime));
-            
-            const ajdgjasjsda = await axios.get("http://localhost:3001/empresas/public")
-            console.log(ajdgjasjsda.data)
-        } catch (error) {
-            console.error("Erro ao carregar dados:", error)
-        } finally {
-            // Animação de saída do loader
-            gsap.to('#loader', {
-              duration: 0.5,
-              opacity: 0,
-              onComplete: () => {
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById('content').classList.remove('hidden');
+            <div class="flex flex-col space-y-4">
+                <button onclick="mostrarErroTopo('Erro de conexão com o servidor.')" 
+                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
+                    Simular Erro de Conexão
+                </button>
                 
-                // Animação de entrada do conteúdo
-                gsap.from('#content', {
-                  duration: 0.5,
-                  opacity: 0,
-                  y: 20
-                });
-              }
-            });
+                <button onclick="mostrarErroTopo('Dados inválidos no formulário.')" 
+                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
+                    Simular Erro de Validação
+                </button>
+                
+                <button onclick="mostrarErroTopo('Você não tem permissão para esta ação.')" 
+                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
+                    Simular Erro de Permissão
+                </button>
+            </div>
+            
+            <div class="mt-6 p-4 bg-gray-100 rounded">
+                <p class="text-sm text-gray-600">
+                    <strong>Nota:</strong> As mensagens de erro desaparecerão automaticamente após 3 segundos.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+     
+export function mostrarErroTopo(mensagem) {
+  const old = document.querySelector('.erro-mensagem-geral');
+  if (old) old.remove();
+
+  const erroDiv = document.createElement('div');
+  erroDiv.className = 'erro-mensagem-geral';
+
+  const contrasteDiv = document.createElement('div');
+  contrasteDiv.className = 'erro-mensagem-contraste';
+  contrasteDiv.innerHTML = `
+                <div class="flex z-10 items-center bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 shadow-md rounded-b mb-4">
+                    <i class="fas fa-exclamation-circle mr-3"></i>
+                    <div>
+                        <strong class="font-bold">Erro: </strong>
+                        <span class="block sm:inline">${mensagem}</span>
+                    </div>
+                </div>
+            `;
+
+  erroDiv.appendChild(contrasteDiv);
+  document.body.prepend(erroDiv);
+
+  // Animação de entrada com Anime.js
+  anime({
+    targets: '.erro-mensagem-contraste',
+    translateY: 0,
+    opacity: 1,
+    duration: 600,
+    easing: 'easeOutElastic(1, .8)'
+  });
+
+  // Remover após 3 segundos com animação de saída
+  setTimeout(() => {
+    if (erroDiv.parentNode) {
+      anime({
+        targets: '.erro-mensagem-contraste',
+        translateY: -100,
+        opacity: 0,
+        duration: 400,
+        easing: 'easeInExpo',
+        complete: function () {
+          if (erroDiv.parentNode) erroDiv.remove();
         }
-    });
-  </script>
+      });
+    }
+  }, 3000);
+}
+  
+    </script>
 </body>
 </html>

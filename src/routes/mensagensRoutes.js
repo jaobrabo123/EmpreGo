@@ -9,5 +9,6 @@ const router = express.Router();
 //Rotas
 router.post('/mensagens', authenticateToken, MensagemController.criar);
 router.patch('/mensagens/vizualizar', authenticateToken, MensagemController.vizualizar);
+router.delete('/mensagens/limpar/:chat', authenticateToken, MensagemController.limparConversa);
 
 module.exports = router;

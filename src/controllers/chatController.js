@@ -40,6 +40,33 @@ class ChatController {
         }
     }
 
+    static async deletar(req, res){
+        try {
+            const { id, tipo, nivel } = req.user;
+            const chatId = Number(req.params.id);
+            await ChatService.deletarChat(id, tipo, nivel, chatId);
+            res.status(200).json({ error: 'Chat removido com sucesso.'});
+        } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Chat fornecido não exite.' });
+            if(erro instanceof Erros.ErroDeAutorizacao) return res.status(403).json({ error: erro.message })
+            res.status(500).json({ error: 'Erro ao remover chat: ' + erro.message });
+        }
+    }
+
+    static async bloquear(req, res){
+        try {
+            const { idChat, bloqueado } = req.body;
+            const { id, tipo, nivel } = req.user;
+            if(bloqueado==null || !idChat) return res.status(400).json({ error: `Informações faltando para ${bloqueado?'bloquear':'desbloquear'} chat.`});
+            await ChatService.bloquearChat(id, tipo, nivel, idChat, bloqueado);
+            res.status(200).json({ error: `Chat ${bloqueado?'bloqueado':'desbloqueado'} com sucesso.`});
+        } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Chat fornecido não exite.' });
+            if(erro instanceof Erros.ErroDeAutorizacao) return res.status(403).json({ error: erro.message });
+            res.status(500).json({ error: 'Erro ao atualizar bloqueio do chat: ' + erro.message });
+        }
+    }
+
 }
 
 module.exports = ChatController;

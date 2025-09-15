@@ -10,5 +10,7 @@ const router = express.Router();
 router.post('/chats', authenticateToken, ChatController.criar);
 router.get('/chats/candidato', authenticateToken, apenasCandidatos, ChatController.listarCand);
 router.get('/chats/empresa', authenticateToken, apenasEmpresa, ChatController.listarEmp);
+router.delete('/chats/:id', authenticateToken, ChatController.deletar);
+router.patch('/chats/block', authenticateToken, ChatController.bloquear);
 
 module.exports = router;

@@ -54,6 +54,8 @@ model chats {
   empresa              String
   candidato            Int
   data_criacao         DateTime?              @default(now()) @db.Timestamptz(6)
+  bloqueado            Boolean                @default(false)
+  bloqueador_tipo      String?                @db.VarChar(9)
   candidatos           candidatos             @relation(fields: [candidato], references: [id], onDelete: Cascade, onUpdate: NoAction)
   empresas             empresas               @relation(fields: [empresa], references: [cnpj], onDelete: Cascade, onUpdate: NoAction)
   favoritos_chats_cand favoritos_chats_cand[]

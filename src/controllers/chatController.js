@@ -63,6 +63,7 @@ class ChatController {
         } catch (erro) {
             if(erro.code==='P2025') return res.status(404).json({ error: 'Chat fornecido não exite.' });
             if(erro instanceof Erros.ErroDeAutorizacao) return res.status(403).json({ error: erro.message });
+            if(erro instanceof Erros.ErroDeValidacao) return res.status(400).json({ error: erro.message });
             res.status(500).json({ error: 'Erro ao atualizar bloqueio do chat: ' + erro.message });
         }
     }

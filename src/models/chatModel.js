@@ -128,7 +128,7 @@ class ChatModel {
 
     static async buscarEmpresaCnpjPorChatId(id){
         const resultado = await prisma.chats.findUniqueOrThrow({
-            select: { empresa: true, bloqueador_tipo: true },
+            select: { empresa: true, bloqueador_tipo: true, bloqueado: true },
             where: { id }
         });
         return resultado;
@@ -136,7 +136,7 @@ class ChatModel {
 
     static async buscarCandidatoIdPorChatId(id){
         const resultado = await prisma.chats.findUniqueOrThrow({
-            select: { candidato: true, bloqueador_tipo: true },
+            select: { candidato: true, bloqueador_tipo: true, bloqueado: true },
             where: { id }
         });
         return resultado;

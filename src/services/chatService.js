@@ -70,10 +70,13 @@ class ChatService {
 
   static async bloquearChat(idUsua, tipoUsua, nivelUsua, idChat, blockChat){
     if(nivelUsua!=='admin'){
-      const idUsuaChat = tipoUsua === 'candidato' ? 
-        (await ChatModel.buscarCandidatoIdPorChatId(idChat)).candidato
-        : (await ChatModel.buscarEmpresaCnpjPorChatId(idChat)).empresa;
+      const chat = tipoUsua === 'candidato' ? 
+        await ChatModel.buscarCandidatoIdPorChatId(idChat)
+        : await ChatModel.buscarEmpresaCnpjPorChatId(idChat);
+      const idUsuaChat = tipoUsua === 'candidato' ? chat.candidato : chat.empresa;
       if(!idUsuaChat || idUsuaChat !== idUsua) throw new Erros.ErroDeAutorizacao(`Você não pode ${blockChat?'bloquear':'desbloquear'} um chat que não é seu.`);
+      if(!blockChat && chat.bloqueador_tipo!==tipoUsua) throw new Erros.ErroDeAutorizacao(`Você não pode desbloquear este chat, pois não foi você que bloqueou.`);
+      if(blockChat && chat.bloqueado) throw new Erros.ErroDeValidacao("O chat já está bloqueado.");
     };
     await prisma.chats.update({ 
       data: { bloqueado: blockChat, bloqueador_tipo: (blockChat?tipoUsua:null) },

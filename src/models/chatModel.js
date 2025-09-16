@@ -34,6 +34,8 @@ class ChatModel {
                 id: true,
                 empresa: true,
                 candidato: true,
+                bloqueado: true,
+                bloqueador_tipo: true,
                 empresas: {
                     select: {
                         cnpj: true,
@@ -83,6 +85,8 @@ class ChatModel {
                 id: true,
                 empresa: true,
                 candidato: true,
+                bloqueado: true,
+                bloqueador_tipo: true,
                 candidatos: {
                     select: {
                         id: true,

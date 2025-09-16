@@ -36,7 +36,7 @@
 </head>
 
 <body class="bg-dark-900 text-white h-screen flex overflow-hidden">
-    <div id="modalDelete" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+    <!-- <div id="modalDelete" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
         <div id="modalDelete-content" class="bg-dark-800 rounded-xl p-6 w-full max-w-md">
             <h3 class="text-lg font-semibold mb-4 text-center"><strong>Você tem certeza de que quer deletar a tag?</strong></h3>
             <div class="flex justify-center space-x-3">
@@ -44,7 +44,7 @@
                 <button id="btnConfirmarDel" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">Confirmar</button>
             </div>
         </div>
-    </div>
+    </div> -->
     <div id="loader-container"></div>
     <script>
         fetch("/components/loader/loader.html")
@@ -190,17 +190,17 @@
 
                             <hr class="border-gray-700 my-2">
 
-                            <li class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2">
+                            <li id="bloquearBtn" class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2">
                                 <i class="fa-solid fa-ban text-gray-400"></i>
-                                <span>Bloquear</span>
+                                <span id="bloquearTxt">Bloquear</span>
                             </li>
-                            <li class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2">
+                            <li id="limparBtn" class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2">
                                 <i class="fa-solid fa-trash text-gray-400"></i>
-                                <span>Limpar conversa</span>
+                                <span id="limparTxt">Limpar conversa</span>
                             </li>
-                            <li class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2">
+                            <li id="apagarBtn" class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2">
                                 <i class="fa-solid fa-trash-can text-gray-400"></i>
-                                <span>Apagar conversa</span>
+                                <span id="apagarTxt">Apagar conversa</span>
                             </li>
                         </ul>
                     </div>

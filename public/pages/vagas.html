@@ -7,6 +7,10 @@
   <!-- Favicon -->
   <link rel="shortcut icon" href="/assets/icons/ajunet.ico" type="image/x-icon">
   <meta name="description" content="EmpreGo - Encontre as melhores vagas de emprego">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -57,6 +61,7 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/components/loader/loader.css">
   <style type="text/css">
     /* Cores da Twitch */
     body {
@@ -575,10 +580,24 @@
     }
 
   </style>
+  
   <title>EmpreGo - Encontre sua vaga ideal</title>
 </head>
 
 <body class="bg-twitch-dark text-twitch-text font-inter min-h-screen flex flex-col">
+  <div id="loader-container"></div>
+    <script>
+        fetch("/components/loader/loader.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("loader-container").innerHTML = html;
+
+            // Só carrega o JS do loader depois que o HTML foi injetado
+            
+        });
+    </script>
+  <div id="content" style="display: none;">
+  
   <header
     class="fixed top-0 left-0 right-0 h-16 bg-twitch-gray flex items-center z-50 border-b border-gray-800 shadow-md">
     <div class="container mx-auto px-5 flex items-center w-full gap-4 justify-center">
@@ -1361,7 +1380,8 @@
       </div>
     </section>
   </main>
-
+  </div>
+  <script src="/components/loader/loader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
   <script type="module" src="/js/vagas.js"></script>

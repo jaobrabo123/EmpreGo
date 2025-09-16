@@ -10,6 +10,39 @@ let usuarioNome;
 let usuarioId;
 let conversas = [];
 
+function criarModal(mensagem, acao, valor, id){
+    const modalOld = document.querySelector('#modalDelete');
+    if(modalOld) modalOld.remove();
+    const html = `
+        <div id="modalDelete" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+            <div id="modalDelete-content" class="bg-dark-800 rounded-xl p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold mb-4 text-center"><strong>${mensagem}</strong></h3>
+                <div class="flex justify-center space-x-3">
+                    <button id="btnCancelarDel" class="px-4 py-2 rounded-lg bg-dark-600 text-gray-300 hover:bg-dark-500 transition-colors">Cancelar</button>
+                    <button id="btnConfirmarDel" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', html);
+    document.getElementById('btnCancelarDel').addEventListener('click',()=>{
+        document.getElementById('modalDelete').remove();
+    })
+    switch (acao) {
+        case 'block':
+            document.getElementById('btnConfirmarDel').addEventListener('click', async()=>{
+                try {
+                    //await axiosWe.patch('/chats/block', {idChat: })
+                } catch (erro) {
+                    mostrarErroTopo(erro.message);
+                }
+            })
+            break;
+        default:
+            break;
+    }
+}
+
 async function carregarConversasBack() {
     const infosUsuario = await carregarInfosUsuario();
     console.log(infosUsuario)
@@ -28,6 +61,8 @@ async function carregarConversasBack() {
         socket.emit('joinRoom', chat.id);
         const ct = {
             id: chat.id,
+            bloqueadoStatus: chat.bloqueado,
+            bloqueador: chat.bloqueador_tipo,
             remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
             statusRemetente: 'Offline',
             nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
@@ -116,6 +151,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
                         socket.emit('joinRoom', chat.id);
                         conversas.push({
                             id: chat.id,
+                            bloqueadoStatus: chat.bloqueado,
+                            bloqueador: chat.bloqueador_tipo,
                             remetente: usuarioTipo === 'candidato' ? chat.empresas.cnpj : String(chat.candidatos.id),
                             statusRemetente: 'Offline',
                             nome: usuarioTipo === 'candidato' ? chat.empresas.nome_fant : chat.candidatos.nome,
@@ -319,6 +356,14 @@ function carregarConversa(conversaId) {
     document.getElementById('current-chat-avatar').src = conversa.avatar;
     document.getElementById('current-chat-status').textContent = conversa.statusRemetente;
     document.getElementById('bolaStatus').className = conversa.statusRemetente === 'Online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
+    const bloquearTxt = document.getElementById('bloquearTxt');
+    bloquearTxt.textContent = conversa.bloqueadoStatus && conversa.bloqueador === usuarioTipo ? 'Desbloquear' : 'Bloquear';
+    const oldBlock = document.getElementById("bloquearBtn");
+    const newBlock = oldBlock.cloneNode(true);
+    oldBlock.parentNode.replaceChild(newBlock, oldBlock);
+    newBlock.addEventListener('click', ()=>{
+        criarModal(`Tem certeza que deseja ${bloquearTxt.textContent} ${conversa.nome}?`, 'block', !conversa.bloqueadoStatus, conversa.id);
+    })
 
     const containerMensagens = document.getElementById('messages-container');
     containerMensagens.innerHTML = '';

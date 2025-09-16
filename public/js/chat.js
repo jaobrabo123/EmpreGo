@@ -20,6 +20,7 @@ async function carregarConversasBack() {
     usuarioTipo = infosUsuario.tipo;
     usuarioNome = infosUsuario.nome;
     usuarioId = infosUsuario.id;
+    document.querySelector('#FotoDePerfil').src = infosUsuario.foto;
     const response = usuarioTipo === 'candidato' ? await axiosWe('/chats/candidato'): await axiosWe('/chats/empresa')
     const data = response.data;
     console.log(data)

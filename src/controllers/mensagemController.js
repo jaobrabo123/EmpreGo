@@ -23,6 +23,12 @@ class MensagemController {
             if (erro instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: erro.message });
             }
+            if (erro instanceof Erros.ErroDeNaoEncontrado) {
+                return res.status(404).json({ error: erro.message });
+            }
+            if (erro instanceof Erros.ErroDeAutorizacao) {
+                return res.status(403).json({ error: erro.message });
+            }
             return res.status(500).json({ error: 'Erro ao enviar mensagem: ' + erro.message})
         }
     }
@@ -35,6 +41,19 @@ class MensagemController {
             res.status(201).json({ message: 'Mensagens vizualizadas com sucesso!' });
         } catch (erro) {
             return res.status(500).json({ error: 'Erro ao enviar mensagem: ' + erro.message})
+        }
+    }
+
+    static async limparConversa(req, res){
+        try {
+            const { id, tipo, nivel } = req.user;
+            const chatId = Number(req.params.chat);
+            await MensagemService.limparChatMensagens(id, tipo, nivel, chatId);
+            res.status(200).json({ error: 'Chat limpo com sucesso.'});
+        } catch (erro) {
+            if(erro.code==='P2025') return res.status(404).json({ error: 'Chat fornecido não exite.' });
+            if(erro instanceof Erros.ErroDeAutorizacao) return res.status(403).json({ error: erro.message });
+            res.status(500).json({ error: 'Erro ao limpar chat: ' + erro.message });
         }
     }
 

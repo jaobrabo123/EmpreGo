@@ -126,6 +126,30 @@ class ChatModel {
         return resultadoComMensagensDescriptografadas;
     }
 
+    static async buscarEmpresaCnpjPorChatId(id){
+        const resultado = await prisma.chats.findUniqueOrThrow({
+            select: { empresa: true, bloqueador_tipo: true, bloqueado: true },
+            where: { id }
+        });
+        return resultado;
+    }
+
+    static async buscarCandidatoIdPorChatId(id){
+        const resultado = await prisma.chats.findUniqueOrThrow({
+            select: { candidato: true, bloqueador_tipo: true, bloqueado: true },
+            where: { id }
+        });
+        return resultado;
+    }
+
+    static async verificarChatBloqueadoPorId(id){
+        const resultado = await prisma.chats.findUnique({
+            select: { bloqueado: true, bloqueador_tipo: true },
+            where: { id }
+        });
+        return resultado;
+    }
+
 }
 
 module.exports = ChatModel;

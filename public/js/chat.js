@@ -2,7 +2,7 @@
 import axiosWe from './axiosConfig.js';
 import socket from './notfSocketsConfig.js';
 import carregarInfosUsuario from './infosUsuarios.js';
-import { finalizarLoader } from '/js/globalFunctions.js';
+import { finalizarLoader, mostrarErroTopo } from '/js/globalFunctions.js';
 
 const params = new URLSearchParams(window.location.search)
 let usuarioTipo;
@@ -272,7 +272,7 @@ async function alternarFavorito(conversaId) {
     } else {
         console.log(estado.contadorFavoritos)
         if (estado.contadorFavoritos >= 3) {
-            alert('Você só pode favoritar no máximo 3 conversas.');
+            mostrarErroTopo('Você só pode favoritar no máximo 3 conversas.');
             return;
         }
         conversa.favoritada = true;

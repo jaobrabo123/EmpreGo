@@ -733,7 +733,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
   }
 
-  setupAnimations();
+  // setupAnimations();
 
   // -------------- JavaScript para o perfil dropdown --------------
   const profileToggleElement = document.getElementById('profile-toggle');

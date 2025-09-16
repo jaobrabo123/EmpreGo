@@ -41,7 +41,7 @@ module.exports = (io, socket) => {
     // });
 
     socket.on("disconnecting", () => {
-        console.log(`Usuário desconectou: ${socket.id}`);
+        // console.log(`Usuário desconectou: ${socket.id}`);
         socket.rooms.forEach((room) => {
             if (room !== socket.id) {
                 io.to(room).emit("userStatus", { status: 'Offline', socket: socket.id, room});

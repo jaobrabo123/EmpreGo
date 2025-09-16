@@ -6,7 +6,7 @@ module.exports = (io, socket) => {
         try{
             const roomName = `${usua.tipo}:${usua.id}`;
             socket.join(roomName);
-            console.log(`Socket ${socket.id} entrou na sala ${roomName}`);
+            // console.log(`Socket ${socket.id} entrou na sala ${roomName}`);
             const notificacoes = usua.tipo === 'candidato' ? 
                 await NotificacaoModel.buscarNotificacoesPorCandidatoId(usua.id)
                 : await NotificacaoModel.buscarNotificacoesPorEmpresaCnpj(usua.id);

@@ -51,8 +51,9 @@ class ChatModel {
                         data_criacao: true
                     },
                     orderBy: {
-                        data_criacao: 'asc'
-                    }
+                        data_criacao: 'desc'
+                    },
+                    take: 100
                 },
                 favoritos_chats_cand: {
                     select: {
@@ -69,7 +70,7 @@ class ChatModel {
         });
         const resultadoComMensagensDescriptografadas = resultado.map(({mensagens, ...resto})=>({
             ...resto,
-            mensagens: mensagens.map(msg => ({
+            mensagens: mensagens.toReversed().map(msg => ({
                 data_criacao: msg.data_criacao,
                 mensagem: descriptografarMensagem(msg.mensagem),
                 de: msg.de,
@@ -102,8 +103,9 @@ class ChatModel {
                         data_criacao: true
                     },
                     orderBy: {
-                        data_criacao: 'asc'
-                    }
+                        data_criacao: 'desc'
+                    },
+                    take: 100
                 },
                 favoritos_chats_emp: {
                     select: {
@@ -120,7 +122,7 @@ class ChatModel {
         });
         const resultadoComMensagensDescriptografadas = resultado.map(({mensagens, ...resto})=>({
             ...resto,
-            mensagens: mensagens.map(msg => ({
+            mensagens: mensagens.toReversed().map(msg => ({
                 data_criacao: msg.data_criacao,
                 mensagem: descriptografarMensagem(msg.mensagem),
                 de: msg.de,

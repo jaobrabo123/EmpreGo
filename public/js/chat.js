@@ -10,7 +10,7 @@ let usuarioNome;
 let usuarioId;
 let conversas = [];
 
-function criarModal(mensagem, acao, valor, id){
+function criarModal(mensagem, acao, conversa, valor, id){
     const modalOld = document.querySelector('#modalDelete');
     if(modalOld) modalOld.remove();
     const html = `
@@ -32,20 +32,103 @@ function criarModal(mensagem, acao, valor, id){
         case 'block':
             document.getElementById('btnConfirmarDel').addEventListener('click', async()=>{
                 try {
-                    //await axiosWe.patch('/chats/block', {idChat: })
+                    await axiosWe.patch('/chats/block', {idChat: id, bloqueado: valor});
+                    conversa.bloqueadoStatus = valor;
+                    if(valor) conversa.bloqueador = usuarioTipo;
+                    const bloquearTxt = document.getElementById('bloquearTxt');
+                    bloquearTxt.textContent = conversa.bloqueadoStatus ? 'Desbloquear' : 'Bloquear';
+                    document.getElementById('modalDelete').remove();
+                    if(valor) {
+                        document.getElementById('current-chat-status').textContent = 'Offline';
+                        document.getElementById('bolaStatus').className = "w-2 h-2 rounded-full bg-red-500 mr-2";
+                        socket.emit('leaveRoom', id);
+                    }
+                    else socket.emit('joinRoom', id);
                 } catch (erro) {
+                    console.error(erro)
+                    document.getElementById('modalDelete').remove();
                     mostrarErroTopo(erro.message);
                 }
-            })
+            }, {once: true})
+            break;
+        case 'clean':
+            document.getElementById('btnConfirmarDel').addEventListener('click', async()=>{
+                try {
+                    if(conversa.mensagens.length === 0) return mostrarErroTopo(`A conversa com ${conversa.nome} já está vazia!`);
+                    await axiosWe.delete(`/mensagens/limpar/${id}`);
+                    conversa.mensagens = [];
+                    conversa.ultimaMensagem = '';
+                    document.getElementsByClassName('text-sm text-gray-400 truncate').textContent = '';
+                    document.getElementById('messages-container').innerHTML = '';
+                } catch (erro) {
+                    console.error(erro);
+                    mostrarErroTopo(erro.message);
+                }
+                finally{
+                    document.getElementById('modalDelete').remove();
+                }
+            }, {once: true})
+            break;
+        case 'remove':
+            document.getElementById('btnConfirmarDel').addEventListener('click', async()=>{
+                try {
+                    await axiosWe.delete(`/chats/${id}`);
+                    //window.location.href = '/chats';
+                    estado.conversas = estado.conversas.filter(c => c.id !== id);
+                    estado.conversaAtualId = 0;
+                    carregarConversa(estado.conversaAtualId);
+                    atualizarListaConversas();
+                    socket.emit('leaveRoom', id);
+                } catch (erro) {
+                    console.error(erro);
+                    mostrarErroTopo(erro.message);
+                }
+                finally{
+                    document.getElementById('modalDelete').remove();
+                }
+            }, {once: true})
             break;
         default:
             break;
     }
 }
 
+document.querySelector('#fecharBtn').addEventListener('click', ()=>{
+    estado.conversaAtualId = 0;
+    carregarConversa(estado.conversaAtualId);
+
+    document.querySelectorAll('#conversations-list > div').forEach(div => {
+        div.classList.remove('bg-gray-700');
+    });
+
+    const menuDropdown = document.getElementById("menu-dropdown");
+    menuDropdown.classList.toggle("hidden");
+});
+
+function hojeOntem(data){
+    const hoje = new Date();
+    const ontem = new Date();
+    ontem.setDate(ontem.getDate() - 1);
+
+    // zera horas pra comparar só a parte da data
+    const normalizar = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+    const dataNormalizada = normalizar(data);
+    const hojeNormalizada = normalizar(hoje);
+    const ontemNormalizada = normalizar(ontem);
+
+    if (dataNormalizada.getTime() === hojeNormalizada.getTime()) {
+        return "Hoje";
+    } else if (dataNormalizada.getTime() === ontemNormalizada.getTime()) {
+        return "Ontem";
+    } else {
+        return `${data.getDate().toString().padStart(2, '0')}/${data.getMonth().toString().padStart(2, '0')}/${data.getFullYear()}`
+    }
+}
+
 async function carregarConversasBack() {
     const infosUsuario = await carregarInfosUsuario();
-    console.log(infosUsuario)
+    
     if(infosUsuario==='visitante'){
         usuarioTipo = infosUsuario; 
         return
@@ -56,9 +139,9 @@ async function carregarConversasBack() {
     document.querySelector('#FotoDePerfil').src = infosUsuario.foto;
     const response = usuarioTipo === 'candidato' ? await axiosWe('/chats/candidato'): await axiosWe('/chats/empresa')
     const data = response.data;
-    console.log(data)
+    
     conversas = data.map(chat=>{
-        socket.emit('joinRoom', chat.id);
+        if(!chat.bloqueado) socket.emit('joinRoom', chat.id);
         const ct = {
             id: chat.id,
             bloqueadoStatus: chat.bloqueado,
@@ -71,7 +154,8 @@ async function carregarConversasBack() {
                 const msg = chat.mensagens.toReversed()[0]?.data_criacao
                 if(!msg) return '';
                 const horario = new Date(msg);
-                return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`;
+                const txtData = hojeOntem(horario);
+                return `${txtData==='Hoje' ? `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}` : `${txtData}`}`;
             })(),
             naoLidas: (()=>{
                 const naoLidas = chat.mensagens.reduce((ac, msg)=>{
@@ -90,7 +174,8 @@ async function carregarConversasBack() {
                     remetente: msg.de === usuarioTipo ? 'usuario' : 'eles',
                     hora: (()=>{
                         const horario = new Date(msg.data_criacao);
-                        return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`
+                        const txtData = hojeOntem(horario);
+                        return `${txtData==='Hoje' ? '' : `${txtData} `}${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`
                     })()
                 }
             })
@@ -101,14 +186,15 @@ async function carregarConversasBack() {
 }
 
 socket.on('receivedMessage', async (message)=>{
-    console.log(message)
+    
     if(message.type === usuarioTipo) return;
     const conversa = estado.conversas.find(c => c.id === message.room);
     carregarMsgRecebida(conversa, message)
     if (!conversa) return;
     if(estado.conversaAtualId===message.room){
         try {
-            console.log('lendo msgs...')
+            
+            conversa.naoLidas = 0;
             await axiosWe.patch('/mensagens/vizualizar', { chatId: message.room })
         } catch (erro) {
             console.error(erro)
@@ -122,33 +208,37 @@ socket.on('userStatus', (user)=>{
     if(user.socket===socket.id) return;
     const conversa = estado.conversas.find(c => c.id === user.room);
     conversa.statusRemetente = user.status;
+    if(conversa.bloqueadoStatus) {
+        conversa.bloqueadoStatus = false;
+        conversa.bloqueador = null;
+    }
     if(user.room===estado.conversaAtualId){
         document.getElementById('current-chat-status').textContent = conversa.statusRemetente;
         document.getElementById('bolaStatus').className = user.status === 'Online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
     }
-    console.log(user)
+    
 })
 
 let dadosConversas;
 
 document.addEventListener('DOMContentLoaded', async ()=>{
     dadosConversas = await carregarConversasBack();
-    console.log(dadosConversas)
+    
     const chatAtual = await (async()=>{
             const id = params.get('id');
             if(id){
                 const atual = dadosConversas.find(cvs => cvs.remetente === id)?.id
                 if(!atual){
                     try {
-                        console.log("Criando novo chat")
+                        
                         const obj = {
                             empresa: usuarioTipo === 'candidato' ? id : usuarioId,
                             candidato: usuarioTipo === 'candidato' ? usuarioId : Number(id)
                         }
                         const response = await axiosWe.post('/chats', obj);
                         const chat = response.data
-                        console.log(chat)
-                        socket.emit('joinRoom', chat.id);
+                        
+                        if(!chat.bloqueado) socket.emit('joinRoom', chat.id);
                         conversas.push({
                             id: chat.id,
                             bloqueadoStatus: chat.bloqueado,
@@ -161,7 +251,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
                                 const msg = chat.mensagens.toReversed()[0]?.data_criacao
                                 if(!msg) return '';
                                 const horario = new Date(msg);
-                                return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`;
+                                const txtData = hojeOntem(horario);
+                                return `${txtData==='Hoje' ? `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}` : `${txtData}`}`;
                             })(),
                             naoLidas: (()=>{
                                 const naoLidas = chat.mensagens.reduce((ac, msg)=>{
@@ -180,7 +271,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
                                     remetente: msg.de === usuarioTipo ? 'usuario' : 'eles',
                                     hora: (()=>{
                                         const horario = new Date(msg.data_criacao);
-                                        return `${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`
+                                        const txtData = hojeOntem(horario);
+                                        return `${txtData==='Hoje' ? '' : `${txtData} `}${String(horario.getHours()).padStart(2, "0")}:${String(horario.getMinutes()).padStart(2, "0")}`
                                     })()
                                 }
                             })
@@ -215,13 +307,13 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     };
     if (estado.conversaAtualId === 0) {
         document.getElementById("TelaBoasVindas").style.display = "flex";
-        console.log("Mostrando tela de boas-vindas");
+        
     } else {
         document.getElementById("TelaBoasVindas").style.display = "none";
-        console.log("Já existe conversa, escondendo tela de boas-vindas");
+        
     }
 
-    console.log(estado.conversaAtualId);
+    
     
     carregarConversas(dadosConversas);
     carregarConversa(estado.conversaAtualId);
@@ -275,11 +367,10 @@ function criarElementoConversa(conversa) {
     div.addEventListener('click', async (e) => {
         if (!e.target.closest('.botao-favorito')) {
             if (conversa.naoLidas > 0) {
-                conversa.naoLidas = 0;
-                await mudarConversa(conversa.id);
+                mudarConversa(conversa.id); 
                 atualizarListaConversas();
             } else {
-                await mudarConversa(conversa.id);
+                mudarConversa(conversa.id);
             }
         }
     });
@@ -307,7 +398,7 @@ async function alternarFavorito(conversaId) {
             console.error(erro);
         }
     } else {
-        console.log(estado.contadorFavoritos)
+        
         if (estado.contadorFavoritos >= 3) {
             mostrarErroTopo('Você só pode favoritar no máximo 3 conversas.');
             return;
@@ -325,7 +416,7 @@ async function alternarFavorito(conversaId) {
 }
 
 // Mudar de conversa
-async function mudarConversa(conversaId) {
+function mudarConversa(conversaId) {
     const containerMensagens = document.getElementById('messages-container');
     containerMensagens.style.opacity = '0';
 
@@ -334,36 +425,43 @@ async function mudarConversa(conversaId) {
     carregarConversa(conversaId);
     atualizarListaConversas();
     containerMensagens.style.opacity = '1';
-
-    try {
-        const conversa = estado.conversas.find(c => c.id === conversaId);
-        if (!conversa) return;
-        await axiosWe.patch('/mensagens/vizualizar', { chatId: conversaId })
-    } catch (erro) {
-        console.error(erro)
-    }
     
 }
 
 // Carregar conversa ativa
-function carregarConversa(conversaId) {
+async function carregarConversa(conversaId) {
     const conversa = estado.conversas.find(c => c.id === conversaId);
-    if (!conversa) return;
+    if (!conversa) return document.getElementById("TelaBoasVindas").style.display = "flex";
     document.getElementById("TelaBoasVindas").style.display = "none";
-    console.log("Já existe conversa, escondendo tela de boas-vindas");
-    console.log(conversa)
+    
+    
     document.getElementById('current-chat-name').textContent = conversa.nome;
     document.getElementById('current-chat-avatar').src = conversa.avatar;
     document.getElementById('current-chat-status').textContent = conversa.statusRemetente;
     document.getElementById('bolaStatus').className = conversa.statusRemetente === 'Online' ? "w-2 h-2 rounded-full bg-green-500 mr-2" : "w-2 h-2 rounded-full bg-red-500 mr-2";
     const bloquearTxt = document.getElementById('bloquearTxt');
-    bloquearTxt.textContent = conversa.bloqueadoStatus && conversa.bloqueador === usuarioTipo ? 'Desbloquear' : 'Bloquear';
+    const txt = conversa.bloqueadoStatus && conversa.bloqueador === usuarioTipo ? 'Desbloquear' : 'Bloquear';
+    bloquearTxt.textContent = txt;
     const oldBlock = document.getElementById("bloquearBtn");
     const newBlock = oldBlock.cloneNode(true);
     oldBlock.parentNode.replaceChild(newBlock, oldBlock);
     newBlock.addEventListener('click', ()=>{
-        criarModal(`Tem certeza que deseja ${bloquearTxt.textContent} ${conversa.nome}?`, 'block', !conversa.bloqueadoStatus, conversa.id);
-    })
+        criarModal(`Tem certeza que deseja ${txt} ${conversa.nome}?`, 'block', conversa, !conversa.bloqueadoStatus, conversa.id);
+    });
+
+    const oldClean = document.getElementById("limparBtn");
+    const newClean = oldClean.cloneNode(true);
+    oldClean.parentNode.replaceChild(newClean, oldClean);
+    newClean.addEventListener('click', ()=>{
+        criarModal(`Tem certeza que deseja limpar a conversa com ${conversa.nome} (Esta ação é irreversível e apagará completamente todas as mensagens desta conversa)?`, 'clean', conversa, true, conversa.id);
+    });
+
+    const oldRemove = document.getElementById("apagarBtn");
+    const newRemove = oldRemove.cloneNode(true);
+    oldRemove.parentNode.replaceChild(newRemove, oldRemove);
+    newRemove.addEventListener('click', ()=>{
+        criarModal(`Tem certeza que deseja apagar a conversa com ${conversa.nome} (Esta ação é irreversível e apagará completamente esta conversa)?`, 'remove', conversa, true, conversa.id);
+    });
 
     const containerMensagens = document.getElementById('messages-container');
     containerMensagens.innerHTML = '';
@@ -372,10 +470,20 @@ function carregarConversa(conversaId) {
         const elemento = criarElementoMensagem(mensagem);
         containerMensagens.appendChild(elemento);
     });
+    
 
     rolarParaFim();
     estado.contadorMensagens = conversa.mensagens.length;
     atualizarContadorMensagens();
+    try {
+        
+        if(conversa.naoLidas===0) return;
+        
+        conversa.naoLidas = 0;
+        await axiosWe.patch('/mensagens/vizualizar', { chatId: conversaId })
+    } catch (erro) {
+        console.error(erro)
+    }
 }
 
 // Criar elemento de mensagem
@@ -410,6 +518,13 @@ async function enviarMensagem() {
     const conversa = estado.conversas.find(c => c.id === estado.conversaAtualId);
     if (!conversa) return;
 
+    if(conversa.bloqueadoStatus) {
+        input.value = '';
+        input.style.height = 'auto';
+        mostrarErroTopo('Você não pode mandar mensagem para este chat, pois ele está bloqueado.')
+        return;
+    }
+
     const agora = new Date();
     const hora = `${agora.getHours()}:${agora.getMinutes().toString().padStart(2, '0')}`;
 
@@ -420,7 +535,8 @@ async function enviarMensagem() {
     conversa.hora = hora;
 
     const containerMensagens = document.getElementById('messages-container');
-    containerMensagens.appendChild(criarElementoMensagem(novaMensagem));
+    const novaMsg = criarElementoMensagem(novaMensagem);
+    containerMensagens.appendChild(novaMsg);
 
     input.value = '';
     input.style.height = 'auto';
@@ -436,7 +552,7 @@ async function enviarMensagem() {
         room: estado.conversaAtualId,
         type: usuarioTipo,
     };
-    console.log(messageObject)
+    
 
     socket.emit('sendMessage', messageObject);
 
@@ -448,7 +564,8 @@ async function enviarMensagem() {
             de: usuarioTipo
         })
     } catch (erro) {
-        console.error(erro)
+        console.error(erro);
+        novaMsg.remove();
     }
 
     //setTimeout(() => simularResposta(conversa), 1000 + Math.random() * 2000);

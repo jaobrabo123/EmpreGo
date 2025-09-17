@@ -35,10 +35,13 @@ module.exports = (io, socket) => {
         });
     })
 
-    // socket.on('leaveRoom', (roomId) => {
-    //     socket.leave(roomId);
-    //     console.log(`${socket.id} saiu da sala ${roomId}`)
-    // });
+    socket.on('leaveRoom', (roomId) => {
+        io.to(roomId).emit("userStatus", { status: 'Offline', socket: socket.id, room: roomId});
+        setTimeout(()=>{
+            socket.leave(roomId);
+        },200);
+        console.log(`${socket.id} saiu da sala ${roomId}`)
+    });
 
     socket.on("disconnecting", () => {
         // console.log(`Usuário desconectou: ${socket.id}`);

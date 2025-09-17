@@ -2,7 +2,7 @@
 import axiosWe from './axiosConfig.js';
 import socket from './notfSocketsConfig.js';
 import carregarInfosUsuario from './infosUsuarios.js';
-import { carregarLinks2, logout } from "/js/globalFunctions.js";
+import { carregarLinks2, logout, finalizarLoader } from "/js/globalFunctions.js";
 
 document.querySelector('#logoutButton').addEventListener('click', () => logout());
 
@@ -134,6 +134,7 @@ async function carregarInit() {
       `;
       document.querySelector('#divEmpresas').innerHTML += html;
     });
+    finalizarLoader()
   } catch (erro) {
     console.error(erro)
   }

@@ -2,6 +2,7 @@ const MensagemService = require('../services/mensagemService.js')
 const Erros = require("../utils/erroClasses.js");
 const axios = require('axios');
 const { validarArquivoRawNoCloudinary } = require('../utils/validarCampos.js');
+const { rollBackDeArquivoRaw } = require('../utils/cloudinaryUtils.js');
 
 class MensagemController {
 
@@ -75,6 +76,36 @@ class MensagemController {
             console.error(erro);
             if(erro instanceof Erros.ErroDeValidacao) return res.status(400).json({ error: erro.message });
             res.status(500).json({ error: 'Erro ao limpar chat: ' + erro.message });
+        }
+    }
+
+    static async upload(req, res){
+        let idFile;
+        try {
+            if (!req.file) {
+                return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
+            }
+            const { autor, chat, de } = req.body;
+            const file = req.file.path;
+            idFile = req.file.filename;
+            const sizeBytes = req.file.size || req.file.bytes;
+            const sizeFile = (sizeBytes / 1024).toFixed(2) + 'KB';
+
+            const newFile = await MensagemService.enviarArquivo(autor, Number(chat), de, file, sizeFile);
+
+            res.status(201).json({ newFile });
+        } catch (erro) {
+            await rollBackDeArquivoRaw(idFile);
+            if (erro instanceof Erros.ErroDeValidacao) {
+                return res.status(400).json({ error: erro.message });
+            }
+            if (erro instanceof Erros.ErroDeNaoEncontrado) {
+                return res.status(404).json({ error: erro.message });
+            }
+            if (erro instanceof Erros.ErroDeAutorizacao) {
+                return res.status(403).json({ error: erro.message });
+            }
+            res.status(500).json({ error: 'Erro ao salvar arquivo: ' + erro.message})
         }
     }
 

@@ -29,6 +29,26 @@ class MensagemService {
 
   }
 
+  static async enviarArquivo(autor, chat, de, path, size){
+    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorId(chat);
+    if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe.');
+    if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar um arquivo para um chat bloqueado.');
+    ValidarCampos.validarArquivoRawNoCloudinary(path);
+    const mensagem = `NewSendFile|${path}|${size}|fileNew`;
+    const mensagemCriptografada = criptografarMensagem(mensagem);
+
+    await prisma.mensagens.create({
+      data: {
+        mensagem: mensagemCriptografada,
+        de,
+        chat,
+        autor
+      }
+    });
+
+    return mensagem;
+  }
+
   static async vizualizarMensagens(chatId, tipo){
     const where = {
       status: false,

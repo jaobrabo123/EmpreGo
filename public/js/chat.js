@@ -324,6 +324,80 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     setInterval(()=>{
         socket.emit('refreshStatus');
     }, 5000)
+
+    const attachButton = document.getElementById('attach-button');
+    const attachmentMenu = document.getElementById('attachment-menu');
+
+    // Inputs escondidos
+    const inputDocumento = document.getElementById('input-documento');
+    const inputFotos = document.getElementById('input-fotos');
+    const inputCamera = document.getElementById('input-camera');
+
+    // Botões do menu
+    const btnDocumento = document.getElementById('btn-documento');
+    const btnFotos = document.getElementById('btn-fotos');
+    const btnCamera = document.getElementById('btn-camera');
+
+    // Alternar visibilidade do menu
+    attachButton.addEventListener('click', function () {
+        attachmentMenu.classList.toggle('hidden');
+        if (!attachmentMenu.classList.contains('hidden')) {
+            attachmentMenu.classList.add('animate-slideIn');
+        }
+    });
+
+    // Fechar ao clicar fora
+    document.addEventListener('click', function (event) {
+        if (!attachButton.contains(event.target) && !attachmentMenu.contains(event.target)) {
+            attachmentMenu.classList.add('hidden');
+        }
+    });
+
+    // Documento
+    btnDocumento.addEventListener('click', () => inputDocumento.click());
+    inputDocumento.addEventListener('change', function () {
+        const arquivo = this.files[0];
+        if (arquivo && arquivo.size > 2 * 1024 * 1024) { // 2MB
+            alert("O arquivo deve ter no máximo 2MB.");
+            this.value = "";
+            return;
+        }
+        if (arquivo) {
+            console.log("Documento selecionado:", arquivo);
+            // Aqui você envia para o backend
+            // uploadArquivo(arquivo, "documento") funcionando 
+        }
+    });
+
+    // Fotos
+    btnFotos.addEventListener('click', () => inputFotos.click());
+    inputFotos.addEventListener('change', function () {
+        const arquivo = this.files[0];
+        if (arquivo) {
+            console.log("Foto selecionada:", arquivo);
+            // uploadArquivo funcionando!
+        }
+    });
+
+    // Câmera
+    btnCamera.addEventListener('click', () => inputCamera.click());
+
+    inputCamera.addEventListener('change', function () {
+    const arquivo = this.files[0];
+    if (arquivo) {
+        // Preview imediato, como no WhatsApp
+        const preview = URL.createObjectURL(arquivo);
+        renderArquivo({
+            name: arquivo.name,
+            size: arquivo.size,
+            type: arquivo.type,
+            link: preview
+        }, "camera");
+
+        // Aqui você ainda pode enviar pro backend
+        // uploadArquivo(arquivo, "camera");
+    }
+    });
 })
 
 // Carregar lista de conversas
@@ -770,3 +844,73 @@ const menuToggle = document.getElementById("menu-toggle");
       menuDropdown.classList.add("hidden");
     }
 });
+
+// ARQUIVOS________________
+
+// Funcionalidade para anexar arquivos
+document.addEventListener('DOMContentLoaded', function () {
+    
+
+    
+});
+
+function renderArquivo(arquivo, tipo, jaBaixado = false) {
+    const container = document.getElementById("messages-container");
+
+    let html = "";
+
+    if (tipo === "documento") {
+        if (!jaBaixado) {
+            // Pré-download
+            html = `
+            <div class="mensagem-arquivo bg-dark-800 rounded-xl p-3 flex items-center justify-between w-80 shadow-md my-2">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-file text-purple-400 text-3xl"></i>
+                <div>
+                  <p class="text-white font-semibold text-sm truncate">${arquivo.name}</p>
+                  <p class="text-gray-400 text-xs">${arquivo.type.toUpperCase()} • ${(arquivo.size / 1024).toFixed(1)} KB</p>
+                </div>
+              </div>
+              <button class="download-btn text-gray-300 hover:text-white" onclick="baixarArquivo('${arquivo.link}', '${arquivo.name}')">
+                <i class="fa-solid fa-download text-lg"></i>
+              </button>
+            </div>`;
+        } else {
+            // Pós-download
+            html = `
+            <div class="mensagem-arquivo bg-dark-800 rounded-xl p-3 flex flex-col w-80 shadow-md my-2">
+              <p class="text-white font-semibold text-sm truncate mb-2">${arquivo.name}</p>
+              <p class="text-gray-400 text-xs mb-3">${arquivo.type.toUpperCase()} • ${(arquivo.size / 1024).toFixed(1)} KB</p>
+              <div class="flex gap-2">
+                <button class="flex-1 bg-dark-700 hover:bg-gray-700 text-white text-sm py-2 rounded-lg">Abrir</button>
+                <button class="flex-1 bg-dark-700 hover:bg-gray-700 text-white text-sm py-2 rounded-lg">Salvar como...</button>
+              </div>
+            </div>`;
+        }
+    }
+
+    if (tipo === "foto" || tipo === "camera") {
+        html = `
+        <div class="mensagem-imagem bg-dark-800 rounded-xl p-2 w-64 shadow-md my-2">
+          <img src="${arquivo.link}" alt="Imagem enviada"
+               class="rounded-lg w-full h-auto object-cover mb-2">
+          <div class="flex justify-between text-xs text-gray-400">
+            <span>${tipo === "camera" ? "Foto da câmera" : "Foto"} • ${(arquivo.size / 1024).toFixed(1)} KB</span>
+            <button class="text-primary-500 hover:underline" onclick="baixarArquivo('${arquivo.link}', '${arquivo.name}')">Baixar</button>
+          </div>
+        </div>`;
+    }
+
+    container.insertAdjacentHTML("beforeend", html);
+    container.scrollTop = container.scrollHeight;
+}
+
+function baixarArquivo(link, nome) {
+    // Aqui chamamos o backend para gerar o link de download
+    const a = document.createElement("a");
+    a.href = link;  // link retornado para a Cloudinary
+    a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}

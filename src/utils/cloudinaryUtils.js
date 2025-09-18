@@ -2,6 +2,8 @@
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require('../config/cloudinary.js');
+const cloudinaryRaw = require('../config/cloudinaryRaw.js');
+const { v4: uuidv4 } = require('uuid');
 
 // * Função para cancelar envio da imagem para a Cloudinary
 async function rollBackDeFoto(fotoId){
@@ -12,6 +14,17 @@ async function rollBackDeFoto(fotoId){
             console.error('Erro ao cancelar envio da imagem: ' + erro.message);
         }
     }
+}
+
+// * Função para cancelar envio de arquivos RAW no Cloudinary
+async function rollBackDeArquivoRaw(fileId) {
+  if (fileId) {
+    try {
+      await cloudinaryRaw.uploader.destroy(fileId, { resource_type: 'raw' });
+    } catch (erro) {
+      console.error('Erro ao cancelar envio do arquivo RAW:', erro.message);
+    }
+  }
 }
 
 // * Storage para as imagens das experiencias
@@ -65,10 +78,27 @@ const empresaPerfilStorage = new CloudinaryStorage({
 });
 const uploadEmpresaImg = multer({ storage: empresaPerfilStorage });  // * Upload das fotos de perfil das empresas
 
+// * Storage para arquivos Raw
+const rawStorage = new CloudinaryStorage({
+  cloudinary: cloudinaryRaw,
+  params: {
+    folder: 'raw_files', // * Pasta no Cloudinary para os arquivos Raw
+    resource_type: 'raw',
+    allowed_formats: ['pdf', 'doc', 'docx', 'txt', 'zip'],
+    public_id: (req, file) => {
+      const ext = file.originalname.split('.').pop();
+      return `${uuidv4()}.${ext}`;
+    }
+  }
+});
+const uploadRawFile = multer({ storage: rawStorage, limits: { fileSize: 2 * 1024 * 1024 } });  // * Upload dos arquivos Raw
+
 // * Exports
 module.exports = { 
-    rollBackDeFoto, 
+    rollBackDeFoto,
+    rollBackDeArquivoRaw,
     uploadExperienciaImg,
     uploadCandidatoImg,
-    uploadEmpresaImg
+    uploadEmpresaImg,
+    uploadRawFile
 };

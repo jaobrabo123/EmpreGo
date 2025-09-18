@@ -3,17 +3,16 @@ const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require('../config/cloudinary.js');
 const cloudinaryRaw = require('../config/cloudinaryRaw.js');
-const { v4: uuidv4 } = require('uuid');
 
 // * Função para cancelar envio da imagem para a Cloudinary
 async function rollBackDeFoto(fotoId){
-    if(fotoId){
-        try {
-            await cloudinary.uploader.destroy(fotoId, { resourceType: 'image' });
-        } catch (erro) {
-            console.error('Erro ao cancelar envio da imagem: ' + erro.message);
-        }
+  if(fotoId){
+    try {
+      await cloudinary.uploader.destroy(fotoId, { resourceType: 'image' });
+    } catch (erro) {
+      console.error('Erro ao cancelar envio da imagem: ' + erro.message);
     }
+  }
 }
 
 // * Função para cancelar envio de arquivos RAW no Cloudinary
@@ -79,19 +78,43 @@ const empresaPerfilStorage = new CloudinaryStorage({
 const uploadEmpresaImg = multer({ storage: empresaPerfilStorage });  // * Upload das fotos de perfil das empresas
 
 // * Storage para arquivos Raw
-const rawStorage = new CloudinaryStorage({
-  cloudinary: cloudinaryRaw,
-  params: {
-    folder: 'raw_files', // * Pasta no Cloudinary para os arquivos Raw
-    resource_type: 'raw',
-    allowed_formats: ['pdf', 'doc', 'docx', 'txt', 'zip'],
-    public_id: (req, file) => {
-      const ext = file.originalname.split('.').pop();
-      return `${uuidv4()}.${ext}`;
-    }
+const storage = multer.memoryStorage();
+const uploadRawFile  = multer({
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (req, file, callback) => {
+    const allowedMimes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+      "text/plain",
+      "application/zip",
+      "application/x-zip-compressed",
+      "multipart/x-zip" 
+    ];
+    if (allowedMimes.includes(file.mimetype)) callback(null, true);
+    else callback(new Error("Formato de arquivo não suportado."));
   }
 });
-const uploadRawFile = multer({ storage: rawStorage, limits: { fileSize: 2 * 1024 * 1024 } });  // * Upload dos arquivos Raw
+
+// * Uploader para os Raw Files
+async function rawUploader(file, idFile) {
+  const result = await new Promise((resolve, reject) => {
+    const stream = cloudinaryRaw.uploader.upload_stream(
+      {
+        resource_type: 'raw',
+        public_id: idFile,
+        folder: 'raw_files',
+      },
+      (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      }
+    );
+    stream.end(file.buffer);
+  });
+  return result;
+}
 
 // * Exports
 module.exports = { 
@@ -100,5 +123,6 @@ module.exports = {
     uploadExperienciaImg,
     uploadCandidatoImg,
     uploadEmpresaImg,
-    uploadRawFile
+    uploadRawFile,
+    rawUploader
 };

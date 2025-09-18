@@ -50,4 +50,22 @@ axiosWe.interceptors.response.use(function (config) {
   return Promise.reject({ message: msg, status: status, originalError: originalError });
 });
 
+axiosWe.download = async function(url){
+  try {
+    const response = await this.get(`/mensagens/download?link=${encodeURIComponent(url)}`, { responseType: 'blob' });
+    const blob = response.data;
+    const fileName = url.split('/').pop().split('?')[0] || 'arquivo';
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  } catch (erro) {
+    console.error('Erro ao baixar o arquivo: ', erro);
+  }
+}
+
 export default axiosWe;

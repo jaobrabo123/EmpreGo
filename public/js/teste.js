@@ -10,3 +10,8 @@ document.querySelector('#sendFile').addEventListener('click', async()=>{
     await axiosWe.post('/mensagens/upload', formData);
     alert('foi')
 })
+
+document.querySelector('#recieveFile').addEventListener('click', async()=>{
+    const imagem = document.querySelector("#urlLink").value;
+    axiosWe.download(imagem);
+})

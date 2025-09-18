@@ -60,6 +60,8 @@ function criarModal(mensagem, acao, conversa, valor, id){
                     conversa.ultimaMensagem = '';
                     document.getElementsByClassName('text-sm text-gray-400 truncate').textContent = '';
                     document.getElementById('messages-container').innerHTML = '';
+                    document.querySelector('.bg-gray-700 .text-sm.text-gray-400.truncate').textContent = '';
+                    document.querySelector('.bg-gray-700 .text-xs.text-gray-400.ml-2').textContent = '';
                 } catch (erro) {
                     console.error(erro);
                     mostrarErroTopo(erro.message);
@@ -189,11 +191,10 @@ socket.on('receivedMessage', async (message)=>{
     
     if(message.type === usuarioTipo) return;
     const conversa = estado.conversas.find(c => c.id === message.room);
-    carregarMsgRecebida(conversa, message)
     if (!conversa) return;
+    carregarMsgRecebida(conversa, message)
     if(estado.conversaAtualId===message.room){
         try {
-            
             conversa.naoLidas = 0;
             await axiosWe.patch('/mensagens/vizualizar', { chatId: message.room })
         } catch (erro) {
@@ -560,6 +561,21 @@ async function carregarConversa(conversaId) {
     }
 }
 
+function validarSeEhArquivo(texto){
+    const textoSplited = texto.split('|');
+    if(textoSplited.length !== 4) return false;
+    const [prefixo, url, size, sufixo] = textoSplited;
+    if(prefixo!=='NewSendFile' || sufixo!=='fileNew' || !size.endsWith('KB') || !url.startsWith('https://res.cloudinary.com/dr0mhgdbr/raw/upload/')) return false;
+    const filename = url.split('/').pop();
+    const extensao = filename.split('.').pop().toUpperCase();
+    return {url, size, filename, extensao};
+}
+
+function transformarLinksEmAnchors(mensagem) {
+  const regex = /(https?:\/\/[^\s]+)/g;
+  return mensagem.replace(regex, '<a href="$1" target="_blank" class="text-blue-400 underline hover:text-blue-600">$1</a>');
+}
+
 // Criar elemento de mensagem
 function criarElementoMensagem(mensagem) {
     const div = document.createElement('div');
@@ -568,16 +584,43 @@ function criarElementoMensagem(mensagem) {
     div.className = `mb-2 flex ${ehUsuario ? 'justify-end' : 'justify-start'} fade-in`;
     div.dataset.mensagem = mensagem.texto.toLowerCase();
 
-    div.innerHTML = `
-<div class="max-w-md px-3 py-2 text-sm shadow-md flex items-end gap-2
-    ${ehUsuario
-            ? 'bg-purple-900 text-white rounded-2xl rounded-br-sm'
-            : 'bg-gray-700 text-gray-100 rounded-2xl rounded-bl-sm'}">
+    const ehArquivo = validarSeEhArquivo(mensagem.texto);
+
+    if(!ehArquivo){
+        div.innerHTML = `
+            <div class="max-w-md px-3 py-2 text-sm shadow-md flex items-end gap-2
+                ${ehUsuario
+                        ? 'bg-purple-900 text-white rounded-2xl rounded-br-sm'
+                        : 'bg-gray-700 text-gray-100 rounded-2xl rounded-bl-sm'}">
+                
+                <p class="whitespace-pre-wrap break-words">${transformarLinksEmAnchors(mensagem.texto)}</p>
+                <span class="text-[10px] opacity-80">${mensagem.hora}</span>
+            </div>
+        `;
+    } else{
+        div.innerHTML = `
+            <div class="mensagem-arquivo ${ehUsuario ?
+                'bg-purple-900' :
+                'bg-dark-800' 
+            } rounded-xl p-3 flex items-center justify-between w-100 shadow-md my-2">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-file-zipper text-yellow-400 text-3xl"></i>
+                    <div>
+                        <p class="text-white font-semibold text-sm truncate">${ehArquivo.filename}</p>
+                        <p class="text-gray-400 text-xs">${ehArquivo.extensao} • ${ehArquivo.size}</p>
+                    </div>
+                </div>
+                <button class="download-btn text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-download text-lg"></i>
+                </button>
+            </div>
+        `;
+        const downloadIcon = div.querySelector('.fa-download');
+        downloadIcon.addEventListener('click', ()=>{
+            axiosWe.download(ehArquivo.url)
+        })
+    }
     
-    <p class="whitespace-pre-wrap break-words">${mensagem.texto}</p>
-    <span class="text-[10px] opacity-80">${mensagem.hora}</span>
-</div>
-`;
     return div;
 }
 
@@ -627,9 +670,6 @@ async function enviarMensagem() {
         type: usuarioTipo,
     };
     
-
-    socket.emit('sendMessage', messageObject);
-
     try {
         await axiosWe.post('/mensagens', {
             autor: usuarioNome,
@@ -637,6 +677,7 @@ async function enviarMensagem() {
             chat: estado.conversaAtualId,
             de: usuarioTipo
         })
+        socket.emit('sendMessage', messageObject);
     } catch (erro) {
         console.error(erro);
         novaMsg.remove();

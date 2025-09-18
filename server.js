@@ -6,6 +6,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const { limiteGeral } = require('@middlewares/rateLimit.js');
+const errorHandler = require('@middlewares/globalErrors.js')
 const setupSockets = require('@sockets/connection.js');
 
 // * Inicialização do servidor
@@ -41,6 +42,9 @@ app.use(require('@routes/tipoRoutes.js'));
 app.use(require('@routes/chatsRoutes.js'));
 app.use(require('@routes/mensagensRoutes.js'));
 app.use(require('@routes/favoritosRoutes.js'));
+
+// * Tratamento de erros
+app.use(errorHandler);
 
 // * Porta do servidor
 server.listen(port, () => console.log(`Servidor rodando em http://localhost:${port}`));

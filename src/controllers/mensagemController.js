@@ -2,7 +2,8 @@ const MensagemService = require('../services/mensagemService.js')
 const Erros = require("../utils/erroClasses.js");
 const axios = require('axios');
 const { validarArquivoRawNoCloudinary } = require('../utils/validarCampos.js');
-const { rollBackDeArquivoRaw } = require('../utils/cloudinaryUtils.js');
+const { rollBackDeArquivoRaw, rawUploader } = require('../utils/cloudinaryUtils.js');
+const { v4: uuidv4 } = require('uuid');
 
 class MensagemController {
 
@@ -73,7 +74,6 @@ class MensagemController {
 
             response.data.pipe(res);
         } catch (erro) {
-            console.error(erro);
             if(erro instanceof Erros.ErroDeValidacao) return res.status(400).json({ error: erro.message });
             res.status(500).json({ error: 'Erro ao limpar chat: ' + erro.message });
         }
@@ -86,12 +86,15 @@ class MensagemController {
                 return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
             }
             const { autor, chat, de } = req.body;
-            const file = req.file.path;
-            idFile = req.file.filename;
-            const sizeBytes = req.file.size || req.file.bytes;
-            const sizeFile = (sizeBytes / 1024).toFixed(2) + 'KB';
+            const file = req.file;
+            const ext = file.originalname.split(".").pop();
+            idFile = `${uuidv4()}.${ext}`;
 
-            const newFile = await MensagemService.enviarArquivo(autor, Number(chat), de, file, sizeFile);
+            const result = await rawUploader(file, idFile);
+
+            const sizeFile = (file.size / 1024).toFixed(2) + 'KB';
+
+            const newFile = await MensagemService.enviarArquivo(autor, Number(chat), de, result.secure_url, sizeFile);
 
             res.status(201).json({ newFile });
         } catch (erro) {

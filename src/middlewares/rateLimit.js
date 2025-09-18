@@ -28,9 +28,17 @@ const limiteValidarCodigo = rateLimit({
     statusCode: 429,
 })
 
+const limiteEnviarMensagem = rateLimit({
+    windowMs: 10 * 1000,
+    max: 10,
+    message: ()=>{return {error: 'SPAM de mensagens.'}},
+    statusCode: 429,
+})
+
 module.exports = {
     limiteGeral,
     limiteLogin,
     limiteNodemailer,
-    limiteValidarCodigo
+    limiteValidarCodigo,
+    limiteEnviarMensagem
 }

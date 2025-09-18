@@ -1,12 +1,13 @@
-//Importações
+// * Importações
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const router = express.Router();
 
+// * Variável com o path para a pasta pages
 const pages = path.join(__dirname, '..', '..', 'public', 'pages');
 
-//Página Inicial
+// * Página Inicial
 router.get('/', (req, res)=>{
   const token = req.cookies.token;
   let pagina = 'index.html';
@@ -14,79 +15,80 @@ router.get('/', (req, res)=>{
   res.sendFile(path.join(pages, pagina));
 })
 
-//Página de login e cadastro
+// * Página de login e cadastro
 router.get('/login', (req, res)=>{
   res.sendFile(path.join(pages, 'login.html'));
 })
 
-//Página do painel de ADMINS
+// * Página do painel de ADMINS
 router.get('/painel', (req, res)=>{
   res.sendFile(path.join(pages, 'adminPanel.html'))
 })
 
-//Página do sobre
+// * Página do sobre
 router.get('/sobre', (req, res)=>{
   res.sendFile(path.join(pages, 'sobre.html'))
 })
 
-//Página do suporte
+// * Página do suporte
 router.get('/suporte', (req, res)=>{
   res.sendFile(path.join(pages, 'suporte.html'))
 })
 
-//Páginas dos chats
+// * Páginas dos chats
 router.get('/chats', (req, res)=>{
   res.sendFile(path.join(pages, 'chat.html'))
 })
 
-//Páginas dos chats teste
+// * Páginas dos chats teste
 router.get('/chatstest', (req, res)=>{
   res.sendFile(path.join(pages, 'chatTest.html'))
 })
 
-//Página para vizualizar perfil de um usuário
+// * Página para vizualizar perfil de um usuário
 /*router.get('/perfil', (req, res)=>{
   res.sendFile(path.join(pages, 'profileView.html'))
 })*/
 
-//Página do perfil do candidato
+// * Página do perfil do candidato
 router.get('/perfil/candidato', (req,res)=>{
   res.sendFile(path.join(pages, 'profile.html'))
 })
 
-//Página de editar perfil do candidato
+// * Página de editar perfil do candidato
 router.get('/perfil/candidato/editar', (req,res)=>{
   res.sendFile(path.join(pages, 'editarPerfil.html'))
 })
 
-//Página do perfil da empresa
+// * Página do perfil da empresa
 router.get('/perfil/empresa', (req, res)=>{
   res.sendFile(path.join(pages, 'profileCompany.html'))
 })
 
-//Página para vizualizar as experiências dos usuários
+// * Página para vizualizar as experiências dos usuários
 /*router.get('/experiencias', (req, res)=>{
   res.sendFile(path.join(pages, 'profileView.html'))
 })*/
 
-//Página do caixa maker de experiências
+// * Página do caixa maker de experiências
 router.get('/experiencias/criar', (req, res)=>{
   res.sendFile(path.join(pages, 'caixaMaker.html'))
 })
 
-//Página de ver as empresas
+// * Página de ver as empresas
 router.get('/empresas', (req,res)=>{
   res.sendFile(path.join(pages, 'vagas.html'))
 })
 
-//Página de ver os candidatos
+// * Página de ver os candidatos
 router.get('/candidatos', (req,res)=>{
   res.sendFile(path.join(pages, 'viewCompany.html'))
 })
 
-//Página de esperando confirmar a conta
+// * Página de esperando confirmar a conta
 router.get('/confirmar', (req, res)=>{
   res.sendFile(path.join(pages, 'waitingConfirm.html'))
 })
 
+// * Export
 module.exports = router;

@@ -3,6 +3,7 @@ const CandidatoModel = require('../models/candidatoModel.js');
 const EmpresaModel = require("../models/empresaModel");
 const CandidatoService = require("../services/candidatoService");
 const EmpresaService = require("../services/empresaService");
+const { rollBackDeFoto } = require('../utils/cloudinaryUtils.js');
 const { salvarCookieFoto } = require('../utils/cookieUtils.js');
 const { ErroDeValidacao } = require('../utils/erroClasses.js');
 
@@ -38,6 +39,7 @@ class PerfilController {
     }
 
     static async editarCandidato(req, res){
+        let idImg;
         try {
             const id = req.user.id;
             const dados = { ...req.body };
@@ -46,6 +48,7 @@ class PerfilController {
             
             if (req.file) {
                 dados.foto = req.file.path;
+                idImg = req.file.filename;
             }
 
             const atributos = Object.keys(dados);
@@ -55,6 +58,7 @@ class PerfilController {
 
             res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
         } catch (error) {
+            await rollBackDeFoto(idImg)
             if (error instanceof ErroDeValidacao) {
                 return res.status(400).json({ error: error.message });
             }
@@ -96,11 +100,13 @@ class PerfilController {
     }
 
     static async editarEmpresa(req, res){
+        let idImg;
         try {
             const cnpj = req.user.id;
             const dados = { ...req.body };
             if (req.file) {
               dados.foto = req.file.path;
+              idImg = req.file.filename;
             }
             const atributos = Object.keys(dados);
             const valores = Object.values(dados);
@@ -109,6 +115,7 @@ class PerfilController {
             res.status(201).json({ message: `Perfil atualizado com sucesso! (${atributos.join(', ')})` });
         } 
         catch (error) {
+            await rollBackDeFoto(idImg);
             if (error instanceof ErroDeValidacao) {
                 return res.status(400).json({ error: error.message });
             }

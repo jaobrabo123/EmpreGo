@@ -1,18 +1,22 @@
 // * Imports
 const ExperienciaModel = require('../models/experienciaModel.js');
 const ExperienciaService = require('../services/experienciaService.js');
+const { rollBackDeFoto } = require('../utils/cloudinaryUtils.js');
 const Erros = require('../utils/erroClasses.js');
 
 class ExperienciaController {
 
     static async adicionar(req, res){
+        let idImg;
         try {
             const { titulo, descricao } = req.body;
             const id = req.user.id;
             const imagem = req.file?.path || false;
+            if(imagem) idImg = req.file.filename;
             await ExperienciaService.popularTabelaExperiencias(titulo, descricao, imagem, id);
             res.status(201).json({ message: "Experiência cadastrada com sucesso!" });
         } catch (error) {
+            await rollBackDeFoto(idImg);
             if (error instanceof Erros.ErroDeValidacao) {
                 return res.status(400).json({ error: error.message });
             }

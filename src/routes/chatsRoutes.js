@@ -1,16 +1,17 @@
-//Imports
+// * Imports
 const express = require('express');
 const { authenticateToken, apenasCandidatos, apenasEmpresa } = require('../middlewares/auth.js');
 const ChatController = require('../controllers/chatController.js');
 
-//Router
+// * Router
 const router = express.Router();
 
-//Rotas
+// * Rotas
 router.post('/chats', authenticateToken, ChatController.criar);
 router.get('/chats/candidato', authenticateToken, apenasCandidatos, ChatController.listarCand);
 router.get('/chats/empresa', authenticateToken, apenasEmpresa, ChatController.listarEmp);
 router.delete('/chats/:id', authenticateToken, ChatController.deletar);
 router.patch('/chats/block', authenticateToken, ChatController.bloquear);
 
+// * Export
 module.exports = router;

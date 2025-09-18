@@ -1,4 +1,4 @@
-//Conexão com o Cloudinary (nuvem das imagens)
+// * Conexão com o Cloudinary (nuvem das imagens)
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({

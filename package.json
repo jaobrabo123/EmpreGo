@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.14.0",
+    "axios": "^1.12.2",
     "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
@@ -33,7 +34,6 @@
     "@tasks": "src/tasks",
     "@config": "src/config"
   },
-  "description": "",
   "devDependencies": {
     "prisma": "^6.14.0"
   }

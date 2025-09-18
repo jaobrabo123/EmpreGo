@@ -1,13 +1,13 @@
-//Imports
+// * Imports
 const express = require("express");
 const CandidatoController = require('../controllers/candidatoController.js');
 const { authenticateToken, apenasAdmins, apenasCandidatos, apenasEmpresa } = require("../middlewares/auth.js");
 const { limiteNodemailer, limiteValidarCodigo } = require('../middlewares/rateLimit.js');
 
-//router
+// * Router
 const router = express.Router();
 
-//Rotas
+// * Rotas
 router.post('/candidatos', CandidatoController.cadastrar);
 router.post('/candidatos/confirmar', limiteValidarCodigo, CandidatoController.confirmarCadastro);
 router.post('/candidatos/reenviar', limiteNodemailer, CandidatoController.enviarNovoCodigo);
@@ -15,4 +15,5 @@ router.get('/candidatos/all', authenticateToken, apenasAdmins, CandidatoControll
 router.get('/candidatos/public', authenticateToken, apenasEmpresa, CandidatoController.listarTodosPublic);
 router.delete('/candidatos/:cd', authenticateToken, apenasCandidatos, CandidatoController.remover);
 
+// * Export
 module.exports = router;

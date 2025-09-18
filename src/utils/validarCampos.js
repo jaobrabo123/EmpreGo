@@ -162,8 +162,15 @@ class ValidarCampos{
 
     static validarImagemNoCloudinary(imagem){
         const prefix = "https://res.cloudinary.com/ddbfifdxd/image/upload/";
-        if (imagem && !imagem.startsWith(prefix)) {
+        if (!imagem || !imagem.startsWith(prefix)) {
             throw new ErroDeValidacao("A imagem não pode ser enviada diretamente. Use o upload de arquivo.");
+        }
+    }
+
+    static validarArquivoRawNoCloudinary(arquivo){
+        const prefix = "https://res.cloudinary.com/ddbfifdxd/raw/upload/";
+        if (!arquivo || !arquivo.startsWith(prefix)) {
+            throw new ErroDeValidacao("Arquivo inválido.");
         }
     }
 

@@ -83,7 +83,7 @@ function initLoader() {
 
         // Animação dos elementos flutuantes
         anime({
-            targets: '.absolute.rounded-full:not(#bolaSemMexer)',
+            targets: '.absolute.rounded-full:not(#bolaSemMexer, #menu-toggle)',
             translateY: () => anime.random(-20, 20),
             translateX: () => anime.random(-15, 15),
             duration: () => anime.random(2000, 5000),

@@ -224,7 +224,26 @@ let dadosConversas;
 
 document.addEventListener('DOMContentLoaded', async ()=>{
     dadosConversas = await carregarConversasBack();
-    
+    // ____________________________Const de ARQUIVOS_______________________________ 
+    const attachButton = document.getElementById('attach-button');
+    const attachmentMenu = document.getElementById('attachment-menu');
+
+    // Inputs escondidos
+    const inputDocumento = document.getElementById('input-documento');
+    const inputFotos = document.getElementById('input-fotos');
+    const inputCamera = document.getElementById('input-camera');
+
+    // Botões do menu
+    const btnDocumento = document.getElementById('btn-documento');
+    const btnFotos = document.getElementById('btn-fotos');
+    const btnCamera = document.getElementById('btn-camera');
+    // ____________________________ARQUIVOS MODAL CONST_______________________________ 
+    const modal = document.getElementById('modalConfirmacao');
+    const fileName = document.getElementById('modal-file-name');
+    const fileSize = document.getElementById('modal-file-size');
+    const btnConfirmar = document.getElementById('btnConfirmarEnvio');
+    const btnCancelar = document.getElementById('btnCancelarEnvio');
+
     const chatAtual = await (async()=>{
             const id = params.get('id');
             if(id){
@@ -326,19 +345,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         socket.emit('refreshStatus');
     }, 5000)
 
-    const attachButton = document.getElementById('attach-button');
-    const attachmentMenu = document.getElementById('attachment-menu');
-
-    // Inputs escondidos
-    const inputDocumento = document.getElementById('input-documento');
-    const inputFotos = document.getElementById('input-fotos');
-    const inputCamera = document.getElementById('input-camera');
-
-    // Botões do menu
-    const btnDocumento = document.getElementById('btn-documento');
-    const btnFotos = document.getElementById('btn-fotos');
-    const btnCamera = document.getElementById('btn-camera');
-
+    // _____________________________ARQUIVOS______________________________
     // Alternar visibilidade do menu
     attachButton.addEventListener('click', function () {
         attachmentMenu.classList.toggle('hidden');
@@ -398,6 +405,59 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         // Aqui você ainda pode enviar pro backend
         // uploadArquivo(arquivo, "camera");
     }
+    });
+
+    // _____________________________MODAL______________________________
+    let arquivoSelecionado = null;
+
+    function mostrarModal(arquivo) {
+        arquivoSelecionado = arquivo;
+        fileName.textContent = arquivo.name;
+        fileSize.textContent = `${(arquivo.size / 1024).toFixed(2)} KB`;
+        modal.classList.remove('hidden');
+    }
+
+    function fecharModal() {
+        modal.classList.add('hidden');
+        arquivoSelecionado = null;
+    }
+
+    inputDocumento.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            mostrarModal(this.files[0]);
+            this.value = "";
+        }
+    });
+
+    inputFotos.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            mostrarModal(this.files[0]);
+            this.value = "";
+        }
+    });
+
+    inputCamera.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            mostrarModal(this.files[0]);
+            this.value = "";
+        }
+    });
+
+    btnConfirmar.addEventListener('click', function () {
+        if (arquivoSelecionado) {
+            renderArquivo(arquivoSelecionado, 'enviado');
+            fecharModal();
+        }
+    });
+
+    btnCancelar.addEventListener('click', function () {
+        fecharModal();
+    });
+
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) {
+            fecharModal();
+        }
     });
 })
 
@@ -884,15 +944,6 @@ const menuToggle = document.getElementById("menu-toggle");
     if (!menuToggle.contains(e.target) && !menuDropdown.contains(e.target)) {
       menuDropdown.classList.add("hidden");
     }
-});
-
-// ARQUIVOS________________
-
-// Funcionalidade para anexar arquivos
-document.addEventListener('DOMContentLoaded', function () {
-    
-
-    
 });
 
 function renderArquivo(arquivo, tipo, jaBaixado = false) {

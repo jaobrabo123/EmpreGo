@@ -33,6 +33,15 @@
     </script>
     <link rel="stylesheet" href="/css/chat.css">
 
+    <style>
+        #docIcon {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            right: 6px;
+        }
+    </style>
+
 </head>
 
 <body class="bg-dark-900 text-white h-screen flex overflow-hidden">
@@ -262,13 +271,52 @@
         <input type="file" id="input-fotos" class="hidden" accept=".jpg,.jpeg,.png,.webp" />
         <input type="file" id="input-camera" accept="image/*" capture="environment" class="hidden">
 
-
         <!-- Mensagem de documento (antes do download) -->
+        <div class="mensagem-arquivo bg-dark-800 rounded-xl p-3 flex items-center justify-between w-80 shadow-md my-2">
+            <div class="flex items-center gap-3">
+                <img src="/assets/imgs/DOCXICONROXO.jpeg" alt="" id="docIcon" class=" object-cover rounded-lg">
+                
+                <div>
+                    <p class="text-white font-semibold text-sm truncate">bola azul.zip</p>
+                    <p class="text-gray-400 text-xs">ZIP • 330 KB</p>
+                </div>
+            </div>
+            <button class="download-btn text-gray-300 hover:text-white">
+                <i class="fa-solid fa-download text-lg"></i>
+            </button>
+        </div>
+
+        <div class="mensagem-arquivo bg-dark-800 rounded-xl p-3 flex items-center justify-between w-80 shadow-md my-2">
+            <div class="flex items-center gap-3">
+                <img src="/assets/imgs/PDF.jpeg" alt="" id="docIcon" class=" object-cover rounded-lg">
+                <div>
+                    <p class="text-white font-semibold text-sm truncate">bola azul 2.zip</p>
+                    <p class="text-gray-400 text-xs">ZIP • 330 KB</p>
+                </div>
+            </div>
+            <button class="download-btn text-gray-300 hover:text-white">
+                <i class="fa-solid fa-download text-lg"></i>
+            </button>
+        </div>
+
+        <div class="mensagem-arquivo bg-dark-800 rounded-xl p-3 flex items-center justify-between w-80 shadow-md my-2">
+            <div class="flex items-center gap-3">
+                <img src="/assets/imgs/TXTAZUL.jpeg" alt="" id="docIcon" class=" object-cover rounded-lg">
+                <div>
+                    <p class="text-white font-semibold text-sm truncate">bola azul 2.zip</p>
+                    <p class="text-gray-400 text-xs">ZIP • 330 KB</p>
+                </div>
+            </div>
+            <button class="download-btn text-gray-300 hover:text-white">
+                <i class="fa-solid fa-download text-lg"></i>
+            </button>
+        </div>
+
         <div class="mensagem-arquivo bg-dark-800 rounded-xl p-3 flex items-center justify-between w-80 shadow-md my-2">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-file-zipper text-yellow-400 text-3xl"></i>
                 <div>
-                    <p class="text-white font-semibold text-sm truncate">bola azul.zip</p>
+                    <p class="text-white font-semibold text-sm truncate">bola azul 3.zip</p>
                     <p class="text-gray-400 text-xs">ZIP • 330 KB</p>
                 </div>
             </div>

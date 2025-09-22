@@ -63,6 +63,80 @@ class MensagemService {
     })
   }
 
+  static async ocultarMensagem(idUsua, tipoUsua, idMsg){
+    if(tipoUsua==='candidato'){
+      const removedMessage = await prisma.mensagens_ocultas_cand.create({
+        data: {
+          candidato_id: Number(idUsua),
+          mensagem_id: idMsg
+        },
+        select: {
+          mensagens: {
+            select: {
+              mensagens_ocultas_emp: { select: { id: true } },
+              id: true
+            }
+          }
+        }
+      });
+      if (removedMessage.mensagens.mensagens_ocultas_emp.length > 0){
+        await prisma.mensagens.delete({
+          where: {
+            id: removedMessage.mensagens.id
+          }
+        })
+      } 
+    } else {
+      const removedMessage = await prisma.mensagens_ocultas_emp.create({
+        data: {
+          empresa_cnpj: idUsua,
+          mensagem_id: idMsg
+        },
+        select: {
+          mensagens: {
+            select: {
+              mensagens_ocultas_cand: { select: { id: true } },
+              id: true
+            }
+          }
+        }
+      });
+      if (removedMessage.mensagens.mensagens_ocultas_cand.length > 0){
+        await prisma.mensagens.delete({
+          where: {
+            id: removedMessage.mensagens.id
+          }
+        })
+      } 
+    }
+  }
+
+  static async deletarMensagem(idUsua, tipoUsua, nivelUsua, idMsg){
+    if(nivelUsua==='admin'){
+      await prisma.mensagens.delete({
+        where: {
+          id: idMsg
+        }
+      });
+      return;
+    }
+    const trintaMinAtras = new Date();
+    trintaMinAtras.setMinutes(trintaMinAtras.getMinutes() - 30);
+    const messageToDelete = await prisma.mensagens.deleteMany({
+      where: {
+        id: idMsg,
+        de: tipoUsua,
+        data_criacao: {
+          gte: trintaMinAtras
+        },
+        chats: {
+          [tipoUsua]: tipoUsua==='candidato' ? Number(idUsua) : idUsua
+        }
+      }
+    });
+    if(messageToDelete.count===0) throw new Erros.ErroDeValidacao('A mensagem não pode ser deletada ou ela não existe.');
+  }
+
   static async limparChatMensagens(idUsua, tipoUsua, nivelUsua, idChat){
     if(nivelUsua!=='admin'){
       const idUsuaChat = tipoUsua === 'candidato' ? 

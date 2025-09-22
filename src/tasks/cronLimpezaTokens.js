@@ -13,7 +13,7 @@ const limpezaDeTokens = cron.schedule('0 * * * *', async () => {
     console.log(`Tokens expirados removidos: ${deletados.count}`);
   }
   catch(erro){
-    console.error('Erro ao remover tokens expirados: ' + erro.message)
+    console.error('Erro ao remover tokens expirados:', erro)
   }
 }, {
   timezone: 'America/Sao_Paulo'

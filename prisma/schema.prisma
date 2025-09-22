@@ -31,6 +31,7 @@ model candidatos {
   favoritos_candidatos    favoritos_candidatos[]
   favoritos_chats_cand    favoritos_chats_cand[]
   favoritos_empresas      favoritos_empresas[]
+  mensagens_ocultas_cand  mensagens_ocultas_cand[]
   notificacoes_candidatos notificacoes_candidatos[]
   tags                    tags[]
   tokens                  tokens[]
@@ -91,6 +92,7 @@ model empresas {
   favoritos_candidatos  favoritos_candidatos[]
   favoritos_chats_emp   favoritos_chats_emp[]
   favoritos_empresas    favoritos_empresas[]
+  mensagens_ocultas_emp mensagens_ocultas_emp[]
   notificacoes_empresas notificacoes_empresas[]
   tokens                tokens[]
 }
@@ -106,14 +108,16 @@ model experiencias {
 }
 
 model mensagens {
-  id           Int       @id @default(autoincrement())
-  mensagem     String
-  de           String
-  status       Boolean?  @default(false)
-  data_criacao DateTime? @default(now()) @db.Timestamptz(6)
-  chat         Int?
-  autor        String
-  chats        chats?    @relation(fields: [chat], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                     Int                      @id @default(autoincrement())
+  mensagem               String
+  de                     String
+  status                 Boolean?                 @default(false)
+  data_criacao           DateTime?                @default(now()) @db.Timestamptz(6)
+  chat                   Int?
+  autor                  String
+  chats                  chats?                   @relation(fields: [chat], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  mensagens_ocultas_cand mensagens_ocultas_cand[]
+  mensagens_ocultas_emp  mensagens_ocultas_emp[]
 }
 
 model tags {
@@ -196,4 +200,22 @@ model favoritos_chats_emp {
   data_criacao DateTime? @default(now()) @db.Timestamptz(6)
   empresas     empresas  @relation(fields: [cnpj_empresa], references: [cnpj], onDelete: Cascade, onUpdate: NoAction)
   chats        chats     @relation(fields: [id_chat], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model mensagens_ocultas_cand {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  candidato_id Int
+  mensagem_id  Int
+  data_criacao DateTime   @default(now()) @db.Timestamptz(6)
+  candidatos   candidatos @relation(fields: [candidato_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  mensagens    mensagens  @relation(fields: [mensagem_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model mensagens_ocultas_emp {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  empresa_cnpj String
+  mensagem_id  Int
+  data_criacao DateTime  @default(now()) @db.Timestamptz(6)
+  empresas     empresas  @relation(fields: [empresa_cnpj], references: [cnpj], onDelete: Cascade, onUpdate: NoAction)
+  mensagens    mensagens @relation(fields: [mensagem_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

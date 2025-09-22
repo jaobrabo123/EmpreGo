@@ -29,9 +29,10 @@ setupSockets(io);
 require('@tasks/cronLimpezaMensagens.js');
 require('@tasks/cronLimpezaTokens.js');
 require('@tasks/cronLimpezaCandidatosPendentes.js');
+require('@tasks/cronLimpezaMensagensOcultas.js');
 
 // * Rotas
-app.use(require('@routes/staticRoutes.js'))
+app.use(require('@routes/staticRoutes.js'));
 app.use(require('@routes/loginRoutes.js'));
 app.use(require('@routes/perfilRoutes.js'));
 app.use(require('@routes/candidatosRoutes.js'));

@@ -7,8 +7,8 @@ document.querySelector('#sendFile').addEventListener('click', async()=>{
     formData.append('autor', "João Pedro Azevedo Freire");
     formData.append('chat', 39);
     formData.append('de', 'candidato');
-    await axiosWe.post('/mensagens/upload', formData);
-    alert('foi')
+    const response = await axiosWe.post('/mensagens/upload', formData);
+    alert(`${response.data.newFile}`)
 })
 
 document.querySelector('#recieveFile').addEventListener('click', async()=>{

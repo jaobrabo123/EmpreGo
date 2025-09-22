@@ -50,6 +50,11 @@ class ChatModel {
                         status: true,
                         data_criacao: true
                     },
+                    where: {
+                        mensagens_ocultas_cand: {
+                            none: { candidato_id: id }
+                        }
+                    },
                     orderBy: {
                         data_criacao: 'desc'
                     },
@@ -101,6 +106,11 @@ class ChatModel {
                         de: true,
                         status: true,
                         data_criacao: true
+                    },
+                    where: {
+                        mensagens_ocultas_emp: {
+                            none: { empresa_cnpj: cnpj }
+                        }
                     },
                     orderBy: {
                         data_criacao: 'desc'

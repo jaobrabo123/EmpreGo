@@ -3,7 +3,6 @@ const Erros = require("../utils/erroClasses.js");
 const axios = require('axios');
 const { validarArquivoRawNoCloudinary } = require('../utils/validarCampos.js');
 const { rollBackDeArquivoRaw, rawUploader } = require('../utils/cloudinaryUtils.js');
-const { v4: uuidv4 } = require('uuid');
 
 class MensagemController {
 
@@ -42,9 +41,40 @@ class MensagemController {
             const { chatId } = req.body;
             const { tipo } = req.user;
             await MensagemService.vizualizarMensagens(chatId, tipo);
-            res.status(201).json({ message: 'Mensagens vizualizadas com sucesso!' });
+            res.status(201).json({ message: 'Mensagens vizualizadas com sucesso.' });
         } catch (erro) {
             return res.status(500).json({ error: 'Erro ao enviar mensagem: ' + erro.message})
+        }
+    }
+
+    static async deletar(req, res){
+        try {
+            const { id, tipo, nivel } = req.user;
+            const msgId = Number(req.params.id);
+            //await MensagemService.ocultarMensagem(id, tipo, nivel, msgId);
+            
+            await MensagemService.deletarMensagem(id, tipo, nivel, msgId);
+            
+            res.status(200).json({ message: 'Mensagem apagada com sucesso.'});
+        } catch (erro) {
+            if (erro instanceof Erros.ErroDeValidacao) {
+                return res.status(400).json({ error: erro.message });
+            }
+            res.status(500).json({ error: 'Erro ao apagar mensagem: ' + erro.message})
+        }
+    }
+
+    static async ocultar(req, res){
+        try {
+            const { id, tipo } = req.user;
+            const msgId = req.body.id;
+            if(!msgId) return res.status(400).json({ error: "O ID da mensagem precisa ser fornecido." })
+
+            await MensagemService.ocultarMensagem(id, tipo, msgId);
+
+            res.status(201).json({ message: 'Mensagem oculta com sucesso.'});
+        } catch (erro) {
+            res.status(500).json({ error: 'Erro ao ocultar mensagem: ' + erro.message})
         }
     }
 
@@ -53,7 +83,7 @@ class MensagemController {
             const { id, tipo, nivel } = req.user;
             const chatId = Number(req.params.chat);
             await MensagemService.limparChatMensagens(id, tipo, nivel, chatId);
-            res.status(200).json({ error: 'Chat limpo com sucesso.'});
+            res.status(200).json({ message: 'Chat limpo com sucesso.'});
         } catch (erro) {
             if(erro.code==='P2025') return res.status(404).json({ error: 'Chat fornecido não exite.' });
             if(erro instanceof Erros.ErroDeAutorizacao) return res.status(403).json({ error: erro.message });
@@ -87,8 +117,8 @@ class MensagemController {
             }
             const { autor, chat, de } = req.body;
             const file = req.file;
-            const ext = file.originalname.split(".").pop();
-            idFile = `${uuidv4()}.${ext}`;
+            // const ext = file.originalname.split(".").pop();
+            idFile = `${Date.now()}-${file.originalname}`;
 
             const result = await rawUploader(file, idFile);
 

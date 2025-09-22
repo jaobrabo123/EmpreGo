@@ -13,7 +13,7 @@ const limpezaDeCandidatosPendentes = cron.schedule('*/10 * * * *', async () => {
     console.log(`Candidatos com codigos expirados removidos: ${deletados.count}`);
   }
   catch(erro){
-    console.error('Erro ao remover candidatos com codigos expirados: ' + erro.message)
+    console.error('Erro ao remover candidatos com codigos expirados:', erro)
   }
 }, {
   timezone: 'America/Sao_Paulo'

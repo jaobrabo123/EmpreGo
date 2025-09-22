@@ -90,10 +90,17 @@ const uploadRawFile  = multer({
       "text/plain",
       "application/zip",
       "application/x-zip-compressed",
-      "multipart/x-zip" 
+      "multipart/x-zip",
+      "application/vnd.rar",
+      "application/x-rar-compressed",
+      "application/x-compressed"
     ];
-    if (allowedMimes.includes(file.mimetype)) callback(null, true);
-    else callback(new Error("Formato de arquivo não suportado."));
+    const allowedExt = [
+      "pdf", "doc", "docx", "txt", "zip", "rar"
+    ]
+    //console.log("Arquivo:", file.originalname, "MIME:", file.mimetype);
+    if (allowedMimes.includes(file.mimetype) && allowedExt.includes(file.originalname.split('.').pop())) callback(null, true);
+    else callback(new multer.MulterError("LIMIT_UNEXPECTED_FILE", file.fieldname));
   }
 });
 

@@ -443,10 +443,21 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         }
     });
 
-    btnConfirmar.addEventListener('click', function () {
+    btnConfirmar.addEventListener('click', async function () {
         if (arquivoSelecionado) {
             renderArquivo(arquivoSelecionado, 'enviado');
-            fecharModal();
+            modal.classList.add('hidden');
+            const formData = new FormData();
+            formData.append('file', arquivoSelecionado);
+            formData.append('autor', usuarioNome);
+            formData.append('chat', estado.conversaAtualId);
+            formData.append('de', usuarioTipo);
+            const response = await axiosWe.post('/mensagens/upload', formData);
+            //alert(`${response.data.newFile}`);
+            enviarMensagem(response.data.newFile)
+            console.log('arquivo', arquivoSelecionado);
+            arquivoSelecionado = null;
+            //fecharModal();
         }
     });
 
@@ -658,13 +669,32 @@ function criarElementoMensagem(mensagem) {
             </div>
         `;
     } else{
+        let icon
+        console.log()
+        switch(ehArquivo.extensao) {
+            case('PDF'):
+                icon = '<img src="/assets/imgs/PDF.png" class="w-10 h-10 object-contain">'
+                break;
+            case('DOCX'):
+            case('DOC'):
+                icon = '<img src="/assets/imgs/DOCXICONROXO.png" class="w-10 h-10 object-contain">'
+                break;
+            case('TXT'):
+                icon = '<img src="/assets/imgs/TXTAZUL.png" class="w-10 h-10 object-contain">'
+                break;
+            case('ZIP'):
+            case('RAR'):
+            default:
+                icon = '<i class="fa-solid fa-file-zipper text-yellow-400 text-3xl"></i>';
+                break;
+        }
         div.innerHTML = `
             <div class="mensagem-arquivo ${ehUsuario ?
                 'bg-purple-900' :
                 'bg-dark-800' 
             } rounded-xl p-3 flex items-center justify-between w-100 shadow-md my-2">
                 <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-file-zipper text-yellow-400 text-3xl"></i>
+                    ${icon}
                     <div>
                         <p class="text-white font-semibold text-sm truncate">${ehArquivo.filename}</p>
                         <p class="text-gray-400 text-xs">${ehArquivo.extensao} • ${ehArquivo.size}</p>
@@ -687,9 +717,9 @@ function criarElementoMensagem(mensagem) {
 
 
 // Enviar mensagem
-async function enviarMensagem() {
+async function enviarMensagem(arquivo = null) {
     const input = document.getElementById('message-input');
-    const texto = input.value.trim();
+    const texto = arquivo ? arquivo : input.value.trim();
     if (!texto) return;
 
     const conversa = estado.conversas.find(c => c.id === estado.conversaAtualId);
@@ -731,12 +761,14 @@ async function enviarMensagem() {
     };
     
     try {
-        await axiosWe.post('/mensagens', {
-            autor: usuarioNome,
-            mensagem: texto,
-            chat: estado.conversaAtualId,
-            de: usuarioTipo
-        })
+        if(!arquivo) {
+            await axiosWe.post('/mensagens', {
+                autor: usuarioNome,
+                mensagem: texto,
+                chat: estado.conversaAtualId,
+                de: usuarioTipo
+            })
+        }
         socket.emit('sendMessage', messageObject);
     } catch (erro) {
         console.error(erro);

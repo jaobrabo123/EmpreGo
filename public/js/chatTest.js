@@ -1,6 +1,6 @@
 // * Conexão com os WebSockets
 const server = window.location.hostname.includes('localhost') ? 
-'http://localhost:3001' : 'https://tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app';
+'http://localhost:3001' : 'https://app.emprego-vagas.com.br';
 var socket = io(server);
 
 // * Importando nossa instância do axios

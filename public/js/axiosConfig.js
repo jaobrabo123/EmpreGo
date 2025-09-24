@@ -5,7 +5,7 @@ const axiosWe = axios.create();
 axiosWe.defaults.withCredentials = true;
 
 const hostName = window.location.hostname;
-axiosWe.defaults.baseURL = hostName.includes('localhost') ? 'http://localhost:3001' : 'https://tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app';
+axiosWe.defaults.baseURL = hostName.includes('localhost') ? 'http://localhost:3001' : 'https://app.emprego-vagas.com.br';
 
 axiosWe.interceptors.response.use(function (config) {
   return config;

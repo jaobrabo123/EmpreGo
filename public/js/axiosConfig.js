@@ -5,11 +5,7 @@ const axiosWe = axios.create();
 axiosWe.defaults.withCredentials = true;
 
 const hostName = window.location.hostname;
-axiosWe.defaults.baseURL = hostName.includes('localhost') ? 
-  'http://localhost:3001' 
-  : hostName.includes('tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app') ? 
-  'https://tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app' 
-  : 'https://tcc-vjhk.onrender.com';
+axiosWe.defaults.baseURL = hostName.includes('localhost') ? 'http://localhost:3001' : 'https://tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app';
 
 axiosWe.interceptors.response.use(function (config) {
   return config;

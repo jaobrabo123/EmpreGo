@@ -1,6 +1,6 @@
 // * Conexão com os WebSockets
 const server = window.location.hostname.includes('localhost') ? 
-'http://localhost:3001' : 'https://tcc-vjhk.onrender.com';
+'http://localhost:3001' : 'https://tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app';
 var socket = io(server);
 
 // * Importando nossa instância do axios

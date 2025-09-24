@@ -4,7 +4,12 @@ import { mostrarErroTopo } from '/js/globalFunctions.js';
 const axiosWe = axios.create();
 axiosWe.defaults.withCredentials = true;
 
-axiosWe.defaults.baseURL = window.location.hostname.includes('localhost') ? 'http://localhost:3001' : 'https://tcc-vjhk.onrender.com';
+const hostName = window.location.hostname;
+axiosWe.defaults.baseURL = hostName.includes('localhost') ? 
+  'http://localhost:3001' 
+  : hostName.includes('tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app') ? 
+  'https://tragic-cherrita-jaobrabo123-ad1a795a.koyeb.app' 
+  : 'https://tcc-vjhk.onrender.com';
 
 axiosWe.interceptors.response.use(function (config) {
   return config;
@@ -51,21 +56,11 @@ axiosWe.interceptors.response.use(function (config) {
 });
 
 axiosWe.download = async function(url){
-  try {
-    const response = await this.get(`/mensagens/download?link=${encodeURIComponent(url)}`, { responseType: 'blob' });
-    const blob = response.data;
-    const fileName = url.split('/').pop().split('?')[0] || 'arquivo';
-
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-  } catch (erro) {
-    console.error('Erro ao baixar o arquivo: ', erro);
-  }
-}
+  const link = document.createElement('a');   // * Cria um link temporário
+  link.href = `/mensagens/download?link=${encodeURIComponent(url)}`;   // * Seta a rota de download como href do link
+  document.body.appendChild(link);   // * Insere o link temporário na Árvore DOM
+  link.click();   // * Clica no link temporário automaticamente para iniciar o download
+  document.body.removeChild(link);   // * Remove o link temporário da Árvore DOM (OBS: fui eu q comentei isso tá? foi chat nn)
+};
 
 export default axiosWe;

@@ -29,12 +29,34 @@ class MensagemService {
 
   }
 
-  static async enviarArquivo(autor, chat, de, path, size){
+  static async enviarArquivo(autor, chat, de, path, size, nomeFile){
     const chatBloqueado = await ChatModel.verificarChatBloqueadoPorId(chat);
     if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe.');
     if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar um arquivo para um chat bloqueado.');
     ValidarCampos.validarArquivoRawNoCloudinary(path);
-    const mensagem = `NewSendFile|${path}|${size}|fileNew`;
+    const nomeAjeitado = Buffer.from(nomeFile, 'latin1').toString('utf8');
+    const mensagem = `NewSendFile|${path}|${size}|${nomeAjeitado}|fileNew`;
+    const mensagemCriptografada = criptografarMensagem(mensagem);
+
+    await prisma.mensagens.create({
+      data: {
+        mensagem: mensagemCriptografada,
+        de,
+        chat,
+        autor
+      }
+    });
+
+    return mensagem;
+  }
+
+  static async enviarFoto(autor, chat, de, path, size, nomeImg){
+    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorId(chat);
+    if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe.');
+    if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar um arquivo para um chat bloqueado.');
+    ValidarCampos.validarImagemNoCloudinary(path);
+    const nomeAjeitado = Buffer.from(nomeImg, 'latin1').toString('utf8');
+    const mensagem = `NewSendImage|${path}|${size}|${nomeAjeitado}|imageNew`;
     const mensagemCriptografada = criptografarMensagem(mensagem);
 
     await prisma.mensagens.create({

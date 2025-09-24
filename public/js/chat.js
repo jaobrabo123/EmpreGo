@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     inputDocumento.addEventListener('change', function () {
         const arquivo = this.files[0];
         if (arquivo && arquivo.size > 2 * 1024 * 1024) { // 2MB
-            alert("O arquivo deve ter no máximo 2MB.");
+            mostrarErroTopo("O arquivo deve ter no máximo 2MB.");
             this.value = "";
             return;
         }
@@ -445,6 +445,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
     btnConfirmar.addEventListener('click', async function () {
         if (arquivoSelecionado) {
+            let conversaDoArquivo = estado.conversaAtualId;
             renderArquivo(arquivoSelecionado, 'enviado');
             modal.classList.add('hidden');
             const formData = new FormData();
@@ -454,7 +455,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
             formData.append('de', usuarioTipo);
             const response = await axiosWe.post('/mensagens/upload', formData);
             //alert(`${response.data.newFile}`);
-            enviarMensagem(response.data.newFile)
+            enviarMensagem(response.data.newFile, conversaDoArquivo)
             console.log('arquivo', arquivoSelecionado);
             arquivoSelecionado = null;
             //fecharModal();
@@ -484,30 +485,31 @@ function criarElementoConversa(conversa) {
     const div = document.createElement('div');
     div.className = `flex items-center p-3 hover:bg-gray-700 cursor-pointer transition-colors mb-1 rounded-lg ${ativa ? 'bg-gray-700' : ''}`;
     div.dataset.id = conversa.id;
+    const ehArquivo = validarSeEhArquivo(conversa.ultimaMensagem);
 
     div.innerHTML = `
-    <div class="flex items-center w-full">
-        <div class="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold flex-shrink-0">
-            <img src="${conversa.avatar}" class="w-full h-full object-cover rounded-full">
-        </div>
-        <div class="ml-3 flex-1 min-w-0">
-            <div class="flex justify-between items-baseline">
-                <h3 class="font-semibold truncate">${conversa.nome}</h3>
-                <span class="text-xs text-gray-400 ml-2">${conversa.hora}</span>
+        <div class="flex items-center w-full">
+            <div class="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold flex-shrink-0">
+                <img src="${conversa.avatar}" class="w-full h-full object-cover rounded-full">
             </div>
-            <p class="text-sm text-gray-400 truncate">${conversa.ultimaMensagem}</p>
-        </div>
-        ${conversa.naoLidas > 0 ? `
-            <div class="ml-2 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                ${conversa.naoLidas}
+            <div class="ml-3 flex-1 min-w-0">
+                <div class="flex justify-between items-baseline">
+                    <h3 class="font-semibold truncate">${conversa.nome}</h3>
+                    <span class="text-xs text-gray-400 ml-2">${conversa.hora}</span>
+                </div>
+                <p class="text-sm text-gray-400 truncate">${!ehArquivo ? conversa.ultimaMensagem : ehArquivo.nomeExib}</p>
             </div>
-        ` : ''}
-        <button class="ml-2 botao-favorito p-1 rounded-full ${conversa.favoritada ? 'text-yellow-400' : 'text-gray-400 hover:text-yellow-300'}" 
-                data-id="${conversa.id}">
-            <i class="fa-star ${conversa.favoritada ? 'fa-solid' : 'fa-regular'}"></i>
-        </button>
-    </div>
-`;
+            ${conversa.naoLidas > 0 ? `
+                <div class="ml-2 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    ${conversa.naoLidas}
+                </div>
+            ` : ''}
+            <button class="ml-2 botao-favorito p-1 rounded-full ${conversa.favoritada ? 'text-yellow-400' : 'text-gray-400 hover:text-yellow-300'}" 
+                    data-id="${conversa.id}">
+                <i class="fa-star ${conversa.favoritada ? 'fa-solid' : 'fa-regular'}"></i>
+            </button>
+        </div>
+    `;
 
     // Estrela de favorito
     div.addEventListener('click', async (e) => {
@@ -634,12 +636,12 @@ async function carregarConversa(conversaId) {
 
 function validarSeEhArquivo(texto){
     const textoSplited = texto.split('|');
-    if(textoSplited.length !== 4) return false;
-    const [prefixo, url, size, sufixo] = textoSplited;
+    if(textoSplited.length !== 5) return false;
+    const [prefixo, url, size, nomeExib, sufixo] = textoSplited;
     if(prefixo!=='NewSendFile' || sufixo!=='fileNew' || !size.endsWith('KB') || !url.startsWith('https://res.cloudinary.com/dr0mhgdbr/raw/upload/')) return false;
     const filename = url.split('/').pop();
     const extensao = filename.split('.').pop().toUpperCase();
-    return {url, size, filename, extensao};
+    return {url, size, filename, extensao, nomeExib};
 }
 
 function transformarLinksEmAnchors(mensagem) {
@@ -696,7 +698,7 @@ function criarElementoMensagem(mensagem) {
                 <div class="flex items-center gap-3">
                     ${icon}
                     <div>
-                        <p class="text-white font-semibold text-sm truncate">${ehArquivo.filename}</p>
+                        <p class="text-white font-semibold text-sm truncate">${ehArquivo.nomeExib}</p>
                         <p class="text-gray-400 text-xs">${ehArquivo.extensao} • ${ehArquivo.size}</p>
                     </div>
                 </div>
@@ -717,13 +719,18 @@ function criarElementoMensagem(mensagem) {
 
 
 // Enviar mensagem
-async function enviarMensagem(arquivo = null) {
+async function enviarMensagem(arquivo = null, arquivoChatId = null) {
     const input = document.getElementById('message-input');
     const texto = arquivo ? arquivo : input.value.trim();
     if (!texto) return;
 
     const conversa = estado.conversas.find(c => c.id === estado.conversaAtualId);
     if (!conversa) return;
+    if(arquivoChatId && arquivoChatId!==estado.conversaAtualId) {
+        let conversaDoArquivo = estado.conversas.find(c => c.id === arquivoChatId);
+        carregarMsgRecebida(conversaDoArquivo, {message: texto}, true)
+        return;
+    };
 
     if(conversa.bloqueadoStatus) {
         input.value = '';
@@ -778,8 +785,7 @@ async function enviarMensagem(arquivo = null) {
     //setTimeout(() => simularResposta(conversa), 1000 + Math.random() * 2000);
 }
 
-// Simular resposta automática (pode apagar)
-function carregarMsgRecebida(conversa, message) {
+function carregarMsgRecebida(conversa, message, foiEu = false) {
     // const respostas = [
     //     "Entendi, como posso ajudar?",
     //     "Interessante, conte-me mais.",
@@ -794,7 +800,7 @@ function carregarMsgRecebida(conversa, message) {
     const agora = new Date();
     const hora = `${agora.getHours().toString().padStart(2, '0')}:${agora.getMinutes().toString().padStart(2, '0')}`;
 
-    const resposta = { texto: message.message, remetente: 'eles', hora: hora };
+    const resposta = { texto: message.message, remetente: foiEu ? 'usuario': 'eles', hora: hora };
 
     conversa.mensagens.push(resposta);
     conversa.ultimaMensagem = resposta.texto;

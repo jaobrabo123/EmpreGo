@@ -327,13 +327,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     };
     if (estado.conversaAtualId === 0) {
         document.getElementById("TelaBoasVindas").style.display = "flex";
-        
     } else {
         document.getElementById("TelaBoasVindas").style.display = "none";
-        
     }
-
-    
     
     carregarConversas(dadosConversas);
     carregarConversa(estado.conversaAtualId);
@@ -497,7 +493,7 @@ function criarElementoConversa(conversa) {
                     <h3 class="font-semibold truncate">${conversa.nome}</h3>
                     <span class="text-xs text-gray-400 ml-2">${conversa.hora}</span>
                 </div>
-                <p class="text-sm text-gray-400 truncate">${!ehArquivo ? conversa.ultimaMensagem : ehArquivo.nomeExib}</p>
+                <p class="text-sm text-gray-400 truncate">${!ehArquivo ? conversa.ultimaMensagem : ehArquivo.tipo==='raw' ? ehArquivo.nomeExib : 'Foto📷'}</p>
             </div>
             ${conversa.naoLidas > 0 ? `
                 <div class="ml-2 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -638,10 +634,15 @@ function validarSeEhArquivo(texto){
     const textoSplited = texto.split('|');
     if(textoSplited.length !== 5) return false;
     const [prefixo, url, size, nomeExib, sufixo] = textoSplited;
-    if(prefixo!=='NewSendFile' || sufixo!=='fileNew' || !size.endsWith('KB') || !url.startsWith('https://res.cloudinary.com/dr0mhgdbr/raw/upload/')) return false;
+    let tipo;
+    if(prefixo==='NewSendFile' && sufixo==='fileNew' && size.endsWith('KB') && url.startsWith('https://res.cloudinary.com/dr0mhgdbr/raw/upload/')){
+        tipo = 'raw';
+    } else if(prefixo==='NewSendImage' && sufixo==='imageNew' && size.endsWith('KB') && url.startsWith('https://res.cloudinary.com/ddbfifdxd/image/upload/')){
+        tipo = 'img';
+    } else return false;
     const filename = url.split('/').pop();
     const extensao = filename.split('.').pop().toUpperCase();
-    return {url, size, filename, extensao, nomeExib};
+    return {url, size, filename, extensao, nomeExib, tipo};
 }
 
 function transformarLinksEmAnchors(mensagem) {
@@ -670,7 +671,7 @@ function criarElementoMensagem(mensagem) {
                 <span class="text-[10px] opacity-80">${mensagem.hora}</span>
             </div>
         `;
-    } else{
+    } else if(ehArquivo.tipo==='raw'){
         let icon
         console.log()
         switch(ehArquivo.extensao) {
@@ -709,8 +710,23 @@ function criarElementoMensagem(mensagem) {
         `;
         const downloadIcon = div.querySelector('.fa-download');
         downloadIcon.addEventListener('click', ()=>{
-            axiosWe.download(ehArquivo.url)
+            axiosWe.download(ehArquivo.url, 'raw');
         })
+    } else if(ehArquivo.tipo==='img'){
+        div.innerHTML = `
+            <div class="mensagem-imagem bg-dark-800 rounded-xl p-2 w-64 shadow-md my-2">
+                <img src="${ehArquivo.url}" alt="Imagem enviada"
+                    class="rounded-lg w-full h-auto object-cover mb-2">
+                <div class="flex justify-between text-xs text-gray-400">
+                    <span>Foto • ${ehArquivo.size}</span>
+                    <button class="text-primary-500 hover:underline skibibaixar">Baixar</button>
+                </div>
+            </div>
+        `;
+        const downloadButton = div.querySelector('.skibibaixar');
+        downloadButton.addEventListener('click', ()=>{
+            axiosWe.download(ehArquivo.url, 'img');
+        });
     }
     
     return div;

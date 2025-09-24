@@ -51,9 +51,9 @@ axiosWe.interceptors.response.use(function (config) {
   return Promise.reject({ message: msg, status: status, originalError: originalError });
 });
 
-axiosWe.download = async function(url){
+axiosWe.download = async function(url, tipo){
   const link = document.createElement('a');   // * Cria um link temporário
-  link.href = `/mensagens/download?link=${encodeURIComponent(url)}`;   // * Seta a rota de download como href do link
+  link.href = `/mensagens/download?link=${encodeURIComponent(url)}&tipo=${tipo}`;   // * Seta a rota de download como href do link
   document.body.appendChild(link);   // * Insere o link temporário na Árvore DOM
   link.click();   // * Clica no link temporário automaticamente para iniciar o download
   document.body.removeChild(link);   // * Remove o link temporário da Árvore DOM (OBS: fui eu q comentei isso tá? foi chat nn)

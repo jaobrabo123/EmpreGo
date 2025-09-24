@@ -1,7 +1,7 @@
 const MensagemService = require('../services/mensagemService.js')
 const Erros = require("../utils/erroClasses.js");
 const axios = require('axios');
-const { validarArquivoRawNoCloudinary } = require('../utils/validarCampos.js');
+const ValidarCampos = require('../utils/validarCampos.js');
 const { rollBackDeArquivoRaw, rawUploader, rollBackDeFoto, chatImageUploader } = require('../utils/cloudinaryUtils.js');
 
 class MensagemController {
@@ -93,8 +93,13 @@ class MensagemController {
 
     static async download(req, res){
         try {
-            const { link } = req.query;
-            validarArquivoRawNoCloudinary(link);
+            const { link, tipo } = req.query;
+
+            if(!link||!tipo) return res.status(400).json({ error: 'O link e o tipo devem ser fornecidos.'})
+
+            if(tipo==='raw') ValidarCampos.validarArquivoRawNoCloudinary(link);
+            else if(tipo==='img') ValidarCampos.validarImagemNoCloudinary(link);
+            else return res.status(400).json({ error: 'Tipo de link inválido.'});
 
             const nomeArquivo = link.split('/').pop().split('?')[0].slice(14);
             const response = await axios.get(link, { responseType: 'stream' });

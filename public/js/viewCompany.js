@@ -51,7 +51,6 @@ async function carregarInit() {
     const favoritosContainer = document.getElementById('favoritos-container');
 
     dataFav.forEach(fav => {
-      console.log(fav.candidatos)
       candidatosJaFavoritados.push(fav.id_candidato);
       const newItem = document.createElement('div');
       newItem.className = 'favorito-item flex items-center gap-3 p-2';

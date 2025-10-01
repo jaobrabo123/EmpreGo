@@ -168,7 +168,7 @@ class ValidarCampos{
     }
 
     static validarArquivoRawNoCloudinary(arquivo){
-        const prefix = "https://res.cloudinary.com/dr0mhgdbr/raw/upload/";
+        const prefix = "https://res.cloudinary.com/ddbfifdxd/raw/upload/";
         if (!arquivo || !arquivo.startsWith(prefix)) {
             throw new ErroDeValidacao("Arquivo inválido.");
         }

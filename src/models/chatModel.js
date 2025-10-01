@@ -158,10 +158,13 @@ class ChatModel {
         return resultado;
     }
 
-    static async verificarChatBloqueadoPorId(id){
+    static async verificarChatBloqueadoPorIdEPorUsua(idChat, tipo, idUsua){
         const resultado = await prisma.chats.findUnique({
             select: { bloqueado: true, bloqueador_tipo: true },
-            where: { id }
+            where: { 
+                id: idChat,
+                [tipo]: idUsua
+            }
         });
         return resultado;
     }

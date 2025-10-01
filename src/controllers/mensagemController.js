@@ -12,13 +12,13 @@ class MensagemController {
 
             if(!autor || !mensagem || !chat || !de) return res.status(400).json({ error: 'Informações faltando para enviar mensagem.' })
 
-            const tipo = req.user.tipo
+            const { id, tipo } = req.user
             
             if(de!==tipo){
                 return res.status(401).json({ error: 'Tipo enviado e tipo do token não coincidem!' });
             }
 
-            await MensagemService.enviarMensagem(autor, mensagem, de, chat)
+            await MensagemService.enviarMensagem(autor, mensagem, de, chat, id)
 
             return res.status(201).json({ message: 'Mensagem enviada com sucesso!', tipo: tipo });
         }
@@ -105,13 +105,18 @@ class MensagemController {
             const response = await axios.get(link, { responseType: 'stream' });
             let nomeArquivoFixed = decodeURIComponent(nomeArquivo);
             nomeArquivoFixed = Buffer.from(nomeArquivoFixed, 'latin1').toString('utf8');
-
+            const partesDoNome = nomeArquivoFixed.split('.');
+            if(tipo==='img' && partesDoNome.at(-1)==='webp'){
+                nomeArquivoFixed = partesDoNome.filter((_, index)=> index!==(partesDoNome.length-2)).join('.');
+            }
+            
             res.setHeader('Content-Disposition', `attachment; filename="${nomeArquivoFixed}"`);
             res.setHeader('Content-Type', response.headers['content-type']);
             response.data.pipe(res);
         } catch (erro) {
+            console.error(erro)
             if(erro instanceof Erros.ErroDeValidacao) return res.status(400).json({ error: erro.message });
-            res.status(500).json({ error: 'Erro ao limpar chat: ' + erro.message });
+            res.status(500).json({ error: 'Erro ao fazer donwload: ' + erro.message });
         }
     }
 
@@ -123,6 +128,15 @@ class MensagemController {
             }
             const { autor, chat, de } = req.body;
             const file = req.file;
+
+            if(!autor || !file || !chat || !de) return res.status(400).json({ error: 'Informações faltando para enviar arquivo.' })
+
+            const { id, tipo } = req.user
+            
+            if(de!==tipo){
+                return res.status(401).json({ error: 'Tipo enviado e tipo do token não coincidem!' });
+            }
+
             const nomeFile = file.originalname;
             
             idFile = `${Date.now()}-${nomeFile}`;
@@ -131,7 +145,7 @@ class MensagemController {
 
             const sizeFile = (file.size / 1024).toFixed(2) + 'KB';
 
-            const newFile = await MensagemService.enviarArquivo(autor, Number(chat), de, result.secure_url, sizeFile, nomeFile);
+            const newFile = await MensagemService.enviarArquivo(autor, Number(chat), de, result.secure_url, sizeFile, nomeFile, id);
 
             res.status(201).json({ newFile });
         } catch (erro) {
@@ -157,6 +171,15 @@ class MensagemController {
             }
             const { autor, chat, de } = req.body;
             const foto = req.file;
+
+            if(!autor || !foto || !chat || !de) return res.status(400).json({ error: 'Informações faltando para enviar a foto.' })
+
+            const { id, tipo } = req.user
+            
+            if(de!==tipo){
+                return res.status(401).json({ error: 'Tipo enviado e tipo do token não coincidem!' });
+            }
+
             const nomeFoto = foto.originalname;
             
             idFoto = `${Date.now()}-${nomeFoto}`;
@@ -165,9 +188,9 @@ class MensagemController {
 
             const sizeFile = (foto.size / 1024).toFixed(2) + 'KB';
 
-            const newImage = await MensagemService.enviarFoto(autor, Number(chat), de, result.secure_url, sizeFile, nomeFoto);
+            const newFile = await MensagemService.enviarFoto(autor, Number(chat), de, result.secure_url, sizeFile, nomeFoto, id);
 
-            res.status(201).json({ newImage });
+            res.status(201).json({ newFile });
         } catch (erro) {
             await rollBackDeFoto(idFoto);
             if (erro instanceof Erros.ErroDeValidacao) {

@@ -405,6 +405,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
     // _____________________________MODAL______________________________
     let arquivoSelecionado = null;
+    let ehImg = false;
 
     function mostrarModal(arquivo) {
         arquivoSelecionado = arquivo;
@@ -415,11 +416,13 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
     function fecharModal() {
         modal.classList.add('hidden');
+        ehImg = false;
         arquivoSelecionado = null;
     }
 
     inputDocumento.addEventListener('change', function () {
         if (this.files.length > 0) {
+            ehImg = false;
             mostrarModal(this.files[0]);
             this.value = "";
         }
@@ -427,6 +430,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
     inputFotos.addEventListener('change', function () {
         if (this.files.length > 0) {
+            ehImg = true;
             mostrarModal(this.files[0]);
             this.value = "";
         }
@@ -434,6 +438,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
     inputCamera.addEventListener('change', function () {
         if (this.files.length > 0) {
+            ehImg = true;
             mostrarModal(this.files[0]);
             this.value = "";
         }
@@ -449,11 +454,12 @@ document.addEventListener('DOMContentLoaded', async ()=>{
             formData.append('autor', usuarioNome);
             formData.append('chat', estado.conversaAtualId);
             formData.append('de', usuarioTipo);
-            const response = await axiosWe.post('/mensagens/upload', formData);
+            const response = await axiosWe.post(`/mensagens/upload${ehImg?'/image':''}`, formData);
             //alert(`${response.data.newFile}`);
             enviarMensagem(response.data.newFile, conversaDoArquivo)
             console.log('arquivo', arquivoSelecionado);
             arquivoSelecionado = null;
+            ehImg = false;
             //fecharModal();
         }
     });
@@ -635,7 +641,7 @@ function validarSeEhArquivo(texto){
     if(textoSplited.length !== 5) return false;
     const [prefixo, url, size, nomeExib, sufixo] = textoSplited;
     let tipo;
-    if(prefixo==='NewSendFile' && sufixo==='fileNew' && size.endsWith('KB') && url.startsWith('https://res.cloudinary.com/dr0mhgdbr/raw/upload/')){
+    if(prefixo==='NewSendFile' && sufixo==='fileNew' && size.endsWith('KB') && url.startsWith('https://res.cloudinary.com/ddbfifdxd/raw/upload/')){
         tipo = 'raw';
     } else if(prefixo==='NewSendImage' && sufixo==='imageNew' && size.endsWith('KB') && url.startsWith('https://res.cloudinary.com/ddbfifdxd/image/upload/')){
         tipo = 'img';

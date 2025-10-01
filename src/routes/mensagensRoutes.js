@@ -16,7 +16,7 @@ router.post('/mensagens/ocultar', authenticateToken, MensagemController.ocultar)
 router.delete('/mensagens/limpar/:chat', authenticateToken, MensagemController.limparConversa);
 router.get('/mensagens/download', authenticateToken, MensagemController.download);
 router.post('/mensagens/upload', authenticateToken, uploadRawFile.single('file'), MensagemController.upload);
-router.post('/mensagens/upload/image', authenticateToken, uploadChatImage.single('img'), MensagemController.uploadFoto);
+router.post('/mensagens/upload/image', authenticateToken, uploadChatImage.single('file'), MensagemController.uploadFoto);
 
 // * Export
 module.exports = router;

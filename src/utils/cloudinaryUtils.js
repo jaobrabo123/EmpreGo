@@ -2,7 +2,7 @@
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require('../config/cloudinary.js');
-const cloudinaryRaw = require('../config/cloudinaryRaw.js');
+//const cloudinaryRaw = require('../config/cloudinaryRaw.js');
 const storage = multer.memoryStorage();
 
 // * Função para cancelar envio da imagem para a Cloudinary
@@ -20,7 +20,7 @@ async function rollBackDeFoto(fotoId){
 async function rollBackDeArquivoRaw(fileId) {
   if (fileId) {
     try {
-      await cloudinaryRaw.uploader.destroy(fileId, { resource_type: 'raw' });
+      await cloudinary.uploader.destroy(fileId, { resource_type: 'raw' });
     } catch (erro) {
       console.error('Erro ao cancelar envio do arquivo RAW:', erro.message);
     }
@@ -144,7 +144,7 @@ const uploadRawFile  = multer({
 // * Uploader para os Raw Files
 async function rawUploader(file, idFile) {
   const result = await new Promise((resolve, reject) => {
-    const stream = cloudinaryRaw.uploader.upload_stream(
+    const stream = cloudinary.uploader.upload_stream(
       {
         resource_type: 'raw',
         public_id: idFile,

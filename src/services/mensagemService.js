@@ -8,10 +8,10 @@ const MensagemModel = require('../models/mensagemModel.js');
 
 class MensagemService {
 
-  static async enviarMensagem(autor, mensagem, de, chat){
-    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorId(chat);
-    if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe.')
-    if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar mensagem para um chat bloqueado.')
+  static async enviarMensagem(autor, mensagem, de, chat, idUsua){
+    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorIdEPorUsua(chat, de, idUsua);
+    if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe ou não é seu.');
+    if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar mensagem para um chat bloqueado.');
 
     ValidarCampos.validarTamanhoMax(mensagem, 500, 'Mensagem');
     mensagem = mensagem.trim();
@@ -29,11 +29,12 @@ class MensagemService {
 
   }
 
-  static async enviarArquivo(autor, chat, de, path, size, nomeFile){
-    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorId(chat);
-    if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe.');
+  static async enviarArquivo(autor, chat, de, path, size, nomeFile, idUsua){
+    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorIdEPorUsua(chat, de, idUsua);
+    if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe ou não é seu.');
     if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar um arquivo para um chat bloqueado.');
     ValidarCampos.validarArquivoRawNoCloudinary(path);
+
     const nomeAjeitado = Buffer.from(nomeFile, 'latin1').toString('utf8');
     const mensagem = `NewSendFile|${path}|${size}|${nomeAjeitado}|fileNew`;
     const mensagemCriptografada = criptografarMensagem(mensagem);
@@ -50,11 +51,12 @@ class MensagemService {
     return mensagem;
   }
 
-  static async enviarFoto(autor, chat, de, path, size, nomeImg){
-    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorId(chat);
+  static async enviarFoto(autor, chat, de, path, size, nomeImg, idUsua){
+    const chatBloqueado = await ChatModel.verificarChatBloqueadoPorIdEPorUsua(chat, de, idUsua);
     if(!chatBloqueado) throw new Erros.ErroDeNaoEncontrado('Chat fornecido não existe.');
-    if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar um arquivo para um chat bloqueado.');
+    if(chatBloqueado.bloqueado) throw new Erros.ErroDeAutorizacao('Você não pode enviar uma imagem para um chat bloqueado.');
     ValidarCampos.validarImagemNoCloudinary(path);
+    
     const nomeAjeitado = Buffer.from(nomeImg, 'latin1').toString('utf8');
     const mensagem = `NewSendImage|${path}|${size}|${nomeAjeitado}|imageNew`;
     const mensagemCriptografada = criptografarMensagem(mensagem);

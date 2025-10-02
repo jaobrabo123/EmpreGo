@@ -38,7 +38,7 @@ class MensagemController {
 
     static async vizualizar(req, res){
         try {
-            const { chatId } = req.body;
+            const chatId = Number(req.params.chat);
             const { tipo } = req.user;
             await MensagemService.vizualizarMensagens(chatId, tipo);
             res.status(201).json({ message: 'Mensagens vizualizadas com sucesso.' });

@@ -32,7 +32,7 @@ function criarModal(mensagem, acao, conversa, valor, id){
         case 'block':
             document.getElementById('btnConfirmarDel').addEventListener('click', async()=>{
                 try {
-                    await axiosWe.patch('/chats/block', {idChat: id, bloqueado: valor});
+                    await axiosWe.patch(`/chats/block/${id}`, { bloqueado: valor});
                     conversa.bloqueadoStatus = valor;
                     if(valor) conversa.bloqueador = usuarioTipo;
                     const bloquearTxt = document.getElementById('bloquearTxt');
@@ -196,7 +196,7 @@ socket.on('receivedMessage', async (message)=>{
     if(estado.conversaAtualId===message.room){
         try {
             conversa.naoLidas = 0;
-            await axiosWe.patch('/mensagens/vizualizar', { chatId: message.room })
+            await axiosWe.patch(`/mensagens/vizualizar/${message.room}`);
         } catch (erro) {
             console.error(erro)
         }
@@ -630,7 +630,7 @@ async function carregarConversa(conversaId) {
         if(conversa.naoLidas===0) return;
         
         conversa.naoLidas = 0;
-        await axiosWe.patch('/mensagens/vizualizar', { chatId: conversaId })
+        await axiosWe.patch(`/mensagens/vizualizar/${conversaId}`);
     } catch (erro) {
         console.error(erro)
     }

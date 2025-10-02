@@ -55,7 +55,8 @@ class ChatController {
 
     static async bloquear(req, res){
         try {
-            const { idChat, bloqueado } = req.body;
+            const idChat = Number(req.params.id);
+            const { bloqueado } = req.body;
             const { id, tipo, nivel } = req.user;
             if(bloqueado==null || !idChat) return res.status(400).json({ error: `Informações faltando para ${bloqueado?'bloquear':'desbloquear'} chat.`});
             await ChatService.bloquearChat(id, tipo, nivel, idChat, bloqueado);
